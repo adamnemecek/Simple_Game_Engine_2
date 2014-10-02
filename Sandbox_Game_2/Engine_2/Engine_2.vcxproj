@@ -53,7 +53,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -81,11 +81,15 @@
   <ItemGroup>
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp" />
     <ClCompile Include="junk_to_make_compiler_happy.cpp" />
+    <ClCompile Include="Timing\Stopwatch.cpp" />
+    <ClCompile Include="Timing\Game_Clock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Misc\Helper_Macros.h" />
     <ClInclude Include="Misc\Typedefs.h" />
+    <ClInclude Include="Timing\Stopwatch.h" />
+    <ClInclude Include="Timing\Game_Clock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

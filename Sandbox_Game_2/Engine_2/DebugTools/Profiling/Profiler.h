@@ -40,17 +40,7 @@ namespace Profiling
       // make these private to force access through get_instance()
       Profiler();
       Profiler(const Profiler&);
-      Profiler& operator=(const Profiler&);
-
-      // maintain a static instance of this class internally
-      // Note: As a static data member, it is not bound to any instance of the
-      // class, but as a result, the declaration here is not considered a 
-      // definition.  That is, the declaration here says that the static value
-      // exists, but it doesn't say where.  We will define it (that is, bring 
-      // it into existance) in the source file for this class.  If PROFILER_ON
-      // is false though, then this value will not be defined, which is ok 
-      // because it will therefore not be accessed.
-      static Profiler m_the_instance;
+      Profiler &operator=(const Profiler&);
 
       int m_frame_index;
 

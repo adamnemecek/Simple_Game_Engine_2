@@ -16,9 +16,6 @@ using std::string;
 
 namespace Profiling
 {
-   // this is where the static class member exists
-   Profiler Profiler::m_the_instance;
-
    Profiler::Profiler()
    {
       reset();
@@ -26,7 +23,9 @@ namespace Profiling
 
    Profiler &Profiler::get_instance()
    {
-      return m_the_instance;
+      static Profiler instance;
+
+      return instance;
    }
 
    // the following are only defined if we are running the compiler, 
