@@ -11,6 +11,7 @@ namespace Timing
 
    bool Game_Clock::initialize()
    {
+      m_delta_time_last_frame = 0;
       bool success = m_stopwatch.initialize();
       if (success)
       {
