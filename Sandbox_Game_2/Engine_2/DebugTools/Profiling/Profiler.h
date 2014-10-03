@@ -1,5 +1,5 @@
-#ifndef ENGINE_DEBUG_TOOLS_PROFILER_H
-#define ENGINE_DEBUG_TOOLS_PROFILER_H
+#ifndef ENGINE_PROFILER_H
+#define ENGINE_PROFILER_H
 
 #include <string>
 #include <Misc\Typedefs.h>
