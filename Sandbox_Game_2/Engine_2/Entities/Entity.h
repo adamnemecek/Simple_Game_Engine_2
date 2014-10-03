@@ -3,8 +3,6 @@
 
 #include <glm\glm.hpp>
 #include <Misc\Typedefs.h>
-#include <string>
-#include <vector>
 
 namespace Entities
 {
@@ -19,7 +17,7 @@ namespace Entities
       bool initialize();
       bool shutdown();
 
-      void add_component(const std::string &component_type);
+      void add_component(Game_Component *component_ptr);
 
       // goes through all components and runs their update() function
       void update();
@@ -36,7 +34,7 @@ namespace Entities
    private:
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;
-      std::vector<Game_Component> m_components;
+      Game_Component *m_components[m_MAX_COMPONENTS];
    };
 
    // define the "get component" function in the header so that it is implicitly inline

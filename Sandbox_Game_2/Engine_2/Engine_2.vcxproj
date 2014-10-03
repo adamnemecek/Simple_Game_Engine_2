@@ -88,6 +88,7 @@
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Entities\Entity.h" />
+    <ClInclude Include="Entities\Game_Component.h" />
     <ClInclude Include="Misc\Helper_Macros.h" />
     <ClInclude Include="Misc\Typedefs.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
