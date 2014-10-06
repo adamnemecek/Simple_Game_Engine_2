@@ -9,7 +9,7 @@
 #include <memory>
 using std::memset;
 
-#include <Misc\Typedefs.h>
+#include <Utilities\Typedefs.h>
 
 
 namespace Entities

@@ -2,7 +2,7 @@
 #define ENGINE_BORDER_HANDLER_COMPONENT_H
 
 #include <Entities\Game_Component.h>
-#include <Misc\Typedefs.h>
+#include <Utilities\Typedefs.h>
 #include <glm\glm.hpp>
 
 namespace Entities

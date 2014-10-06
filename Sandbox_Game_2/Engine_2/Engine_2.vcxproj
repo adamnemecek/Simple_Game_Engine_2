@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -84,8 +84,11 @@
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="junk_to_make_compiler_happy.cpp" />
+    <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Timing\Stopwatch.cpp" />
     <ClCompile Include="Timing\Game_Clock.cpp" />
+    <ClCompile Include="Utilities\Geometry_Creation\Geometry_Loader.cpp" />
+    <ClCompile Include="Utilities\Geometry_Creation\shape_generator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
@@ -93,9 +96,14 @@
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
-    <ClInclude Include="Misc\Helper_Macros.h" />
-    <ClInclude Include="Misc\Typedefs.h" />
+    <ClInclude Include="Utilities\Geometry_Creation\Geometry_Loader.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Utilities\Geometry_Creation\shape_generator.h" />
+    <ClInclude Include="Utilities\Helper_Macros.h" />
+    <ClInclude Include="Utilities\include_GL_version.h" />
+    <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Geometry.h" />
+    <ClInclude Include="Rendering\Renderable.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
     <ClInclude Include="Timing\Game_Clock.h" />
   </ItemGroup>
