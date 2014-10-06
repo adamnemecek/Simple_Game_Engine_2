@@ -28,8 +28,8 @@ namespace Entities
       // but type it in all caps to STRONGLY SUGGEST THAT IT SHOULD NOT BE CHANGED ELSEWHERE
       uint m_NUM_BOUNDARY_VERTS;
 
-      const glm::vec3 *m_border_verts_arr;
-      const glm::vec3 *m_border_vert_normals_arr;
+      const glm::vec3 *m_border_verts_ptr;
+      const glm::vec3 *m_border_vert_normals_ptr;
 
       Physics_Component *m_physics_sibling_ptr;
       glm::vec3 m_prev_entity_position;

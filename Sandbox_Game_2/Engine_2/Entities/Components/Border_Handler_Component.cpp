@@ -7,8 +7,8 @@
 namespace Entities
 {
    Border_Handler_Component::Border_Handler_Component()
-      : m_border_verts_arr(0),
-      m_border_vert_normals_arr(0),
+      : m_border_verts_ptr(0),
+      m_border_vert_normals_ptr(0),
       m_physics_sibling_ptr(0),
       m_prev_entity_position(0)  // initialize vector to all 0s
    {
@@ -26,8 +26,8 @@ namespace Entities
       }
 
       // reset pointers to 0 (this is in case "initialize" is called again after initial setup)
-      m_border_verts_arr = 0;
-      m_border_vert_normals_arr = 0;
+      m_border_verts_ptr = 0;
+      m_border_vert_normals_ptr = 0;
       m_physics_sibling_ptr = 0;
 
       return true;
@@ -40,8 +40,8 @@ namespace Entities
 
    void Border_Handler_Component::set_data(const glm::vec3 *border_verts_positions_arr, const glm::vec3 *border_verts_normals_ptr, uint num_boundary_verts)
    {
-      m_border_verts_arr = border_verts_positions_arr;
-      m_border_vert_normals_arr = border_verts_normals_ptr;
+      m_border_verts_ptr = border_verts_positions_arr;
+      m_border_vert_normals_ptr = border_verts_normals_ptr;
       m_NUM_BOUNDARY_VERTS = num_boundary_verts;
    }
 }

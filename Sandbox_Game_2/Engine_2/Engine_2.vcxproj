@@ -95,6 +95,7 @@
     <ClInclude Include="Entities\Game_Component.h" />
     <ClInclude Include="Misc\Helper_Macros.h" />
     <ClInclude Include="Misc\Typedefs.h" />
+    <ClInclude Include="Rendering\Geometry.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
     <ClInclude Include="Timing\Game_Clock.h" />
   </ItemGroup>
