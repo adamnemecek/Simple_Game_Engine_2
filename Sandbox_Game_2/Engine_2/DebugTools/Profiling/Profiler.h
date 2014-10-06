@@ -38,7 +38,7 @@ namespace Profiling
 
    private:
       // make these private to force access through get_instance()
-      Profiler()
+      Profiler();
       Profiler(const Profiler&);
       Profiler &operator=(const Profiler&);
 

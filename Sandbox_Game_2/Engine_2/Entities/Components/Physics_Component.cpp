@@ -21,11 +21,9 @@ namespace Entities
       m_linear_acceleration = vec3();
       m_angular_velocity = vec3();
       m_angular_acceleration = vec3();
-   }
 
-   bool Physics_Component::shutdown()
-   {
-      // nothing to do
+      // don't bother clearing the force vectors array because it will be overwritten on every frame
+
       return true;
    }
 

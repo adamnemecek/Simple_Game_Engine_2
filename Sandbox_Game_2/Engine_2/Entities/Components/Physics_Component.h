@@ -11,7 +11,7 @@ namespace Entities
    {
    public:
       bool initialize();
-      bool shutdown();
+      // default shutdown()
       void update();
       
       void add_immediate_force_vector(const glm::vec3 &force_vec);

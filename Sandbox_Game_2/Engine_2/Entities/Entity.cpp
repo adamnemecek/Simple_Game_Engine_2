@@ -51,7 +51,7 @@ namespace Entities
       // ??remove this assertion??
       assert(m_num_current_components != m_MAX_COMPONENTS);
       m_components[m_num_current_components++] = component_ptr;
-      component_ptr->m_parent_entity = this;
+      component_ptr->m_parent_entity_ptr = this;
    }
 
    // goes through all components and runs their update() function
