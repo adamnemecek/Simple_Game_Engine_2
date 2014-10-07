@@ -88,7 +88,7 @@
     <ClCompile Include="Timing\Stopwatch.cpp" />
     <ClCompile Include="Timing\Game_Clock.cpp" />
     <ClCompile Include="Utilities\Geometry_Creation\Geometry_Loader.cpp" />
-    <ClCompile Include="Utilities\Geometry_Creation\shape_generator.cpp" />
+    <ClCompile Include="Utilities\Geometry_Creation\Shape_Generator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
@@ -98,7 +98,7 @@
     <ClInclude Include="Entities\Game_Component.h" />
     <ClInclude Include="Utilities\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Rendering\Renderer.h" />
-    <ClInclude Include="Utilities\Geometry_Creation\shape_generator.h" />
+    <ClInclude Include="Utilities\Geometry_Creation\Shape_Generator.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
     <ClInclude Include="Utilities\include_GL_version.h" />
     <ClInclude Include="Utilities\Typedefs.h" />

@@ -12,9 +12,19 @@
 // for storing the geometry
 #include <vector>
 
+
+namespace Utility
+{
+   namespace Geometry_Creation
+   {
+      // forward declaration from different namespace
+      class Geometry_Loader;
+   }
+}
+
 namespace Rendering
 {
-   // this is a data storage class for the renderer, but all 
+   // this is a data storage class for the renderer
    class Geometry
    {
       // let everything be private, but let the geometry loader and the renderer access 
@@ -22,7 +32,7 @@ namespace Rendering
       // Note: In this design, the renderer could set things, but be nice to the program 
       // and don't exploit this permission loophole.
    private:
-      friend class Geometry_Loader;
+      friend class Utility::Geometry_Creation::Geometry_Loader;
       friend class Renderer;
 
       GLuint m_VAO_ID;
@@ -32,7 +42,8 @@ namespace Rendering
       // and we want good resource management, so just use the std::vector
       std::vector<glm::vec3> m_verts;
       std::vector<glm::vec3> m_normals;
-      std::vector<glm::vec3> m_indices;
+      std::vector<glm::vec3> m_colors;
+      std::vector<GLushort> m_indices;
 
       GLenum m_render_mode;
    };

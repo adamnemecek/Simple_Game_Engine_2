@@ -2,19 +2,29 @@
 #define ENGINE_GEOMETRY_LOADER_H
 
 
+namespace Rendering
+{
+   // forward declaration from different namespace
+   class Geometry;
+}
+
 namespace Utility
 {
-   class __declspec(dllexport) Geometry_Loader
+   namespace Geometry_Creation
    {
-   public:
-      static Geometry_Loader &get_instance();
+      static class __declspec(dllexport) Geometry_Loader
+      {
+      public:
+         enum GEOMETRY_LOADER_ENUMS
+         {
+            CUBE = 0,
+         };
 
-
-   private:
-      Geometry_Loader();
-      Geometry_Loader(const Geometry_Loader &);
-      Geometry_Loader &operator=(const Geometry_Loader &);
-   };
+         static void load_from_generator(
+            GEOMETRY_LOADER_ENUMS load_type,
+            Rendering::Geometry &geo);
+      };
+   }
 }
 
 #endif

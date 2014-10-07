@@ -42,7 +42,7 @@
     <ClCompile Include="Utilities\Geometry_Creation\Geometry_Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Geometry_Creation\shape_generator.cpp">
+    <ClCompile Include="Utilities\Geometry_Creation\Shape_Generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="Utilities\Geometry_Creation\Geometry_Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Geometry_Creation\shape_generator.h">
+    <ClInclude Include="Utilities\Geometry_Creation\Shape_Generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
