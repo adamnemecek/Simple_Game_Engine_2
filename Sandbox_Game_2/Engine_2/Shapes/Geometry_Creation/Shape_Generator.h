@@ -1,18 +1,12 @@
 #ifndef ENGINE_SHAPE_GENERATOR_H
 #define ENGINE_SHAPE_GENERATOR_H
 
-#include <vector>
-#include <glm\glm.hpp>
-
-// for GL typedefs
-#include <Utilities\include_GL_version.h>
-
-namespace Utility
+namespace Shapes
 {
+   class Shape_Data;
+
    namespace Geometry_Creation
    {
-      class Geometry;
-
       // this class can create geometry primitives or more complex shapes that are mathematically defined, like the teapot
       // Note: It is a static class because it never requires an instance
       static class __declspec(dllexport) Shape_Generator
@@ -31,7 +25,7 @@ namespace Utility
          // free up memory.
 
 
-         static void create_cube_data(std::vector<glm::vec3> &put_vertex_data_here, std::vector<GLushort> &put_index_data_here);
+         static void create_cube_data(Shape_Data *put_data_here);
       };
    }
 }

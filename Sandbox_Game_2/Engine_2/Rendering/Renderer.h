@@ -7,7 +7,7 @@
 #include <vector>
 
 // the renderer stores arrays of both of these, so we can't forward declare them
-#include <Rendering\Geometry.h>
+#include <Shapes\Geometry.h>
 #include <Rendering\Renderable.h>
 
 namespace Rendering
@@ -47,7 +47,7 @@ namespace Rendering
 
       // declare a pool of geometries
       static const uint m_MAX_GEOMETRIES = 10;
-      Geometry m_geometries[m_MAX_GEOMETRIES];
+      Shapes::Geometry m_geometries[m_MAX_GEOMETRIES];
       uint m_num_current_geometries;
 
       // declare a pool of renderables

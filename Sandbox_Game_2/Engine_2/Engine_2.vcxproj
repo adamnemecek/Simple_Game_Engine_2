@@ -85,10 +85,10 @@
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="junk_to_make_compiler_happy.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
+    <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />
+    <ClCompile Include="Shapes\Geometry_Creation\Shape_Generator.cpp" />
     <ClCompile Include="Timing\Stopwatch.cpp" />
     <ClCompile Include="Timing\Game_Clock.cpp" />
-    <ClCompile Include="Utilities\Geometry_Creation\Geometry_Loader.cpp" />
-    <ClCompile Include="Utilities\Geometry_Creation\Shape_Generator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
@@ -96,13 +96,14 @@
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
-    <ClInclude Include="Utilities\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Rendering\Renderer.h" />
-    <ClInclude Include="Utilities\Geometry_Creation\Shape_Generator.h" />
+    <ClInclude Include="Shapes\Geometry.h" />
+    <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
+    <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />
+    <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
     <ClInclude Include="Utilities\include_GL_version.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
-    <ClInclude Include="Rendering\Geometry.h" />
     <ClInclude Include="Rendering\Renderable.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
     <ClInclude Include="Timing\Game_Clock.h" />

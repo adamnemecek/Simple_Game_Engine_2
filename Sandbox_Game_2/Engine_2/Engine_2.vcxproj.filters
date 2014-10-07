@@ -39,10 +39,16 @@
     <ClCompile Include="Rendering\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Geometry_Creation\Geometry_Loader.cpp">
+    <ClCompile Include="Geometry\Geometry_Creation\Geometry_Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Geometry_Creation\Shape_Generator.cpp">
+    <ClCompile Include="Geometry\Geometry_Creation\Shape_Generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes\Geometry_Creation\Shape_Generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,9 +74,6 @@
     <ClInclude Include="Entities\Components\Border_Handler_Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\Geometry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Rendering\Renderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -86,10 +89,28 @@
     <ClInclude Include="Utilities\include_GL_version.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Geometry_Creation\Geometry_Loader.h">
+    <ClInclude Include="Geometry\Geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Geometry_Creation\Shape_Generator.h">
+    <ClInclude Include="Geometry\Geometry_Creation\Geometry_Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry\Geometry_Creation\Shape_Generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometry\Shape_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Shape_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

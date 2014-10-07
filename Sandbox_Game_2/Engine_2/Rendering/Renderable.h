@@ -14,7 +14,7 @@ namespace Rendering
 
    // a renderable is a simple data store and is a combination of geometry and 
    // location/orientation
-   class Renderable
+   class __declspec(dllexport) Renderable
    {
    public:
       // this will be updated on every frame, so just make it public
