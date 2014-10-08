@@ -30,7 +30,9 @@ namespace Shapes
       ~Geometry()
       {
          glDeleteVertexArrays(1, &m_VAO_ID);
-         glDeleteBuffers(1, &m_buffer_ID);
+         glDeleteBuffers(1, &m_vertex_buffer_ID);
+         glDeleteBuffers(1, &m_matrix_buffer_ID);
+         glDeleteBuffers(1, &m_element_buffer_ID);
       }
 
       // let everything be private, but let the geometry loader and the renderer access 
@@ -41,13 +43,17 @@ namespace Shapes
       friend class Geometry_Creation::Geometry_Loader;
       friend class Rendering::Renderer;
 
+      // these will be cleaned up by the destructor
       GLuint m_VAO_ID;
-      GLuint m_buffer_ID;
-      GLenum m_render_mode;
+      GLuint m_vertex_buffer_ID;
+      GLuint m_matrix_buffer_ID;
+      GLuint m_element_buffer_ID;
 
       // it makes sense to contain the vertex and index data in the geometry class itself
       // Note: This member will clean itself up upon destruction.
       Shape_Data m_shape_data;
+
+      GLenum m_render_mode;
    };
 }
 
