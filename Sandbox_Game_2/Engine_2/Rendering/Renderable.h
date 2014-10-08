@@ -1,30 +1,34 @@
 #ifndef ENGINE_RENDERABLE
 #define ENGINE_RENDERABLE
 
-// for vec
-#include <glm\vec3.hpp>
+#include <glm\mat4x4.hpp>
 
 // for GL typedefs
 #include <Utilities\include_GL_version.h>
 
-namespace Rendering
+namespace Shapes
 {
    // forward declaration of Geometry class
    class Geometry;
+}
+
+namespace Rendering
+{
 
    // a renderable is a simple data store and is a combination of geometry and 
    // location/orientation
    class __declspec(dllexport) Renderable
    {
    public:
-      // this will be updated on every frame, so just make it public
-      glm::vec3 where;
+      // these will be updated on every frame, so just make it public
+      glm::mat4 m_model_to_world_mat;
+      glm::mat4 m_orientation_only_mat;
 
    private:
       // let geometry loader, but no one else, have access to the geometry
       friend class Renderer;
 
-      Geometry *what;
+      Shapes::Geometry *m_geometry_ptr;
    };
 }
 

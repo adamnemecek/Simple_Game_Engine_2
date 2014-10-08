@@ -27,6 +27,13 @@ namespace Shapes
          case Geometry_Loader::CUBE:
          {
             Shape_Generator::create_cube_data(&(geo.m_shape_data));
+            geo.m_render_mode = GL_TRIANGLES;
+            break;
+         }
+         case Geometry_Loader::PLANE:
+         {
+            Shape_Generator::create_plane_data(20, &(geo.m_shape_data));
+            geo.m_render_mode = GL_TRIANGLES;
             break;
          }
          default:
@@ -54,8 +61,6 @@ namespace Shapes
          // position = 0
          // normals = 1
          // colors = 2
-         // full transform = 3, 4, 5, 6
-         // orientation only = 7, 8, 9, 10
          
          // some helper variables
          uint vertex_array_index = 0;
@@ -80,36 +85,6 @@ namespace Shapes
          vertex_array_index++;
 
 
-         // matrix buffer
-         // - generate one array buffer and bind it 
-         // - allocate space for two mat4's (full transform and orientation only) with DYNAMIC drawing, but send no data (matrix data is stored in the Renderable, not in every single geometry)
-         // - set vertex attribute pointers 
-         // - set vertex attribute divisors to 1 for the two matrices
-         glGenBuffers(1, &geo.m_matrix_buffer_ID);
-         glBindBuffer(GL_ARRAY_BUFFER, geo.m_matrix_buffer_ID);
-         glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * 2, 0, GL_DYNAMIC_DRAW);
-         
-         // full transform matrix
-         for (size_t count = 0; count < 4; count++)
-         {
-            glEnableVertexAttribArray(vertex_array_index);
-            glVertexAttribPointer(vertex_array_index, 4, GL_FLOAT, GL_FALSE, sizeof(mat4), (void *)(sizeof(float) * 4 * count));
-            glVertexAttribDivisor(vertex_array_index, 1);
-
-            vertex_array_index++;
-         }
-
-         // orientation only matrix
-         for (size_t count = 0; count < 4; count++)
-         {
-            glEnableVertexAttribArray(vertex_array_index);
-            glVertexAttribPointer(vertex_array_index, 4, GL_FLOAT, GL_FALSE, sizeof(mat4), (void *)(sizeof(float) * 4 * count));
-            glVertexAttribDivisor(vertex_array_index, 1);
-
-            vertex_array_index++;
-         }
-
-
          // indices buffer
          // - generate one element buffer object and bind it
          // - allocate space for the indices and send the data
@@ -123,6 +98,8 @@ namespace Shapes
          glBindVertexArray(0);
          glBindBuffer(GL_ARRAY_BUFFER, 0);
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+
       }
    }
    

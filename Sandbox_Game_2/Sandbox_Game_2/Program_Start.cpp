@@ -52,10 +52,13 @@ void initialize_vertex_buffer()
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   initialize_program("VertexColors.vert", "VertexColors.frag");
-   initialize_vertex_buffer();
-   glGenVertexArrays(1, &vao);
-   glBindVertexArray(vao);
+   //initialize_program("VertexColors.vert", "VertexColors.frag");
+   //initialize_vertex_buffer();
+   //glGenVertexArrays(1, &vao);
+   //glBindVertexArray(vao);
+
+   // load level
+
 }
 
 //Called to update the display.

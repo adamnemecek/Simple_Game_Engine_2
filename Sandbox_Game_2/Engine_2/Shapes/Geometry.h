@@ -31,7 +31,6 @@ namespace Shapes
       {
          glDeleteVertexArrays(1, &m_VAO_ID);
          glDeleteBuffers(1, &m_vertex_buffer_ID);
-         glDeleteBuffers(1, &m_matrix_buffer_ID);
          glDeleteBuffers(1, &m_element_buffer_ID);
       }
 
@@ -46,7 +45,6 @@ namespace Shapes
       // these will be cleaned up by the destructor
       GLuint m_VAO_ID;
       GLuint m_vertex_buffer_ID;
-      GLuint m_matrix_buffer_ID;
       GLuint m_element_buffer_ID;
 
       // it makes sense to contain the vertex and index data in the geometry class itself

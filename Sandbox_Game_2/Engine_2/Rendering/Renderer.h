@@ -9,8 +9,12 @@
 #include <vector>
 
 // the renderer stores arrays of both of these, so we can't forward declare them
-#include <Shapes\Geometry.h>
 #include <Rendering\Renderable.h>
+
+namespace Shapes
+{
+   class Geometry;
+}
 
 namespace Rendering
 {
@@ -20,19 +24,17 @@ namespace Rendering
       bool initialize();
       bool shutdown();
 
+      // returns the program ID
       GLuint create_shader_program(
          const std::string *shader_file_paths,
          GLenum *shader_types,
          uint num_shaders);
+
       void bind_shader_program(GLuint program_ID);
       void unbind_current_shader_program();
 
-      Geometry *add_geometry(
-         glm::vec3 *verts_ptr, glm::vec3 *normal_verts_ptr, uint num_verts,
-         ushort *indices_ptr, uint num_indices,
-         GLenum render_mode = GL_TRIANGLES);
-
-      Renderable *add_renderable(Geometry *geometry_ptr);
+      // returns a pointer to a renderable (??why??)
+      Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
 
       void set_viewport(GLsizei width, GLsizei height);
 
@@ -42,15 +44,10 @@ namespace Rendering
 
    private:
       std::vector<GLuint> m_shader_programs;
+      GLint m_full_transform_uniform_location;
+      GLint m_orientation_only_uniform_location;
 
-      glm::mat4 get_aspect_correction_matrix() const;
-      GLsizei m_viewport_width;
-      GLsizei m_viewport_height;
-
-      // declare a pool of geometries
-      static const uint m_MAX_GEOMETRIES = 10;
-      Shapes::Geometry m_geometries[m_MAX_GEOMETRIES];
-      uint m_num_current_geometries;
+      glm::mat4 m_perspective_mat;
 
       // declare a pool of renderables
       static const uint m_MAX_RENDERABLES = 10;

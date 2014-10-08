@@ -6,13 +6,12 @@
 
 namespace Shapes
 {
-   class Shape_Data;
+   struct Shape_Data;
 
    namespace Geometry_Creation
    {
       // this class can create geometry primitives or more complex shapes that are mathematically defined, like the teapot
-      // Note: It is a static class because it never requires an instance
-      static class __declspec(dllexport) Shape_Generator
+      class __declspec(dllexport) Shape_Generator
       {
       public:
          // the order of the returned vertices is as follows:
@@ -30,6 +29,12 @@ namespace Shapes
 
          static void create_cube_data(Shape_Data *put_data_here);
          static void create_plane_data(uint side_length, Shape_Data *put_data_here);
+
+      private:
+         // enforce staticness
+         Shape_Generator();
+         Shape_Generator(const Shape_Generator&);
+         Shape_Generator &operator=(const Shape_Generator&);
       };
    }
 }

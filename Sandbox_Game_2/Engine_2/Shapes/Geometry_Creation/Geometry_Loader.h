@@ -9,15 +9,22 @@ namespace Shapes
 
    namespace Geometry_Creation
    {
-      static class __declspec(dllexport) Geometry_Loader
+      class __declspec(dllexport) Geometry_Loader
       {
       public:
          enum GEOMETRY_LOADER_ENUMS
          {
             CUBE = 0,
+            PLANE,
          };
 
          static void load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry &geo);
+
+      private:
+         // enforce staticness
+         Geometry_Loader();
+         Geometry_Loader(const Geometry_Loader&);
+         Geometry_Loader &operator=(const Geometry_Loader&);
       };
    }
 }
