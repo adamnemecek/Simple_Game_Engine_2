@@ -100,6 +100,7 @@
     <ClInclude Include="Shapes\Geometry.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />
+    <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
     <ClInclude Include="Utilities\include_GL_version.h" />

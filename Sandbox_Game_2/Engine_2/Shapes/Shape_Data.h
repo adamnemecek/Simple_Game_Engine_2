@@ -4,6 +4,7 @@
 #include <glm\glm.hpp>
 #include <Utilities\include_GL_version.h>
 #include <Utilities\Typedefs.h>
+#include <Shapes\My_Vertex.h>
 
 namespace Shapes
 {
@@ -11,30 +12,40 @@ namespace Shapes
    // Note: Export this to dll because it is a member of the geometry class.
    struct __declspec(dllexport) Shape_Data
    {
-      // ensure that pointers are null
+      // ensure that values start as null
       Shape_Data()
-         : m_position(0),
-         m_normals(0),
-         m_colors(0),
-         m_indices(0)
+         : m_verts(0),
+         m_num_verts(0),
+         m_indices(0),
+         m_num_indices(0)
       {
       }
 
       // ensure that memory is cleared on object destruction
       ~Shape_Data()
       {
-         delete[] m_position;
-         delete[] m_normals;
-         delete[] m_colors;
+         delete[] m_verts;
          delete[] m_indices;
       }
 
-      // it is expected for there to be one position, one normal, and one color per vert, so their count is identical
-      glm::vec3 *m_position;
-      glm::vec3 *m_normals;
-      glm::vec3 *m_colors;
-      uint m_num_verts;
+      inline GLsizeiptr vertex_buffer_size() const
+      {
+         return (m_num_verts * My_Vertex::BYTES_PER_VERTEX);
+      }
 
+      inline GLsizeiptr index_buffer_size() const
+      {
+         // a pointer will be dereferenced here, so check that it isn't null first
+         if (0 != m_indices)
+         {
+            return (m_num_indices * sizeof(*m_indices));
+         }
+
+         return 0;
+      }
+      
+      My_Vertex *m_verts;
+      uint m_num_verts;
       GLushort *m_indices;
       uint m_num_indices;
    };

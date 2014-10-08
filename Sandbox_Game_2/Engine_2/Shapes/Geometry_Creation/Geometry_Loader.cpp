@@ -56,23 +56,28 @@ namespace Shapes
          // colors = 2
          // full transform = 3, 4, 5, 6
          // orientation only = 7, 8, 9, 10
-         GLuint vertex_array_index = 0;
+         
+         // some helper variables
+         uint vertex_array_index = 0;
+         uint buffer_start_offset = 0;
 
-         void *data_ptrs[] =
-         {
-            geo.m_shape_data.m_position,
-            geo.m_shape_data.m_normals,
-            geo.m_shape_data.m_colors
-         };
+         // position
+         glEnableVertexAttribArray(vertex_array_index);
+         glVertexAttribPointer(vertex_array_index, My_Vertex::FLOATS_PER_POSITION, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)buffer_start_offset);
+         buffer_start_offset += My_Vertex::BYTES_PER_POSITION;
+         vertex_array_index++;
 
-         for (size_t count = 0; count < 3; count++)
-         {
-            glEnableVertexAttribArray(vertex_array_index);
-            glVertexAttribPointer(vertex_array_index, attrib_byte_count, GL_FLOAT, GL_FALSE, 0, (void *)(attrib_byte_count * count));
-            glBufferSubData(GL_ARRAY_BUFFER, attrib_byte_count * count, attrib_byte_count, (void *)(data_ptrs[count]));
+         // normal
+         glEnableVertexAttribArray(vertex_array_index);
+         glVertexAttribPointer(vertex_array_index, My_Vertex::FLOATS_PER_NORMAL, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)buffer_start_offset);
+         buffer_start_offset += My_Vertex::BYTES_PER_NORMAL;
+         vertex_array_index++;
 
-            vertex_array_index++;
-         }
+         // color
+         glEnableVertexAttribArray(vertex_array_index);
+         glVertexAttribPointer(vertex_array_index, My_Vertex::FLOATS_PER_COLOR, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)buffer_start_offset);
+         buffer_start_offset += My_Vertex::BYTES_PER_COLOR;
+         vertex_array_index++;
 
 
          // matrix buffer
@@ -83,7 +88,7 @@ namespace Shapes
          glGenBuffers(1, &geo.m_matrix_buffer_ID);
          glBindBuffer(GL_ARRAY_BUFFER, geo.m_matrix_buffer_ID);
          glBufferData(GL_ARRAY_BUFFER, sizeof(mat4) * 2, 0, GL_DYNAMIC_DRAW);
-
+         
          // full transform matrix
          for (size_t count = 0; count < 4; count++)
          {

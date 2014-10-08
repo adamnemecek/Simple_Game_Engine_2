@@ -1,6 +1,9 @@
 #ifndef ENGINE_SHAPE_GENERATOR_H
 #define ENGINE_SHAPE_GENERATOR_H
 
+
+#include <Utilities\Typedefs.h>
+
 namespace Shapes
 {
    class Shape_Data;
@@ -26,6 +29,7 @@ namespace Shapes
 
 
          static void create_cube_data(Shape_Data *put_data_here);
+         static void create_plane_data(uint side_length, Shape_Data *put_data_here);
       };
    }
 }

@@ -1,6 +1,7 @@
 #include "Shape_Generator.h"
 
 #include <Shapes\Shape_Data.h>
+#include <Shapes\My_Vertex.h>
 
 #include <glm\glm.hpp>
 using glm::vec3;
@@ -32,104 +33,94 @@ namespace Shapes
             return;
          }
 
-         vec3 local_verts[] = 
+         My_Vertex local_verts[] = 
          {
             vec3(-1.0f, +1.0f, +1.0f),  // 0
-               vec3(+0.0f, +1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, +1.0f, +1.0f),  // 1
-               vec3(+0.0f, +1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, +1.0f, -1.0f),  // 2
-               vec3(+0.0f, +1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, +1.0f, -1.0f),  // 3
-               vec3(+0.0f, +1.0f, +0.0f),  // Normal
-               random_color(),
+            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, +1.0f, +1.0f),  // 1
+            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, +1.0f, -1.0f),  // 2
+            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, +1.0f, -1.0f),  // 3
+            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            random_color(),
 
-               vec3(-1.0f, +1.0f, -1.0f),  // 4
-               vec3(+0.0f, +0.0f, -1.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, +1.0f, -1.0f),  // 5
-               vec3(+0.0f, +0.0f, -1.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, -1.0f, -1.0f),  // 6
-               vec3(+0.0f, +0.0f, -1.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, -1.0f),  // 7
-               vec3(+0.0f, +0.0f, -1.0f),  // Normal
-               random_color(),
+            vec3(-1.0f, +1.0f, -1.0f),  // 4
+            vec3(+0.0f, +0.0f, -1.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, +1.0f, -1.0f),  // 5
+            vec3(+0.0f, +0.0f, -1.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, -1.0f, -1.0f),  // 6
+            vec3(+0.0f, +0.0f, -1.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, -1.0f),  // 7
+            vec3(+0.0f, +0.0f, -1.0f),  // Normal
+            random_color(),
 
-               vec3(+1.0f, +1.0f, -1.0f),  // 8
-               vec3(+1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, +1.0f, +1.0f),  // 9
-               vec3(+1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, -1.0f, +1.0f),  // 10
-               vec3(+1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, -1.0f, -1.0f),  // 11
-               vec3(+1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
+            vec3(+1.0f, +1.0f, -1.0f),  // 8
+            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, +1.0f, +1.0f),  // 9
+            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, -1.0f, +1.0f),  // 10
+            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, -1.0f, -1.0f),  // 11
+            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
 
-               vec3(-1.0f, +1.0f, +1.0f),  // 12
-               vec3(-1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, +1.0f, -1.0f),  // 13
-               vec3(-1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, -1.0f),  // 14
-               vec3(-1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, +1.0f),  // 15
-               vec3(-1.0f, +0.0f, +0.0f),  // Normal
-               random_color(),
+            vec3(-1.0f, +1.0f, +1.0f),  // 12
+            vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, +1.0f, -1.0f),  // 13
+            vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, -1.0f),  // 14
+            vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, +1.0f),  // 15
+            vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
 
-               vec3(+1.0f, +1.0f, +1.0f),  // 16
-               vec3(+0.0f, +0.0f, +1.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, +1.0f, +1.0f),  // 17
-               vec3(+0.0f, +0.0f, +1.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, +1.0f),  // 18
-               vec3(+0.0f, +0.0f, +1.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, -1.0f, +1.0f),  // 19
-               vec3(+0.0f, +0.0f, +1.0f),  // Normal
-               random_color(),
+            vec3(+1.0f, +1.0f, +1.0f),  // 16
+            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, +1.0f, +1.0f),  // 17
+            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, +1.0f),  // 18
+            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, -1.0f, +1.0f),  // 19
+            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
 
-               vec3(+1.0f, -1.0f, -1.0f),  // 20
-               vec3(+0.0f, -1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, -1.0f),  // 21
-               vec3(+0.0f, -1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(-1.0f, -1.0f, +1.0f),  // 22
-               vec3(+0.0f, -1.0f, +0.0f),  // Normal
-               random_color(),
-               vec3(+1.0f, -1.0f, +1.0f),  // 23
-               vec3(+0.0f, -1.0f, +0.0f),  // Normal
-               random_color(),
+            vec3(+1.0f, -1.0f, -1.0f),  // 20
+            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, -1.0f),  // 21
+            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(-1.0f, -1.0f, +1.0f),  // 22
+            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            vec3(+1.0f, -1.0f, +1.0f),  // 23
+            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
          };
 
-         // there are three vec3's per vertex
-         uint num_verts = sizeof(local_verts) / (sizeof(*local_verts) * 3);
-
-         put_data_here->m_num_verts = num_verts;
-         put_data_here->m_position = (vec3 *)malloc(sizeof(vec3) * num_verts);   // ??check if malloc failed??
-         put_data_here->m_normals = (vec3 *)malloc(sizeof(vec3) * num_verts);
-         put_data_here->m_colors = (vec3 *)malloc(sizeof(vec3) * num_verts);
-
          // copy away!
-         for (size_t vert_index = 0; vert_index < num_verts; vert_index++)
-         {
-            // the local vertex data is organized in sets of three for mental book keeping purposes,
-            // but it needs to be split up in the shape data structure
-            put_data_here->m_position[vert_index] = local_verts[(vert_index * 3) + 0];
-            put_data_here->m_normals[vert_index] = local_verts[(vert_index * 3) + 1];
-            put_data_here->m_colors[vert_index] = local_verts[(vert_index * 3) + 2];
-         }
+         uint array_size_bytes = sizeof(local_verts);
+         uint num_verts = array_size_bytes / sizeof(*local_verts);
+         put_data_here->m_num_verts = num_verts;
+         put_data_here->m_verts = new My_Vertex[num_verts];
+         memcpy(put_data_here->m_verts, local_verts, array_size_bytes);
+
 
          GLushort local_indices[] =
          {
@@ -142,8 +133,59 @@ namespace Shapes
          };
 
          // copy away!
-         put_data_here->m_num_indices = sizeof(local_indices) / sizeof(*local_indices);
-         put_data_here->m_indices = (GLushort *)malloc(sizeof(local_indices));  // ??check if malloc failed??
+         array_size_bytes = sizeof(local_indices);
+         uint num_indices = array_size_bytes / sizeof(*local_indices);
+         put_data_here->m_num_indices = num_indices;
+         put_data_here->m_indices = new GLushort[num_indices];
+         memcpy(put_data_here->m_indices, local_indices, array_size_bytes);
+      }
+
+      void create_plane_data(uint side_length, Shape_Data *put_data_here)
+      {
+         // make a plane that is centered on the origin
+
+         uint vert_count = side_length * side_length;
+         put_data_here->m_num_verts = vert_count;
+         put_data_here->m_verts = new My_Vertex[vert_count];
+
+         int row_max_count = side_length;
+         float row_half_length = (float)side_length / 2;
+         int col_max_count = side_length;
+         float col_half_length = (float)side_length / 2;
+
+         for (int row_count = 0; row_count < row_max_count; row_count++)
+         {
+            for (int col_count = 0; col_count < col_max_count; col_count++)
+            {
+               // start at upper left (-X, +Y) and work to lower right (+X, -Y)
+               My_Vertex& this_vert = put_data_here->m_verts[row_count * row_max_count + col_count];
+               this_vert.position.x = col_count - col_half_length;
+               this_vert.position.y = 0.0f;
+               this_vert.position.z = row_half_length - row_count;
+               this_vert.color = random_color();
+               this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
+            }
+         }
+
+         // 6 indices to draw a square (every adjacent set of 4 vertices (including overlap))
+         // Note: 3x3 is a 2x2 set of 4 vertices, 4x4 is a 3x3 set of 4, etc.
+         uint index_count = (row_max_count - 1) * (col_max_count - 1) * 6;
+         put_data_here->m_num_indices = index_count;
+         put_data_here->m_indices = new GLushort[index_count];
+         int index_counter = 0;
+         for (int row_count = 0; row_count < (row_max_count - 1); row_count++)
+         {
+            for (int col_count = 0; col_count < (col_max_count - 1); col_count++)
+            {
+               put_data_here->m_indices[index_counter++] = row_count * row_max_count + col_count;
+               put_data_here->m_indices[index_counter++] = row_count * row_max_count + (col_count + 1);
+               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + (col_count + 1);
+               
+               put_data_here->m_indices[index_counter++] = row_count * row_max_count + col_count;
+               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + (col_count + 1);
+               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + col_count;
+            }
+         }
       }
    }
 }
