@@ -1,7 +1,7 @@
 #ifndef ENGINE_MY_VERTEX_H
 #define ENGINE_MY_VERTEX_H
 
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 
 namespace Shapes
 {

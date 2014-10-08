@@ -1,6 +1,8 @@
 #ifndef ENGINE_RENDERABLE_H
 #define ENGINE_RENDERABLE_H
 
+#include <glm\mat4x4.hpp>
+#include <glm\vec3.hpp>
 #include <Utilities\include_GL_version.h>
 #include <Utilities\Typedefs.h>
 #include <string>

@@ -3,7 +3,7 @@
 
 #include <Entities\Game_Component.h>
 #include <Utilities\Typedefs.h>
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 
 namespace Entities
 {

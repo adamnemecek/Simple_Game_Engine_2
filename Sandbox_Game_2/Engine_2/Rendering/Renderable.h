@@ -2,7 +2,7 @@
 #define ENGINE_RENDERABLE
 
 // for vec
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 
 // for GL typedefs
 #include <Utilities\include_GL_version.h>

@@ -1,7 +1,7 @@
 #ifndef ENGINE_ENTITY_H
 #define ENGINE_ENTITY_H
 
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
 namespace Entities
@@ -29,7 +29,7 @@ namespace Entities
 
       // these components/values are shared by all entities, and they will likely need to be
       // updated by some other component, so just make them public
-      glm::vec4 position;
+      glm::vec3 position;
 
    private:
       static const uint m_MAX_COMPONENTS = 10;

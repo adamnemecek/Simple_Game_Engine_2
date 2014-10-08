@@ -2,7 +2,7 @@
 #define ENGINE_PHYSICS_COMPONENT_H
 
 #include <Entities\Game_Component.h>
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
 namespace Entities
