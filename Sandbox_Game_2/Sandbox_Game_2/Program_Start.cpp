@@ -8,45 +8,76 @@ when/why they are called. You can copy this file and simply implement
 these function.
 ***********************************************************************/
 
-
-#include <glload/gl_3_3_comp.h>
-#include <GL/freeglut.h>
-#include <framework.h>
+#include <Engine_2\Rendering\Renderer.h>
+#include <Engine_2\Rendering\Renderable.h>
+#include <Engine_2\Utilities\include_GL_version.h>
 
 #include <string>
-#include <vector>
+using std::string;
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+#include <Engine_2\Shapes\Geometry.h>
+#include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm\gtc\matrix_transform.hpp>
+using glm::translate;
+using glm::rotate;
+
+#include <glm\vec3.hpp>
+using glm::vec3;
+#include <glm\mat4x4.hpp>
+using glm::mat4;
+
+//#include <glload/gl_3_3_comp.h>
+
+// include this last to avoid errors when this includes gl.h 
+// (apparently this needs to be included after the glm and glload and other libraries)
+#include <GL/freeglut.h>
+//#include <framework.h>
+//#include <vector>
 
 
-GLuint g_program_ID;
+Rendering::Renderer g_renderer;
 
-void initialize_program(const std::string &str_vertex_shader, const std::string &str_fragment_shader)
-{
-   std::vector<GLuint> shader_list;
-   shader_list.push_back(Framework::LoadShader(GL_VERTEX_SHADER, str_vertex_shader));
-   shader_list.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, str_fragment_shader));
+Rendering::Renderable *g_renderable;
+Shapes::Geometry g_geometry;
 
-   g_program_ID = Framework::CreateProgram(shader_list);
-}
+//GLuint g_program_ID;
+//
+//void initialize_program(const std::string &str_vertex_shader, const std::string &str_fragment_shader)
+//{
+//   std::vector<GLuint> shader_list;
+//   shader_list.push_back(Framework::LoadShader(GL_VERTEX_SHADER, str_vertex_shader));
+//   shader_list.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, str_fragment_shader));
+//
+//   g_program_ID = Framework::CreateProgram(shader_list);
+//}
+//
+//const float vertexData[] = {
+//   1.0f, 0.0f, 0.0f, 1.0f,
+//   0.0f, 1.0f, 0.0f, 1.0f,
+//   0.0f, 0.0f, 1.0f, 1.0f,
+//   0.0f, 0.5f, 0.0f, 1.0f,
+//   0.5f, -0.366f, 0.0f, 1.0f,
+//   -0.5f, -0.366f, 0.0f, 1.0f,
+//};
+//
+//GLuint vertexBufferObject;
+//GLuint vao;
+//
+//void initialize_vertex_buffer()
+//{
+//   glGenBuffers(1, &vertexBufferObject);
+//   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+//   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+//   glBindBuffer(GL_ARRAY_BUFFER, 0);
+//}
 
-const float vertexData[] = {
-   1.0f, 0.0f, 0.0f, 1.0f,
-   0.0f, 1.0f, 0.0f, 1.0f,
-   0.0f, 0.0f, 1.0f, 1.0f,
-   0.0f, 0.5f, 0.0f, 1.0f,
-   0.5f, -0.366f, 0.0f, 1.0f,
-   -0.5f, -0.366f, 0.0f, 1.0f,
-};
 
-GLuint vertexBufferObject;
-GLuint vao;
-
-void initialize_vertex_buffer()
-{
-   glGenBuffers(1, &vertexBufferObject);
-   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
 
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
@@ -59,6 +90,32 @@ void init()
 
    // load level
 
+
+   g_renderer.initialize();
+   string file_paths[] = 
+   {
+      "VertexColors.vert",
+      "VertexColors.frag",
+   };
+   GLenum shader_types[] = 
+   {
+      GL_VERTEX_SHADER,
+      GL_FRAGMENT_SHADER,
+   };
+
+   GLuint program_ID = g_renderer.create_shader_program(file_paths, shader_types, 2);
+   g_renderer.bind_shader_program(program_ID);
+   cout << "Program ID: " << program_ID << endl;
+
+   //using Shapes::Geometry_Creation::Geometry_Loader;
+   //Geometry_Loader::load_from_generator(Geometry_Loader::TRIANGLE_2D, g_geometry);
+
+   //g_renderable = g_renderer.add_renderable(&g_geometry);
+
+   //mat4 model_to_world = translate(mat4(), vec3(0.0f, 0.0f, -5.0f));
+   //mat4 orientation_only = rotate(mat4(), 0.0f, vec3(0.0f, 1.0f, 0.0f));
+   //g_renderable->m_model_to_world_mat = model_to_world;
+   //g_renderable->m_orientation_only_mat = orientation_only;
 }
 
 //Called to update the display.
@@ -66,24 +123,7 @@ void init()
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   glClear(GL_COLOR_BUFFER_BIT);
-
-   glUseProgram(g_program_ID);
-
-   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-   glEnableVertexAttribArray(0);
-   glEnableVertexAttribArray(15);
-   //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-   //glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
-   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
-   glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-   glDrawArrays(GL_TRIANGLES, 0, 3);
-
-   glDisableVertexAttribArray(0);
-   glDisableVertexAttribArray(15);
-   glUseProgram(0);
+   g_renderer.render_scene();
 
    glutSwapBuffers();
    glutPostRedisplay();
@@ -93,7 +133,8 @@ void display()
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void reshape (int w, int h)
 {
-   glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+   //glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+   g_renderer.set_viewport(w, h);
 }
 
 //Called whenever a key on the keyboard was pressed.

@@ -26,6 +26,8 @@ namespace Shapes
          // responsibility to extract data from this returned object and then let it terminate to 
          // free up memory.
 
+         // 2D shapes
+         static void create_triangle(Shape_Data *put_data_here);
 
          static void create_cube_data(Shape_Data *put_data_here);
          static void create_plane_data(uint side_length, Shape_Data *put_data_here);

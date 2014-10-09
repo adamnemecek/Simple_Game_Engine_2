@@ -12,6 +12,8 @@ using std::ios;
 
 #include <string>
 using std::string;
+
+#include <Utilities\Typedefs.h>
 #endif
 
 namespace Profiling
@@ -101,9 +103,9 @@ namespace Profiling
       out_stream << "\n";
 
       // write the time data to the file row by row
-      for (int frame_index_counter = 0; frame_index_counter < (m_frame_index % MAX_FRAME_SAMPLES); frame_index_counter++)
+      for (uint frame_index_counter = 0; frame_index_counter < (m_frame_index % MAX_FRAME_SAMPLES); frame_index_counter++)
       {
-         for (int category_index_counter = 0; category_index_counter < MAX_PROFILER_CATEGORIES; category_index_counter++)
+         for (uint category_index_counter = 0; category_index_counter < MAX_PROFILER_CATEGORIES; category_index_counter++)
          {
             m_profiler_category_data &data_ref = m_profiler_data[category_index_counter];
             if (data_ref.category_name.empty())

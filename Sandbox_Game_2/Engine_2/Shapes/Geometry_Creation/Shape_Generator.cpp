@@ -3,8 +3,10 @@
 #include <Shapes\Shape_Data.h>
 #include <Shapes\My_Vertex.h>
 
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 using glm::vec3;
+
+#include <stdlib.h>
 
 // for GL typedefs
 #include <Utilities\include_GL_version.h>
@@ -22,10 +24,54 @@ vec3 random_color()
    return ret;
 }
 
+
+
+
+
 namespace Shapes
 {
    namespace Geometry_Creation
    {
+      void Shape_Generator::create_triangle(Shape_Data *put_data_here)
+      {
+         My_Vertex local_verts[] = 
+         {
+            vec3(-1.0f, -1.0f, +0.0f),          // left bottom corner
+            vec3(1.0f, 0.0f, 0.0f),             // all red
+            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+
+            vec3(+1.0f, -1.0f, +0.0f),          // right bottom corner
+            vec3(1.0f, 1.0f, 0.0f),             // red + green (apparently this makes yellow)
+            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+
+            vec3(+0.0f, +1.0f, +0.0f),          // center top
+            vec3(1.0f, 0.0f, 1.0f),             // red + blue (apparently this makes pink
+            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+         };
+
+         // copy away!
+         uint array_size_bytes = sizeof(local_verts);
+         uint num_verts = array_size_bytes / sizeof(*local_verts);
+         put_data_here->m_num_verts = num_verts;
+         put_data_here->m_verts = new My_Vertex[num_verts];
+         memcpy(put_data_here->m_verts, local_verts, array_size_bytes);
+
+
+         GLushort local_indices[] =
+         {
+            0, 1, 2, 
+         };
+
+         // copy away!
+         array_size_bytes = sizeof(local_indices);
+         uint num_indices = array_size_bytes / sizeof(*local_indices);
+         put_data_here->m_num_indices = num_indices;
+         put_data_here->m_indices = new GLushort[num_indices];
+         memcpy(put_data_here->m_indices, local_indices, array_size_bytes);
+
+      }
+
+
       void Shape_Generator::create_cube_data(Shape_Data *put_data_here)
       {
          if (0 == put_data_here)
@@ -140,7 +186,7 @@ namespace Shapes
          memcpy(put_data_here->m_indices, local_indices, array_size_bytes);
       }
 
-      void create_plane_data(uint side_length, Shape_Data *put_data_here)
+      void Shape_Generator::create_plane_data(uint side_length, Shape_Data *put_data_here)
       {
          // make a plane that is centered on the origin
 

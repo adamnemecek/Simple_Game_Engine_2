@@ -3,8 +3,10 @@
 #include <Shapes\Geometry.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
 
-#include <glm\glm.hpp>
+#include <glm\vec3.hpp>
 using glm::vec3;
+
+#include <glm\mat4x4.hpp>
 using glm::mat4;
 
 // to make buffer data passing easier
@@ -33,6 +35,12 @@ namespace Shapes
          case Geometry_Loader::PLANE:
          {
             Shape_Generator::create_plane_data(20, &(geo.m_shape_data));
+            geo.m_render_mode = GL_TRIANGLES;
+            break;
+         }
+         case Geometry_Loader::TRIANGLE_2D:
+         {
+            Shape_Generator::create_triangle(&(geo.m_shape_data));
             geo.m_render_mode = GL_TRIANGLES;
             break;
          }

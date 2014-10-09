@@ -40,9 +40,10 @@ namespace Rendering
 
       void render_scene();
 
-
-
    private:
+      // helper function(s)
+      GLint find_uniform(const GLuint program_ID, const std::string &uniform_name);
+
       std::vector<GLuint> m_shader_programs;
       GLint m_full_transform_uniform_location;
       GLint m_orientation_only_uniform_location;

@@ -42,7 +42,7 @@ namespace Profiling
       Profiler(const Profiler&);
       Profiler &operator=(const Profiler&);
 
-      int m_frame_index;
+      uint m_frame_index;
 
       // this defines the profiler data for each frame of each category
       // Note: The memory for it is declared up front to avoid having any 

@@ -14,13 +14,12 @@ namespace Shapes
 
 namespace Rendering
 {
-
    // a renderable is a simple data store and is a combination of geometry and 
    // location/orientation
    class __declspec(dllexport) Renderable
    {
    public:
-      // these will be updated on every frame, so just make it public
+      // these will be updated on every frame, so just make them public
       glm::mat4 m_model_to_world_mat;
       glm::mat4 m_orientation_only_mat;
 

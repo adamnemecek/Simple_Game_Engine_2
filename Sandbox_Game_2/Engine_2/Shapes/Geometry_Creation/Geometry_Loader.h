@@ -2,6 +2,9 @@
 #define ENGINE_GEOMETRY_LOADER_H
 
 
+#include <iostream>
+using std::cout;
+using std::endl;
 
 namespace Shapes
 {
@@ -16,6 +19,7 @@ namespace Shapes
          {
             CUBE = 0,
             PLANE,
+            TRIANGLE_2D,
          };
 
          static void load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry &geo);

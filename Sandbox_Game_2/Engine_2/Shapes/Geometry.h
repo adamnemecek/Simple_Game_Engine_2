@@ -26,7 +26,8 @@ namespace Shapes
    // this is a data storage class for the renderer
    class __declspec(dllexport) Geometry
    {
-      // for cleaning up when this object is destroyed
+   public:
+      // public destructor for cleaning up when this object is destroyed
       ~Geometry()
       {
          glDeleteVertexArrays(1, &m_VAO_ID);
@@ -34,11 +35,12 @@ namespace Shapes
          glDeleteBuffers(1, &m_element_buffer_ID);
       }
 
-      // let everything be private, but let the geometry loader and the renderer access 
+   private:
+      // let everything else be private, but let the geometry loader and the renderer access 
       // everything (it's easier that way)
       // Note: In this design, the renderer could set things, but be nice to the program 
       // and don't exploit this permission loophole.
-   private:
+
       friend class Geometry_Creation::Geometry_Loader;
       friend class Rendering::Renderer;
 
