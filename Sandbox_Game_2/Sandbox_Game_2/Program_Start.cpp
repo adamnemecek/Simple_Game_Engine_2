@@ -107,10 +107,10 @@ void init()
    g_renderer.bind_shader_program(program_ID);
    cout << "Program ID: " << program_ID << endl;
 
-   //using Shapes::Geometry_Creation::Geometry_Loader;
-   //Geometry_Loader::load_from_generator(Geometry_Loader::TRIANGLE_2D, g_geometry);
+   using Shapes::Geometry_Creation::Geometry_Loader;
+   Geometry_Loader::load_from_generator(Geometry_Loader::TRIANGLE_2D, g_geometry);
 
-   //g_renderable = g_renderer.add_renderable(&g_geometry);
+   g_renderable = g_renderer.add_renderable(&g_geometry);
 
    //mat4 model_to_world = translate(mat4(), vec3(0.0f, 0.0f, -5.0f));
    //mat4 orientation_only = rotate(mat4(), 0.0f, vec3(0.0f, 1.0f, 0.0f));

@@ -37,16 +37,16 @@ namespace Shapes
          My_Vertex local_verts[] = 
          {
             vec3(-1.0f, -1.0f, +0.0f),          // left bottom corner
-            vec3(1.0f, 0.0f, 0.0f),             // all red
-            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+            vec3(+0.0f, +0.0f, +1.0f),             // normal points out of screen
+            vec3(+1.0f, +0.0f, +0.0f),          // red
 
             vec3(+1.0f, -1.0f, +0.0f),          // right bottom corner
-            vec3(1.0f, 1.0f, 0.0f),             // red + green (apparently this makes yellow)
             vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+            vec3(+0.0f, +1.0f, +0.0f),          // green
 
             vec3(+0.0f, +1.0f, +0.0f),          // center top
-            vec3(1.0f, 0.0f, 1.0f),             // red + blue (apparently this makes pink
-            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+            vec3(+1.0f, +0.0f, +1.0f),          // normal points out of screen
+            vec3(+0.0f, +0.0f, +1.0f),          // blue
          };
 
          // copy away!

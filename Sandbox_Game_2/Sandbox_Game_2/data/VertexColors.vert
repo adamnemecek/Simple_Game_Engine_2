@@ -11,7 +11,7 @@ smooth out vec4 theColor;
 
 void main()
 {
-	gl_Position = position;
-   theColor = color;
+	gl_Position = full_transform * position;
+   theColor = orientation_only * color;
 }
 

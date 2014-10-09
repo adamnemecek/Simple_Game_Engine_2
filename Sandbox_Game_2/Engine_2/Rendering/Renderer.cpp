@@ -34,38 +34,10 @@ using std::cout;
 using std::endl;
 
 
-#include <Shapes\My_Vertex.h>
-using Shapes::My_Vertex;
-
-
-My_Vertex g_verts[] =
-{
-   vec3(-1.0f, -1.0f, +0.0f),          // left bottom corner
-   vec3(1.0f, 0.0f, 0.0f),             // all red
-   vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
-
-   vec3(+1.0f, -1.0f, +0.0f),          // right bottom corner
-   vec3(1.0f, 1.0f, 0.0f),             // red + green (apparently this makes yellow)
-   vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
-
-   vec3(+0.0f, +1.0f, +0.0f),          // center top
-   vec3(1.0f, 0.0f, 1.0f),             // red + blue (apparently this makes pink
-   vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
-};
-
-GLushort g_indices[] =
-{
-   0, 1, 2,
-};
-
-GLuint g_vao;
-
 namespace Rendering
 {
    bool Renderer::initialize()
    {
-      glGenVertexArrays(1, &g_vao);
-
       return true;
    }
 
@@ -98,49 +70,29 @@ namespace Rendering
    {
       glUseProgram(program_ID);
 
-      glBindVertexArray(g_vao);
+      string matrix_name = "full_transform";
+      try
+      {
+         m_full_transform_uniform_location = find_uniform(program_ID, matrix_name);
+      }
+      catch (std::exception &e)
+      {
+         fprintf(stderr, "%s\n", e.what());
+         glUseProgram(0);
+         return;
+      }
 
-      GLuint vert_buffer_ID = 0;
-      glGenBuffers(1, &vert_buffer_ID);
-      glBindBuffer(GL_ARRAY_BUFFER, vert_buffer_ID);
-      glEnableVertexAttribArray(0);
-      glVertexAttribPointer(0, My_Vertex::FLOATS_PER_POSITION, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)0);
-      glEnableVertexAttribArray(1);
-      glVertexAttribPointer(1, My_Vertex::FLOATS_PER_NORMAL, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)(My_Vertex::BYTES_PER_VERTEX));
-      glEnableVertexAttribArray(2);
-      glVertexAttribPointer(2, My_Vertex::FLOATS_PER_COLOR, GL_FLOAT, GL_FALSE, My_Vertex::BYTES_PER_VERTEX, (void *)(My_Vertex::BYTES_PER_VERTEX * 2));
-      glBufferData(GL_ARRAY_BUFFER, sizeof(g_verts), g_verts, GL_STATIC_DRAW);
-
-      GLuint elem_buffer_ID = 0;
-      glGenBuffers(1, &elem_buffer_ID);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elem_buffer_ID);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_indices), g_indices, GL_STATIC_DRAW);
-
-
-
-      //string matrix_name = "full_transform";
-      //try
-      //{
-      //   m_full_transform_uniform_location = find_uniform(program_ID, matrix_name);
-      //}
-      //catch (std::exception &e)
-      //{
-      //   fprintf(stderr, "%s\n", e.what());
-      //   glUseProgram(0);
-      //   return;
-      //}
-
-      //matrix_name = "orientation_only";
-      //try
-      //{
-      //   m_orientation_only_uniform_location = find_uniform(program_ID, matrix_name);
-      //}
-      //catch (std::exception &e)
-      //{
-      //   fprintf(stderr, "%s\n", e.what());
-      //   glUseProgram(0);
-      //   return;
-      //}
+      matrix_name = "orientation_only";
+      try
+      {
+         m_orientation_only_uniform_location = find_uniform(program_ID, matrix_name);
+      }
+      catch (std::exception &e)
+      {
+         fprintf(stderr, "%s\n", e.what());
+         glUseProgram(0);
+         return;
+      }
    }
 
    // ??necessary??
@@ -185,34 +137,25 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+      for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
+      {
+         Renderable &r = m_renderables[renderable_count];
+         glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
 
-      //for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
-      //{
-      //   //Renderable &r = m_renderables[renderable_count];
-      //   //glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
+         //mat4 model_to_projection = m_perspective_mat * r.m_model_to_world_mat;
+         mat4 model_to_projection = mat4(1);
 
+         glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(model_to_projection));
+         glUniformMatrix4fv(m_orientation_only_uniform_location, 1, GL_FALSE, value_ptr(r.m_orientation_only_mat));
 
-
-      //   //mat4 model_to_projection = m_perspective_mat * r.m_model_to_world_mat;
-      //   mat4 model_to_projection = mat4(1);
-
-      //   //glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(model_to_projection));
-      //   //glUniformMatrix4fv(m_orientation_only_uniform_location, 1, GL_FALSE, value_ptr(r.m_orientation_only_mat));
-
-      //   glDrawElements(
-      //      (r.m_geometry_ptr)->m_render_mode,
-      //      (r.m_geometry_ptr)->m_shape_data.m_num_indices,
-      //      GL_UNSIGNED_SHORT,
-      //      (void *)0);
-      //}
+         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+      }
    }
 
 
    // Private functions
 
    // throws an "out of range" exception if the uniform's location is < 0
-   // Note: I want the program to blow up if a uniform can't be found.  
    GLint Renderer::find_uniform(const GLuint program_ID, const std::string &uniform_name)
    {
       GLint uniform_location = 0;

@@ -63,7 +63,7 @@ namespace Shapes
          uint attrib_byte_count = sizeof(vec3) * geo.m_shape_data.m_num_verts;
          glGenBuffers(1, &geo.m_vertex_buffer_ID);
          glBindBuffer(GL_ARRAY_BUFFER, geo.m_vertex_buffer_ID);
-         glBufferData(GL_ARRAY_BUFFER, attrib_byte_count * 3, 0, GL_STATIC_DRAW);
+         glBufferData(GL_ARRAY_BUFFER, attrib_byte_count * 3, geo.m_shape_data.m_verts, GL_STATIC_DRAW);
 
 
          // position = 0
