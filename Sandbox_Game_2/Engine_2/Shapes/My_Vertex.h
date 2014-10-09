@@ -17,8 +17,8 @@ namespace Shapes
       static const unsigned int BYTES_PER_VERTEX = BYTES_PER_POSITION + BYTES_PER_COLOR + BYTES_PER_NORMAL;
 
       glm::vec3 position;
-      glm::vec3 color;
       glm::vec3 normal;
+      glm::vec3 color;
    };
 }
 

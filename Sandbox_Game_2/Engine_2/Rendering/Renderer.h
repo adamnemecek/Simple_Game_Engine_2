@@ -30,8 +30,8 @@ namespace Rendering
          GLenum *shader_types,
          uint num_shaders);
 
-      void bind_shader_program(GLuint program_ID);
-      void unbind_current_shader_program();
+      bool bind_shader_program(GLuint program_ID);
+      bool unbind_current_shader_program();
 
       // returns a pointer to a renderable (??why??)
       Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
@@ -46,9 +46,9 @@ namespace Rendering
 
       std::vector<GLuint> m_shader_programs;
       GLint m_full_transform_uniform_location;
-      GLint m_orientation_only_uniform_location;
+      GLint m_model_to_world_uniform_location;
 
-      glm::mat4 m_perspective_mat;
+      glm::mat4 m_world_to_projection;
 
       // declare a pool of renderables
       static const uint m_MAX_RENDERABLES = 10;

@@ -90,8 +90,7 @@ void init()
 
    // load level
 
-
-   g_renderer.initialize();
+   if (!g_renderer.initialize()) { exit(1); }
    string file_paths[] = 
    {
       "VertexColors.vert",
@@ -104,7 +103,8 @@ void init()
    };
 
    GLuint program_ID = g_renderer.create_shader_program(file_paths, shader_types, 2);
-   g_renderer.bind_shader_program(program_ID);
+   if (!g_renderer.bind_shader_program(program_ID)) { exit(1); }
+
    cout << "Program ID: " << program_ID << endl;
 
    using Shapes::Geometry_Creation::Geometry_Loader;
@@ -112,9 +112,10 @@ void init()
 
    g_renderable = g_renderer.add_renderable(&g_geometry);
 
-   //mat4 model_to_world = translate(mat4(), vec3(0.0f, 0.0f, -5.0f));
+   float translation = 2.0f;
+   mat4 model_to_world = translate(mat4(), vec3(0.0f, 0.0f, translation)) * rotate(mat4(), 0.5f, vec3(0.0f, 0.0f, +1.0f));
    //mat4 orientation_only = rotate(mat4(), 0.0f, vec3(0.0f, 1.0f, 0.0f));
-   //g_renderable->m_model_to_world_mat = model_to_world;
+   g_renderable->m_model_to_world_mat = model_to_world;
    //g_renderable->m_orientation_only_mat = orientation_only;
 }
 
@@ -133,7 +134,6 @@ void display()
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void reshape (int w, int h)
 {
-   //glViewport(0, 0, (GLsizei)w, (GLsizei)h);
    g_renderer.set_viewport(w, h);
 }
 

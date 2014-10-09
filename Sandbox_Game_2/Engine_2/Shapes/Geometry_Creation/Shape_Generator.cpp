@@ -25,9 +25,6 @@ vec3 random_color()
 }
 
 
-
-
-
 namespace Shapes
 {
    namespace Geometry_Creation
@@ -36,16 +33,16 @@ namespace Shapes
       {
          My_Vertex local_verts[] = 
          {
-            vec3(-1.0f, -1.0f, +0.0f),          // left bottom corner
+            vec3(-1.0f, -1.0f, -1.0f),          // left bottom corner
             vec3(+0.0f, +0.0f, +1.0f),             // normal points out of screen
             vec3(+1.0f, +0.0f, +0.0f),          // red
 
-            vec3(+1.0f, -1.0f, +0.0f),          // right bottom corner
+            vec3(+1.0f, -1.0f, -1.0f),          // right bottom corner
             vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
             vec3(+0.0f, +1.0f, +0.0f),          // green
 
-            vec3(+0.0f, +1.0f, +0.0f),          // center top
-            vec3(+1.0f, +0.0f, +1.0f),          // normal points out of screen
+            vec3(+0.0f, +1.0f, -1.0f),          // center top
+            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
             vec3(+0.0f, +0.0f, +1.0f),          // blue
          };
 

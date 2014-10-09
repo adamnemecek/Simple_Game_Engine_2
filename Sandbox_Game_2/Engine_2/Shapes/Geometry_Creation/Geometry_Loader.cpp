@@ -60,10 +60,9 @@ namespace Shapes
          // - allocate space for the position, normal, and color data with STATIC drawing (this data doesn't change on every draw), but send no data
          // - set vertex attribute pointers 
          // - send data with glBufferSubData(...)
-         uint attrib_byte_count = sizeof(vec3) * geo.m_shape_data.m_num_verts;
          glGenBuffers(1, &geo.m_vertex_buffer_ID);
          glBindBuffer(GL_ARRAY_BUFFER, geo.m_vertex_buffer_ID);
-         glBufferData(GL_ARRAY_BUFFER, attrib_byte_count * 3, geo.m_shape_data.m_verts, GL_STATIC_DRAW);
+         glBufferData(GL_ARRAY_BUFFER, geo.m_shape_data.vertex_buffer_size(), geo.m_shape_data.m_verts, GL_STATIC_DRAW);
 
 
          // position = 0
@@ -96,10 +95,9 @@ namespace Shapes
          // indices buffer
          // - generate one element buffer object and bind it
          // - allocate space for the indices and send the data
-         attrib_byte_count = sizeof(GLushort) * geo.m_shape_data.m_num_indices;
          glGenBuffers(1, &geo.m_element_buffer_ID);
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo.m_element_buffer_ID);
-         glBufferData(GL_ELEMENT_ARRAY_BUFFER, attrib_byte_count, geo.m_shape_data.m_indices, GL_STATIC_DRAW);
+         glBufferData(GL_ELEMENT_ARRAY_BUFFER, geo.m_shape_data.index_buffer_size(), geo.m_shape_data.m_indices, GL_STATIC_DRAW);
 
 
          // clean up bindings 
