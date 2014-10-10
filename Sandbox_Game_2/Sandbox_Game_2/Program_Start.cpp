@@ -122,10 +122,10 @@ void init()
 
    g_renderable = g_renderer.add_renderable(&g_geometry);
 
-   float translation = -0.001f;
-   //float translation = +2.001f;
+   //float translation = -0.001f;
+   float translation = -2.001f;
    //float translation = +1.0f;
-   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f / 100.0f), vec3(0.0f, 1.0f, 0.0f));
+   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f * 0.0f), vec3(0.0f, 1.0f, 0.0f));
    //mat4 orientation_only = rotate(mat4(), 0.0f, vec3(0.0f, 1.0f, 0.0f));
    g_renderable->m_model_to_world_mat = model_to_world;
    //g_renderable->m_orientation_only_mat = orientation_only;
@@ -190,9 +190,27 @@ void keyboard(unsigned char key, int x, int y)
 {
    switch (key)
    {
+   case 'w':
+   {
+      break;
+   }
+   case 'a':
+   {
+      break;
+   }
+   case 's':
+   {
+      break;
+   }
+   case 'd':
+   {
+      break;
+   }
    case 27:
+   {
       glutLeaveMainLoop();
       return;
+   }
    default:
       break;
    }

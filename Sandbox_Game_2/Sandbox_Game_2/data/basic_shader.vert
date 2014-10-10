@@ -12,9 +12,9 @@ smooth out vec4 theColor;
 void main()
 {
    //vec4 position_world = model_to_world_matrix * position;
-   //vec4 normal_world = model_to_world_matrix * vec4(normal, 0.0f);      // disable translation and keep rotation only
+   vec4 normal_world = model_to_world_matrix * vec4(normal, 0.0f);      // disable translation and keep rotation only
 
 	gl_Position = full_transform_matrix * position;
-   theColor = color;
+   theColor = normal_world + color;
 }
 

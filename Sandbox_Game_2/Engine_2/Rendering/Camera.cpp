@@ -41,8 +41,8 @@ namespace Rendering
          // ??good candidate for quaternion computation??
          m_strafe_direction = glm::cross(m_view_direction, m_world_up_vector);
          glm::mat4 rotator_mat =
-            glm::rotate(rotate_angle_rad_x * ROTATION_SENSITIVITY, m_world_up_vector) *
-            glm::rotate(rotate_angle_rad_y * ROTATION_SENSITIVITY, m_strafe_direction);
+            glm::rotate(glm::mat4(), rotate_angle_rad_x * ROTATION_SENSITIVITY, m_world_up_vector) *
+            glm::rotate(glm::mat4(), rotate_angle_rad_y * ROTATION_SENSITIVITY, m_strafe_direction);
 
          // cast the mat4 down to a mat3 rather than casting twice casting the view direction to a 
          // vec4 and back to a vec3
