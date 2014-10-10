@@ -9,8 +9,8 @@ namespace Utilities
    class __declspec(dllexport) Printer_Helper
    {
    public:
-      static void print_vec(const glm::vec3 &vec);
-      static void print_mat(const glm::mat4 & mat);
+      static void print_vec(const char *foreword, const glm::vec3 &vec);
+      static void print_mat(const char *foreword, const glm::mat4 & mat);
 
    private:
       // enforce staticness

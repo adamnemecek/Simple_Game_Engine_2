@@ -7,6 +7,7 @@
 #include <Utilities\Typedefs.h>
 #include <string>
 #include <vector>
+#include <Rendering\Camera.h>
 
 // the renderer stores arrays of both of these, so we can't forward declare them
 #include <Rendering\Renderable.h>
@@ -43,6 +44,8 @@ namespace Rendering
    private:
       // helper function(s)
       GLint find_uniform(const GLuint program_ID, const std::string &uniform_name);
+
+      Camera m_cam;
 
       std::vector<GLuint> m_shader_programs;
       GLint m_full_transform_uniform_location;

@@ -8,6 +8,9 @@ when/why they are called. You can copy this file and simply implement
 these function.
 ***********************************************************************/
 
+#define MY_ENGINE
+
+#ifdef MY_ENGINE
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
 #include <Engine_2\Utilities\include_GL_version.h>
@@ -22,81 +25,88 @@ using std::endl;
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
 
-#define GLM_FORCE_RADIANS
-#include <glm\gtc\matrix_transform.hpp>
-using glm::translate;
-using glm::rotate;
+#include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
 
 #include <glm\vec3.hpp>
 using glm::vec3;
 #include <glm\mat4x4.hpp>
 using glm::mat4;
 
-//#include <glload/gl_3_3_comp.h>
-
-// include this last to avoid errors when this includes gl.h 
-// (apparently this needs to be included after the glm and glload and other libraries)
-#include <GL/freeglut.h>
-//#include <framework.h>
-//#include <vector>
-
-
 Rendering::Renderer g_renderer;
 
 Rendering::Renderable *g_renderable;
 Shapes::Geometry g_geometry;
 
-//GLuint g_program_ID;
-//
-//void initialize_program(const std::string &str_vertex_shader, const std::string &str_fragment_shader)
-//{
-//   std::vector<GLuint> shader_list;
-//   shader_list.push_back(Framework::LoadShader(GL_VERTEX_SHADER, str_vertex_shader));
-//   shader_list.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, str_fragment_shader));
-//
-//   g_program_ID = Framework::CreateProgram(shader_list);
-//}
-//
-//const float vertexData[] = {
-//   1.0f, 0.0f, 0.0f, 1.0f,
-//   0.0f, 1.0f, 0.0f, 1.0f,
-//   0.0f, 0.0f, 1.0f, 1.0f,
-//   0.0f, 0.5f, 0.0f, 1.0f,
-//   0.5f, -0.366f, 0.0f, 1.0f,
-//   -0.5f, -0.366f, 0.0f, 1.0f,
-//};
-//
-//GLuint vertexBufferObject;
-//GLuint vao;
-//
-//void initialize_vertex_buffer()
-//{
-//   glGenBuffers(1, &vertexBufferObject);
-//   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-//   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-//   glBindBuffer(GL_ARRAY_BUFFER, 0);
-//}
+// include this last to avoid errors when this includes gl.h 
+// (apparently this needs to be included after the glm and glload and other libraries)
+#include <GL/freeglut.h>
 
 
+GLuint g_program_ID;
+
+#else
+#include <glload/gl_3_3_comp.h>
+#include <GL/freeglut.h>
+#include <framework.h>
+#include <vector>
+
+GLuint theProgram;
+#endif
+
+
+
+
+
+
+#ifndef MY_ENGINE
+void initialize_program(const std::string &str_vertex_shader, const std::string &str_fragment_shader)
+{
+   std::vector<GLuint> shader_list;
+   shader_list.push_back(Framework::LoadShader(GL_VERTEX_SHADER, str_vertex_shader));
+   shader_list.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, str_fragment_shader));
+
+   theProgram = Framework::CreateProgram(shader_list);
+}
+
+const float vertexData[] = {
+   1.0f, 0.0f, 0.0f, 1.0f,
+   0.0f, 1.0f, 0.0f, 1.0f,
+   0.0f, 0.0f, 1.0f, 1.0f,
+   //0.0f, 0.5f, 0.0f, 1.0f,
+   //0.5f, -0.366f, 0.0f, 1.0f,
+   //-0.5f, -0.366f, 0.0f, 1.0f,
+   0.0f, 0.5f, +3.0f, 1.0f,
+   0.5f, -0.366f, -3.0f, 1.0f,
+   -0.5f, -0.366f, -3.0f, 1.0f,
+};
+
+GLuint vertexBufferObject;
+GLuint vao;
+
+void initialize_vertex_buffer()
+{
+   glGenBuffers(1, &vertexBufferObject);
+   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+   glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+#endif
 
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   //initialize_program("VertexColors.vert", "VertexColors.frag");
-   //initialize_vertex_buffer();
-   //glGenVertexArrays(1, &vao);
-   //glBindVertexArray(vao);
-
-   // load level
+#ifdef MY_ENGINE
+   glDisable(GL_CULL_FACE);
 
    if (!g_renderer.initialize()) { exit(1); }
-   string file_paths[] = 
+   string file_paths[] =
    {
-      "VertexColors.vert",
-      "VertexColors.frag",
+      "basic_shader.vert",
+      "basic_shader.frag",
    };
-   GLenum shader_types[] = 
+   GLenum shader_types[] =
    {
       GL_VERTEX_SHADER,
       GL_FRAGMENT_SHADER,
@@ -112,11 +122,20 @@ void init()
 
    g_renderable = g_renderer.add_renderable(&g_geometry);
 
-   float translation = 2.0f;
-   mat4 model_to_world = translate(mat4(), vec3(0.0f, 0.0f, translation)) * rotate(mat4(), 0.5f, vec3(0.0f, 0.0f, +1.0f));
+   float translation = -0.001f;
+   //float translation = +2.001f;
+   //float translation = +1.0f;
+   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f / 100.0f), vec3(0.0f, 1.0f, 0.0f));
    //mat4 orientation_only = rotate(mat4(), 0.0f, vec3(0.0f, 1.0f, 0.0f));
    g_renderable->m_model_to_world_mat = model_to_world;
    //g_renderable->m_orientation_only_mat = orientation_only;
+#else
+   initialize_program("VertexColors.vert", "VertexColors.frag");
+   initialize_vertex_buffer();
+   glGenVertexArrays(1, &vao);
+   glBindVertexArray(vao);
+
+#endif
 }
 
 //Called to update the display.
@@ -124,7 +143,29 @@ void init()
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
+#ifdef MY_ENGINE
    g_renderer.render_scene();
+#else
+   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+   glClear(GL_COLOR_BUFFER_BIT);
+
+   glUseProgram(theProgram);
+
+   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+   glEnableVertexAttribArray(0);
+   glEnableVertexAttribArray(15);
+   //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+   //glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
+   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
+   glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+   glDrawArrays(GL_TRIANGLES, 0, 3);
+
+   glDisableVertexAttribArray(0);
+   glDisableVertexAttribArray(15);
+   glUseProgram(0);
+#endif
+
 
    glutSwapBuffers();
    glutPostRedisplay();
@@ -134,7 +175,11 @@ void display()
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void reshape (int w, int h)
 {
+#ifdef MY_ENGINE
    g_renderer.set_viewport(w, h);
+#else
+   glViewport(0, 0, w, h);
+#endif
 }
 
 //Called whenever a key on the keyboard was pressed.

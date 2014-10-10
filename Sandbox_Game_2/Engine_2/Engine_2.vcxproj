@@ -86,6 +86,7 @@
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="junk_to_make_compiler_happy.cpp" />
+    <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Shape_Generator.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
+    <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Shapes\Geometry.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
@@ -106,6 +108,7 @@
     <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
+    <ClInclude Include="Utilities\Include_GLM_Mat_Transform.h" />
     <ClInclude Include="Utilities\Include_GL_Version.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Typedefs.h" />

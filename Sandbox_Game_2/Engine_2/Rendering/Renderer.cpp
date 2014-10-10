@@ -15,8 +15,7 @@ using glm::mat4;
 #include <glm\gtc\type_ptr.hpp>
 using glm::value_ptr;
 
-#define GLM_FORCE_RADIANS
-#include <glm\gtc\matrix_transform.hpp>
+#include <Utilities\Include_GLM_Mat_Transform.h>
 
 #include <vector>
 using std::vector;
@@ -28,6 +27,8 @@ using std::string;
 
 #include <Shapes\Geometry.h>
 using Shapes::Geometry;
+
+#include <Utilities\Printer_Helper.h>
 
 #include <iostream>
 using std::cout;
@@ -123,7 +124,13 @@ namespace Rendering
       float near_plane_dist = 0.1f;
       float far_plane_dist = 20.0f;
       mat4 perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
-      m_world_to_projection = perspective_mat * glm::lookAt(vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 0.0f, -1.0f), vec3(0.0f, +1.0f, 0.0f));
+      //mat4 perspective_mat = glm::ortho(0.0f, (float)width, (float)height, 0.0f, near_plane_dist, far_plane_dist);
+      mat4 camera_mat = m_cam.get_world_to_view_matrix();
+      m_world_to_projection = perspective_mat * camera_mat;
+
+      Utilities::Printer_Helper::print_mat("perspective:\n", perspective_mat);
+      Utilities::Printer_Helper::print_mat("camera:\n", camera_mat);
+      Utilities::Printer_Helper::print_mat("world to projection:\n", m_world_to_projection);
 
       cout << "resizing to aspect ratio " << aspect_ratio << endl;
    }
@@ -145,19 +152,9 @@ namespace Rendering
          Renderable &r = m_renderables[renderable_count];
          glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
 
-         //mat4 model_to_projection = m_perspective_mat * glm::translate(mat4(), vec3(0.0f, 0.0f, -5.0f));//r.m_model_to_world_mat;
          mat4 full_transform_matrix = m_world_to_projection * r.m_model_to_world_mat;
-         //mat4 full_transform_matrix = mat4(1);
 
          char str[256];
-         _snprintf(str, 256,
-            "%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f",
-            full_transform_matrix[0][0], full_transform_matrix[1][0], full_transform_matrix[2][0], full_transform_matrix[3][0],
-            full_transform_matrix[0][1], full_transform_matrix[1][1], full_transform_matrix[2][1], full_transform_matrix[3][1],
-            full_transform_matrix[0][2], full_transform_matrix[1][2], full_transform_matrix[2][2], full_transform_matrix[3][2],
-            full_transform_matrix[0][3], full_transform_matrix[1][3], full_transform_matrix[2][3], full_transform_matrix[3][3]);
-         cout << str << endl;
-
          for (uint vert_count = 0; vert_count < r.m_geometry_ptr->m_shape_data.m_num_verts; vert_count++)
          {
             vec3 &pos = r.m_geometry_ptr->m_shape_data.m_verts[vert_count].position;
@@ -175,7 +172,6 @@ namespace Rendering
                pos.x, pos.y, pos.z, norm.x, norm.y, norm.z, col.r, col.g, col.b);
             cout << str << endl;
          }
-
 
          glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(full_transform_matrix));
          glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, value_ptr(r.m_model_to_world_mat));
