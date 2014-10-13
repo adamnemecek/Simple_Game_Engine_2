@@ -130,7 +130,6 @@ namespace Rendering
       float near_plane_dist = 0.1f;
       float far_plane_dist = 20.0f;
       mat4 perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
-      //mat4 perspective_mat = glm::ortho(0.0f, (float)width, (float)height, 0.0f, near_plane_dist, far_plane_dist);
       mat4 camera_mat = m_cam.get_world_to_view_matrix();
       m_world_to_projection = perspective_mat * camera_mat;
 
@@ -157,7 +156,7 @@ namespace Rendering
          glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(full_transform_matrix));
          glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, value_ptr(r.m_model_to_world_mat));
 
-         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, 0);
+         glDrawElements(GL_TRIANGLES, (r.m_geometry_ptr)->m_shape_data.m_num_indices, GL_UNSIGNED_SHORT, 0);
       }
    }
 

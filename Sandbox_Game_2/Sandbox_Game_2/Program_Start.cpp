@@ -98,7 +98,7 @@ void initialize_vertex_buffer()
 void init()
 {
 #ifdef MY_ENGINE
-   glDisable(GL_CULL_FACE);
+   //glDisable(GL_CULL_FACE);
 
    if (!g_renderer.initialize()) { exit(1); }
    string file_paths[] =
@@ -118,12 +118,12 @@ void init()
    cout << "Program ID: " << program_ID << endl;
 
    using Shapes::Geometry_Creation::Geometry_Loader;
-   Geometry_Loader::load_from_generator(Geometry_Loader::TRIANGLE_2D, g_geometry);
+   Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, g_geometry);
 
    g_renderable = g_renderer.add_renderable(&g_geometry);
 
-   float translation = -2.001f;
-   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f * 0.0f), vec3(0.0f, 1.0f, 0.0f));
+   float translation = -6.001f;
+   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f * 1.0f), vec3(1.0f, 1.0f, 1.0f));
    g_renderable->m_model_to_world_mat = model_to_world;
 #else
    initialize_program("VertexColors.vert", "VertexColors.frag");
