@@ -11,7 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox_Game_2", "Sandbox_G
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine_2", "Engine_2\Engine_2.vcxproj", "{EB1582D3-1934-423F-96E5-5336FD576C7E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\middleware\framework\framework.vcxproj", "{EFD0770E-F54A-0543-A68E-3D43261A5C47}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "framework", "..\middleware\arcsynthesis_framework\framework.vcxproj", "{EFD0770E-F54A-0543-A68E-3D43261A5C47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

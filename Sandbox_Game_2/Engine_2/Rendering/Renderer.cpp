@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include <framework\framework.h>
+#include <arcsynthesis_framework\framework.h>
 using Framework::LoadShader;
 using Framework::CreateProgram;
 

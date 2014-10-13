@@ -54,12 +54,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>FREEGLUT_LIB_PRAGMAS=0;FREEGLUT_STATIC;WIN32;_CONSOLE;_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\framework;$(SolutionDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm;$(SolutionDir)\Engine_2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\arcsynthesis_framework;$(SolutionDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm;$(SolutionDir)\Engine_2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\lib;$(SolutionDir)\..\middleware\framework\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\lib;$(SolutionDir)\Engine_2\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\lib;$(SolutionDir)\..\middleware\arcsynthesis_framework\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\lib;$(SolutionDir)\Engine_2\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>freeglutD.lib;frameworkD.lib;opengl32.lib;winmm.lib;glloadD.lib;glutilD.lib;Engine_2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
