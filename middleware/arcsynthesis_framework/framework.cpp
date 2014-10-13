@@ -12,7 +12,8 @@
 #include <stdexcept>
 #include <string.h>
 #include <glload/gl_3_3.h>
-#include <glload/gll.hpp>
+//#include <glload/gll.hpp>   // depreciated by glsdk 0.5.2
+#include <glload\gl_load.hpp>
 #include <glutil/Shader.h>
 #include <GL/freeglut.h>
 #include "framework.h"

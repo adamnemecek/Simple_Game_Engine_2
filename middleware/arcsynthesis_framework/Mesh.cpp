@@ -14,7 +14,8 @@
 #include <algorithm>
 #include <iostream>
 #include <glload/gl_3_2_comp.h>
-#include <glload/gll.h>
+//#include <glload/gll.hpp>   // depreciated by glsdk 0.5.2
+#include <glload\gl_load.hpp>
 #include <GL/freeglut.h>
 #include "framework.h"
 #include "Mesh.h"
