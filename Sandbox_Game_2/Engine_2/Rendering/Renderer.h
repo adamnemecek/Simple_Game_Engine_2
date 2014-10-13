@@ -41,6 +41,14 @@ namespace Rendering
 
       void render_scene();
 
+      static const uint CAMERA_MOVE_FORWARD =   0x01;
+      static const uint CAMERA_MOVE_BACK =      0x02;
+      static const uint CAMERA_MOVE_LEFT =      0x04;
+      static const uint CAMERA_MOVE_RIGHT =     0x08;
+      static const uint CAMERA_MOVE_UP =        0x10;
+      static const uint CAMERA_MOVE_DOWN =      0x20;
+      void manipulate_active_camera(uint flags);
+
    private:
       // helper function(s)
       GLint find_uniform(const GLuint program_ID, const std::string &uniform_name);
@@ -51,7 +59,7 @@ namespace Rendering
       GLint m_full_transform_uniform_location;
       GLint m_model_to_world_uniform_location;
 
-      glm::mat4 m_world_to_projection;
+      glm::mat4 m_perspective_mat;
 
       // declare a pool of renderables
       static const uint m_MAX_RENDERABLES = 10;

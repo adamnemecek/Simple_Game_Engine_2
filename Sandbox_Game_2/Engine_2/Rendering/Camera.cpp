@@ -8,7 +8,7 @@ namespace Rendering
       : m_position(0.0f),
       m_world_up_vector(0.0f, 1.0f, 0.0f),
       m_view_direction(0.0f, 0.0f, -1.0f),
-      m_strafe_direction(0.0f),
+      m_strafe_direction(glm::cross(m_view_direction, m_world_up_vector)),
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f)
    {
@@ -51,5 +51,51 @@ namespace Rendering
 
       m_prev_mouse_position = new_mouse_position;
    }
+
+   glm::vec3 Camera::get_strafe_vector()
+   {
+      return m_strafe_direction;
+   }
+
+   glm::vec3 Camera::get_forward_vector()
+   {
+      return m_view_direction;
+   }
+
+   glm::vec3 Camera::get_position()
+   {
+      return m_position;
+   }
+
+   void Camera::move_forward()
+   {
+      m_position += m_view_direction * m_camera_move_speed;
+   }
+
+   void Camera::move_back()
+   {
+      m_position -= m_view_direction * m_camera_move_speed;
+   }
+
+   void Camera::strafe_left()
+   {
+      m_position -= m_strafe_direction * m_camera_move_speed;
+   }
+
+   void Camera::strafe_right()
+   {
+      m_position += m_strafe_direction * m_camera_move_speed;
+   }
+
+   void Camera::move_up()
+   {
+      m_position += m_world_up_vector * m_camera_move_speed;
+   }
+
+   void Camera::move_down()
+   {
+      m_position -= m_world_up_vector * m_camera_move_speed;
+   }
+
 
 }

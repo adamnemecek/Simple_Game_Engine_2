@@ -129,9 +129,7 @@ namespace Rendering
       float aspect_ratio = (float)width / height;
       float near_plane_dist = 0.1f;
       float far_plane_dist = 20.0f;
-      mat4 perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
-      mat4 camera_mat = m_cam.get_world_to_view_matrix();
-      m_world_to_projection = perspective_mat * camera_mat;
+      m_perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
 
       cout << "resizing to aspect ratio " << aspect_ratio << endl;
    }
@@ -146,12 +144,15 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
+      mat4 camera_mat = m_cam.get_world_to_view_matrix();
+      mat4 world_to_projection = m_perspective_mat * camera_mat;
+
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
          Renderable &r = m_renderables[renderable_count];
          glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
 
-         mat4 full_transform_matrix = m_world_to_projection * r.m_model_to_world_mat;
+         mat4 full_transform_matrix = world_to_projection * r.m_model_to_world_mat;
 
          glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(full_transform_matrix));
          glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, value_ptr(r.m_model_to_world_mat));
@@ -159,6 +160,42 @@ namespace Rendering
          glDrawElements(GL_TRIANGLES, (r.m_geometry_ptr)->m_shape_data.m_num_indices, GL_UNSIGNED_SHORT, 0);
       }
    }
+
+   void Renderer::manipulate_active_camera(uint flags)
+   {
+      // multiple movements can happen at once, so test them all individually
+
+      if ((flags & Renderer::CAMERA_MOVE_FORWARD) > 0)
+      {
+         m_cam.move_forward();
+      }
+
+      if ((flags & Renderer::CAMERA_MOVE_BACK) > 0)
+      {
+         m_cam.move_back();
+      }
+
+      if ((flags & Renderer::CAMERA_MOVE_LEFT) > 0)
+      {
+         m_cam.strafe_left();
+      }
+
+      if ((flags & Renderer::CAMERA_MOVE_RIGHT) > 0)
+      {
+         m_cam.strafe_right();
+      }
+
+      if ((flags & Renderer::CAMERA_MOVE_UP) > 0)
+      {
+         m_cam.move_up();
+      }
+
+      if ((flags & Renderer::CAMERA_MOVE_DOWN) > 0)
+      {
+         m_cam.move_down();
+      }
+   }
+
 
 
    // Private functions

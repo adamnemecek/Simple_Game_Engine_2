@@ -15,10 +15,12 @@ namespace Rendering
       glm::mat4 get_world_to_view_matrix() const;
       void mouse_update(const glm::vec2& new_mouse_position);
 
+      // these getters are useful for manipulating entities relative to the camera
       glm::vec3 get_strafe_vector();
       glm::vec3 get_forward_vector();
       glm::vec3 get_position();
 
+      // basic camera controls
       void move_forward();
       void move_back();
       void strafe_left();

@@ -184,22 +184,28 @@ void reshape (int w, int h)
 //exit the program.
 void keyboard(unsigned char key, int x, int y)
 {
+   using Rendering::Renderer;
+
    switch (key)
    {
    case 'w':
    {
+      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_FORWARD);
       break;
    }
    case 'a':
    {
+      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_LEFT);
       break;
    }
    case 's':
    {
+      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_BACK);
       break;
    }
    case 'd':
    {
+      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_RIGHT);
       break;
    }
    case 27:
