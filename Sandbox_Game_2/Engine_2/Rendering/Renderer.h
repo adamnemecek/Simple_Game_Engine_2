@@ -25,12 +25,7 @@ namespace Rendering
       bool initialize();
       bool shutdown();
 
-      // returns the program ID
-      GLuint create_shader_program(
-         const std::string *shader_file_paths,
-         GLenum *shader_types,
-         uint num_shaders);
-
+      bool add_shader_program(GLuint program_ID);
       bool bind_shader_program(GLuint program_ID);
       bool unbind_current_shader_program();
 
@@ -52,7 +47,7 @@ namespace Rendering
    private:
       // helper function(s)
       GLint find_uniform(const GLuint program_ID, const std::string &uniform_name);
-
+      
       Camera m_cam;
 
       std::vector<GLuint> m_shader_programs;

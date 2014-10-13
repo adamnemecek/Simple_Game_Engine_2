@@ -2,34 +2,15 @@
 
 #include <cassert>
 
-#include <arcsynthesis_framework\framework.h>
-using Framework::LoadShader;
-using Framework::CreateProgram;
-
 #include <glm\vec3.hpp>
-using glm::vec3;
-
 #include <glm\mat4x4.hpp>
-using glm::mat4;
-
 #include <glm\gtc\type_ptr.hpp>
-using glm::value_ptr;
-
 #include <Utilities\Include_GLM_Mat_Transform.h>
-
 #include <vector>
-using std::vector;
 #include <string>
-
-using std::string;
-
 #include <Utilities\include_GL_version.h>
-
 #include <Shapes\Geometry.h>
-using Shapes::Geometry;
-
 #include <Utilities\Printer_Helper.h>
-
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -53,23 +34,22 @@ namespace Rendering
       return true;
    }
 
-   GLuint Renderer::create_shader_program(
-      const std::string *shader_file_paths,
-      GLenum *shader_types,
-      uint num_shaders)
+   bool Renderer::add_shader_program(GLuint program_ID)
    {
-      vector<GLuint> shader_list;
-      for (size_t shader_count = 0; shader_count < num_shaders; shader_count++)
+      for (uint program_count = 0; program_count < m_shader_programs.size(); program_count++)
       {
-         shader_list.push_back(LoadShader(shader_types[shader_count], shader_file_paths[shader_count]));
+         if (m_shader_programs[program_count] == program_ID)
+         {
+            // already have this shader program
+            return false;
+         }
       }
 
-      GLuint shader_program_ID = Framework::CreateProgram(shader_list);
-      m_shader_programs.push_back(shader_program_ID);
+      // don't have this shader program yet, so add it
+      m_shader_programs.push_back(program_ID);
 
-      return shader_program_ID;
+      return true;
    }
-
 
    // if the uniforms can't be found, an error is reported to stderr and the program will not be bound
    // ??necessary??
@@ -77,7 +57,7 @@ namespace Rendering
    {
       glUseProgram(program_ID);
 
-      string matrix_name = "full_transform_matrix";
+      std::string matrix_name = "full_transform_matrix";
       try
       {
          m_full_transform_uniform_location = find_uniform(program_ID, matrix_name);
@@ -111,12 +91,12 @@ namespace Rendering
       return false;
    }
 
-   Renderable *Renderer::add_renderable(Geometry *geometry_ptr)
+   Renderable *Renderer::add_renderable(Shapes::Geometry *geometry_ptr)
    {
       assert(m_num_current_renderables != m_MAX_RENDERABLES);
       Renderable &r = m_renderables[m_num_current_renderables++];
       r.m_geometry_ptr = geometry_ptr;
-      r.m_model_to_world_mat = mat4(1.0f);
+      r.m_model_to_world_mat = glm::mat4(1.0f);
 
       return &r;
    }
@@ -144,18 +124,18 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      mat4 camera_mat = m_cam.get_world_to_view_matrix();
-      mat4 world_to_projection = m_perspective_mat * camera_mat;
+      glm::mat4 camera_mat = m_cam.get_world_to_view_matrix();
+      glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
 
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
          Renderable &r = m_renderables[renderable_count];
          glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
 
-         mat4 full_transform_matrix = world_to_projection * r.m_model_to_world_mat;
+         glm::mat4 full_transform_matrix = world_to_projection * r.m_model_to_world_mat;
 
-         glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, value_ptr(full_transform_matrix));
-         glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, value_ptr(r.m_model_to_world_mat));
+         glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, glm::value_ptr(full_transform_matrix));
+         glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, glm::value_ptr(r.m_model_to_world_mat));
 
          glDrawElements(GL_TRIANGLES, (r.m_geometry_ptr)->m_shape_data.m_num_indices, GL_UNSIGNED_SHORT, 0);
       }

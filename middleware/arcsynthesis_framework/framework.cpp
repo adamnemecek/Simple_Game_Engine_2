@@ -23,6 +23,8 @@
 #define APIENTRY
 #endif
 
+//#define ACTUALLY_I_WANT_THE_FRAMEWORK
+#ifdef ACTUALLY_I_WANT_THE_FRAMEWORK
 namespace Framework
 {
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
@@ -173,3 +175,5 @@ int main(int argc, char** argv)
 	glutMainLoop();
 	return 0;
 }
+
+#endif

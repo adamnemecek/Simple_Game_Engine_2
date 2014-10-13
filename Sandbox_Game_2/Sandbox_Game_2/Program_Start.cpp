@@ -16,21 +16,17 @@ these function.
 #include <Engine_2\Utilities\include_GL_version.h>
 
 #include <string>
-using std::string;
-
 #include <iostream>
 using std::cout;
 using std::endl;
 
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
-
+#include <Engine_2\Utilities\Shader_Maker.h>
 #include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
 
 #include <glm\vec3.hpp>
-using glm::vec3;
 #include <glm\mat4x4.hpp>
-using glm::mat4;
 
 Rendering::Renderer g_renderer;
 
@@ -101,7 +97,7 @@ void init()
    //glDisable(GL_CULL_FACE);
 
    if (!g_renderer.initialize()) { exit(1); }
-   string file_paths[] =
+   std::string file_paths[] =
    {
       "basic_shader.vert",
       "basic_shader.frag",
@@ -112,7 +108,8 @@ void init()
       GL_FRAGMENT_SHADER,
    };
 
-   GLuint program_ID = g_renderer.create_shader_program(file_paths, shader_types, 2);
+   GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
+   if (!g_renderer.add_shader_program(program_ID)) { exit(1); }
    if (!g_renderer.bind_shader_program(program_ID)) { exit(1); }
 
    cout << "Program ID: " << program_ID << endl;
@@ -123,7 +120,10 @@ void init()
    g_renderable = g_renderer.add_renderable(&g_geometry);
 
    float translation = -6.001f;
-   mat4 model_to_world = glm::translate(mat4(), vec3(0.0f, 0.0f, translation)) * glm::rotate(mat4(), -(3.14159f * 1.0f), vec3(1.0f, 1.0f, 1.0f));
+   float rotation_rad = -(3.14159f * 1.0f);
+   glm::mat4 model_to_world = 
+      glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, translation)) * 
+      glm::rotate(glm::mat4(), rotation_rad, glm::vec3(1.0f, 1.0f, 1.0f));
    g_renderable->m_model_to_world_mat = model_to_world;
 #else
    initialize_program("VertexColors.vert", "VertexColors.frag");

@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\boost\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,6 +85,7 @@
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="Timing\Stopwatch.cpp" />
     <ClCompile Include="Timing\Game_Clock.cpp" />
     <ClCompile Include="Utilities\Printer_Helper.cpp" />
+    <ClCompile Include="Utilities\Shader_Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
@@ -110,6 +112,7 @@
     <ClInclude Include="Utilities\Include_GLM_Mat_Transform.h" />
     <ClInclude Include="Utilities\Include_GL_Version.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
+    <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Renderable.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
