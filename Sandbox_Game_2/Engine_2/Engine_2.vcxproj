@@ -85,7 +85,6 @@
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
-    <ClCompile Include="junk_to_make_compiler_happy.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />

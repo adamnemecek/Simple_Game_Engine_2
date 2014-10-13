@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="junk_to_make_compiler_happy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
