@@ -86,6 +86,7 @@
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
+    <ClCompile Include="Input\Key_Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
@@ -102,6 +103,8 @@
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
+    <ClInclude Include="Input\I_Key_Mapper.h" />
+    <ClInclude Include="Input\Key_Input.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Shapes\Geometry.h" />
