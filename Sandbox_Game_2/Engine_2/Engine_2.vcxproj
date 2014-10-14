@@ -43,6 +43,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(ProjectDir)\bin\</OutDir>
     <IntDir>$(Configuration)\Tmp\</IntDir>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -53,14 +54,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FREEGLUT_STATIC;_LIB;FREEGLUT_LIB_PRAGMAS=0;WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\boost\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\lib;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>freeglutD.lib;opengl32.lib;winmm.lib;glloadD.lib;glutilD.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

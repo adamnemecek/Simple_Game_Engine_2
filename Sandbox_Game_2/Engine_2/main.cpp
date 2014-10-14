@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <string>
 
-// These functions are defined elsewhere
+// These functions must be defined in the game project
 void init();
 void display();
 void reshape(int w, int h);

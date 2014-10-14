@@ -65,6 +65,8 @@ namespace Utilities
 
    std::string Shader_Maker::FindFileOrThrow(const std::string &strBasename)
    {
+      // this commented code is Arcsynthesis' original code, so I think that I should leave it so that I don't pretend it's mine
+
       //std::string strFilename = LOCAL_FILE_DIR + strBasename;
       //std::ifstream testFile(strFilename.c_str());
       //if (testFile.is_open())

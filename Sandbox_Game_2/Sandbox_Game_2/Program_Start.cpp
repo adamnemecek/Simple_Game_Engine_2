@@ -99,8 +99,8 @@ void init()
    if (!g_renderer.initialize()) { exit(1); }
    std::string file_paths[] =
    {
-      "basic_shader.vert",
-      "basic_shader.frag",
+      "data/basic_shader.vert",
+      "data/basic_shader.frag",
    };
    GLenum shader_types[] =
    {
