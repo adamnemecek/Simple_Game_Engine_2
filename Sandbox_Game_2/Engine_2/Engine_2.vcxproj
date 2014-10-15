@@ -54,7 +54,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>FREEGLUT_STATIC;_LIB;FREEGLUT_LIB_PRAGMAS=0;WIN32_LEAN_AND_MEAN;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FREEGLUT_STATIC;_LIB;FREEGLUT_LIB_PRAGMAS=0;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\boost\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -84,8 +84,10 @@
   <ItemGroup>
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp" />
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
+    <ClCompile Include="Entities\Components\Controller_Component.cpp" />
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
+    <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="Input\Key_Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
@@ -100,10 +102,13 @@
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Entities\Components\Border_Handler_Component.h" />
+    <ClInclude Include="Entities\Components\Controller_Component.h" />
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
-    <ClInclude Include="Input\I_Key_Mapper.h" />
+    <ClInclude Include="Input\I_Action_Bindings.h" />
+    <ClInclude Include="Input\Action_List.h" />
+    <ClInclude Include="Input\Key_Bindings\Keyboard_Bindings.h" />
     <ClInclude Include="Input\Key_Input.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
@@ -115,12 +120,16 @@
     <ClInclude Include="Utilities\Helper_Macros.h" />
     <ClInclude Include="Utilities\Include_GLM_Mat_Transform.h" />
     <ClInclude Include="Utilities\Include_GL_Version.h" />
+    <ClInclude Include="Utilities\Include_Windows_Light.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Renderable.h" />
     <ClInclude Include="Timing\Stopwatch.h" />
     <ClInclude Include="Timing\Game_Clock.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Input\input_overview.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

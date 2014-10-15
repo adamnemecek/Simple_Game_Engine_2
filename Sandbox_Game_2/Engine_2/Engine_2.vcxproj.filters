@@ -57,6 +57,12 @@
     <ClCompile Include="Input\Key_Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Entities\Components\Controller_Component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -125,8 +131,23 @@
     <ClInclude Include="Input\Key_Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input\I_Key_Mapper.h">
+    <ClInclude Include="Utilities\Include_Windows_Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Entities\Components\Controller_Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Key_Bindings\Keyboard_Bindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Action_List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\I_Action_Bindings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Input\input_overview.txt" />
   </ItemGroup>
 </Project>

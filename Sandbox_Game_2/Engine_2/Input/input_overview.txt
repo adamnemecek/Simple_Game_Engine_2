@@ -1,0 +1,31 @@
+10-15-2014
+
+I have been having some difficulty wrapping my head around what I learned about
+input in Jamie King's Sandbox Game Engine tutorial playlist, but I think that I 
+understand it now, so I'll record this info so that it make more sense later.
+
+Overview:
+The engine is not an event-driven system.  It has no interrupts.  It would 
+be too much of a performance drain (this is my understanding, at least) to get
+an interrupt call every single time a key is pressed.  We could instead use a 
+polling loop to check for every single possible input on every supported device 
+and then respond to every single key combination, but that's too brute force.
+
+Instead, we make a list of all actions that we want our game to be able to 
+support (move forward, reload, fire weapon, jump, interact, etc.).  Let us call 
+this the "Action List".
+
+We then make a "Key Binding" for each supported device and input configuration
+(in the case of game controllers, we might have inverted controls, south paw, 
+boxer, etc.).  This Key Binding has a method that polls through the action list 
+and checks if the corresponding device input (gamepad button, keyboard key, 
+mouse wheel, etc.) is active.  If it is, then the action is added to a list of 
+active actions.  The method returns this list when it is done.
+
+We then want a "Controller" that will respond to these active actions.  In 
+common parlance, "controller" is a reference to a particular device, usually a 
+gamepad, but we need to separate the concepts of key-action bindings from the 
+response to those actions.  We have chosen to make the Controller the thing 
+that responds to the actions.  This Controller will support all actions in the 
+Action List and will be a big list of "if" statements (no "else if" or "else" 
+or switch(...) so that it can support multiple simultaneous inputs).
