@@ -28,4 +28,6 @@ gamepad, but we need to separate the concepts of key-action bindings from the
 response to those actions.  We have chosen to make the Controller the thing 
 that responds to the actions.  This Controller will support all actions in the 
 Action List and will be a big list of "if" statements (no "else if" or "else" 
-or switch(...) so that it can support multiple simultaneous inputs).
+or switch(...) so that it can support multiple simultaneous inputs).  The 
+Controller will be able to use one of many bindings, but it will only be able 
+to to use one binding at a time.

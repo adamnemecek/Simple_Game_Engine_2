@@ -3,7 +3,7 @@
 
 namespace Input
 {
-   enum Action_List
+   enum ACTION_LIST
    {
       ACCELERTATE    = 0x00000001,
       ROTATE_LEFT    = 0x00000002,
