@@ -45,7 +45,11 @@ namespace Entities
       {
          cout << ", rotating right";
       }
-      cout << endl;
+
+      if (active_actions != 0)
+      {
+         cout << endl;
+      }
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

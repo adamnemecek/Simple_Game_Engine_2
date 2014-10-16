@@ -10,7 +10,7 @@ namespace Input
 {
    I_Key_Bindings *Keyboard_Bindings::get_instance_ptr()
    {
-      Keyboard_Bindings instance;
+      static Keyboard_Bindings instance;
 
       return &instance;
    }
@@ -29,7 +29,7 @@ namespace Input
          active_actions |= ACTION_LIST::ROTATE_LEFT;
       }
 
-      if (GetAsyncKeyState(VK_LEFT))
+      if (GetAsyncKeyState(VK_RIGHT))
       {
          active_actions |= ACTION_LIST::ROTATE_RIGHT;
       }
