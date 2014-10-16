@@ -9,9 +9,17 @@ namespace Input
    class __declspec(dllexport) I_Key_Bindings
    {
    public:
+      // for primitive variable initialization
+      I_Key_Bindings() 
+         : m_actions_previous(0)
+      {}
+
       virtual uint get_active_actions() const = 0;
 
-   private:
+   protected:
+      // this member variable is common to all key bindings, but it cannot be private 
+      // because of class inheritance rules, and I don't want it to be public, so make 
+      // it protected
       uint m_actions_previous;
    };
 }

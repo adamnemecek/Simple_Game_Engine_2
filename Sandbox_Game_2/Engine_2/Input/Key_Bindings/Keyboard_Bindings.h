@@ -17,7 +17,7 @@ namespace Input
       uint get_active_actions() const;
 
    private:
-      Keyboard_Bindings();
+      Keyboard_Bindings() {};
       Keyboard_Bindings(Keyboard_Bindings &);
       Keyboard_Bindings &operator=(Keyboard_Bindings &);
    };

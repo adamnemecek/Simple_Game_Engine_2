@@ -11,27 +11,29 @@ these function.
 #define MY_ENGINE
 
 #ifdef MY_ENGINE
+#include <Engine_2\Shapes\Geometry.h>
+#include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
+#include <Engine_2\Utilities\Shader_Maker.h>
+#include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
 #include <Engine_2\Utilities\include_GL_version.h>
+
+#include <Engine_2\Entities\Entity.h>
+#include <Engine_2\Entities\Components\Controller_Component.h>
+#include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
+#include <Engine_2\Input\Supported_Bindings.h>
+#include <Engine_2\Entities\Components\Physics_Component.h>
+
+#include <cassert>
 
 #include <string>
 #include <iostream>
 using std::cout;
 using std::endl;
 
-#include <Engine_2\Shapes\Geometry.h>
-#include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
-#include <Engine_2\Utilities\Shader_Maker.h>
-#include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
-
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
-
-Rendering::Renderer g_renderer;
-
-Rendering::Renderable *g_renderable;
-Shapes::Geometry g_geometry;
 
 // include this last to avoid errors when this includes gl.h 
 // (apparently this needs to be included after the glm and glload and other libraries)
@@ -39,6 +41,15 @@ Shapes::Geometry g_geometry;
 
 
 GLuint g_program_ID;
+
+Entities::Entity g_shape_entity;
+Entities::Controller_Component g_controller_component;
+Entities::Renderable_Updater_Component g_renderable_updater_component;
+Entities::Physics_Component g_physics_component;
+Rendering::Renderer g_renderer;
+Rendering::Renderable *g_renderable_ptr;
+Shapes::Geometry g_geometry;
+
 
 #else
 #include <glload/gl_3_3_comp.h>
@@ -96,7 +107,10 @@ void init()
 #ifdef MY_ENGINE
    //glDisable(GL_CULL_FACE);
 
-   if (!g_renderer.initialize()) { exit(1); }
+   bool initialize_success = false;
+   initialize_success = g_renderer.initialize();
+   assert(initialize_success);
+
    std::string file_paths[] =
    {
       "data/basic_shader.vert",
@@ -109,22 +123,42 @@ void init()
    };
 
    GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
-   if (!g_renderer.add_shader_program(program_ID)) { exit(1); }
-   if (!g_renderer.bind_shader_program(program_ID)) { exit(1); }
+   initialize_success = g_renderer.add_shader_program(program_ID);
+   assert(initialize_success);
+   initialize_success = g_renderer.bind_shader_program(program_ID);
+   assert(initialize_success);
 
    cout << "Program ID: " << program_ID << endl;
 
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, g_geometry);
+   g_renderable_ptr = g_renderer.add_renderable(&g_geometry);
 
-   g_renderable = g_renderer.add_renderable(&g_geometry);
+
+   // Entity creation and order of component attachment:
+   // - Controller - read inputs
+   // - Physics - respond to inputs
+   // - Renderable Updater - update model_to_world matrix
+
+   initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
+   assert(initialize_success);
+
+   g_renderable_updater_component.set_renderable(g_renderable_ptr);
+
+   g_shape_entity.add_component(&g_controller_component);
+   g_shape_entity.add_component(&g_physics_component);
+   g_shape_entity.add_component(&g_renderable_updater_component);
+
+   initialize_success = g_shape_entity.initialize();
+   assert(initialize_success);
+
 
    float translation = -6.001f;
    float rotation_rad = -(3.14159f * 1.0f);
    glm::mat4 model_to_world = 
       glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, translation)) * 
       glm::rotate(glm::mat4(), rotation_rad, glm::vec3(1.0f, 1.0f, 1.0f));
-   g_renderable->m_model_to_world_mat = model_to_world;
+   g_renderable_ptr->m_model_to_world_mat = model_to_world;
 #else
    initialize_program("VertexColors.vert", "VertexColors.frag");
    initialize_vertex_buffer();
@@ -140,6 +174,7 @@ void init()
 void display()
 {
 #ifdef MY_ENGINE
+   g_shape_entity.update();
    g_renderer.render_scene();
 #else
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -188,26 +223,26 @@ void keyboard(unsigned char key, int x, int y)
 
    switch (key)
    {
-   case 'w':
-   {
-      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_FORWARD);
-      break;
-   }
-   case 'a':
-   {
-      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_LEFT);
-      break;
-   }
-   case 's':
-   {
-      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_BACK);
-      break;
-   }
-   case 'd':
-   {
-      g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_RIGHT);
-      break;
-   }
+   //case 'w':
+   //{
+   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_FORWARD);
+   //   break;
+   //}
+   //case 'a':
+   //{
+   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_LEFT);
+   //   break;
+   //}
+   //case 's':
+   //{
+   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_BACK);
+   //   break;
+   //}
+   //case 'd':
+   //{
+   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_RIGHT);
+   //   break;
+   //}
    case 27:
    {
       glutLeaveMainLoop();

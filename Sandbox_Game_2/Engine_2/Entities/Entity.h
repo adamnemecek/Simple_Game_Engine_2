@@ -27,9 +27,12 @@ namespace Entities
       template<class T>
       T *get_component_ptr() const;
 
-      // these components/values are shared by all entities, and they will likely need to be
-      // updated by some other component, so just make them public
+      // shared by all entities, so just make it public
       glm::vec3 position;
+
+      // shared by all entities, so just make it public
+      // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
+      glm::vec3 base_orientation;
 
    private:
       static const uint m_MAX_COMPONENTS = 10;
