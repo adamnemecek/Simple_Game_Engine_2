@@ -28,11 +28,11 @@ namespace Entities
       T *get_component_ptr() const;
 
       // shared by all entities, so just make it public
-      glm::vec3 position;
+      glm::vec3 m_position;
 
       // shared by all entities, so just make it public
       // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
-      glm::vec3 base_orientation;
+      glm::vec3 m_base_orientation;
 
    private:
       static const uint m_MAX_COMPONENTS = 10;

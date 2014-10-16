@@ -9,14 +9,16 @@ namespace Entities
 {
    void Renderable_Updater_Component::update()
    {
+      glm::vec3 &orientation_ref = m_parent_entity_ptr->m_base_orientation;
+
       // take the arcsine of the opposite over adjacent sides of a triangle made up by the orientation vector
-      float rot_angle_rad = asinf(m_parent_entity_ptr->base_orientation.y / glm::length(m_parent_entity_ptr->base_orientation));
+      float rot_angle_rad = asinf(orientation_ref.y / glm::length(orientation_ref));
 
       // just hardcode the world-up vector as the Y axis and be done with it
-      glm::vec3 rotation_axis = glm::cross(m_parent_entity_ptr->base_orientation, glm::vec3(0.0f, +1.0f, 0.0f));
+      glm::vec3 rotation_axis = glm::cross(orientation_ref, glm::vec3(0.0f, +1.0f, 0.0f));
 
       m_renderable_ptr->m_model_to_world_mat =
-         glm::translate(glm::mat4(), m_parent_entity_ptr->position) *
+         glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
          glm::rotate(glm::mat4(), rot_angle_rad, rotation_axis);
    }
 

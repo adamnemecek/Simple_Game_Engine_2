@@ -154,11 +154,14 @@ void init()
 
 
    float translation = -6.001f;
-   float rotation_rad = -(3.14159f * 1.0f);
-   glm::mat4 model_to_world = 
-      glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, translation)) * 
-      glm::rotate(glm::mat4(), rotation_rad, glm::vec3(1.0f, 1.0f, 1.0f));
-   g_renderable_ptr->m_model_to_world_mat = model_to_world;
+   //float rotation_rad = -(3.14159f * 1.0f);
+   //glm::mat4 model_to_world =
+   //   glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, translation)) *
+   //   glm::rotate(glm::mat4(), rotation_rad, glm::vec3(1.0f, 1.0f, 1.0f));
+
+   g_shape_entity.m_position = glm::vec3(0.0f, 0.0f, translation);
+   g_shape_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, 1.0f);
+//   g_renderable_ptr->m_model_to_world_mat = model_to_world;
 #else
    initialize_program("VertexColors.vert", "VertexColors.frag");
    initialize_vertex_buffer();
