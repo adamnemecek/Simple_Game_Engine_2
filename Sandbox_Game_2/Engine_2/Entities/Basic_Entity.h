@@ -1,5 +1,5 @@
-#ifndef ENGINE_ENTITY_H
-#define ENGINE_ENTITY_H
+#ifndef ENGINE_BASIC_ENTITY_H
+#define ENGINE_BASIC_ENTITY_H
 
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
@@ -8,16 +8,17 @@ namespace Entities
 {
    class Game_Component;
 
-   class __declspec(dllexport) Entity
+   class __declspec(dllexport) Basic_Entity
    {
    public:
       // for initializing non-static-const members
-      Entity();
+      Basic_Entity();
 
       bool initialize();
       bool shutdown();
 
-      void add_component(Game_Component *component_ptr);
+      // this is vitual so that the derived Controllable_Entity can add controller and camera components
+      virtual void add_component(Game_Component *component_ptr);
 
       // goes through all components and runs their update() function
       void update();
@@ -34,7 +35,8 @@ namespace Entities
       // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
       glm::vec3 m_base_orientation;
 
-   private:
+   protected:
+      // these are protected instead of private so that the Controllable_Entity can also access them
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;
       Game_Component *m_components[m_MAX_COMPONENTS];
@@ -42,7 +44,7 @@ namespace Entities
 
    // define the "get component" function in the header so that it is implicitly inline
    template<class T>
-   T *Entity::get_component_ptr() const
+   T *Basic_Entity::get_component_ptr() const
    {
       for (uint index = 0; index < m_num_current_components; index++)
       {

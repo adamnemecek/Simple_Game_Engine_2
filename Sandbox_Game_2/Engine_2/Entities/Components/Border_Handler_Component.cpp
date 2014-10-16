@@ -2,7 +2,7 @@
 
 // for getting at the physics component
 #include <Entities\Components\Physics_Component.h>
-#include <Entities\Entity.h>
+#include <Entities\Basic_Entity.h>
 
 namespace Entities
 {

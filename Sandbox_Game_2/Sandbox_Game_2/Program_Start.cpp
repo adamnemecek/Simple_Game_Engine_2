@@ -19,7 +19,7 @@ these function.
 #include <Engine_2\Rendering\Renderable.h>
 #include <Engine_2\Utilities\include_GL_version.h>
 
-#include <Engine_2\Entities\Entity.h>
+#include <Engine_2\Entities\Basic_Entity.h>
 #include <Engine_2\Entities\Components\Controller_Component.h>
 #include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
 #include <Engine_2\Input\Supported_Bindings.h>
@@ -42,7 +42,7 @@ using std::endl;
 
 GLuint g_program_ID;
 
-Entities::Entity g_shape_entity;
+Entities::Basic_Entity g_shape_entity;
 Entities::Controller_Component g_controller_component;
 Entities::Renderable_Updater_Component g_renderable_updater_component;
 Entities::Physics_Component g_physics_component;
@@ -145,7 +145,7 @@ void init()
 
    g_renderable_updater_component.set_renderable(g_renderable_ptr);
 
-   g_shape_entity.add_component(&g_controller_component);
+   //g_shape_entity.add_component(&g_controller_component);
    g_shape_entity.add_component(&g_physics_component);
    g_shape_entity.add_component(&g_renderable_updater_component);
 

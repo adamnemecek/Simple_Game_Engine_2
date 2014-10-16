@@ -1,0 +1,6 @@
+#ifndef ENGINE_CAMERA_COMPONENT_H
+#define ENGINE_CAMERA_COMPONENT_H
+
+
+
+#endif
