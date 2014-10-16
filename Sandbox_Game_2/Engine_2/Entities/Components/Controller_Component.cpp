@@ -45,6 +45,22 @@ namespace Entities
       {
          cout << ", rotating right";
       }
+      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CW_X_AXIS)
+      {
+         cout << ", rotating right";
+      }
+      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CCW_X_AXIS)
+      {
+         cout << ", rotating right";
+      }
+      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CW_Y_AXIS)
+      {
+         cout << ", rotating right";
+      }
+      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CCW_Y_AXIS)
+      {
+         cout << ", rotating right";
+      }
 
       if (active_actions != 0)
       {
