@@ -126,6 +126,11 @@ void init()
    glCullFace(GL_BACK);
    glFrontFace(GL_CCW);
 
+   glEnable(GL_DEPTH_TEST);
+   glDepthMask(GL_TRUE);
+   glDepthFunc(GL_LEQUAL);
+   glDepthRange(0.0f, 1.0f);
+
 
    bool initialize_success = false;
    initialize_success = g_renderer.initialize();
@@ -228,6 +233,10 @@ void init()
 void display()
 {
 #ifdef MY_ENGINE
+   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+   glClearDepth(1.0f);
+   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
    g_cube_1_entity.update();
    g_cube_2_entity.update();
    g_cube_3_entity.update();
