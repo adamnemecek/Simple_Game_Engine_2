@@ -3,7 +3,7 @@
 #include <glm\mat4x4.hpp>
 #include <Utilities\Include_GLM_Mat_Transform.h>
 #include <Rendering\Renderable.h>
-#include <Entities\Basic_Entity.h>
+#include <Entities\Entity.h>
 
 namespace Entities
 {

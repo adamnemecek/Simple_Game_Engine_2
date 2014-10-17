@@ -5,7 +5,7 @@
 #include <Input\Key_Bindings\Keyboard_Bindings.h>
 
 // for getting at the physics component
-#include <Entities\Basic_Entity.h>
+#include <Entities\Entity.h>
 #include <Entities\Components\Physics_Component.h>
 
 // for figuring out which actions are active

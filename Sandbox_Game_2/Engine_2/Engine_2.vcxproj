@@ -83,13 +83,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp" />
-    <ClCompile Include="Entities\Basic_Entity.cpp" />
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
-    <ClCompile Include="Entities\Components\Camera_Component.cpp" />
     <ClCompile Include="Entities\Components\Controller_Component.cpp" />
     <ClCompile Include="Entities\Components\Physics_Component.cpp" />
     <ClCompile Include="Entities\Components\Renderable_Updater_Component.cpp" />
-    <ClCompile Include="Entities\Controllable_Entity.cpp" />
+    <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
@@ -103,13 +101,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
-    <ClInclude Include="Entities\Basic_Entity.h" />
     <ClInclude Include="Entities\Components\Border_Handler_Component.h" />
-    <ClInclude Include="Entities\Components\Camera_Component.h" />
     <ClInclude Include="Entities\Components\Controller_Component.h" />
     <ClInclude Include="Entities\Components\Physics_Component.h" />
     <ClInclude Include="Entities\Components\Renderable_Updater_Component.h" />
-    <ClInclude Include="Entities\Controllable_Entity.h" />
+    <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="Entities\Game_Component.h" />
     <ClInclude Include="Input\I_Key_Bindings.h" />
     <ClInclude Include="Input\Action_List.h" />
@@ -136,6 +132,7 @@
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />
     <Text Include="Input\overview_of_inputs.txt" />
+    <Text Include="thoughts_on_message_flow.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
-#ifndef ENGINE_BASIC_ENTITY_H
-#define ENGINE_BASIC_ENTITY_H
+#ifndef ENGINE_Entity_H
+#define ENGINE_Entity_H
 
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
@@ -8,17 +8,18 @@ namespace Entities
 {
    class Game_Component;
 
-   class __declspec(dllexport) Basic_Entity
+   class __declspec(dllexport) Entity
    {
    public:
       // for initializing non-static-const members
-      Basic_Entity();
+      Entity();
 
       bool initialize();
       bool shutdown();
 
-      // this is vitual so that the derived Controllable_Entity can add controller and camera components
-      virtual void add_component(Game_Component *component_ptr);
+      // add a derivation of the Game_Component to this class
+      // Note: The derived component will not be stored here.  Only a pointer is stored in this class.
+      void add_component(Game_Component *component_ptr);
 
       // goes through all components and runs their update() function
       void update();
@@ -45,7 +46,7 @@ namespace Entities
 
    // define the "get component" function in the header so that it is implicitly inline
    template<class T>
-   T *Basic_Entity::get_component_ptr() const
+   T *Entity::get_component_ptr() const
    {
       for (uint index = 0; index < m_num_current_components; index++)
       {

@@ -1,0 +1,6 @@
+Should an entity contain it's components or pointers to components?
+
+There will be one camera, and the renderer will use that camera. 
+An entity's controller component will not interact with the camera.
+The camera will be assigned an entity to follow.  If no entity is assigned, 
+then the camera will stay put at it's origin.
