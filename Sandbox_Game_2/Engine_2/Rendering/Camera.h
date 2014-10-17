@@ -6,6 +6,11 @@
 #include <glm\mat4x4.hpp>
 
 
+namespace Entities
+{
+   class Entity;
+}
+
 namespace Rendering
 {
    class Camera
@@ -13,20 +18,27 @@ namespace Rendering
    public:
       Camera();
       glm::mat4 get_world_to_view_matrix() const;
-      void mouse_update(const glm::vec2& new_mouse_position);
+      //void mouse_update(const glm::vec2& new_mouse_position);
+
+      // updates the camera to follow the assigned entity (provided one exists)
+      void update();
 
       // these getters are useful for manipulating entities relative to the camera
       glm::vec3 get_strafe_vector();
       glm::vec3 get_forward_vector();
       glm::vec3 get_position();
 
+      // use this to assign an entity to follow
+      // Note: If no entity is assigned, then the camera will remain at the origin and not move.
+      void set_entity_to_follow(Entities::Entity *entity_ptr);
+
       // basic camera controls
-      void move_forward();
-      void move_back();
-      void strafe_left();
-      void strafe_right();
-      void move_up();
-      void move_down();
+      //void move_forward();
+      //void move_back();
+      //void strafe_left();
+      //void strafe_right();
+      //void move_up();
+      //void move_down();
 
 
    private:
@@ -35,6 +47,8 @@ namespace Rendering
       glm::vec3 m_view_direction;
       glm::vec3 m_strafe_direction;
       glm::vec2 m_prev_mouse_position;
+
+      Entities::Entity *m_follow_this_entity_ptr;
 
       float m_camera_move_speed;
    };

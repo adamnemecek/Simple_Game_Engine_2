@@ -17,6 +17,7 @@ these function.
 #include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
+#include <Rendering\Camera.h>
 #include <Engine_2\Utilities\include_GL_version.h>
 
 #include <Engine_2\Entities\Entity.h>
@@ -42,6 +43,8 @@ using std::endl;
 
 GLuint g_program_ID;
 
+Rendering::Camera g_camera;
+
 Entities::Entity g_shape_entity;
 Entities::Controller_Component g_controller_component;
 Entities::Renderable_Updater_Component g_renderable_updater_component;
@@ -49,7 +52,6 @@ Entities::Physics_Component g_physics_component;
 Rendering::Renderer g_renderer;
 Rendering::Renderable *g_renderable_ptr;
 Shapes::Geometry g_geometry;
-
 
 #else
 #include <glload/gl_3_3_comp.h>
@@ -130,9 +132,12 @@ void init()
 
    cout << "Program ID: " << program_ID << endl;
 
+   g_renderer.set_camera_to_render(&g_camera);
+
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, g_geometry);
    g_renderable_ptr = g_renderer.add_renderable(&g_geometry);
+
 
 
    // Entity creation and order of component attachment:
@@ -151,6 +156,10 @@ void init()
 
    initialize_success = g_shape_entity.initialize();
    assert(initialize_success);
+
+
+   // set the camera to follow this entity
+   g_camera.set_entity_to_follow(&g_shape_entity);
 
 
    float translation = -6.001f;
@@ -178,6 +187,7 @@ void display()
 {
 #ifdef MY_ENGINE
    g_shape_entity.update();
+   g_camera.update();
    g_renderer.render_scene();
 #else
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

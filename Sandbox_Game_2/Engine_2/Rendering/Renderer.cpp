@@ -11,6 +11,7 @@
 #include <Utilities\include_GL_version.h>
 #include <Shapes\Geometry.h>
 #include <Utilities\Printer_Helper.h>
+#include <Rendering\Camera.h>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -114,8 +115,17 @@ namespace Rendering
       cout << "resizing to aspect ratio " << aspect_ratio << endl;
    }
 
+   void Renderer::set_camera_to_render(Camera *camera_ptr)
+   {
+      assert(camera_ptr != 0);
+      m_camera_ptr = camera_ptr;
+   }
+
    void Renderer::render_scene()
    {
+      // we can't render without a camera
+      assert(m_camera_ptr != 0);
+
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
       glClear(GL_COLOR_BUFFER_BIT);
 
@@ -124,7 +134,7 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      glm::mat4 camera_mat = m_cam.get_world_to_view_matrix();
+      glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
       glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
 
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
@@ -140,42 +150,6 @@ namespace Rendering
          glDrawElements(GL_TRIANGLES, (r.m_geometry_ptr)->m_shape_data.m_num_indices, GL_UNSIGNED_SHORT, 0);
       }
    }
-
-   void Renderer::manipulate_active_camera(uint flags)
-   {
-      // multiple movements can happen at once, so test them all individually
-
-      if ((flags & Renderer::CAMERA_MOVE_FORWARD) > 0)
-      {
-         m_cam.move_forward();
-      }
-
-      if ((flags & Renderer::CAMERA_MOVE_BACK) > 0)
-      {
-         m_cam.move_back();
-      }
-
-      if ((flags & Renderer::CAMERA_MOVE_LEFT) > 0)
-      {
-         m_cam.strafe_left();
-      }
-
-      if ((flags & Renderer::CAMERA_MOVE_RIGHT) > 0)
-      {
-         m_cam.strafe_right();
-      }
-
-      if ((flags & Renderer::CAMERA_MOVE_UP) > 0)
-      {
-         m_cam.move_up();
-      }
-
-      if ((flags & Renderer::CAMERA_MOVE_DOWN) > 0)
-      {
-         m_cam.move_down();
-      }
-   }
-
 
 
    // Private functions

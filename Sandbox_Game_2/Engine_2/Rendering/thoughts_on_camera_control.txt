@@ -1,0 +1,5 @@
+I want the camera to automatically follow an entity based on that entity's 
+position and orientation, but I also want to allow for manual camera control.
+
+For the moment, I will institute a "dumb" camera that will only follow it's 
+assigned entity.

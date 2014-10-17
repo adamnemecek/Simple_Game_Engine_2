@@ -132,6 +132,7 @@
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />
     <Text Include="Input\overview_of_inputs.txt" />
+    <Text Include="Rendering\thoughts_on_camera_control.txt" />
     <Text Include="thoughts_on_message_flow.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
