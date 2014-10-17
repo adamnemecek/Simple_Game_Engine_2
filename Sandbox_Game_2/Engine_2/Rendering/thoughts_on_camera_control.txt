@@ -3,3 +3,5 @@ position and orientation, but I also want to allow for manual camera control.
 
 For the moment, I will institute a "dumb" camera that will only follow it's 
 assigned entity.
+
+Make it third person by default, but all for first person perspective later.

@@ -49,6 +49,7 @@ namespace Rendering
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;
+      float m_entity_backoff_distance;
 
       float m_camera_move_speed;
    };
