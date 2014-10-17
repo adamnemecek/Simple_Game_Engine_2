@@ -5,14 +5,18 @@ namespace Input
 {
    enum ACTION_LIST
    {
-      ACCELERTATE    = (1 << 1),
-      ROTATE_LEFT    = (1 << 2),
-      ROTATE_RIGHT   = (1 << 3),
-      ROTATE_OBJECT_CW_X_AXIS = (1 << 4),
-      ROTATE_OBJECT_CCW_X_AXIS = (1 << 5),
-      ROTATE_OBJECT_CW_Y_AXIS = (1 << 6),
-      ROTATE_OBJECT_CCW_Y_AXIS = (1 << 7),
-      MAX            = (1 << 8),
+      FORWARD = (1 << 1),
+      BACK = (1 << 2),
+      ROTATE_LEFT = (1 << 3),
+      ROTATE_RIGHT = (1 << 4),
+      GO_UP = (1 << 5),
+      GO_DOWN = (1 << 6),
+      TILT_LEFT = (1 << 7),
+      TILT_RIGHT = (1 << 8),
+      TILT_FORWARD = (1 << 9),
+      TILT_BACK = (1 << 10),
+      STRAFE_LEFT = (1 << 11),
+      STRAFE_RIGHT = (1 << 12),
    };
 }
 

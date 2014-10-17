@@ -232,6 +232,7 @@ void display()
    g_cube_2_entity.update();
    g_cube_3_entity.update();
    g_cube_4_entity.update();
+   g_camera_entity.update();
    g_camera.update();
    g_renderer.render_scene();
 #else

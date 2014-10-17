@@ -19,9 +19,30 @@ namespace Input
    {
       uint active_actions = 0;
       
-      if (GetAsyncKeyState(VK_UP))
+      // check out the MSDN article on Virtual-Key Codes
+
+      // 'W'
+      if (GetAsyncKeyState(0x57))
       {
-         active_actions |= ACTION_LIST::ACCELERTATE;
+         active_actions |= ACTION_LIST::FORWARD;
+      }
+
+      // 'S'
+      if (GetAsyncKeyState(0x53))
+      {
+         active_actions |= ACTION_LIST::BACK;
+      }
+
+      // 'A'
+      if (GetAsyncKeyState(0x41))
+      {
+         active_actions |= ACTION_LIST::STRAFE_LEFT;
+      }
+
+      // 'D'
+      if (GetAsyncKeyState(0x44))
+      {
+         active_actions |= ACTION_LIST::STRAFE_RIGHT;
       }
 
       if (GetAsyncKeyState(VK_LEFT))
@@ -32,6 +53,15 @@ namespace Input
       if (GetAsyncKeyState(VK_RIGHT))
       {
          active_actions |= ACTION_LIST::ROTATE_RIGHT;
+      }
+
+      if (GetAsyncKeyState(VK_UP))
+      {
+         active_actions |= ACTION_LIST::TILT_FORWARD;
+      }
+      if (GetAsyncKeyState(VK_DOWN))
+      {
+         active_actions |= ACTION_LIST::TILT_BACK;
       }
 
       return active_actions;

@@ -33,33 +33,44 @@ namespace Entities
       
       uint active_actions = m_key_binder_ptr->get_active_actions();
 
-      if (active_actions & ACTION_LIST::ACCELERTATE)
+      if (active_actions & ACTION_LIST::FORWARD)
       {
          cout << "accellerating";
       }
+
+      if (active_actions & ACTION_LIST::BACK)
+      {
+         cout << ", back";
+      }
+
+      if (active_actions & ACTION_LIST::STRAFE_LEFT)
+      {
+         cout << ", strafing left";
+      }
+
+      if (active_actions & ACTION_LIST::STRAFE_RIGHT)
+      {
+         cout << ", strafing right";
+      }
+
       if (active_actions & ACTION_LIST::ROTATE_LEFT)
       {
          cout << ", rotating left";
       }
+
       if (active_actions & ACTION_LIST::ROTATE_RIGHT)
       {
          cout << ", rotating right";
       }
-      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CW_X_AXIS)
+
+      if (active_actions & ACTION_LIST::TILT_FORWARD)
       {
-         cout << ", rotating right";
+         cout << ", tilting forward";
       }
-      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CCW_X_AXIS)
+
+      if (active_actions & ACTION_LIST::TILT_BACK)
       {
-         cout << ", rotating right";
-      }
-      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CW_Y_AXIS)
-      {
-         cout << ", rotating right";
-      }
-      if (active_actions & ACTION_LIST::ROTATE_OBJECT_CCW_Y_AXIS)
-      {
-         cout << ", rotating right";
+         cout << ", tilting back";
       }
 
       if (active_actions != 0)
