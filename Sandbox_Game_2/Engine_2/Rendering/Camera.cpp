@@ -14,7 +14,7 @@ namespace Rendering
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
-      m_entity_backoff_distance(5.0f)
+      m_entity_backoff_distance(0.0f)
    {
    }
 

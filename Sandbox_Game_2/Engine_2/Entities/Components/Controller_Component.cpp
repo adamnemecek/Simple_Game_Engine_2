@@ -29,7 +29,7 @@ namespace Entities
    {
       using Input::ACTION_LIST;
       assert(m_key_binder_ptr != 0);
-      assert(m_easy_physics_ptr != 0);
+      //assert(m_easy_physics_ptr != 0);
       
       uint active_actions = m_key_binder_ptr->get_active_actions();
 

@@ -22,7 +22,7 @@ namespace Shapes
             TRIANGLE_2D,
          };
 
-         static void load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry &geo);
+         static void load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry *geo);
 
       private:
          // enforce staticness

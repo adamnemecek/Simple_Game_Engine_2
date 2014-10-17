@@ -22,26 +22,26 @@ namespace Shapes
 {
    namespace Geometry_Creation
    {
-      void Geometry_Loader::load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry &geo)
+      void Geometry_Loader::load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry *geo)
       {
          switch (load_type)
          {
          case Geometry_Loader::CUBE:
          {
-            Shape_Generator::create_cube_data(&(geo.m_shape_data));
-            geo.m_render_mode = GL_TRIANGLES;
+            Shape_Generator::create_cube_data(&(geo->m_shape_data));
+            geo->m_render_mode = GL_TRIANGLES;
             break;
          }
          case Geometry_Loader::PLANE:
          {
-            Shape_Generator::create_plane_data(20, &(geo.m_shape_data));
-            geo.m_render_mode = GL_TRIANGLES;
+            Shape_Generator::create_plane_data(20, &(geo->m_shape_data));
+            geo->m_render_mode = GL_TRIANGLES;
             break;
          }
          case Geometry_Loader::TRIANGLE_2D:
          {
-            Shape_Generator::create_triangle(&(geo.m_shape_data));
-            geo.m_render_mode = GL_TRIANGLES;
+            Shape_Generator::create_triangle(&(geo->m_shape_data));
+            geo->m_render_mode = GL_TRIANGLES;
             break;
          }
          default:
@@ -52,17 +52,17 @@ namespace Shapes
          }
          
          // generate vertex array object and bind it
-         glGenVertexArrays(1, &geo.m_VAO_ID);
-         glBindVertexArray(geo.m_VAO_ID);
+         glGenVertexArrays(1, &geo->m_VAO_ID);
+         glBindVertexArray(geo->m_VAO_ID);
 
          // vertex buffer
          // - generate one array buffer object and bind it
          // - allocate space for the position, normal, and color data with STATIC drawing (this data doesn't change on every draw), but send no data
          // - set vertex attribute pointers 
          // - send data with glBufferSubData(...)
-         glGenBuffers(1, &geo.m_vertex_buffer_ID);
-         glBindBuffer(GL_ARRAY_BUFFER, geo.m_vertex_buffer_ID);
-         glBufferData(GL_ARRAY_BUFFER, geo.m_shape_data.vertex_buffer_size(), geo.m_shape_data.m_verts, GL_STATIC_DRAW);
+         glGenBuffers(1, &geo->m_vertex_buffer_ID);
+         glBindBuffer(GL_ARRAY_BUFFER, geo->m_vertex_buffer_ID);
+         glBufferData(GL_ARRAY_BUFFER, geo->m_shape_data.vertex_buffer_size(), geo->m_shape_data.m_verts, GL_STATIC_DRAW);
 
 
          // position = 0
@@ -95,9 +95,9 @@ namespace Shapes
          // indices buffer
          // - generate one element buffer object and bind it
          // - allocate space for the indices and send the data
-         glGenBuffers(1, &geo.m_element_buffer_ID);
-         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo.m_element_buffer_ID);
-         glBufferData(GL_ELEMENT_ARRAY_BUFFER, geo.m_shape_data.index_buffer_size(), geo.m_shape_data.m_indices, GL_STATIC_DRAW);
+         glGenBuffers(1, &geo->m_element_buffer_ID);
+         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geo->m_element_buffer_ID);
+         glBufferData(GL_ELEMENT_ARRAY_BUFFER, geo->m_shape_data.index_buffer_size(), geo->m_shape_data.m_indices, GL_STATIC_DRAW);
 
 
          // clean up bindings 

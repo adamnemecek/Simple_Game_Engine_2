@@ -43,15 +43,30 @@ using std::endl;
 
 GLuint g_program_ID;
 
+Rendering::Renderer g_renderer;
 Rendering::Camera g_camera;
 
-Entities::Entity g_shape_entity;
+Shapes::Geometry g_cube_geometry;
+Entities::Entity g_cube_1_entity;
+Entities::Entity g_cube_2_entity;
+Entities::Entity g_cube_3_entity;
+Entities::Entity g_cube_4_entity;
+Rendering::Renderable *g_cube_1_renderable_ptr;
+Rendering::Renderable *g_cube_2_renderable_ptr;
+Rendering::Renderable *g_cube_3_renderable_ptr;
+Rendering::Renderable *g_cube_4_renderable_ptr;
+Entities::Renderable_Updater_Component g_cube_1_renderable_updater_component;
+Entities::Renderable_Updater_Component g_cube_2_renderable_updater_component;
+Entities::Renderable_Updater_Component g_cube_3_renderable_updater_component;
+Entities::Renderable_Updater_Component g_cube_4_renderable_updater_component;
+
+Entities::Entity g_plane_entity;
+Shapes::Geometry g_plane_geometry;
+Rendering::Renderable *g_plane_renderable_ptr;
+Entities::Renderable_Updater_Component g_plane_renderable_updater_component;
+
+Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
-Entities::Renderable_Updater_Component g_renderable_updater_component;
-Entities::Physics_Component g_physics_component;
-Rendering::Renderer g_renderer;
-Rendering::Renderable *g_renderable_ptr;
-Shapes::Geometry g_geometry;
 
 #else
 #include <glload/gl_3_3_comp.h>
@@ -107,7 +122,10 @@ void initialize_vertex_buffer()
 void init()
 {
 #ifdef MY_ENGINE
-   //glDisable(GL_CULL_FACE);
+   glEnable(GL_CULL_FACE);
+   glCullFace(GL_BACK);
+   glFrontFace(GL_CCW);
+
 
    bool initialize_success = false;
    initialize_success = g_renderer.initialize();
@@ -135,42 +153,66 @@ void init()
    g_renderer.set_camera_to_render(&g_camera);
 
    using Shapes::Geometry_Creation::Geometry_Loader;
-   Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, g_geometry);
-   g_renderable_ptr = g_renderer.add_renderable(&g_geometry);
+   Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, &g_cube_geometry);
+
+   g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+
+   g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
+   g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
+   g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
+   g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
+
+   g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
+   g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
+   g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
+   g_cube_4_entity.add_component(&g_cube_4_renderable_updater_component);
 
 
+   initialize_success = g_cube_1_entity.initialize();
+   assert(initialize_success);
+   initialize_success = g_cube_2_entity.initialize();
+   assert(initialize_success);
+   initialize_success = g_cube_3_entity.initialize();
+   assert(initialize_success);
+   initialize_success = g_cube_4_entity.initialize();
+   assert(initialize_success);
 
-   // Entity creation and order of component attachment:
-   // - Controller - read inputs
-   // - Physics - respond to inputs
-   // - Renderable Updater - update model_to_world matrix
+   // set some initial positions and rotations for these cubes
+   g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
+   g_cube_1_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, 1.0f);
+   g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
+   g_cube_2_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, -1.0f);
+   g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
+   g_cube_3_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, -1.0f);
+   g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
+   g_cube_4_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, 1.0f);
 
+
+   // set up the camera entity
+   // Note: Set it to be off to the side of and above the scene and looking into it.
+   g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    assert(initialize_success);
-
-   g_renderable_updater_component.set_renderable(g_renderable_ptr);
-
-   //g_shape_entity.add_component(&g_controller_component);
-   g_shape_entity.add_component(&g_physics_component);
-   g_shape_entity.add_component(&g_renderable_updater_component);
-
-   initialize_success = g_shape_entity.initialize();
-   assert(initialize_success);
+   g_camera_entity.add_component(&g_controller_component);
+   g_camera_entity.initialize();
+   g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
+   g_camera_entity.m_base_orientation = (-1.0f) * g_camera_entity.m_position;
 
 
-   // set the camera to follow this entity
-   g_camera.set_entity_to_follow(&g_shape_entity);
+   // and the plane
+   // Note: Let the plane be it's default size and remain at the origin.
+   Geometry_Loader::load_from_generator(Geometry_Loader::PLANE, &g_plane_geometry);
+   g_plane_renderable_ptr = g_renderer.add_renderable(&g_plane_geometry);
+   g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
+   g_plane_entity.add_component(&g_plane_renderable_updater_component);
+   g_plane_entity.initialize();
 
 
-   float translation = -6.001f;
-   //float rotation_rad = -(3.14159f * 1.0f);
-   //glm::mat4 model_to_world =
-   //   glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, translation)) *
-   //   glm::rotate(glm::mat4(), rotation_rad, glm::vec3(1.0f, 1.0f, 1.0f));
 
-   g_shape_entity.m_position = glm::vec3(0.0f, 0.0f, translation);
-   g_shape_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, 1.0f);
-//   g_renderable_ptr->m_model_to_world_mat = model_to_world;
+
 #else
    initialize_program("VertexColors.vert", "VertexColors.frag");
    initialize_vertex_buffer();
@@ -186,7 +228,10 @@ void init()
 void display()
 {
 #ifdef MY_ENGINE
-   g_shape_entity.update();
+   g_cube_1_entity.update();
+   g_cube_2_entity.update();
+   g_cube_3_entity.update();
+   g_cube_4_entity.update();
    g_camera.update();
    g_renderer.render_scene();
 #else
