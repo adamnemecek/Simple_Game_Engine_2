@@ -42,7 +42,6 @@ namespace Rendering
 
 
    private:
-      glm::vec3 m_world_up_vector;
       glm::vec3 m_position;
       glm::vec3 m_view_direction;
       glm::vec3 m_strafe_direction;

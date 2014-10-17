@@ -9,7 +9,7 @@ using glm::vec3;
 #include <stdlib.h>
 
 // for GL typedefs
-#include <Utilities\include_GL_version.h>
+#include <Utilities\Include_Helper_GL_Version.h>
 
 #include <Utilities\Typedefs.h>
 

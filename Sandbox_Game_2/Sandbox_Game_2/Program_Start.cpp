@@ -14,11 +14,11 @@ these function.
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
 #include <Engine_2\Utilities\Shader_Maker.h>
-#include <Engine_2\Utilities\Include_GLM_Mat_Transform.h>
+#include <Engine_2\Utilities\Include_Helper_GLM_Mat_Transform.h>
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
 #include <Rendering\Camera.h>
-#include <Engine_2\Utilities\include_GL_version.h>
+#include <Engine_2\Utilities\Include_Helper_GL_Version.h>
 
 #include <Engine_2\Entities\Entity.h>
 #include <Engine_2\Entities\Components\Controller_Component.h>

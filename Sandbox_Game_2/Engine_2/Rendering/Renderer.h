@@ -3,7 +3,7 @@
 
 #include <glm\mat4x4.hpp>
 #include <glm\vec3.hpp>
-#include <Utilities\include_GL_version.h>
+#include <Utilities\Include_Helper_GL_Version.h>
 #include <Utilities\Typedefs.h>
 #include <string>
 #include <vector>

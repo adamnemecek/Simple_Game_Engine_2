@@ -6,3 +6,6 @@ The camera will be assigned an entity to follow.  If no entity is assigned,
 then the camera will stay put at it's origin.
 
 Remove the Arcsynthesis framework from my solution.
+
+The Entity's "orientation" should be a quaternion.  This means that the camera
+and the renderable will need to work with quaternions as well.

@@ -1,7 +1,8 @@
 #include "Renderable_Updater_Component.h"
 
 #include <glm\mat4x4.hpp>
-#include <Utilities\Include_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helper_WORLD_UP_VECTOR.h>
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
 
@@ -14,8 +15,7 @@ namespace Entities
       // take the arcsine of the opposite over adjacent sides of a triangle made up by the orientation vector
       float rot_angle_rad = asinf(orientation_ref.y / glm::length(orientation_ref));
 
-      // just hardcode the world-up vector as the Y axis and be done with it
-      glm::vec3 rotation_axis = glm::cross(orientation_ref, glm::vec3(0.0f, +1.0f, 0.0f));
+      glm::vec3 rotation_axis = glm::cross(orientation_ref, Utilities::WORLD_UP_VECTOR);
 
       m_renderable_ptr->m_model_to_world_mat =
          glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *

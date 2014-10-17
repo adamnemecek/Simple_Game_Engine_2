@@ -119,9 +119,10 @@
     <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
-    <ClInclude Include="Utilities\Include_GLM_Mat_Transform.h" />
-    <ClInclude Include="Utilities\Include_GL_Version.h" />
-    <ClInclude Include="Utilities\Include_Windows_Light.h" />
+    <ClInclude Include="Utilities\Include_Helper_GLM_Mat_Transform.h" />
+    <ClInclude Include="Utilities\Include_Helper_GL_Version.h" />
+    <ClInclude Include="Utilities\Include_Helper_World_Up_Vector.h" />
+    <ClInclude Include="Utilities\Include_Helper_Windows_Light.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />

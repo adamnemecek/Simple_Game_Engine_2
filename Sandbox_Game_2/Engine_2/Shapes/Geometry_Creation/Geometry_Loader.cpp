@@ -14,7 +14,7 @@ using glm::mat4;
 using glm::value_ptr;
 
 // for GL typedefs
-#include <Utilities\include_GL_version.h>
+#include <Utilities\Include_Helper_GL_Version.h>
 
 #include <Utilities\Typedefs.h>
 

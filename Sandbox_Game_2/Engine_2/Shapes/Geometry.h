@@ -7,7 +7,7 @@
 #include <Shapes\Shape_Data.h>
 
 // for cleaning up openGL objects that are unique for each geometry object
-#include <Utilities\include_GL_version.h>
+#include <Utilities\Include_Helper_GL_Version.h>
 
 
 namespace Rendering

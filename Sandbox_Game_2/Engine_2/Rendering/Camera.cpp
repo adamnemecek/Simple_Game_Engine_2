@@ -1,6 +1,7 @@
 #include "Camera.h"
 
-#include <Utilities\Include_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helper_WORLD_UP_VECTOR.h>
 #include <Entities\Entity.h>
 #include <cassert>
 
@@ -8,9 +9,8 @@ namespace Rendering
 {
    Camera::Camera()
       : m_position(0.0f),
-      m_world_up_vector(0.0f, 1.0f, 0.0f),
       m_view_direction(0.0f, 0.0f, -1.0f),
-      m_strafe_direction(glm::cross(m_view_direction, m_world_up_vector)),
+      m_strafe_direction(glm::cross(m_view_direction, Utilities::WORLD_UP_VECTOR)),
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
@@ -20,7 +20,7 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-      return glm::lookAt(m_position, m_position + m_view_direction, m_world_up_vector);
+      return glm::lookAt(m_position, m_position + m_view_direction, Utilities::WORLD_UP_VECTOR);
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -42,9 +42,9 @@ namespace Rendering
    //      // take the cross product of the current view direction and the world up vector to get the 
    //      // strafe vector, then rotate around Y, then rotate around the strafe vector
    //      // ??good candidate for quaternion computation??
-   //      m_strafe_direction = glm::cross(m_view_direction, m_world_up_vector);
+   //      m_strafe_direction = glm::cross(m_view_direction, m_WORLD_UP_VECTORtor);
    //      glm::mat4 rotator_mat =
-   //         glm::rotate(glm::mat4(), rotate_angle_rad_x * ROTATION_SENSITIVITY, m_world_up_vector) *
+   //         glm::rotate(glm::mat4(), rotate_angle_rad_x * ROTATION_SENSITIVITY, m_WORLD_UP_VECTORtor) *
    //         glm::rotate(glm::mat4(), rotate_angle_rad_y * ROTATION_SENSITIVITY, m_strafe_direction);
 
    //      // cast the mat4 down to a mat3 rather than casting twice casting the view direction to a 
@@ -110,12 +110,12 @@ namespace Rendering
 
    //void Camera::move_up()
    //{
-   //   m_position += m_world_up_vector * m_camera_move_speed;
+   //   m_position += m_WORLD_UP_VECTORtor * m_camera_move_speed;
    //}
 
    //void Camera::move_down()
    //{
-   //   m_position -= m_world_up_vector * m_camera_move_speed;
+   //   m_position -= m_WORLD_UP_VECTORtor * m_camera_move_speed;
    //}
 
 
