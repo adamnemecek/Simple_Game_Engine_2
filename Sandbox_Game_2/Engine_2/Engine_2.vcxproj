@@ -134,7 +134,8 @@
     <ClInclude Include="Timing\Game_Clock.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Input\input_overview.txt" />
+    <Text Include="Entities\overview_of_entity_use.txt" />
+    <Text Include="Input\overview_of_inputs.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
