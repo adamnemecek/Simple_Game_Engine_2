@@ -152,13 +152,13 @@
     <ClInclude Include="Entities\Components\Renderable_Updater_Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Entities\Controllable_Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Entities\Basic_Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Entities\Components\Camera_Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Controllable_Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

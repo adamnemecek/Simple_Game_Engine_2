@@ -23,8 +23,9 @@ namespace Entities
       // goes through all components and runs their update() function
       void update();
 
-      // this is a template function so that a component can get at one of its siblings
-      // Note: The border handler, for example, needs to update the velocity, which is in the physics component
+      // this is a template function so that a component can get at one of its siblings, such as
+      // the border handler component needing to update the velocity, which is in the physics component
+      // Note: This function is public 
       template<class T>
       T *get_component_ptr() const;
 

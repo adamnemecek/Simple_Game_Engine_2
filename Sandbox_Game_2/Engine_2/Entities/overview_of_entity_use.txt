@@ -1,0 +1,15 @@
+I was thinking that I should try to make some entities controllable and others 
+be non-controllable and others stationary or renderable or "have sounds", etc., 
+but I decided that it should be up to the user of the Engine_2 code to decide
+what kinds of entities that they want.
+
+I will therefore remove the Controllable_Entity class and undo the 
+modifications that I made to the Entity class (I changed it to Basic_Entity and
+changed some private members to be protected just so that the derived 
+Controllable_Entity could access them, plus other changes).  The message 
+handling of Controllable_Entity also isn't different enough from Basic_Entity 
+to warrant the existence of a derived class.
+
+Each Entity with a Controller_Component will be manipulable, but unlike my 
+previous thinking, the Controller_Component will not alter the camera, but 
+rather the camera will be assigned an entity to follow.
