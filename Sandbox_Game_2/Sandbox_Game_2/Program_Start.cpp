@@ -68,6 +68,7 @@ Entities::Renderable_Updater_Component g_plane_renderable_updater_component;
 Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
 
+
 #else
 #include <glload/gl_3_3_comp.h>
 #include <GL/freeglut.h>
@@ -214,6 +215,7 @@ void init()
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
    g_plane_entity.initialize();
+   //g_plane_entity.m_base_orientation = glm::mat3(glm::rotate(glm::mat4(), 3.14159f, glm::vec3(0.0f, 0.0f, 1.0f))) * g_plane_entity.m_base_orientation;
 
 
 
@@ -233,10 +235,6 @@ void init()
 void display()
 {
 #ifdef MY_ENGINE
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   glClearDepth(1.0f);
-   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
    g_cube_1_entity.update();
    g_cube_2_entity.update();
    g_cube_3_entity.update();

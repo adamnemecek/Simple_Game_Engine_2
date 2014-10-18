@@ -47,6 +47,7 @@ namespace Rendering
       std::vector<GLuint> m_shader_programs;
       GLint m_full_transform_uniform_location;
       GLint m_model_to_world_uniform_location;
+      GLint m_light_position_world_uniform_location;
 
       glm::mat4 m_perspective_mat;
 

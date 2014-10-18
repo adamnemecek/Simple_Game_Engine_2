@@ -24,6 +24,7 @@ namespace Rendering
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;
       m_model_to_world_uniform_location = -1;
+      m_light_position_world_uniform_location = -1;
 
       m_num_current_renderables = 0;
 
@@ -58,10 +59,10 @@ namespace Rendering
    {
       glUseProgram(program_ID);
 
-      std::string matrix_name = "full_transform_matrix";
+      std::string uniform_name_str = "full_transform_matrix";
       try
       {
-         m_full_transform_uniform_location = find_uniform(program_ID, matrix_name);
+         m_full_transform_uniform_location = find_uniform(program_ID, uniform_name_str);
       }
       catch (std::exception &e)
       {
@@ -70,10 +71,22 @@ namespace Rendering
          return false;
       }
 
-      matrix_name = "model_to_world_matrix";
+      uniform_name_str = "model_to_world_matrix";
       try
       {
-         m_model_to_world_uniform_location = find_uniform(program_ID, matrix_name);
+         m_model_to_world_uniform_location = find_uniform(program_ID, uniform_name_str);
+      }
+      catch (std::exception &e)
+      {
+         fprintf(stderr, "%s\n", e.what());
+         glUseProgram(0);
+         return false;
+      }
+
+      uniform_name_str = "light_position_world";
+      try
+      {
+         m_light_position_world_uniform_location = find_uniform(program_ID, uniform_name_str);
       }
       catch (std::exception &e)
       {
@@ -127,7 +140,8 @@ namespace Rendering
       assert(m_camera_ptr != 0);
 
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
+      glClearDepth(1.0f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       // for each renderable:
       // - bind the geometry VAO
@@ -136,6 +150,9 @@ namespace Rendering
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
       glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
+
+      // the light is independent of each renderable
+      glUniform4fv(m_light_position_world_uniform_location, 1, glm::value_ptr(glm::vec4(0.0f, +0.5f, 0.0f, 0.0f)));
 
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
@@ -162,7 +179,7 @@ namespace Rendering
       if (uniform_location < 0)
       {
          char err_str[256];
-         _snprintf(err_str, 256, "find_uniform(...): could not find uniform '%s' in program '%u'; the requested uniform is either unused in the program or mispelled", uniform_name.c_str(), program_ID);
+         _snprintf(err_str, 256, "find_uniform(...): could not find uniform '%s' in program '%u'; the requested uniform is either mispelled or unused in the program", uniform_name.c_str(), program_ID);
          throw std::out_of_range(err_str);
          return -1;
       }
