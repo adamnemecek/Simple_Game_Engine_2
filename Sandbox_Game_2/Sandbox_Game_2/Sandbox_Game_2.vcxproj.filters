@@ -19,8 +19,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="data\VertexColors.vert" />
-    <None Include="data\VertexColors.frag" />
-  </ItemGroup>
 </Project>

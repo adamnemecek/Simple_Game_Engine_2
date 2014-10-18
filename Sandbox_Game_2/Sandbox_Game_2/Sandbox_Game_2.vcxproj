@@ -83,10 +83,6 @@
   <ItemGroup>
     <ClCompile Include="Program_Start.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="data\VertexColors.frag" />
-    <None Include="data\VertexColors.vert" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -8,13 +8,10 @@ when/why they are called. You can copy this file and simply implement
 these function.
 ***********************************************************************/
 
-#define MY_ENGINE
 
-#ifdef MY_ENGINE
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
 #include <Engine_2\Utilities\Shader_Maker.h>
-#include <Engine_2\Utilities\Include_Helper_GLM_Mat_Transform.h>
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
 #include <Rendering\Camera.h>
@@ -69,60 +66,10 @@ Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
 
 
-#else
-#include <glload/gl_3_3_comp.h>
-#include <GL/freeglut.h>
-#include <framework.h>
-#include <vector>
-
-GLuint theProgram;
-#endif
-
-
-
-
-
-
-#ifndef MY_ENGINE
-void initialize_program(const std::string &str_vertex_shader, const std::string &str_fragment_shader)
-{
-   std::vector<GLuint> shader_list;
-   shader_list.push_back(Framework::LoadShader(GL_VERTEX_SHADER, str_vertex_shader));
-   shader_list.push_back(Framework::LoadShader(GL_FRAGMENT_SHADER, str_fragment_shader));
-
-   theProgram = Framework::CreateProgram(shader_list);
-}
-
-const float vertexData[] = {
-   1.0f, 0.0f, 0.0f, 1.0f,
-   0.0f, 1.0f, 0.0f, 1.0f,
-   0.0f, 0.0f, 1.0f, 1.0f,
-   //0.0f, 0.5f, 0.0f, 1.0f,
-   //0.5f, -0.366f, 0.0f, 1.0f,
-   //-0.5f, -0.366f, 0.0f, 1.0f,
-   0.0f, 0.5f, +3.0f, 1.0f,
-   0.5f, -0.366f, -3.0f, 1.0f,
-   -0.5f, -0.366f, -3.0f, 1.0f,
-};
-
-GLuint vertexBufferObject;
-GLuint vao;
-
-void initialize_vertex_buffer()
-{
-   glGenBuffers(1, &vertexBufferObject);
-   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
-   glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-#endif
-
 
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-#ifdef MY_ENGINE
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
    glFrontFace(GL_CCW);
@@ -139,8 +86,8 @@ void init()
 
    std::string file_paths[] =
    {
-      "data/basic_shader.vert",
-      "data/basic_shader.frag",
+      "data/diffuse_shader.vert",
+      "data/diffuse_shader.frag",
    };
    GLenum shader_types[] =
    {
@@ -215,17 +162,6 @@ void init()
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
    g_plane_entity.initialize();
-
-
-
-
-#else
-   initialize_program("VertexColors.vert", "VertexColors.frag");
-   initialize_vertex_buffer();
-   glGenVertexArrays(1, &vao);
-   glBindVertexArray(vao);
-
-#endif
 }
 
 //Called to update the display.
@@ -233,7 +169,6 @@ void init()
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
-#ifdef MY_ENGINE
    g_cube_1_entity.update();
    g_cube_2_entity.update();
    g_cube_3_entity.update();
@@ -242,27 +177,6 @@ void display()
    g_camera_entity.update();
    g_camera.update();
    g_renderer.render_scene();
-#else
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   glClear(GL_COLOR_BUFFER_BIT);
-
-   glUseProgram(theProgram);
-
-   glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-   glEnableVertexAttribArray(0);
-   glEnableVertexAttribArray(15);
-   //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-   //glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
-   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)48);
-   glVertexAttribPointer(15, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-   glDrawArrays(GL_TRIANGLES, 0, 3);
-
-   glDisableVertexAttribArray(0);
-   glDisableVertexAttribArray(15);
-   glUseProgram(0);
-#endif
-
 
    glutSwapBuffers();
    glutPostRedisplay();
@@ -272,11 +186,7 @@ void display()
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void reshape (int w, int h)
 {
-#ifdef MY_ENGINE
    g_renderer.set_viewport(w, h);
-#else
-   glViewport(0, 0, w, h);
-#endif
 }
 
 //Called whenever a key on the keyboard was pressed.
@@ -289,26 +199,6 @@ void keyboard(unsigned char key, int x, int y)
 
    switch (key)
    {
-   //case 'w':
-   //{
-   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_FORWARD);
-   //   break;
-   //}
-   //case 'a':
-   //{
-   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_LEFT);
-   //   break;
-   //}
-   //case 's':
-   //{
-   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_BACK);
-   //   break;
-   //}
-   //case 'd':
-   //{
-   //   g_renderer.manipulate_active_camera(Renderer::CAMERA_MOVE_RIGHT);
-   //   break;
-   //}
    case 27:
    {
       glutLeaveMainLoop();
