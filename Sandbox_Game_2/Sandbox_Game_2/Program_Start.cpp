@@ -215,7 +215,6 @@ void init()
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
    g_plane_entity.initialize();
-   //g_plane_entity.m_base_orientation = glm::mat3(glm::rotate(glm::mat4(), 3.14159f, glm::vec3(0.0f, 0.0f, 1.0f))) * g_plane_entity.m_base_orientation;
 
 
 
@@ -239,6 +238,7 @@ void display()
    g_cube_2_entity.update();
    g_cube_3_entity.update();
    g_cube_4_entity.update();
+   g_plane_entity.update();
    g_camera_entity.update();
    g_camera.update();
    g_renderer.render_scene();

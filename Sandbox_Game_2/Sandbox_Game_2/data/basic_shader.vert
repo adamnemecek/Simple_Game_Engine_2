@@ -14,13 +14,12 @@ smooth out vec4 vertex_base_color;
 
 void main()
 {
-   vec4 position_world = model_to_world_matrix * position;
-   vec4 normal_world = model_to_world_matrix * vec4(normal, 0.0f);      // disable translation and keep rotation only
+   vertex_position_world = model_to_world_matrix * position;
+   vertex_base_color = color;
+
+   // disable normal translation and renormalize the result in case scaling made it non-unit length
+   vertex_normal_world = normalize(model_to_world_matrix * vec4(normal, 0.0f));
 
 	gl_Position = full_transform_matrix * position;
-
-   vertex_position_world = (position_world);
-   vertex_normal_world = (normal_world);
-   vertex_base_color = color;
 }
 
