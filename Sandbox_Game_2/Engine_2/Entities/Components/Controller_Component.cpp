@@ -73,6 +73,18 @@ namespace Entities
          position += strafe_vector * LINEAR_SPEED;
       }
 
+      if (active_actions & ACTION_LIST::GO_UP)
+      {
+         //cout << ", going up";
+         position += Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
+      }
+
+      if (active_actions & ACTION_LIST::GO_DOWN)
+      {
+         //cout << ", going up";
+         position -= Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
+      }
+
       if (active_actions & ACTION_LIST::ROTATE_LEFT)
       {
          //cout << ", rotating left";

@@ -45,6 +45,16 @@ namespace Input
          active_actions |= ACTION_LIST::STRAFE_RIGHT;
       }
 
+      if (GetAsyncKeyState(VK_SPACE))
+      {
+         active_actions |= ACTION_LIST::GO_UP;
+      }
+      
+      if (GetAsyncKeyState(VK_SHIFT))
+      {
+         active_actions |= ACTION_LIST::GO_DOWN;
+      }
+
       if (GetAsyncKeyState(VK_LEFT))
       {
          active_actions |= ACTION_LIST::ROTATE_LEFT;
