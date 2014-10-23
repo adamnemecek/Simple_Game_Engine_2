@@ -68,4 +68,25 @@ namespace Entities
       }
    }
 
+   void Entity::rotate_me(glm::vec3 rotation_axis, const float rotation_angle_rad)
+   {
+      glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
+
+      normalized_rotation_axis *= sinf(rotation_angle_rad / 2.0f);
+      float scalar = cosf(rotation_angle_rad / 2.0f);
+
+      glm::fquat local_offset(
+         scalar,
+         normalized_rotation_axis.x,
+         normalized_rotation_axis.y,
+         normalized_rotation_axis.z);
+
+      // assuming right multiplication only for now
+      m_base_orientation = glm::normalize(m_base_orientation * local_offset);
+   }
+
+   glm::mat4 Entity::get_rotation_matrix()
+   {
+      return glm::mat4_cast(m_base_orientation);
+   }
 }

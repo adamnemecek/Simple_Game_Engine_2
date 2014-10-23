@@ -1,7 +1,6 @@
 #ifndef ENGINE_CAMERA_H
 #define ENGINE_CAMERA_H
 
-#include <glm\gtc\quaternion.hpp>
 #include <glm\vec3.hpp>
 #include <glm\vec2.hpp>
 #include <glm\mat4x4.hpp>
@@ -44,9 +43,7 @@ namespace Rendering
 
    private:
       glm::vec3 m_position;
-      //glm::vec3 m_view_direction;
-      glm::fquat m_view_orientation;
-      //glm::vec3 m_strafe_direction;
+      glm::vec3 m_view_direction;
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;

@@ -63,9 +63,6 @@
     <ClCompile Include="Entities\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Quaternion_Helper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -152,10 +149,7 @@
     <ClInclude Include="Utilities\Include_Helper_Windows_Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Include_Helper_World_Up_Vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\quaternion_helper.h">
+    <ClInclude Include="Utilities\Include_Helper_Default_Vectors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

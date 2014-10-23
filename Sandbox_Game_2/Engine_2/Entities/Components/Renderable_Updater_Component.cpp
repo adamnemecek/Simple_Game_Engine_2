@@ -2,10 +2,10 @@
 
 #include <glm\mat4x4.hpp>
 #include <Utilities\Include_Helper_GLM_Mat_Transform.h>
-#include <Utilities\Include_Helper_WORLD_UP_VECTOR.h>
+//#include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
-#include <glm\gtc\quaternion.hpp>
+//#include <glm\gtc\quaternion.hpp>
 
 namespace Entities
 {
@@ -20,7 +20,8 @@ namespace Entities
 
       m_renderable_ptr->m_model_to_world_mat =
          glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
-         glm::mat4_cast(m_parent_entity_ptr->m_base_orientation);
+         m_parent_entity_ptr->get_rotation_matrix();
+         //glm::mat4_cast(m_parent_entity_ptr->m_base_orientation);
          //glm::rotate(glm::mat4(), rot_angle_rad, rotation_axis);
    }
 

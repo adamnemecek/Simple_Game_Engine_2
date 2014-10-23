@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 #include <Utilities\Include_Helper_GLM_Mat_Transform.h>
-#include <Utilities\Include_Helper_WORLD_UP_VECTOR.h>
+#include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <cassert>
 
@@ -9,8 +9,8 @@ namespace Rendering
 {
    Camera::Camera()
       : m_position(0.0f),
-      m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
-      //m_view_direction(0.0f, 0.0f, -1.0f),
+      //m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
+      m_view_direction(Utilities::Default_Vectors::WORLD_FORWARD),
       //m_strafe_direction(glm::cross(m_view_direction, Utilities::WORLD_UP_VECTOR)),
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
@@ -21,10 +21,10 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-      //return glm::lookAt(m_position, m_position + m_view_direction, Utilities::WORLD_UP_VECTOR);
+      return glm::lookAt(m_position, m_position + m_view_direction, Utilities::Default_Vectors::WORLD_UP_VECTOR);
 
       //??normalize??
-      return glm::mat4_cast(m_view_orientation);
+      //return glm::mat4_cast(m_view_orientation);
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -65,11 +65,11 @@ namespace Rendering
       if (m_follow_this_entity_ptr != 0)
       {
          //m_view_direction = m_follow_this_entity_ptr->m_base_orientation;
-         //glm::vec3 backoff_vector = glm::normalize(m_follow_this_entity_ptr->m_base_orientation) * m_entity_backoff_distance;
-         m_view_orientation = m_follow_this_entity_ptr->m_base_orientation;
+         m_view_direction = glm::mat3(m_follow_this_entity_ptr->get_rotation_matrix()) * Utilities::Default_Vectors::WORLD_FORWARD;
+         glm::vec3 backoff_vector = m_view_direction * m_entity_backoff_distance;
 
-         //m_position = (m_follow_this_entity_ptr->m_position) - backoff_vector;
-         m_position = (m_follow_this_entity_ptr->m_position);
+         m_position = (m_follow_this_entity_ptr->m_position) - backoff_vector;
+         //m_position = (m_follow_this_entity_ptr->m_position);
       }
    }
 

@@ -136,19 +136,19 @@ void init()
    // set some initial positions and rotations for these cubes
    g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
    //g_cube_1_entity.m_base_orientation = glm::fquat(glm::vec3(1.0f, 1.0f, 1.0f));
-   g_cube_1_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
+   //g_cube_1_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
    
    g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
    //g_cube_2_entity.m_base_orientation = glm::fquat(glm::vec3(1.0f, 1.0f, -1.0f));
-   g_cube_2_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
+   //g_cube_2_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
    
    g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
    //g_cube_3_entity.m_base_orientation = glm::fquat(glm::vec3(-1.0f, 1.0f, -1.0f));
-   g_cube_3_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
+   //g_cube_3_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
    
    g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
    //g_cube_4_entity.m_base_orientation = glm::fquat(glm::vec3(-1.0f, 1.0f, 1.0f));
-   g_cube_4_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
+   //g_cube_4_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
 
 
    // set up the camera entity
@@ -160,7 +160,7 @@ void init()
    g_camera_entity.initialize();
    g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
    //g_camera_entity.m_base_orientation = glm::fquat((-1.0f) * g_camera_entity.m_position);
-   g_camera_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
+   //g_camera_entity.m_base_orientation = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
 
 
    // and the plane
