@@ -16,6 +16,7 @@
 #include <Utilities\Include_Helper_WORLD_UP_VECTOR.h>
 #include <Utilities\Include_Helper_GLM_Mat_Transform.h>
 #include <glm\gtx\transform.hpp>
+#include <Utilities\Quaternion_Helper.h>
 
 #include <cassert>
 
@@ -41,10 +42,16 @@ namespace Entities
       static const float ROTATION_SPEED = 0.02f;
 
       // define these to avoid lots of repetious dereferencing
-      glm::vec3 position = m_parent_entity_ptr->m_position;
-      glm::vec3 orientation = m_parent_entity_ptr->m_base_orientation;
-      glm::vec3 strafe_vector = glm::cross(orientation, Utilities::WORLD_UP_VECTOR);
-      glm::vec3 relative_up_vector = glm::cross(orientation, strafe_vector);
+      glm::vec3 new_position = m_parent_entity_ptr->m_position;
+      glm::fquat final_quat = m_parent_entity_ptr->m_base_orientation;
+      
+      glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation)) * glm::vec3(1.0f, 0.0f, 0.0f);
+      glm::vec3 strafe_vector = glm::cross(forward_vector, Utilities::WORLD_UP_VECTOR);
+      printf("forward: <%.2f, %.2f, %.2f>, strafe: <%.2f, %.2f, %.2f>\n",
+         forward_vector.x, forward_vector.y, forward_vector.z,
+         strafe_vector.x, strafe_vector.y, strafe_vector.z);
+
+      glm::vec3 relative_up_vector = glm::cross(forward_vector, strafe_vector);
 
       // get the list of actions that are active right now
       uint active_actions = m_key_binder_ptr->get_active_actions();
@@ -52,70 +59,87 @@ namespace Entities
       if (active_actions & ACTION_LIST::FORWARD)
       {
          //cout << "accellerating";
-         position += orientation * LINEAR_SPEED;
+         new_position += forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::BACK)
       {
          //cout << ", back";
-         position -= orientation * LINEAR_SPEED;
+         new_position -= forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_LEFT)
       {
          //cout << ", strafing left";
-         position -= strafe_vector * LINEAR_SPEED;
+         new_position -= strafe_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_RIGHT)
       {
          //cout << ", strafing right";
-         position += strafe_vector * LINEAR_SPEED;
+         new_position += strafe_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_UP)
       {
          //cout << ", going up";
-         position += Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position += Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_DOWN)
       {
          //cout << ", going up";
-         position -= Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position -= Utilities::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::ROTATE_LEFT)
       {
          //cout << ", rotating left";
-         orientation = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, relative_up_vector)) * orientation;
+         //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         Utilities::offset_orientation(
+            Utilities::WORLD_UP_VECTOR, 
+            (-1.0f) * ROTATION_SPEED, 
+            final_quat);
       }
 
       if (active_actions & ACTION_LIST::ROTATE_RIGHT)
       {
          //cout << ", rotating right";
-         orientation = glm::mat3(glm::rotate(ROTATION_SPEED, relative_up_vector)) * orientation;
+         //forward_vector = glm::mat3(glm::rotate(ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         Utilities::offset_orientation(
+            Utilities::WORLD_UP_VECTOR,
+            ROTATION_SPEED,
+            final_quat);
       }
 
       if (active_actions & ACTION_LIST::TILT_FORWARD)
       {
          //cout << ", tilting forward";
-         orientation = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, strafe_vector)) * orientation;
+         //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
+         Utilities::offset_orientation(
+            strafe_vector,
+            (-1.0f) * ROTATION_SPEED,
+            final_quat);
       }
 
       if (active_actions & ACTION_LIST::TILT_BACK)
       {
          //cout << ", tilting back";
-         orientation = glm::mat3(glm::rotate(ROTATION_SPEED, strafe_vector)) * orientation;
+         //forward_vector = glm::mat3(glm::rotate(ROTATION_SPEED, strafe_vector)) * forward_vector;
+         Utilities::offset_orientation(
+            strafe_vector,
+            ROTATION_SPEED,
+            final_quat);
       }
 
       if (active_actions != 0)
       {
-         cout << endl;
+         //cout << endl;
       }
 
-      m_parent_entity_ptr->m_position = position;
-      m_parent_entity_ptr->m_base_orientation = glm::normalize(orientation);
+      m_parent_entity_ptr->m_position = new_position;
+      //m_parent_entity_ptr->m_base_orientation = glm::fquat(glm::normalize(forward_vector));
+      m_parent_entity_ptr->m_base_orientation = glm::normalize(final_quat);
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

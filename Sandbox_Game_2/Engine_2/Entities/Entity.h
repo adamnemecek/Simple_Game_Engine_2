@@ -1,6 +1,7 @@
 #ifndef ENGINE_Entity_H
 #define ENGINE_Entity_H
 
+#include <glm\gtc\quaternion.hpp>
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
@@ -35,7 +36,8 @@ namespace Entities
 
       // shared by all entities, so just make it public
       // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
-      glm::vec3 m_base_orientation;
+      //glm::vec3 m_base_orientation;
+      glm::fquat m_base_orientation;
 
    protected:
       // these are protected instead of private so that the Controllable_Entity can also access them
