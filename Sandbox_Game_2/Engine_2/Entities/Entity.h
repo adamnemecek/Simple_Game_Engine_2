@@ -1,7 +1,6 @@
 #ifndef ENGINE_Entity_H
 #define ENGINE_Entity_H
 
-#include <glm\gtc\quaternion.hpp>
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
 #include <Utilities\Typedefs.h>
@@ -32,23 +31,17 @@ namespace Entities
       template<class T>
       T *get_component_ptr() const;
 
-      // this function is an adaption of OrientationOffset(...) from ArcSynthesis Tutorial 0.3.8, tutorial 8, QuaternionYPR.cpp
-      void rotate_me(glm::vec3 rotation_axis, const float rotation_angle_rad);
-      glm::mat4 get_rotation_matrix();
-
       // shared by all entities, so make it public to make it simple to manipulate
       glm::vec3 m_position;
+
+      // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
+      glm::vec3 m_base_orientation;
 
    protected:
       // these are protected instead of private so that the Controllable_Entity can also access them
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;
       Game_Component *m_components[m_MAX_COMPONENTS];
-
-   private:
-      // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
-      //glm::vec3 m_base_orientation;
-      glm::fquat m_base_orientation;
    };
 
    // define the "get component" function in the header so that it is implicitly inline

@@ -64,12 +64,10 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         //m_view_direction = m_follow_this_entity_ptr->m_base_orientation;
-         m_view_direction = glm::mat3(m_follow_this_entity_ptr->get_rotation_matrix()) * Utilities::Default_Vectors::WORLD_FORWARD;
+         m_view_direction = m_follow_this_entity_ptr->m_base_orientation;
          glm::vec3 backoff_vector = m_view_direction * m_entity_backoff_distance;
 
          m_position = (m_follow_this_entity_ptr->m_position) - backoff_vector;
-         //m_position = (m_follow_this_entity_ptr->m_position);
       }
    }
 

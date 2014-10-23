@@ -151,8 +151,6 @@ namespace Rendering
       // the light is independent of each renderable
       static glm::vec4 translation(0.0f, +0.5f, 0.0f, 1.0f);
       glUniform4fv(m_light_position_world_uniform_location, 1, glm::value_ptr(translation));
-      //translation += glm::vec4(+0.01f, +0.01f, +0.01f, 0.0f);
-
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
       glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
