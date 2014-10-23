@@ -45,7 +45,7 @@ namespace Entities
       glm::vec3 new_position = m_parent_entity_ptr->m_position;
       glm::fquat final_quat = m_parent_entity_ptr->m_base_orientation;
       
-      glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation)) * glm::vec3(1.0f, 0.0f, 0.0f);
+      glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation)) * glm::vec3(0.0f, 0.0f, 1.0f);
       glm::vec3 strafe_vector = glm::cross(forward_vector, Utilities::WORLD_UP_VECTOR);
       printf("forward: <%.2f, %.2f, %.2f>, strafe: <%.2f, %.2f, %.2f>\n",
          forward_vector.x, forward_vector.y, forward_vector.z,
