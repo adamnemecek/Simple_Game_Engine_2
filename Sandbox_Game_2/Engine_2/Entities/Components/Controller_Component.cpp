@@ -50,9 +50,10 @@ namespace Entities
       glm::vec3 strafe_vector = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, forward_vector);
       glm::vec3 relative_up_vector = glm::cross(forward_vector, strafe_vector);
 
-      //Utilities::Printer_Helper::print_vec("forward:", forward_vector);
+      //Utilities::Printer_Helper::print_vec("up:", relative_up_vector);
 
       glm::fquat new_orientation = m_parent_entity_ptr->m_base_orientation_quat;
+      Utilities::Printer_Helper::print_quat("orientation:", new_orientation);
 
       // get the list of actions that are active right now
       uint active_actions = m_key_binder_ptr->get_active_actions();
@@ -123,14 +124,14 @@ namespace Entities
 
       if (active_actions & ACTION_LIST::TILT_LEFT)
       {
-         cout << ", tilt left";
-         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, 1.0f), +ROTATION_SPEED, new_orientation);
+         //cout << ", tilt left";
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, -1.0f), +ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions & ACTION_LIST::TILT_RIGHT)
       {
-         cout << ", tilt right";
-         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, 1.0f), -ROTATION_SPEED, new_orientation);
+         //cout << ", tilt right";
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, -1.0f), -ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions != 0)

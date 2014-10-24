@@ -153,6 +153,7 @@ void init()
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    assert(initialize_success);
    g_camera_entity.add_component(&g_controller_component);
+   g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
    g_camera_entity.initialize();
    //g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
    //g_camera_entity.m_base_orientation = (-1.0f) * g_camera_entity.m_position;

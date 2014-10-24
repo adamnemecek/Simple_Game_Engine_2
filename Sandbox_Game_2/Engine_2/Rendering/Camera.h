@@ -43,8 +43,8 @@ namespace Rendering
 
    private:
       glm::vec3 m_position;
-      //glm::vec3 m_view_direction;
-      glm::fquat m_view_orientation;
+      glm::vec3 m_view_direction;
+      //glm::fquat m_view_orientation;
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;

@@ -11,7 +11,7 @@ namespace Utilities
          printf("%s <%.2f, %.2f, %.2f>\n", foreword, vec.x, vec.y, vec.z);
       }
 
-      void print_mat(const char *foreword, const glm::mat4 & mat)
+      void print_mat(const char *foreword, const glm::mat4 &mat)
       {
          printf("%s %.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n",
             foreword,
@@ -19,6 +19,11 @@ namespace Utilities
             mat[0][1], mat[1][1], mat[2][1], mat[3][1],
             mat[0][2], mat[1][2], mat[2][2], mat[3][2],
             mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+      }
+
+      void print_quat(const char *foreword, const glm::fquat &quat)
+      {
+         printf("%s <%.2f, %.2f, %.2f, %.2f>\n", foreword, quat.w, quat.x, quat.y, quat.z);
       }
    }
 }

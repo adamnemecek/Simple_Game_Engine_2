@@ -9,8 +9,10 @@
 namespace Rendering
 {
    Camera::Camera()
-      : m_position(0.0f),
-      m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
+      : //m_position(0.0f),
+      m_position(8.0f, 6.0f, 0.0f),
+      m_view_direction(-m_position),
+      //m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
       //m_view_direction(Utilities::Default_Vectors::WORLD_FORWARD),
       //m_strafe_direction(glm::cross(m_view_direction, Utilities::WORLD_UP_VECTOR)),
       m_prev_mouse_position(0.0f),
@@ -22,10 +24,10 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-      //return glm::lookAt(m_position, m_position + m_view_direction, Utilities::Default_Vectors::WORLD_UP_VECTOR);
+      return glm::lookAt(m_position, m_position + m_view_direction, Utilities::Default_Vectors::WORLD_UP_VECTOR);
 
       //??normalize??
-      return glm::mat4_cast(m_view_orientation);
+      //return glm::mat4_cast(m_view_orientation);
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -72,8 +74,8 @@ namespace Rendering
 
          //m_position = (m_follow_this_entity_ptr->m_position) - backoff_vector;
 
-         m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
-         m_position = m_follow_this_entity_ptr->m_position;
+         //m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
+         //m_position = m_follow_this_entity_ptr->m_position;
       }
    }
 
