@@ -3,6 +3,7 @@
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
+#include <glm\gtc\quaternion.hpp>
 #include <Utilities\Typedefs.h>
 
 namespace Entities
@@ -35,7 +36,8 @@ namespace Entities
       glm::vec3 m_position;
 
       // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
-      glm::vec3 m_base_orientation;
+      //glm::vec3 m_base_orientation;
+      glm::fquat m_base_orientation_quat;
 
    protected:
       // these are protected instead of private so that the Controllable_Entity can also access them

@@ -15,7 +15,9 @@
 #include <glm\vec3.hpp>
 #include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Utilities\Include_Helper_GLM_Mat_Transform.h>
-#include <glm\gtx\transform.hpp>
+//#include <glm\gtx\transform.hpp>
+#include <Utilities\Quaternion_Helper.h>
+#include <glm\gtc\quaternion.hpp>
 
 #include <cassert>
 
@@ -42,9 +44,12 @@ namespace Entities
 
       // define these to avoid lots of repetious dereferencing
       glm::vec3 new_position = m_parent_entity_ptr->m_position;
-      glm::vec3 forward_vector = glm::normalize(m_parent_entity_ptr->m_base_orientation);
+      //glm::vec3 forward_vector = glm::normalize(m_parent_entity_ptr->m_base_orientation);
+      glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat)) * Utilities::Default_Vectors::WORLD_FORWARD;
       glm::vec3 strafe_vector = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, forward_vector);
       glm::vec3 relative_up_vector = glm::cross(forward_vector, strafe_vector);
+
+      glm::fquat new_orientation = m_parent_entity_ptr->m_base_orientation_quat;
 
       // get the list of actions that are active right now
       uint active_actions = m_key_binder_ptr->get_active_actions();
@@ -88,25 +93,29 @@ namespace Entities
       if (active_actions & ACTION_LIST::ROTATE_LEFT)
       {
          //cout << ", rotating left";
-         forward_vector = glm::mat3(glm::rotate((+1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         //forward_vector = glm::mat3(glm::rotate((+1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), +ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions & ACTION_LIST::ROTATE_RIGHT)
       {
          //cout << ", rotating right";
-         forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), -ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions & ACTION_LIST::TILT_FORWARD)
       {
          //cout << ", tilting forward";
-         forward_vector = glm::mat3(glm::rotate((+1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
+         //forward_vector = glm::mat3(glm::rotate((+1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), -ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions & ACTION_LIST::TILT_BACK)
       {
          //cout << ", tilting back";
-         forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
+         //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), +ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions != 0)
@@ -115,7 +124,8 @@ namespace Entities
       }
 
       m_parent_entity_ptr->m_position = new_position;
-      m_parent_entity_ptr->m_base_orientation = forward_vector;
+      //m_parent_entity_ptr->m_base_orientation = forward_vector;
+      m_parent_entity_ptr->m_base_orientation_quat = new_orientation;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

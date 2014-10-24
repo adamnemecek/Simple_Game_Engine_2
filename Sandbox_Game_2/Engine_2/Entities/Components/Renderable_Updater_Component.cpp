@@ -6,21 +6,34 @@
 #include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
+#include <Utilities\Quaternion_Helper.h>
+#include <glm\gtc\quaternion.hpp>
 
 namespace Entities
 {
    void Renderable_Updater_Component::update()
    {
-      glm::vec3 &orientation_ref = m_parent_entity_ptr->m_base_orientation;
+      //// declare this to avoid excess dereferencing later
+      //glm::vec3 &orientation_ref = m_parent_entity_ptr->m_base_orientation;
 
-      // take the arcsine of the opposite over adjacent sides of a triangle made up by the orientation vector
-      float rot_angle_rad = asinf(orientation_ref.y / glm::length(orientation_ref));
+      //// take the arcsine of the opposite over adjacent sides of a triangle made up by the orientation vector
+      //float rot_angle_rad = asinf(orientation_ref.y / glm::length(orientation_ref));
 
-      glm::vec3 rotation_axis = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, orientation_ref);
+      //glm::vec3 rotation_axis = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, orientation_ref);
 
+      //m_renderable_ptr->m_model_to_world_mat =
+      //   glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
+      //   glm::rotate(glm::mat4(), rot_angle_rad, rotation_axis);
+
+      
+      glm::mat4 rotation_matrix = glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat);
       m_renderable_ptr->m_model_to_world_mat =
          glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
-         glm::rotate(glm::mat4(), rot_angle_rad, rotation_axis);
+         rotation_matrix;
+
+      //// update the entity's orientation vector for the sake of the camera
+      //glm::vec3 forward_vector = m_parent_entity_ptr->m_base_orientation;
+      //m_parent_entity_ptr->m_base_orientation = glm::mat3(rotation_matrix) * forward_vector;
    }
 
    void Renderable_Updater_Component::set_renderable(Rendering::Renderable *renderable_ptr)

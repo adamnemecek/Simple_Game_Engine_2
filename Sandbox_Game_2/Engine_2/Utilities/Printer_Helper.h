@@ -6,18 +6,11 @@
 
 namespace Utilities
 {
-   class __declspec(dllexport) Printer_Helper
+   namespace Printer_Helper
    {
-   public:
-      static void print_vec(const char *foreword, const glm::vec3 &vec);
-      static void print_mat(const char *foreword, const glm::mat4 & mat);
-
-   private:
-      // enforce staticness
-      Printer_Helper();
-      Printer_Helper(const Printer_Helper &);
-      Printer_Helper &operator=(const Printer_Helper &);
-   };
+      void print_vec(const char *foreword, const glm::vec3 &vec);
+      void print_mat(const char *foreword, const glm::mat4 & mat);
+   }
 }
 
 #endif

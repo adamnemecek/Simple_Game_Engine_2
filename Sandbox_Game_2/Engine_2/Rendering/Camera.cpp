@@ -4,6 +4,7 @@
 #include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <cassert>
+#include <glm\gtc\quaternion.hpp>
 
 namespace Rendering
 {
@@ -64,7 +65,8 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         m_view_direction = m_follow_this_entity_ptr->m_base_orientation;
+         //m_view_direction = glm::normalize(m_follow_this_entity_ptr->m_base_orientation);
+         m_view_direction = glm::mat3(glm::mat4_cast(m_follow_this_entity_ptr->m_base_orientation_quat)) * Utilities::Default_Vectors::WORLD_FORWARD;
          glm::vec3 backoff_vector = m_view_direction * m_entity_backoff_distance;
 
          m_position = (m_follow_this_entity_ptr->m_position) - backoff_vector;

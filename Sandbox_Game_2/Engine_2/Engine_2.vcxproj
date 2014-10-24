@@ -97,6 +97,7 @@
     <ClCompile Include="Timing\Stopwatch.cpp" />
     <ClCompile Include="Timing\Game_Clock.cpp" />
     <ClCompile Include="Utilities\Printer_Helper.cpp" />
+    <ClCompile Include="Utilities\Quaternion_Helper.cpp" />
     <ClCompile Include="Utilities\Shader_Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
     <ClInclude Include="Utilities\Include_Helper_Default_Vectors.h" />
     <ClInclude Include="Utilities\Include_Helper_Windows_Light.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
+    <ClInclude Include="Utilities\Quaternion_Helper.h" />
     <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Renderable.h" />

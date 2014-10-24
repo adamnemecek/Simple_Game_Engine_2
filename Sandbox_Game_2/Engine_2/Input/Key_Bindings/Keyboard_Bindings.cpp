@@ -69,6 +69,7 @@ namespace Input
       {
          active_actions |= ACTION_LIST::TILT_FORWARD;
       }
+
       if (GetAsyncKeyState(VK_DOWN))
       {
          active_actions |= ACTION_LIST::TILT_BACK;

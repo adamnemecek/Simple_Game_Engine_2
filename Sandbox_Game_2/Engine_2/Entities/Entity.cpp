@@ -24,7 +24,8 @@ namespace Entities
    bool Entity::initialize()
    {
       // give it a non-0 orientation by defaulting to the -Z axis
-      m_base_orientation.z = -1.0f;
+      //m_base_orientation.z = -1.0f;
+      m_base_orientation_quat = glm::fquat(1.0f, 0.0f, 0.0f, 0.0f);
 
 
       for (uint index = 0; index < m_num_current_components; index++)
