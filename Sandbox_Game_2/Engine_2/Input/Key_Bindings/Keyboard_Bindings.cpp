@@ -45,6 +45,18 @@ namespace Input
          active_actions |= ACTION_LIST::STRAFE_RIGHT;
       }
 
+      // 'Q'
+      if (GetAsyncKeyState(0x51))
+      {
+         active_actions |= ACTION_LIST::TILT_LEFT;
+      }
+
+      // 'E'
+      if (GetAsyncKeyState(0x45))
+      {
+         active_actions |= ACTION_LIST::TILT_RIGHT;
+      }
+
       if (GetAsyncKeyState(VK_SPACE))
       {
          active_actions |= ACTION_LIST::GO_UP;

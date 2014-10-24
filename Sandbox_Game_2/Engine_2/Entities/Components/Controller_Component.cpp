@@ -18,6 +18,7 @@
 //#include <glm\gtx\transform.hpp>
 #include <Utilities\Quaternion_Helper.h>
 #include <glm\gtc\quaternion.hpp>
+#include <Utilities\Printer_Helper.h>
 
 #include <cassert>
 
@@ -48,6 +49,8 @@ namespace Entities
       glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat)) * Utilities::Default_Vectors::WORLD_FORWARD;
       glm::vec3 strafe_vector = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, forward_vector);
       glm::vec3 relative_up_vector = glm::cross(forward_vector, strafe_vector);
+
+      //Utilities::Printer_Helper::print_vec("forward:", forward_vector);
 
       glm::fquat new_orientation = m_parent_entity_ptr->m_base_orientation_quat;
 
@@ -116,6 +119,18 @@ namespace Entities
          //cout << ", tilting back";
          //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, strafe_vector)) * forward_vector;
          Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), +ROTATION_SPEED, new_orientation);
+      }
+
+      if (active_actions & ACTION_LIST::TILT_LEFT)
+      {
+         cout << ", tilt left";
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, 1.0f), +ROTATION_SPEED, new_orientation);
+      }
+
+      if (active_actions & ACTION_LIST::TILT_RIGHT)
+      {
+         cout << ", tilt right";
+         Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 0.0f, 1.0f), -ROTATION_SPEED, new_orientation);
       }
 
       if (active_actions != 0)

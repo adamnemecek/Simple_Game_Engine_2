@@ -1,5 +1,9 @@
 #include <Utilities\Quaternion_Helper.h>
 
+#include <Utilities\Include_Helper_Default_Vectors.h>
+#include <glm\gtc\quaternion.hpp>
+#include <glm\mat3x3.hpp>
+
 namespace Utilities
 {
    namespace Quaternion_Helper
@@ -19,6 +23,12 @@ namespace Utilities
 
          // assuming right multiplication only for now
          offset_this = glm::normalize(offset_this * local_offset);
+      }
+
+      void point_at(const glm::vec3 &look_here, glm::fquat &offset_this)
+      {
+         glm::vec3 current_view_direction = glm::mat3(glm::mat4_cast(offset_this)) * Utilities::Default_Vectors::WORLD_FORWARD;
+
       }
    }
 }
