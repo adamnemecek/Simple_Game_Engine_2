@@ -48,13 +48,13 @@ namespace Input
       // 'Q'
       if (GetAsyncKeyState(0x51))
       {
-         active_actions |= ACTION_LIST::TILT_LEFT;
+         active_actions |= ACTION_LIST::ROLL_LEFT;
       }
 
       // 'E'
       if (GetAsyncKeyState(0x45))
       {
-         active_actions |= ACTION_LIST::TILT_RIGHT;
+         active_actions |= ACTION_LIST::ROLL_RIGHT;
       }
 
       if (GetAsyncKeyState(VK_SPACE))
@@ -69,22 +69,22 @@ namespace Input
 
       if (GetAsyncKeyState(VK_LEFT))
       {
-         active_actions |= ACTION_LIST::ROTATE_LEFT;
+         active_actions |= ACTION_LIST::YAW_LEFT;
       }
 
       if (GetAsyncKeyState(VK_RIGHT))
       {
-         active_actions |= ACTION_LIST::ROTATE_RIGHT;
+         active_actions |= ACTION_LIST::YAW_RIGHT;
       }
 
       if (GetAsyncKeyState(VK_UP))
       {
-         active_actions |= ACTION_LIST::TILT_FORWARD;
+         active_actions |= ACTION_LIST::PITCH_FORWARD;
       }
 
       if (GetAsyncKeyState(VK_DOWN))
       {
-         active_actions |= ACTION_LIST::TILT_BACK;
+         active_actions |= ACTION_LIST::PITCH_BACK;
       }
 
       return active_actions;

@@ -20,7 +20,7 @@ void main()
 
    // add colors together
    final_color = 
-      clamp(vertex_base_color, 0, 0) +
-      clamp(diffuse_color, 0, 1);
+      clamp(vertex_base_color, 0, 1) +
+      clamp(diffuse_color, 0, 0);
 }
 
