@@ -4,7 +4,7 @@
 #ifdef PROFILER_ON
 
 // it's ok to use assertions here because this class is only for debugging anyway
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 #include <fstream>
 using std::ofstream;
@@ -59,7 +59,7 @@ namespace Profiling
          else
          {
             // check that we didn't run out of categories
-            assert((index + 1) != MAX_PROFILER_CATEGORIES);
+            MY_ASSERT((index + 1) != MAX_PROFILER_CATEGORIES);
          }
       }
    }
@@ -67,7 +67,7 @@ namespace Profiling
    void Profiler::add_category_time_log(const string &category_name, float time)
    {
       // check that the frame index is valid
-      assert(m_frame_index >= 0);
+      MY_ASSERT(m_frame_index >= 0);
 
       for (int index = 0; index < MAX_PROFILER_CATEGORIES; index++)
       {
@@ -80,7 +80,7 @@ namespace Profiling
          else
          {
             // check that we didn't run out of categories
-            assert((index + 1) != MAX_PROFILER_CATEGORIES);
+            MY_ASSERT((index + 1) != MAX_PROFILER_CATEGORIES);
          }
       }
    }

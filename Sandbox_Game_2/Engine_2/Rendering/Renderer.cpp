@@ -1,6 +1,6 @@
 #include "Renderer.h"
 
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
@@ -107,7 +107,7 @@ namespace Rendering
 
    Renderable *Renderer::add_renderable(Shapes::Geometry *geometry_ptr)
    {
-      assert(m_num_current_renderables != m_MAX_RENDERABLES);
+      MY_ASSERT(m_num_current_renderables != m_MAX_RENDERABLES);
       Renderable &r = m_renderables[m_num_current_renderables++];
       r.m_geometry_ptr = geometry_ptr;
       r.m_model_to_world_mat = glm::mat4(1.0f);
@@ -130,14 +130,14 @@ namespace Rendering
 
    void Renderer::set_camera_to_render(Camera *camera_ptr)
    {
-      assert(camera_ptr != 0);
+      MY_ASSERT(camera_ptr != 0);
       m_camera_ptr = camera_ptr;
    }
 
    void Renderer::render_scene()
    {
       // we can't render without a camera
-      assert(m_camera_ptr != 0);
+      MY_ASSERT(m_camera_ptr != 0);
 
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
       glClearDepth(1.0f);

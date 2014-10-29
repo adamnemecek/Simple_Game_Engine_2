@@ -23,7 +23,7 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
 
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 #include <string>
 #include <iostream>
@@ -82,7 +82,7 @@ void init()
 
    bool initialize_success = false;
    initialize_success = g_renderer.initialize();
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
 
    std::string file_paths[] =
    {
@@ -97,9 +97,9 @@ void init()
 
    GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
    initialize_success = g_renderer.add_shader_program(program_ID);
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
    initialize_success = g_renderer.bind_shader_program(program_ID);
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
 
    cout << "Program ID: " << program_ID << endl;
 
@@ -125,13 +125,13 @@ void init()
 
 
    initialize_success = g_cube_1_entity.initialize();
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
    initialize_success = g_cube_2_entity.initialize();
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
    initialize_success = g_cube_3_entity.initialize();
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
    initialize_success = g_cube_4_entity.initialize();
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
 
    // set some initial positions and rotations for these cubes
    g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
@@ -151,7 +151,7 @@ void init()
    // Note: Set it to be off to the side of and above the scene and looking into it.
    g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
-   assert(initialize_success);
+   MY_ASSERT(initialize_success);
    g_camera_entity.add_component(&g_controller_component);
    g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
    g_camera_entity.initialize();

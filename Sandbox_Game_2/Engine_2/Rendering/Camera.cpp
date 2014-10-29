@@ -3,7 +3,7 @@
 #include <Utilities\Include_Helper_GLM_Mat_Transform.h>
 #include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Entities\Entity.h>
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 namespace Rendering
 {
@@ -102,7 +102,7 @@ namespace Rendering
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)
    {
-      assert(entity_ptr != 0);
+      MY_ASSERT(entity_ptr != 0);
       m_follow_this_entity_ptr = entity_ptr;
    }
 

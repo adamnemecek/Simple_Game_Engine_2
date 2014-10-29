@@ -19,7 +19,7 @@
 #include <Utilities\Include_Helper_GLM_Quaternion.h>
 #include <Utilities\Printer_Helper.h>
 
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 #include <iostream>
 using std::cout;
@@ -36,8 +36,8 @@ namespace Entities
    void Controller_Component::update()
    {
       using Input::ACTION_LIST;
-      assert(m_key_binder_ptr != 0);
-      //assert(m_easy_physics_ptr != 0);
+      MY_ASSERT(m_key_binder_ptr != 0);
+      //MY_ASSERT(m_easy_physics_ptr != 0);
 
       static const float LINEAR_SPEED = 0.3f;
       static const float ROTATION_SPEED = 0.02f;

@@ -125,6 +125,7 @@
     <ClInclude Include="Utilities\Include_Helper_GL_Version.h" />
     <ClInclude Include="Utilities\Include_Helper_Default_Vectors.h" />
     <ClInclude Include="Utilities\Include_Helper_Windows_Light.h" />
+    <ClInclude Include="Utilities\My_Assert.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Quaternion_Helper.h" />
     <ClInclude Include="Utilities\Shader_Maker.h" />

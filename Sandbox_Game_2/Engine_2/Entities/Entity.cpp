@@ -1,7 +1,7 @@
 #include "Entity.h"
 
 // for checking that memory pools don't overflow
-#include <cassert>
+#include <Utilities\My_Assert.h>
 
 // so we can assign each component's "containing entity" pointer and reject the controller component
 #include <Entities\Game_Component.h>
@@ -55,7 +55,7 @@ namespace Entities
    void Entity::add_component(Game_Component *component_ptr)
    {
       // ??remove this assertion??
-      assert(m_num_current_components != m_MAX_COMPONENTS);
+      MY_ASSERT(m_num_current_components != m_MAX_COMPONENTS);
       m_components[m_num_current_components++] = component_ptr;
       component_ptr->m_parent_entity_ptr = this;
    }

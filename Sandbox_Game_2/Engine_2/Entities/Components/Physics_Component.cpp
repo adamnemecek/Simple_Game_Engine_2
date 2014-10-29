@@ -8,7 +8,7 @@ using glm::vec3;
 #include <Timing\Game_Clock.h>
 using Timing::Game_Clock;
 
-#include <cassert>
+#include <Utilities\My_Assert.h>
 #include <memory>
 using std::memset;
 
@@ -53,7 +53,7 @@ namespace Entities
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)
    {
       // ??remove assertion??
-      assert(m_current_force_vector_index != m_MAX_FORCE_VECTORS);
+      MY_ASSERT(m_current_force_vector_index != m_MAX_FORCE_VECTORS);
       m_force_vectors[m_current_force_vector_index++] = force_vec;
    }
 

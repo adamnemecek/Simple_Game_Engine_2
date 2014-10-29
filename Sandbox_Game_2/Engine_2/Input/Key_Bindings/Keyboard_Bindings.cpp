@@ -3,7 +3,7 @@
 // for VK_some_key
 #include <Utilities\Include_Helper_Windows_Light.h>
 
-#include <cassert>
+#include <Utilities\My_Assert.h>
 #include <Input\Action_List.h>
 
 namespace Input
