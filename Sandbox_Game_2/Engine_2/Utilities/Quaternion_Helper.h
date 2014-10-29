@@ -2,7 +2,7 @@
 #define ENGINE_QUATERNION_HELPER_H
 
 #include <glm\vec3.hpp>
-#include <glm\gtx\quaternion.hpp>
+#include <Utilities\Include_Helper_GLM_Quaternion.h>
 
 namespace Utilities
 {

@@ -16,11 +16,62 @@
 using std::cout;
 using std::endl;
 
+#include <glm\gtx\dual_quaternion.hpp>
+#include <Utilities\Quaternion_Helper.h>
+
+#include <Math\Dual_Quat.h>
+
+glm::fdualquat dual_quat_conjugate(glm::fdualquat dq)
+{
+   return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
+}
+void my_function()
+{
+   glm::fquat point(1.0f, 3.0f, 4.0f, 5.0f);
+   glm::fdualquat point_dq(glm::fquat(), point);
+
+   glm::vec3 translate(4.0f, 2.0f, 6.0f);
+   glm::fdualquat translate_dq(glm::fquat(), translate);
+
+   glm::fquat rotation;
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f, rotation);
+   glm::fdualquat rotation_dq(rotation, glm::fquat(0.0, 0.0f, 0.0f, 0.0f));
+
+   // pure rotation
+   //glm::vec4 v = glm::vec4(3.0f, 4.0f, 5.0f, 1.0f);
+   //glm::vec4 result = glm::mat4_cast(rotation) * v;
+   //glm::fdualquat result_1 = rotation_dq * point_dq * rotation_dq;
+   //glm::fdualquat result_2 = glm::normalize(rotation_dq) * point_dq * glm::normalize(rotation_dq);
+
+   // pure translation
+   //glm::fdualquat result_1 = translate_dq * point_dq * dual_quat_conjugate(translate_dq);
+   //glm::fdualquat result_2 = glm::normalize(translate_dq) * point_dq * glm::normalize(dual_quat_conjugate(translate_dq));
+
+   // rotate, then translate
+   glm::fdualquat transform(rotation, translate);
+   glm::fdualquat result_1 = transform * point_dq * dual_quat_conjugate(transform);
+   glm::fdualquat result_2 = glm::normalize(transform) * point_dq * glm::normalize(dual_quat_conjugate(transform));
+
+   //glm::fdualquat dq(glm::fquat(), glm::fquat(0.0f, 0.0f, 5.0f, 0.0f));
+   //dq = glm::normalize(dq);
+
+
+
+
+   //Math::Dual_Quaternion point = Math::Dual_Quaternion::point(glm::vec3(0.0f, 1.0f, 0.0f));
+   //Math::Dual_Quaternion translate = Math::Dual_Quaternion::translate(glm::vec3(0.0f, 2.0f, 0.0f));
+   //Math::Dual_Quaternion result = translate * Math::Dual_Quaternion::conjugate(point);
+
+   printf("hello\n");
+}
+
 
 namespace Rendering
 {
    bool Renderer::initialize()
    {
+      my_function();
+
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;
       m_model_to_world_uniform_location = -1;
