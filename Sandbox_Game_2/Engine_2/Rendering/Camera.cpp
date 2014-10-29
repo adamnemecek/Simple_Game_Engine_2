@@ -9,13 +9,8 @@ namespace Rendering
 {
    Camera::Camera()
       : 
-#ifdef QUAT
       m_position(0.0f),
       m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
-#else
-      m_position(8.0f, 6.0f, 0.0f),
-      m_view_direction(-m_position),
-#endif
       //m_view_direction(Utilities::Default_Vectors::WORLD_FORWARD),
       //m_strafe_direction(glm::cross(m_view_direction, Utilities::WORLD_UP_VECTOR)),
       m_prev_mouse_position(0.0f),
@@ -27,11 +22,7 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-#ifdef QUAT
       return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
-#else
-      return glm::lookAt(m_position, m_position + m_view_direction, Utilities::Default_Vectors::WORLD_UP_VECTOR);
-#endif
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -71,15 +62,8 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-#ifdef QUAT
          m_position = (m_follow_this_entity_ptr->m_position);
          m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
-#else
-         //m_position = m_follow_this_entity_ptr->m_position;
-#endif
-
-         //m_view_direction = glm::normalize(m_follow_this_entity_ptr->m_base_orientation);
-         //m_view_direction = glm::mat3(glm::mat4_cast(m_follow_this_entity_ptr->m_base_orientation_quat)) * Utilities::Default_Vectors::WORLD_FORWARD;
       }
    }
 
