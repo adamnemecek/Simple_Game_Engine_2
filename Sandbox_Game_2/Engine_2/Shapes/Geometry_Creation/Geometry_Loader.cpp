@@ -22,7 +22,7 @@ namespace Shapes
 {
    namespace Geometry_Creation
    {
-      void Geometry_Loader::load_from_generator(GEOMETRY_LOADER_ENUMS load_type, Geometry *geo)
+      void Geometry_Loader::load_from_generator(GEOMETRY_PRIMITIVE_ENUMS load_type, Geometry *geo)
       {
          switch (load_type)
          {
@@ -104,8 +104,6 @@ namespace Shapes
          glBindVertexArray(0);
          glBindBuffer(GL_ARRAY_BUFFER, 0);
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
       }
    }
    

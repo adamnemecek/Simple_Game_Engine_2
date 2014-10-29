@@ -1,0 +1,5 @@
+- add a "scene" class that stores as orders entities
+- add support for scene loading from a file
+- add support for multiple simultaneous shader programs
+- add support for geometry loading from Maya
+- change entities to use dual-quaternions for position and orientation instead of the current mix of vec3 (position) and fquat (orientation)
