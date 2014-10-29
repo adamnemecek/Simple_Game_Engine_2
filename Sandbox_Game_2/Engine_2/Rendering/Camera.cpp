@@ -4,7 +4,6 @@
 #include <Utilities\Include_Helper_Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <cassert>
-#include <glm\gtc\quaternion.hpp>
 
 namespace Rendering
 {

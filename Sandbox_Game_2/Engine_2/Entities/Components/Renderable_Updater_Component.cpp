@@ -7,7 +7,8 @@
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
 #include <Utilities\Quaternion_Helper.h>
-#include <glm\gtc\quaternion.hpp>
+#include <Utilities\Include_Helper_GLM_Quaternion.h>
+
 
 namespace Entities
 {

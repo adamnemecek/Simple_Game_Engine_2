@@ -158,6 +158,9 @@
     <ClInclude Include="Utilities\Quaternion_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\Include_Helper_GLM_Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />

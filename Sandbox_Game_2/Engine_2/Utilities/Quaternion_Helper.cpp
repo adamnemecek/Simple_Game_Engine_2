@@ -1,7 +1,7 @@
 #include <Utilities\Quaternion_Helper.h>
 
 #include <Utilities\Include_Helper_Default_Vectors.h>
-#include <glm\gtc\quaternion.hpp>
+#include "Include_Helper_GLM_Quaternion.h"
 #include <glm\mat3x3.hpp>
 
 namespace Utilities
@@ -27,7 +27,7 @@ namespace Utilities
 
       void point_at(const glm::vec3 &look_here, glm::fquat &offset_this)
       {
-         glm::vec3 current_view_direction = glm::mat3(glm::mat4_cast(offset_this)) * Utilities::Default_Vectors::WORLD_FORWARD;
+         //glm::vec3 current_view_direction = glm::mat3(glm::mat4_cast(offset_this)) * Utilities::Default_Vectors::WORLD_FORWARD_VECTOR;
 
       }
    }

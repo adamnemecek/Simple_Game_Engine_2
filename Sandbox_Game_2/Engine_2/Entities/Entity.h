@@ -3,7 +3,7 @@
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
-#include <glm\gtc\quaternion.hpp>
+#include <Utilities\Include_Helper_GLM_Quaternion.h>
 #include <Utilities\Typedefs.h>
 
 namespace Entities
