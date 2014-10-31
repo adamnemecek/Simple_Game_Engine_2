@@ -37,7 +37,7 @@ namespace Shapes
          static void generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here);
 
          // create a rectangle wire-frame in the X-Z plane (horizontal) at Y = 0
-         static void generate_rectangle(const float width, const float length, Shape_Data *put_data_here);
+         static void generate_box(const float width, const float length, Shape_Data *put_data_here);
 
          // create a circle in the X-Z plane (horizontal) at Y = 0
          // Note: Algorithm courtesy of http://slabode.exofire.net/circle_draw.shtml .

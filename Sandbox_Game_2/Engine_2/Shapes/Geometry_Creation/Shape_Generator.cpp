@@ -181,25 +181,34 @@ namespace Shapes
       }
 
 
-      void Shape_Generator::generate_rectangle(const float width, const float length, Shape_Data *put_data_here)
+      void Shape_Generator::generate_box(const float width, const float length, Shape_Data *put_data_here)
       {
          float half_width = width / 2.0f;
          float half_length = length / 2.0f;
          
          vec3 common_normal = vec3(0.0f, 1.0f, 0.0f);
 
+         // generate vertices clockwise, starting with the upper right, when looking at an X-Z 
+         // plane in which X is width and Z is length (or height depending on how you look at it)
          My_Vertex local_verts[] =
          {
-            glm::vec3(half_width, 0.0f, half_length),
+            // upper right
+            glm::vec3(+half_width, 0.0f, +half_length),
             common_normal,
             random_color(),
-            glm::vec3(half_width, 0.0f, half_length),
+            
+            // lower right
+            glm::vec3(+half_width, 0.0f, -half_length),
             common_normal,
             random_color(),
-            glm::vec3(half_width, 0.0f, half_length),
+            
+            // lower left
+            glm::vec3(-half_width, 0.0f, -half_length),
             common_normal,
             random_color(),
-            glm::vec3(half_width, 0.0f, half_length),
+            
+            // upper left
+            glm::vec3(-half_width, 0.0f, +half_length),
             common_normal,
             random_color(),
          };
@@ -212,12 +221,15 @@ namespace Shapes
 
          GLushort local_indices[] =
          {
-            0, 2, 4, 0, 4, 1,
+            0, 1,
+            1, 2,
+            2, 3,
+            3, 0
          };
 
          // this is a rectangle, so go ahead and use magic numbers for the index count
-         put_data_here->m_num_indices = 6;
-         put_data_here->m_indices = new GLushort[6];
+         put_data_here->m_num_indices = 8;
+         put_data_here->m_indices = new GLushort[8];
          memcpy(put_data_here->m_indices, local_indices, sizeof(local_indices));
       }
 

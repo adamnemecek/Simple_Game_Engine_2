@@ -68,6 +68,11 @@ Shapes::Geometry g_circle_geometry;
 Rendering::Renderable * g_circle_renderable_ptr;
 Entities::Renderable_Updater_Component g_circle_renderable_updater_component;
 
+Entities::Entity g_rectangle_box_entity;
+Shapes::Geometry g_rectangle_box_geometry;
+Rendering::Renderable * g_rectangle_box_renderable_ptr;
+Entities::Renderable_Updater_Component g_rectangle_box_renderable_updater_component;
+
 Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
 
@@ -176,12 +181,22 @@ void init()
    initialize_success = g_plane_entity.initialize();
    MY_ASSERT(initialize_success);
 
-   Geometry_Loader::load_circle(&g_circle_geometry, 30, 5.0f);
+   // and the circle
+   Geometry_Loader::load_circle(&g_circle_geometry);
    g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
    g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
-   g_circle_entity.m_position = glm::vec3(0.0f, +5.0f, 0.0f);
+   g_circle_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
    initialize_success = g_circle_entity.initialize();
+   MY_ASSERT(initialize_success);
+
+   // and the box
+   Geometry_Loader::load_box(&g_rectangle_box_geometry, 5.0f, 2.0f);
+   g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
+   g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
+   g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
+   g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
+   initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
 }
 
@@ -196,8 +211,11 @@ void display()
    g_cube_4_entity.update();
    g_plane_entity.update();
    g_circle_entity.update();
+   g_rectangle_box_entity.update();
+
    g_camera_entity.update();
    g_camera.update();
+   
    g_renderer.render_scene();
 
    glutSwapBuffers();

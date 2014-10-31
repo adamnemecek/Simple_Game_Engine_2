@@ -112,9 +112,9 @@ namespace Shapes
 
       }
 
-      void Geometry_Loader::load_rectangle(Geometry *put_geometry_here, const float width, const float length)
+      void Geometry_Loader::load_box(Geometry *put_geometry_here, const float width, const float length)
       {
-         Shape_Generator::generate_rectangle(width, length, &(put_geometry_here->m_shape_data));
+         Shape_Generator::generate_box(width, length, &(put_geometry_here->m_shape_data));
          put_geometry_here->m_render_mode = GL_LINE_STRIP;
 
          initialize_attributes(put_geometry_here);
