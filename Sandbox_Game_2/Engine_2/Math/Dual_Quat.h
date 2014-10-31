@@ -1,7 +1,7 @@
 #ifndef ENGINE_DUAL_QUAT_H
 #define ENGINE_DUAL_QUAT_H
 
-#include <Utilities\Include_Helper_GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Quaternion.h>
 #include <glm\vec3.hpp>
 
 namespace Math

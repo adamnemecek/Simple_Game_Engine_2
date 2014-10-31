@@ -5,10 +5,10 @@
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
 #include <glm\gtc\type_ptr.hpp>
-#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
 #include <vector>
 #include <string>
-#include <Utilities\Include_Helper_GL_Version.h>
+#include <Utilities\Include_Helpers\GL_Version.h>
 #include <Shapes\Geometry.h>
 #include <Utilities\Printer_Helper.h>
 #include <Rendering\Camera.h>

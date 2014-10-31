@@ -1,7 +1,7 @@
 #include "Camera.h"
 
-#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
-#include <Utilities\Include_Helper_Default_Vectors.h>
+#include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
+#include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
 

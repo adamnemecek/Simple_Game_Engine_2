@@ -124,11 +124,12 @@
     <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Utilities\Helper_Macros.h" />
-    <ClInclude Include="Utilities\Include_Helper_GLM_Mat_Transform.h" />
-    <ClInclude Include="Utilities\Include_Helper_GLM_Quaternion.h" />
-    <ClInclude Include="Utilities\Include_Helper_GL_Version.h" />
-    <ClInclude Include="Utilities\Include_Helper_Default_Vectors.h" />
-    <ClInclude Include="Utilities\Include_Helper_Windows_Light.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_GLM_Dual_Quaternions.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_GLM_Mat_Transform.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_GLM_Quaternion.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_GL_Version.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_Default_Vectors.h" />
+    <ClInclude Include="Utilities\Include_Helpers\Include_Helper_Windows_Light.h" />
     <ClInclude Include="Utilities\My_Assert.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Quaternion_Helper.h" />

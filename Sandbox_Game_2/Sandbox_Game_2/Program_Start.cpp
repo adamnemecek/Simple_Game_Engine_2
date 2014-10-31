@@ -15,7 +15,7 @@ these function.
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
 #include <Rendering\Camera.h>
-#include <Engine_2\Utilities\Include_Helper_GL_Version.h>
+#include <Engine_2\Utilities\Include_Helpers\GL_Version.h>
 
 #include <Engine_2\Entities\Entity.h>
 #include <Engine_2\Entities\Components\Controller_Component.h>

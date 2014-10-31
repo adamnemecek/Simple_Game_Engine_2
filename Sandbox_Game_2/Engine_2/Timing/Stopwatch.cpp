@@ -5,7 +5,7 @@
 // because there are some macros that this header file needs that are defined
 // further up in the header hierarchy.  So just include Windows.h and be done
 // with it.
-#include <Utilities\Include_Helper_Windows_Light.h>
+#include <Utilities\Include_Helpers\Windows_Lite.h>
 
 // make an empty namespace to keep these values in this file only
 // Note: I do this instead of making them class members because their declaration

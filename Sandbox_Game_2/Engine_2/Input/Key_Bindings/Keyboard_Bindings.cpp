@@ -1,7 +1,7 @@
 #include "Keyboard_Bindings.h"
 
 // for VK_some_key
-#include <Utilities\Include_Helper_Windows_Light.h>
+#include <Utilities\Include_Helpers\Windows_Lite.h>
 
 #include <Utilities\My_Assert.h>
 #include <Input\Action_List.h>

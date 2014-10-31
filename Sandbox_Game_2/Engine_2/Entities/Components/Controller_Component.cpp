@@ -13,10 +13,10 @@
 
 #include <Utilities\Typedefs.h>
 #include <glm\vec3.hpp>
-#include <Utilities\Include_Helper_Default_Vectors.h>
-#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
+#include <Utilities\Include_Helpers\Default_Vectors.h>
+#include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
 #include <Utilities\Quaternion_Helper.h>
-#include <Utilities\Include_Helper_GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Quaternion.h>
 #include <Utilities\Printer_Helper.h>
 
 #include <Utilities\My_Assert.h>

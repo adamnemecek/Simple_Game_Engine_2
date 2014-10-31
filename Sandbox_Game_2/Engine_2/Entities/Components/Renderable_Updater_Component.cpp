@@ -2,12 +2,12 @@
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
-#include <Utilities\Include_Helper_GLM_Mat_Transform.h>
-#include <Utilities\Include_Helper_Default_Vectors.h>
+#include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
+#include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
 #include <Utilities\Quaternion_Helper.h>
-#include <Utilities\Include_Helper_GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Quaternion.h>
 
 
 namespace Entities

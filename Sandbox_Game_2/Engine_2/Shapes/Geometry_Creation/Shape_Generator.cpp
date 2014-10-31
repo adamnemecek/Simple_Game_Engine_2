@@ -7,7 +7,7 @@
 using glm::vec3;
 
 #include <stdlib.h>
-#include <Utilities\Include_Helper_GL_Version.h>
+#include <Utilities\Include_Helpers\GL_Version.h>
 #include <Utilities\Typedefs.h>
 #include <math.h>
 
