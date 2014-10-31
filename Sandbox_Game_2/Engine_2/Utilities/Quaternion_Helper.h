@@ -3,7 +3,7 @@
 
 #include <glm\vec3.hpp>
 #include <Utilities\Include_Helpers\GLM_Quaternion.h>
-//#include <Utilities\Include_Helpers\GLM_Dual_Quaternions.h>
+#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 
 namespace Utilities
 {
@@ -18,7 +18,10 @@ namespace Utilities
       void point_at(const glm::vec3 &look_here, glm::fquat &offset_this);
 
       // creates a purely translational dual-quaternion out of a vector
-      //glm::fdualquat make_dual_quat_translation_only(const glm::vec3 &position);
+      glm::fdualquat make_dual_quat_position_only(const glm::vec3 &position);
+      glm::fdualquat make_dual_quat_rotation_only(const glm::fquat &orientation);
+      glm::fdualquat make_dual_quat(const glm::fquat &orientation, const glm::vec3 &position);
+      glm::fdualquat dual_quat_conjugate(const glm::fdualquat &dq);
    }
 }
 
