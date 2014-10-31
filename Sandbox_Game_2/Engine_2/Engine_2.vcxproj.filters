@@ -179,6 +179,24 @@
     <ClInclude Include="Utilities\Include_Helpers\Include_Helper_Windows_Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\Default_Vectors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\GL_Version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\GLM_Dual_Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\GLM_Mat_Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\GLM_Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Include_Helpers\Windows_Lite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />
