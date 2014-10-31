@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision_Detection\AABB.cpp" />
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp" />
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
     <ClCompile Include="Entities\Components\Controller_Component.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Utilities\Shader_Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision_Detection\AABB.h" />
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Entities\Components\Border_Handler_Component.h" />
     <ClInclude Include="Entities\Components\Controller_Component.h" />
