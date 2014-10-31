@@ -41,7 +41,7 @@ namespace Shapes
 
          // create a circle in the X-Z plane (horizontal) at Y = 0
          // Note: Algorithm courtesy of http://slabode.exofire.net/circle_draw.shtml .
-         static void generate_circle(const float num_arc_segments, const float radius, Shape_Data *put_data_here);
+         static void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
 
          // 3D shapes
          static void generate_cube(Shape_Data *put_data_here);

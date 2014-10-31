@@ -115,7 +115,7 @@ namespace Shapes
       }
 
 
-      void Shape_Generator::generate_circle(const float num_arc_segments, const float radius, Shape_Data *put_data_here)
+      void Shape_Generator::generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here)
       {
          // there are two vertices for each line representing an arc segment except for the 
          // last one, which only has one vertex that connects to the first one
@@ -125,7 +125,7 @@ namespace Shapes
 
 
          // pre-loop calculations
-         float theta = 2 * 3.1415926 / float(num_arc_segments);
+         float theta = 2 * 3.1415926f / float(num_arc_segments);
          float tangetial_factor = tanf(theta);
          float radial_factor = cosf(theta);
 
