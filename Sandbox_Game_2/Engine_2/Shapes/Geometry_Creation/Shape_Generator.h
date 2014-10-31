@@ -1,7 +1,7 @@
 #ifndef ENGINE_SHAPE_GENERATOR_H
 #define ENGINE_SHAPE_GENERATOR_H
 
-
+#include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
 namespace Shapes
@@ -27,10 +27,28 @@ namespace Shapes
          // free up memory.
 
          // 2D shapes
+
+         // create a triangle in the X-Y plane (vertical)
+         // Note: It is vertical because this was the original shape that I drew to make sure that 
+         // my code could draw something to the screen.
          static void create_triangle(Shape_Data *put_data_here);
 
+         // create a plane in the X-Z plane (horizontal) at Y = 0
+         static void create_plane(uint number_segments_on_side, Shape_Data *put_data_here);
+
+         // create a quadrilateral wire-frame in the X-Z plane (horizontal)
+         // Note: This function is expected to be used in creating bounding boxes from geometry 
+         // data.  A minimum AABB for a given set of vertices from a geometry may not be centered 
+         // on the origin, especially when an AABB is subdivided into finer AABBs for the purpose
+         // of collision detection.  
+         static void create_rectangle_wire_frame(float center, float width, float height, Shape_Data *put_data_here);
+
+         // create a circle in the X-Z plane (horizontal) at Y = 0
+         // Note: Algorithm courtesy of http://slabode.exofire.net/circle_draw.shtml .
+         static void create_circle(glm::vec3 &center, float num_arc_segments, float radius, Shape_Data *put_data_here);
+
+         // 3D shapes
          static void create_cube_data(Shape_Data *put_data_here);
-         static void create_plane_data(uint side_length, Shape_Data *put_data_here);
 
       private:
          // enforce staticness

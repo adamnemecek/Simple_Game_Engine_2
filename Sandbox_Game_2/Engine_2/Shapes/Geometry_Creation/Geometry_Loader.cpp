@@ -34,14 +34,20 @@ namespace Shapes
          }
          case Geometry_Loader::PLANE:
          {
-            Shape_Generator::create_plane_data(20, &(geo->m_shape_data));
+            Shape_Generator::create_plane(20, &(geo->m_shape_data));
             geo->m_render_mode = GL_TRIANGLES;
             break;
          }
-         case Geometry_Loader::TRIANGLE_2D:
+         case Geometry_Loader::TRIANGLE:
          {
             Shape_Generator::create_triangle(&(geo->m_shape_data));
             geo->m_render_mode = GL_TRIANGLES;
+            break;
+         }
+         case Geometry_Loader::CIRCLE:
+         {
+            Shape_Generator::create_circle(glm::vec3(), 16.0f, 2.2f, &(geo->m_shape_data));
+            geo->m_render_mode = GL_LINE_STRIP;
             break;
          }
          default:

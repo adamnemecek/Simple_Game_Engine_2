@@ -18,7 +18,8 @@ namespace Shapes
          {
             CUBE = 0,
             PLANE,
-            TRIANGLE_2D,
+            TRIANGLE,
+            CIRCLE,
          };
 
          static void load_from_generator(GEOMETRY_PRIMITIVE_ENUMS load_type, Geometry *geo);

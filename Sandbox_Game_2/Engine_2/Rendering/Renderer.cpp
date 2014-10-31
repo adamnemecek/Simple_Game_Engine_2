@@ -70,7 +70,7 @@ namespace Rendering
 {
    bool Renderer::initialize()
    {
-      my_function();
+      //my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;
@@ -216,7 +216,10 @@ namespace Rendering
          glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, glm::value_ptr(full_transform_matrix));
          glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, glm::value_ptr(r.m_model_to_world_mat));
 
-         glDrawElements(GL_TRIANGLES, (r.m_geometry_ptr)->m_shape_data.m_num_indices, GL_UNSIGNED_SHORT, 0);
+         glDrawElements(
+            (r.m_geometry_ptr)->m_render_mode, 
+            (r.m_geometry_ptr)->m_shape_data.m_num_indices, 
+            GL_UNSIGNED_SHORT, 0);
       }
    }
 

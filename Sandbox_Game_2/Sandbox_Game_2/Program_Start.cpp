@@ -33,6 +33,7 @@ using std::endl;
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
 
+
 // include this last to avoid errors when this includes gl.h 
 // (apparently this needs to be included after the glm and glload and other libraries)
 #include <GL/freeglut.h>
@@ -62,8 +63,15 @@ Shapes::Geometry g_plane_geometry;
 Rendering::Renderable *g_plane_renderable_ptr;
 Entities::Renderable_Updater_Component g_plane_renderable_updater_component;
 
+Entities::Entity g_circle_entity;
+Shapes::Geometry g_circle_geometry;
+Rendering::Renderable * g_circle_renderable_ptr;
+Entities::Renderable_Updater_Component g_circle_renderable_updater_component;
+
 Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
+
+
 
 
 
@@ -165,7 +173,16 @@ void init()
    g_plane_renderable_ptr = g_renderer.add_renderable(&g_plane_geometry);
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
-   g_plane_entity.initialize();
+   initialize_success = g_plane_entity.initialize();
+   MY_ASSERT(initialize_success);
+
+   Geometry_Loader::load_from_generator(Geometry_Loader::CIRCLE, &g_circle_geometry);
+   g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
+   g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
+   g_circle_entity.add_component(&g_circle_renderable_updater_component);
+   g_circle_entity.m_position = glm::vec3(0.0f, +2.0f, 0.0f);
+   initialize_success = g_circle_entity.initialize();
+   MY_ASSERT(initialize_success);
 }
 
 //Called to update the display.
@@ -178,6 +195,7 @@ void display()
    g_cube_3_entity.update();
    g_cube_4_entity.update();
    g_plane_entity.update();
+   g_circle_entity.update();
    g_camera_entity.update();
    g_camera.update();
    g_renderer.render_scene();
@@ -219,3 +237,4 @@ void keyboard(unsigned char key, int x, int y)
 //This function can also set the width/height of the window. The initial
 //value of these variables is the default, but you can change it.
 unsigned int defaults(unsigned int displayMode, int &width, int &height) {return displayMode;}
+

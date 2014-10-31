@@ -103,7 +103,7 @@ namespace Entities
          //cout << ", rotating left";
          //forward_vector = glm::mat3(glm::rotate((+1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
          //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), +ROTATION_SPEED, new_orientation);
-         new_orientation = glm::angleAxis(+ROTATION_SPEED, Utilities::Default_Vectors::WORLD_UP_VECTOR) * new_orientation;
+         new_orientation = glm::angleAxis(-ROTATION_SPEED, Utilities::Default_Vectors::WORLD_UP_VECTOR) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::YAW_RIGHT)
@@ -111,7 +111,7 @@ namespace Entities
          //cout << ", rotating right";
          //forward_vector = glm::mat3(glm::rotate((-1.0f) * ROTATION_SPEED, relative_up_vector)) * forward_vector;
          //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), -ROTATION_SPEED, new_orientation);
-         new_orientation = glm::angleAxis(-ROTATION_SPEED, Utilities::Default_Vectors::WORLD_UP_VECTOR) * new_orientation;
+         new_orientation = glm::angleAxis(+ROTATION_SPEED, Utilities::Default_Vectors::WORLD_UP_VECTOR) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::PITCH_FORWARD)
