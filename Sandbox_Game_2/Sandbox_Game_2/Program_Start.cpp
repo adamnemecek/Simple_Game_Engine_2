@@ -114,7 +114,7 @@ void init()
    g_renderer.set_camera_to_render(&g_camera);
 
    using Shapes::Geometry_Creation::Geometry_Loader;
-   Geometry_Loader::load_from_generator(Geometry_Loader::CUBE, &g_cube_geometry);
+   Geometry_Loader::load_cube(&g_cube_geometry);
 
    g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
@@ -161,7 +161,7 @@ void init()
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
    g_camera_entity.add_component(&g_controller_component);
-   g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
+   //g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
    g_camera_entity.initialize();
    //g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
    //g_camera_entity.m_base_orientation = (-1.0f) * g_camera_entity.m_position;
@@ -169,18 +169,18 @@ void init()
 
    // and the plane
    // Note: Let the plane be it's default size and remain at the origin.
-   Geometry_Loader::load_from_generator(Geometry_Loader::PLANE, &g_plane_geometry);
+   Geometry_Loader::load_plane(&g_plane_geometry, 40);
    g_plane_renderable_ptr = g_renderer.add_renderable(&g_plane_geometry);
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
    initialize_success = g_plane_entity.initialize();
    MY_ASSERT(initialize_success);
 
-   Geometry_Loader::load_from_generator(Geometry_Loader::CIRCLE, &g_circle_geometry);
+   Geometry_Loader::load_circle(&g_circle_geometry, 30, 5.0f);
    g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
    g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
-   g_circle_entity.m_position = glm::vec3(0.0f, +2.0f, 0.0f);
+   g_circle_entity.m_position = glm::vec3(0.0f, +5.0f, 0.0f);
    initialize_success = g_circle_entity.initialize();
    MY_ASSERT(initialize_success);
 }

@@ -31,24 +31,20 @@ namespace Shapes
          // create a triangle in the X-Y plane (vertical)
          // Note: It is vertical because this was the original shape that I drew to make sure that 
          // my code could draw something to the screen.
-         static void create_triangle(Shape_Data *put_data_here);
+         static void generate_triangle(Shape_Data *put_data_here);
 
          // create a plane in the X-Z plane (horizontal) at Y = 0
-         static void create_plane(uint number_segments_on_side, Shape_Data *put_data_here);
+         static void generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here);
 
-         // create a quadrilateral wire-frame in the X-Z plane (horizontal)
-         // Note: This function is expected to be used in creating bounding boxes from geometry 
-         // data.  A minimum AABB for a given set of vertices from a geometry may not be centered 
-         // on the origin, especially when an AABB is subdivided into finer AABBs for the purpose
-         // of collision detection.  
-         static void create_rectangle_wire_frame(float center, float width, float height, Shape_Data *put_data_here);
+         // create a rectangle wire-frame in the X-Z plane (horizontal) at Y = 0
+         static void generate_rectangle(const float width, const float length, Shape_Data *put_data_here);
 
          // create a circle in the X-Z plane (horizontal) at Y = 0
          // Note: Algorithm courtesy of http://slabode.exofire.net/circle_draw.shtml .
-         static void create_circle(glm::vec3 &center, float num_arc_segments, float radius, Shape_Data *put_data_here);
+         static void generate_circle(const float num_arc_segments, const float radius, Shape_Data *put_data_here);
 
          // 3D shapes
-         static void create_cube_data(Shape_Data *put_data_here);
+         static void generate_cube(Shape_Data *put_data_here);
 
       private:
          // enforce staticness

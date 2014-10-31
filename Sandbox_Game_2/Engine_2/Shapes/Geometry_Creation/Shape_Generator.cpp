@@ -28,7 +28,7 @@ namespace Shapes
    {
       // 2D shapes
 
-      void Shape_Generator::create_triangle(Shape_Data *put_data_here)
+      void Shape_Generator::generate_triangle(Shape_Data *put_data_here)
       {
          My_Vertex local_verts[] = 
          {
@@ -68,7 +68,7 @@ namespace Shapes
       }
 
 
-      void Shape_Generator::create_plane(uint number_segments_on_side, Shape_Data *put_data_here)
+      void Shape_Generator::generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here)
       {
          uint vert_count = number_segments_on_side * number_segments_on_side;
          put_data_here->m_num_verts = vert_count;
@@ -115,7 +115,7 @@ namespace Shapes
       }
 
 
-      void Shape_Generator::create_circle(glm::vec3 &center, float num_arc_segments, float radius, Shape_Data *put_data_here)
+      void Shape_Generator::generate_circle(const float num_arc_segments, const float radius, Shape_Data *put_data_here)
       {
          // there are two vertices for each line representing an arc segment except for the 
          // last one, which only has one vertex that connects to the first one
@@ -132,14 +132,12 @@ namespace Shapes
          float x = radius;//we start at angle = 0 
          float z = 0;
 
-         //glBegin(GL_LINE_LOOP);
          for (int vertex_count = 0; vertex_count < num_arc_segments; vertex_count++)
          {
             My_Vertex& this_vert = put_data_here->m_verts[vertex_count];
             this_vert.position.x = x;
             this_vert.position.y = 0.0f;
             this_vert.position.z = z;
-            this_vert.position += center;
 
             this_vert.color = random_color();
             this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
@@ -159,7 +157,6 @@ namespace Shapes
             x *= radial_factor;
             z *= radial_factor;
          }
-         //glEnd();
 
          uint index_count = num_arc_segments * 2;
          put_data_here->m_num_indices = index_count;
@@ -184,17 +181,49 @@ namespace Shapes
       }
 
 
-      void Shape_Generator::create_rectangle_wire_frame(float center, float width, float height, Shape_Data *put_data_here)
+      void Shape_Generator::generate_rectangle(const float width, const float length, Shape_Data *put_data_here)
       {
-         // we know that a rectangle has only 4 vertices, so you can declare them with a magic number
-         My_Vertex local_verts[4];
+         float half_width = width / 2.0f;
+         float half_length = length / 2.0f;
+         
+         vec3 common_normal = vec3(0.0f, 1.0f, 0.0f);
 
-         // the vertex order will be this
+         My_Vertex local_verts[] =
+         {
+            glm::vec3(half_width, 0.0f, half_length),
+            common_normal,
+            random_color(),
+            glm::vec3(half_width, 0.0f, half_length),
+            common_normal,
+            random_color(),
+            glm::vec3(half_width, 0.0f, half_length),
+            common_normal,
+            random_color(),
+            glm::vec3(half_width, 0.0f, half_length),
+            common_normal,
+            random_color(),
+         };
+
+         // this is a rectangle, so go ahead and use magic numbers for the vertex count
+         put_data_here->m_num_verts = 4;
+         put_data_here->m_verts = new My_Vertex[4];
+         memcpy(put_data_here->m_verts, local_verts, sizeof(local_verts));
+
+
+         GLushort local_indices[] =
+         {
+            0, 2, 4, 0, 4, 1,
+         };
+
+         // this is a rectangle, so go ahead and use magic numbers for the index count
+         put_data_here->m_num_indices = 6;
+         put_data_here->m_indices = new GLushort[6];
+         memcpy(put_data_here->m_indices, local_indices, sizeof(local_indices));
       }
 
 
       // 3D shapes
-      void Shape_Generator::create_cube_data(Shape_Data *put_data_here)
+      void Shape_Generator::generate_cube(Shape_Data *put_data_here)
       {
          if (0 == put_data_here)
          {
