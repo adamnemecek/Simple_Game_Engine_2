@@ -56,6 +56,21 @@ void my_function()
    //dq = glm::normalize(dq);
 
 
+   glm::vec4 vec = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+   glm::fquat orientation;
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, orientation);
+   //glm::mat4 mat = glm::mat4_cast(orientation);
+   glm::fdualquat fdq1 = Utilities::Quaternion_Helper::make_dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+   glm::fdualquat fdq2 = Utilities::Quaternion_Helper::make_dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+   glm::fdualquat fdq = fdq1 * fdq2;
+   
+   glm::mat4 mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq1);
+   glm::vec4 point1 = mat * vec;
+   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq2);
+   glm::vec4 point_2 = mat * vec;
+   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq);
+   glm::vec4 point_3 = mat * vec;
+
 
 
    //Math::Dual_Quaternion point = Math::Dual_Quaternion::point(glm::vec3(0.0f, 1.0f, 0.0f));
@@ -70,7 +85,7 @@ namespace Rendering
 {
    bool Renderer::initialize()
    {
-      //my_function();
+      my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;
