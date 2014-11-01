@@ -70,37 +70,37 @@ namespace Entities
       if (active_actions & ACTION_LIST::FORWARD)
       {
          //cout << "accellerating";
-         new_position += forward_vector * LINEAR_SPEED;
+         new_position -= forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::BACK)
       {
          //cout << ", back";
-         new_position -= forward_vector * LINEAR_SPEED;
+         new_position += forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_LEFT)
       {
          //cout << ", strafing left";
-         new_position += left_vector * LINEAR_SPEED;
+         new_position -= left_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_RIGHT)
       {
          //cout << ", strafing right";
-         new_position -= left_vector * LINEAR_SPEED;
+         new_position += left_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_UP)
       {
          //cout << ", going up";
-         new_position += Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position -= Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_DOWN)
       {
          //cout << ", going up";
-         new_position -= Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position += Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::YAW_LEFT)
@@ -163,7 +163,13 @@ namespace Entities
       //m_parent_entity_ptr->m_base_orientation_quat = glm::normalize(new_orientation);
 
       glm::fdualquat new_state = glm::normalize(Utilities::Quaternion_Helper::make_dual_quat(new_orientation, new_position));
-      m_parent_entity_ptr->m_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way * new_state;
+      
+      // right or left multiply the entity's dual quat as needed
+      // Note: Right multiply to make the rotation happen relative to the world origin.  
+      // Note: Left multiply to make the rotation happen relative to the object's origin.
+      // I'll need to think to understand why this is happening.  Or I may just call it a 
+      // magic black box and move on.
+      m_parent_entity_ptr->m_where_and_which_way = new_state * m_parent_entity_ptr->m_where_and_which_way;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)
