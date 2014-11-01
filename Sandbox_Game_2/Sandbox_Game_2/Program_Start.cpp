@@ -23,6 +23,8 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
 
+#include <Utilities\Quaternion_Helper.h>
+
 #include <Engine_2\Utilities\My_Assert.h>
 
 #include <string>
@@ -147,17 +149,30 @@ void init()
    MY_ASSERT(initialize_success);
 
    // set some initial positions and rotations for these cubes
-   g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
+   //g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
    //g_cube_1_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, 1.0f);
+
+   glm::fquat quat;
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
+   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, +3.0f));
    
-   g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
+   //g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
    //g_cube_2_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, -1.0f);
+
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, -1.0f), 0.5f, quat);
+   g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, -3.0f));
    
-   g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
+   //g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
    //g_cube_3_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, -1.0f);
+
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
+   g_cube_3_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, -3.0f));
    
-   g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
+   //g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
    //g_cube_4_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, 1.0f);
+
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, +1.0f), 0.5f, quat);
+   g_cube_4_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, +3.0f));
 
 
    // set up the camera entity
@@ -186,7 +201,10 @@ void init()
    g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
    g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
-   g_circle_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
+   //g_circle_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
+
+   g_circle_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
+
    initialize_success = g_circle_entity.initialize();
    MY_ASSERT(initialize_success);
 
@@ -195,7 +213,10 @@ void init()
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
-   g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
+   //g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
+
+   g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
+
    initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
 }

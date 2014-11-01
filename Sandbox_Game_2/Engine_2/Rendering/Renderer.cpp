@@ -85,7 +85,7 @@ namespace Rendering
 {
    bool Renderer::initialize()
    {
-      my_function();
+      //my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;

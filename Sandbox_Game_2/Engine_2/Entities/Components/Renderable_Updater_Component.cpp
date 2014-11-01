@@ -7,7 +7,8 @@
 #include <Rendering\Renderable.h>
 #include <Entities\Entity.h>
 #include <Utilities\Quaternion_Helper.h>
-#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+//#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 
 
 namespace Entities
@@ -26,11 +27,16 @@ namespace Entities
       //   glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
       //   glm::rotate(glm::mat4(), rot_angle_rad, rotation_axis);
 
-      
-      glm::mat4 rotation_matrix = glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat);
-      m_renderable_ptr->m_model_to_world_mat =
-         glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
-         rotation_matrix;
+
+      // replaced with dual quaternion
+      //glm::mat4 rotation_matrix = glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat);
+      //m_renderable_ptr->m_model_to_world_mat =
+      //   glm::translate(glm::mat4(), m_parent_entity_ptr->m_position) *
+      //   rotation_matrix;
+
+
+      m_renderable_ptr->m_model_to_world_mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(m_parent_entity_ptr->m_where_and_which_way);
+
 
       //// update the entity's orientation vector for the sake of the camera
       //glm::vec3 forward_vector = m_parent_entity_ptr->m_base_orientation;

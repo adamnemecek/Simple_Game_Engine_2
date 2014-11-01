@@ -4,13 +4,14 @@
 #include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
+#include <Utilities\Quaternion_Helper.h>
 
 namespace Rendering
 {
    Camera::Camera()
       : 
-      m_position(0.0f),
-      m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
+      //m_position(0.0f),
+      //m_view_orientation(1.0f, 0.0f, 0.0f, 0.0f),
       //m_view_direction(Utilities::Default_Vectors::WORLD_FORWARD),
       //m_strafe_direction(glm::cross(m_view_direction, Utilities::WORLD_UP_VECTOR)),
       m_prev_mouse_position(0.0f),
@@ -22,7 +23,9 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-      return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
+      //return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
+
+      return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -62,8 +65,10 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         m_position = (m_follow_this_entity_ptr->m_position);
-         m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
+         //m_position = (m_follow_this_entity_ptr->m_position);
+         //m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
+
+         m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
       }
    }
 
@@ -81,7 +86,10 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      return m_position;
+      return glm::vec3(
+         m_where_and_which_way.dual.x,
+         m_where_and_which_way.dual.y,
+         m_where_and_which_way.dual.z);
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

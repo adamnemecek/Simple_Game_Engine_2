@@ -4,7 +4,8 @@
 #include <glm\vec3.hpp>
 #include <glm\vec2.hpp>
 #include <glm\mat4x4.hpp>
-#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+//#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 
 namespace Entities
 {
@@ -42,9 +43,11 @@ namespace Rendering
 
 
    private:
-      glm::vec3 m_position;
+      // replaced with dual quat
+      //glm::vec3 m_position;
+      //glm::fquat m_view_orientation;
+      glm::fdualquat m_where_and_which_way;
 
-      glm::fquat m_view_orientation;
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;

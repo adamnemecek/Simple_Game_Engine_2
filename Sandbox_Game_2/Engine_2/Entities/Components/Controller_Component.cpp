@@ -17,6 +17,7 @@
 #include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
 #include <Utilities\Quaternion_Helper.h>
 #include <Utilities\Include_Helpers\GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 #include <Utilities\Printer_Helper.h>
 
 #include <Utilities\My_Assert.h>
@@ -43,7 +44,10 @@ namespace Entities
       static const float ROTATION_SPEED = 0.02f;
 
       // define these to avoid lots of repetious dereferencing
-      glm::vec3 new_position = m_parent_entity_ptr->m_position;
+      //glm::vec3 new_position = m_parent_entity_ptr->m_position;
+      glm::vec3 new_position;
+      
+      
       //glm::vec3 forward_vector = glm::normalize(m_parent_entity_ptr->m_base_orientation);
       //glm::vec3 forward_vector = glm::mat3(glm::mat4_cast(m_parent_entity_ptr->m_base_orientation_quat)) * Utilities::Default_Vectors::WORLD_FORWARD;
       //glm::vec3 strafe_vector = glm::cross(Utilities::Default_Vectors::WORLD_UP_VECTOR, forward_vector);
@@ -51,8 +55,9 @@ namespace Entities
 
       //Utilities::Printer_Helper::print_vec("up:", relative_up_vector);
 
-      glm::fquat new_orientation = m_parent_entity_ptr->m_base_orientation_quat;
+      //glm::fquat new_orientation = m_parent_entity_ptr->m_base_orientation_quat;
       //Utilities::Printer_Helper::print_quat("orientation:", new_orientation);
+      glm::fquat new_orientation;
 
       glm::fquat current_orientation_conjugate = glm::conjugate(new_orientation);
       glm::vec3 forward_vector = current_orientation_conjugate * Utilities::Default_Vectors::WORLD_FORWARD_VECTOR;
@@ -149,9 +154,16 @@ namespace Entities
          //cout << endl;
       }
 
-      m_parent_entity_ptr->m_position = new_position;
+      // replaced with dual quaternion
+      //m_parent_entity_ptr->m_position = new_position;
+
       //m_parent_entity_ptr->m_base_orientation = forward_vector;
-      m_parent_entity_ptr->m_base_orientation_quat = glm::normalize(new_orientation);
+
+      // replaced with dual quat
+      //m_parent_entity_ptr->m_base_orientation_quat = glm::normalize(new_orientation);
+
+      glm::fdualquat new_state = glm::normalize(Utilities::Quaternion_Helper::make_dual_quat(new_orientation, new_position));
+      m_parent_entity_ptr->m_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way * new_state;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

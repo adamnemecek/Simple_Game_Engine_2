@@ -3,7 +3,8 @@
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
-#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+//#include <Utilities\Include_Helpers\GLM_Quaternion.h>
+#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 #include <Utilities\Typedefs.h>
 
 namespace Entities
@@ -33,11 +34,15 @@ namespace Entities
       T *get_component_ptr() const;
 
       // shared by all entities, so make it public to make it simple to manipulate
-      glm::vec3 m_position;
+      //glm::vec3 m_position;
 
       // Note: I call it a "base" orientation because sub parts of the entity may be oriented differently.
       //glm::vec3 m_base_orientation;
-      glm::fquat m_base_orientation_quat;
+      //glm::fquat m_base_orientation_quat;
+
+      // use a dual quaternion for both orientation and position so that we only have to multiply a 
+      // single item when transforming child entities
+      glm::fdualquat m_where_and_which_way;
 
    protected:
       // these are protected instead of private so that the Controllable_Entity can also access them
