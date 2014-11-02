@@ -70,37 +70,37 @@ namespace Entities
       if (active_actions & ACTION_LIST::FORWARD)
       {
          //cout << "accellerating";
-         new_position -= forward_vector * LINEAR_SPEED;
+         new_position += forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::BACK)
       {
          //cout << ", back";
-         new_position += forward_vector * LINEAR_SPEED;
+         new_position -= forward_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_LEFT)
       {
          //cout << ", strafing left";
-         new_position -= left_vector * LINEAR_SPEED;
+         new_position += left_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::STRAFE_RIGHT)
       {
          //cout << ", strafing right";
-         new_position += left_vector * LINEAR_SPEED;
+         new_position -= left_vector * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_UP)
       {
          //cout << ", going up";
-         new_position -= Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position += Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_DOWN)
       {
          //cout << ", going up";
-         new_position += Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position -= Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::YAW_LEFT)

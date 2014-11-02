@@ -185,10 +185,10 @@ namespace Rendering
    {
       glViewport(0, 0, width, height);
 
-      float fov_radians = (1.0f / 2.0f) * 3.14159f;   // 1/2 pi
+      float fov_radians = (1.0f / 4.0f) * 3.14159f;   // 1/2 pi
       float aspect_ratio = (float)width / height;
       float near_plane_dist = 0.1f;
-      float far_plane_dist = 20.0f;
+      float far_plane_dist = 40.0f;
       m_perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
 
       cout << "resizing to aspect ratio " << aspect_ratio << endl;

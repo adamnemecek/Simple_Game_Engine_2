@@ -25,7 +25,11 @@ namespace Rendering
    {
       //return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
 
-      return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
+      glm::fdualquat dq = m_where_and_which_way;
+      //dq.real = glm::conjugate(dq.real);
+      dq.dual *= -1.0f;
+      return Utilities::Quaternion_Helper::dual_quat_to_mat4(dq);
+      //return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)

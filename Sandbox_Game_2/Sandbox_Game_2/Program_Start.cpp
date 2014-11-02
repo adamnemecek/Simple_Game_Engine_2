@@ -154,25 +154,28 @@ void init()
 
    glm::fquat quat;
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
-   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, +3.0f));
+   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+0.0f, +3.0f, +0.0f));
    
    //g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
    //g_cube_2_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, -1.0f);
 
+   quat = glm::fquat();
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, -1.0f), 0.5f, quat);
-   g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, -3.0f));
+   //g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, -3.0f));
    
    //g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
    //g_cube_3_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, -1.0f);
 
+   quat = glm::fquat();
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
-   g_cube_3_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, -3.0f));
+   //g_cube_3_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, -3.0f));
    
    //g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
    //g_cube_4_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, 1.0f);
 
+   quat = glm::fquat();
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, +1.0f), 0.5f, quat);
-   g_cube_4_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, +3.0f));
+   //g_cube_4_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, +3.0f));
 
 
    // set up the camera entity
@@ -185,6 +188,13 @@ void init()
    g_camera_entity.initialize();
    //g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
    //g_camera_entity.m_base_orientation = (-1.0f) * g_camera_entity.m_position;
+
+   // start the camera above and looking down at the scene
+   quat = glm::fquat();
+   glm::fdualquat translation = Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 10.0f, 0.0f));
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, quat);
+   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 1.0, quat);
+   g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_rotation_only(quat) * translation;
 
 
    // and the plane
