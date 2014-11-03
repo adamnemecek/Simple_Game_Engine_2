@@ -234,7 +234,7 @@ void init()
    initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
 
-   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, 20.0f));
+   g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
 
    // start the game clock
    initialize_success = Timing::Game_Clock::get_instance().initialize();

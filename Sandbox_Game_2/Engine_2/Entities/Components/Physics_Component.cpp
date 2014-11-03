@@ -19,7 +19,7 @@ namespace Entities
 {
    bool Physics_Component::initialize()
    {
-      m_current_force_vector_index = 0;
+      m_current_immediate_force_vector_index = 0;
       m_linear_velocity = glm::vec3();
       m_linear_acceleration = glm::vec3();
       m_angular_rotation_vector = glm::vec3();
@@ -37,19 +37,26 @@ namespace Entities
       float delta_time = Timing::Game_Clock::get_instance().get_delta_time_last_frame();
       //printf("delta_t: %.2f", delta_time);
 
-      // add up the force vectors
+      // add up the immediate and sustained force vectors
       glm::vec3 net_force_vector;
-      for (uint index = 0; index < m_current_force_vector_index; index++)
+      for (uint index = 0; index < m_current_immediate_force_vector_index; index++)
       {
-         net_force_vector += m_force_vectors[index];
+         net_force_vector += m_immediate_force_vectors_this_frame[index];
+      }
+      for (uint index = 0; index < m_current_sustained_force_vector_index; index++)
+      {
+         net_force_vector += m_sustained_force_vectors_this_frame[index];
       }
 
+      // TODO: ??add DEBUG flags to the printer helper or just delete the uses when you're done debugging??
       Utilities::Printer_Helper::print_vec("net force vector: ", net_force_vector);
 
       // reset the "current force vector index", but don't bother overwriting values 
       // back to 0 because they will be overwritten anyway on the next "add immediate 
       // force vector" call
-      m_current_force_vector_index = 0;
+      m_current_immediate_force_vector_index = 0;
+
+
 
       // make crude physics code just to start things moving and testing your collision boxes, and then do t with fancy calculations later
 
@@ -83,8 +90,14 @@ namespace Entities
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)
    {
       // ??remove assertion and make into a try-throw check or maybe just refuse to add too many??
-      MY_ASSERT(m_current_force_vector_index != m_MAX_FORCE_VECTORS);
-      m_force_vectors[m_current_force_vector_index++] = force_vec;
+      MY_ASSERT(m_current_immediate_force_vector_index != m_MAX_IMMEDIATE_FORCE_VECTORS);
+      m_immediate_force_vectors_this_frame[m_current_immediate_force_vector_index++] = force_vec;
+   }
+
+   void Physics_Component::add_sustained_force_vector(const glm::vec3 &force_vec)
+   {
+      MY_ASSERT(m_current_sustained_force_vector_index != m_MAX_SUSTAINED_FORCE_VECTORS);
+      m_sustained_force_vectors_this_frame[m_current_sustained_force_vector_index++] = force_vec;
    }
 
    void Physics_Component::reflect_linear_velocity_around_vector(const glm::vec3 &reflection_axis)
