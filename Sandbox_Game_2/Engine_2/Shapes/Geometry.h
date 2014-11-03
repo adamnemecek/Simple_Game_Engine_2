@@ -15,6 +15,11 @@ namespace Rendering
    class Renderer;
 }
 
+namespace Entities
+{
+   class AABB_Component;
+}
+
 namespace Shapes
 {
    namespace Geometry_Creation
@@ -36,11 +41,13 @@ namespace Shapes
       }
 
    private:
-      // let everything else be private, but let the geometry loader and the renderer access 
-      // everything (it's easier that way)
-      // Note: In this design, the renderer could set things, but be nice to the program 
+      // let everything else be private, but let a select few classes access the private data 
+      // Ex: Geometry_Loader and AABB need to set and read the vertices, respectively, and 
+      // the Renderer needs to get at VAO and buffer IDs.
+      // Note: In this design, these classes could set things, but be nice to the program 
       // and don't exploit this permission loophole.
 
+      friend class Entities::AABB_Component;
       friend class Geometry_Creation::Geometry_Loader;
       friend class Rendering::Renderer;
 

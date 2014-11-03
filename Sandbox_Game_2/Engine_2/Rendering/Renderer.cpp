@@ -34,7 +34,8 @@ void my_function()
    glm::fdualquat translate_dq(glm::fquat(), translate);
 
    glm::fquat rotation;
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f, rotation);
+   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f/2.0f, rotation);
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, rotation);
    glm::fdualquat rotation_dq(rotation, glm::fquat(0.0, 0.0f, 0.0f, 0.0f));
 
    // pure rotation
@@ -51,6 +52,9 @@ void my_function()
    glm::fdualquat transform(rotation, translate);
    glm::fdualquat result_1 = transform * point_dq * dual_quat_conjugate(transform);
    glm::fdualquat result_2 = glm::normalize(transform) * point_dq * glm::normalize(dual_quat_conjugate(transform));
+
+   result_2 = glm::normalize(result_2);
+   glm::fquat T = (result_2.dual * 2.0f) * glm::conjugate(result_2.real);
 
    //glm::fdualquat dq(glm::fquat(), glm::fquat(0.0f, 0.0f, 5.0f, 0.0f));
    //dq = glm::normalize(dq);
@@ -85,7 +89,7 @@ namespace Rendering
 {
    bool Renderer::initialize()
    {
-      //my_function();
+      my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_full_transform_uniform_location = -1;
