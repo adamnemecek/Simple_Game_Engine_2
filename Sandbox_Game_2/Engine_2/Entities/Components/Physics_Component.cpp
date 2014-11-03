@@ -13,6 +13,7 @@
 
 #include <Utilities\Quaternion_Helper.h>
 #include <Utilities\Include_Helpers\Default_Vectors.h>
+#include <Utilities\Printer_Helper.h>
 
 namespace Entities
 {
@@ -34,6 +35,7 @@ namespace Entities
    {
       // get delta time for the last frame
       float delta_time = Timing::Game_Clock::get_instance().get_delta_time_last_frame();
+      //printf("delta_t: %.2f", delta_time);
 
       // add up the force vectors
       glm::vec3 net_force_vector;
@@ -41,6 +43,8 @@ namespace Entities
       {
          net_force_vector += m_force_vectors[index];
       }
+
+      Utilities::Printer_Helper::print_vec("net force vector: ", net_force_vector);
 
       // reset the "current force vector index", but don't bother overwriting values 
       // back to 0 because they will be overwritten anyway on the next "add immediate 
@@ -52,20 +56,27 @@ namespace Entities
       static const uint ENTITY_MASS = 5.0f;  // TODO: make this an adjustable property of the entity, perhaps with a 'material' component or property
 
       // calculate torque and rotate the entity
-      m_angular_acceleration = glm::length(net_force_vector) / 5.0f;
+      m_angular_acceleration = glm::length(net_force_vector) / 2.0f;
       m_angular_velocity += m_angular_acceleration * delta_time;
-      float rotation_angle = m_angular_velocity * delta_time;
+      double rotation_angle = m_angular_velocity * delta_time;
+
+      //printf("angle: %.2lf", rotation_angle);
       
       glm::fquat orientation_change;
-      Utilities::Quaternion_Helper::orientation_offset(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, orientation_change);
+      //Utilities::Quaternion_Helper::orientation_offset(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, orientation_change);
 
       // calculate the linear acceleraiton and move it in the new direction
       m_linear_acceleration = net_force_vector;
       m_linear_velocity += net_force_vector * delta_time;
       glm::vec3 position_change = m_linear_velocity * delta_time;
+      //glm::vec3 position_change;
+
+      //printf("position change: <%.2f, %.2f, %.2f>\n", position_change);
 
       glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
-      m_parent_entity_ptr->m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(orientation_change, position_change) * previous_where_and_which_way;
+      glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_translation_only(position_change) * previous_where_and_which_way;
+      new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::make_dual_quat_rotation_only(orientation_change);
+      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::make_dual_quat(orientation_change, position_change);
    }
 
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)

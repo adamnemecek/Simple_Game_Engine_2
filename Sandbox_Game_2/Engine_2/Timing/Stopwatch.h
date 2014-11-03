@@ -12,8 +12,8 @@ namespace Timing
 
       // delta time is in seconds
       void start();
-      float lap();
-      float total_time();
+      double lap();
+      double total_time();
       void reset();
    };
 }

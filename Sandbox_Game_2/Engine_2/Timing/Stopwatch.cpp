@@ -17,9 +17,9 @@ namespace
    LARGE_INTEGER g_start_counter;
    LARGE_INTEGER g_last_lap_counter;
 
-   inline float counter_to_seconds(LARGE_INTEGER counter)
+   inline double counter_to_seconds(LARGE_INTEGER counter)
    {
-      return ((float)counter.QuadPart / g_cpu_timer_frequency.QuadPart);
+      return ((double)counter.QuadPart / g_cpu_timer_frequency.QuadPart);
    }
 }
 
@@ -55,7 +55,7 @@ namespace Timing
       g_last_lap_counter.QuadPart = g_start_counter.QuadPart;
    }
    
-   float Stopwatch::lap()
+   double Stopwatch::lap()
    {
       // get the current time
       LARGE_INTEGER now;
@@ -64,19 +64,19 @@ namespace Timing
       // calculate delta time relative to previous frame
       LARGE_INTEGER delta_large_int;
       delta_large_int.QuadPart = now.QuadPart - g_last_lap_counter.QuadPart;
-      float delta_time = counter_to_seconds(delta_large_int);
+      double delta_time = counter_to_seconds(delta_large_int);
 
       g_last_lap_counter.QuadPart = now.QuadPart;
 
       return delta_time;
    }
    
-   float Stopwatch::total_time()
+   double Stopwatch::total_time()
    {
       LARGE_INTEGER now;
       QueryPerformanceCounter(&now);
 
-      float delta_time = counter_to_seconds(now);
+      double delta_time = counter_to_seconds(now);
       return delta_time;
    }
 

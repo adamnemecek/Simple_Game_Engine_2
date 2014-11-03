@@ -34,7 +34,7 @@ namespace Timing
       m_delta_time_last_frame = m_stopwatch.lap();
    }
 
-   float Game_Clock::get_delta_time_last_frame() const
+   double Game_Clock::get_delta_time_last_frame() const
    {
       return m_delta_time_last_frame;
    }

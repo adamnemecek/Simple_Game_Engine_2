@@ -24,8 +24,8 @@ these function.
 #include <Engine_2\Entities\Components\Physics_Component.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
-#include <Utilities\Quaternion_Helper.h>
-
+#include <Engine_2\Utilities\Quaternion_Helper.h>
+#include <Engine_2\Utilities\Printer_Helper.h>
 #include <Engine_2\Utilities\My_Assert.h>
 
 #include <string>
@@ -223,19 +223,18 @@ void init()
 
    // and the box
    Geometry_Loader::load_box(&g_rectangle_box_geometry, 5.0f, 2.0f);
+   g_rectangle_box_entity.add_component(&g_rectangle_box_physics);
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
-   g_rectangle_box_entity.add_component(&g_rectangle_box_physics);
    //g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
 
    g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
 
    initialize_success = g_rectangle_box_entity.initialize();
-   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(1.0f, 0.0f, 0.0f));
    MY_ASSERT(initialize_success);
 
-
+   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, 20.0f));
 
    // start the game clock
    initialize_success = Timing::Game_Clock::get_instance().initialize();
@@ -248,6 +247,11 @@ void init()
 void display()
 {
    Timing::Game_Clock::get_instance().new_frame();
+   //float delta_time = Timing::Game_Clock::get_instance().get_delta_time_last_frame();
+   //if (0 != delta_time)
+   //{
+   //   printf("frame rate: '%.2f'\n", 1.0f / delta_time);
+   //}
 
    g_cube_1_entity.update();
    g_cube_2_entity.update();
@@ -255,7 +259,10 @@ void display()
    g_cube_4_entity.update();
    g_plane_entity.update();
    g_circle_entity.update();
+
    g_rectangle_box_entity.update();
+
+   //Utilities::Printer_Helper::print_dual_quat("rectangle: ", g_rectangle_box_entity.m_where_and_which_way);
 
    g_camera_entity.update();
    g_camera.update();
@@ -283,6 +290,32 @@ void keyboard(unsigned char key, int x, int y)
 
    switch (key)
    {
+   case 'w':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, +20.0f));
+      break;
+   }
+   case 'a':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(+20.0f, 0.0f, 0.0f));
+      break;
+   }
+   case 's': 
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, -20.0f));
+      break;
+   }
+   case 'd':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(-20.0f, 0.0f, 0.0f));
+      break;
+   }
+   case 32:
+   {
+      // space bar
+      g_rectangle_box_physics.reflect_linear_velocity_around_vector(glm::vec3(0.0f, 1.0f, 0.0f));
+   }
+
    case 27:
    {
       glutLeaveMainLoop();

@@ -17,7 +17,7 @@ namespace Timing
       bool shutdown();
 
       void new_frame();
-      float get_delta_time_last_frame() const;
+      double get_delta_time_last_frame() const;
 
    private:
       // make these private to force access through get_instance()
@@ -26,7 +26,7 @@ namespace Timing
       Game_Clock &operator=(const Game_Clock&);
 
       Stopwatch m_stopwatch;
-      float m_delta_time_last_frame;
+      double m_delta_time_last_frame;
    };
 }
 

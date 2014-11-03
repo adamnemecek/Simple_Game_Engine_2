@@ -25,5 +25,13 @@ namespace Utilities
       {
          printf("%s <%.2f, %.2f, %.2f, %.2f>\n", foreword, quat.w, quat.x, quat.y, quat.z);
       }
+
+      void print_dual_quat(const char *foreword, const glm::fdualquat &dq)
+      {
+         printf("%s real: <%.2f, %.2f, %.2f, %.2f>, dual: <%.2f, %.2f, %.2f, %.2f>\n",
+            foreword,
+            dq.real.w, dq.real.x, dq.real.y, dq.real.z,
+            dq.dual.w, dq.dual.x, dq.dual.y, dq.dual.z, 5);
+      }
    }
 }
