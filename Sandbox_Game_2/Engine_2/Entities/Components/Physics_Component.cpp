@@ -56,6 +56,7 @@ namespace Entities
       static const uint ENTITY_MASS = 5.0f;  // TODO: make this an adjustable property of the entity, perhaps with a 'material' component or property
 
       // calculate torque and rotate the entity
+      m_angular_rotation_vector = Utilities::Default_Vectors::WORLD_UP_VECTOR;
       m_angular_acceleration = glm::length(net_force_vector) / 2.0f;
       m_angular_velocity += m_angular_acceleration * delta_time;
       double rotation_angle = m_angular_velocity * delta_time;
@@ -63,7 +64,7 @@ namespace Entities
       //printf("angle: %.2lf", rotation_angle);
       
       glm::fquat orientation_change;
-      //Utilities::Quaternion_Helper::orientation_offset(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, orientation_change);
+      //Utilities::Quaternion_Helper::orientation_offset(m_angular_rotation_vector, rotation_angle, orientation_change);
 
       // calculate the linear acceleraiton and move it in the new direction
       m_linear_acceleration = net_force_vector;
@@ -88,7 +89,9 @@ namespace Entities
 
    void Physics_Component::reflect_linear_velocity_around_vector(const glm::vec3 &reflection_axis)
    {
-      // ??add in this code??
+      // first vector is incident vector, the second the is the reflection axis
+      // Note: Axis sign does not seem to matter.  ??why??
+      m_linear_velocity = glm::reflect(m_linear_velocity, reflection_axis);
    }
 
 }
