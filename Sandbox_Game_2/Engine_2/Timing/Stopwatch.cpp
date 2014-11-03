@@ -57,13 +57,17 @@ namespace Timing
    
    float Stopwatch::lap()
    {
-      // get the current time and convert it to a second
+      // get the current time
       LARGE_INTEGER now;
       QueryPerformanceCounter(&now);
-      
+
+      // calculate delta time relative to previous frame
+      LARGE_INTEGER delta_large_int;
+      delta_large_int.QuadPart = now.QuadPart - g_last_lap_counter.QuadPart;
+      float delta_time = counter_to_seconds(delta_large_int);
+
       g_last_lap_counter.QuadPart = now.QuadPart;
-      
-      float delta_time = counter_to_seconds(now);
+
       return delta_time;
    }
    

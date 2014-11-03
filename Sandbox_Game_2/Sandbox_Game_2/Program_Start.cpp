@@ -22,6 +22,7 @@ these function.
 #include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
+#include <Engine_2\Timing\Game_Clock.h>
 
 #include <Utilities\Quaternion_Helper.h>
 
@@ -74,6 +75,7 @@ Entities::Entity g_rectangle_box_entity;
 Shapes::Geometry g_rectangle_box_geometry;
 Rendering::Renderable * g_rectangle_box_renderable_ptr;
 Entities::Renderable_Updater_Component g_rectangle_box_renderable_updater_component;
+Entities::Physics_Component g_rectangle_box_physics;
 
 Entities::Entity g_camera_entity;
 Entities::Controller_Component g_controller_component;
@@ -154,7 +156,7 @@ void init()
 
    glm::fquat quat;
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
-   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+0.0f, +3.0f, +0.0f));
+   //g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+0.0f, +3.0f, +0.0f));
    
    //g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
    //g_cube_2_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, -1.0f);
@@ -191,10 +193,11 @@ void init()
 
    // start the camera above and looking down at the scene
    quat = glm::fquat();
-   glm::fdualquat translation = Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 10.0f, 0.0f));
+   glm::fdualquat translation = Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, quat);
    //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 1.0, quat);
    g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_rotation_only(quat) * translation;
+   //g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(0.0f, 10.0f, 0.0f));
 
 
    // and the plane
@@ -223,11 +226,19 @@ void init()
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
+   g_rectangle_box_entity.add_component(&g_rectangle_box_physics);
    //g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
 
    g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
 
    initialize_success = g_rectangle_box_entity.initialize();
+   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(1.0f, 0.0f, 0.0f));
+   MY_ASSERT(initialize_success);
+
+
+
+   // start the game clock
+   initialize_success = Timing::Game_Clock::get_instance().initialize();
    MY_ASSERT(initialize_success);
 }
 
@@ -236,6 +247,8 @@ void init()
 //If you need continuous updates of the screen, call glutPostRedisplay() at the end of the function.
 void display()
 {
+   Timing::Game_Clock::get_instance().new_frame();
+
    g_cube_1_entity.update();
    g_cube_2_entity.update();
    g_cube_3_entity.update();

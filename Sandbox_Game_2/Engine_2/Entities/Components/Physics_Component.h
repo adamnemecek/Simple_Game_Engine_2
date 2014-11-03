@@ -26,8 +26,10 @@ namespace Entities
 
       glm::vec3 m_linear_velocity;
       glm::vec3 m_linear_acceleration;
-      glm::vec3 m_angular_velocity;
-      glm::vec3 m_angular_acceleration;
+
+      glm::vec3 m_angular_rotation_vector;
+      float m_angular_velocity;
+      float m_angular_acceleration;
    };
 }
 

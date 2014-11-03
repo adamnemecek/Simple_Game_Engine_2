@@ -69,6 +69,7 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
+         glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
          //m_position = (m_follow_this_entity_ptr->m_position);
          //m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
 
