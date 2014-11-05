@@ -49,7 +49,7 @@ namespace Entities
       }
 
       // TODO: ??add DEBUG flags to the printer helper or just delete the uses when you're done debugging??
-      Utilities::Printer_Helper::print_vec("net force vector: ", net_force_vector);
+      //Utilities::Printer_Helper::print_vec("net force vector: ", net_force_vector);
 
       // reset the "current force vector index", but don't bother overwriting values 
       // back to 0 because they will be overwritten anyway on the next "add immediate 

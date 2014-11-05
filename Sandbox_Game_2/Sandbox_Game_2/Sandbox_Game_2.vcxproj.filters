@@ -18,8 +18,16 @@
     <ClCompile Include="Program_Start.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="experiment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="things_to_do.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="experiment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

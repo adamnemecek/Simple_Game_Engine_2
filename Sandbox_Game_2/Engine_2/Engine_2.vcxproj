@@ -103,6 +103,7 @@
     <ClCompile Include="Utilities\Shader_Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision_Detection\AABB_Collision_Detector.h" />
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Entities\Components\AABB_Component.h" />
     <ClInclude Include="Entities\Components\Border_Handler_Component.h" />

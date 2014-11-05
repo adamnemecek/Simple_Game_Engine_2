@@ -84,9 +84,7 @@ namespace Utilities
          mat[3][1] = trans.y;
          mat[3][2] = trans.z;
 
-
          // the last row remains untouched; that row is the realm of clip space and perspective division 
-
 
          return mat;
       }

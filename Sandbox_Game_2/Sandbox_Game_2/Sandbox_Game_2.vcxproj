@@ -81,10 +81,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="experiment.cpp" />
     <ClCompile Include="Program_Start.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="things_to_do.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="experiment.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

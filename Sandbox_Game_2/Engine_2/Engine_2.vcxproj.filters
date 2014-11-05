@@ -179,6 +179,9 @@
     <ClInclude Include="Entities\Components\AABB_Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Collision_Detection\AABB_Collision_Detector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />
