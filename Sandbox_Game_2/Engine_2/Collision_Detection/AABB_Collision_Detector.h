@@ -9,7 +9,7 @@ namespace Collision_Detection
    class __declspec(dllexport) AABB_Collision_Detector
    {
    public:
-      AABB_Collision_Detector &get_instance();
+      static AABB_Collision_Detector &get_instance();
 
       bool initialize();
 
@@ -37,7 +37,7 @@ namespace Collision_Detection
       Entities::AABB_Component *m_bounding_boxes[m_MAX_BOUNDING_BOXES];
 
       // enforce singleton-ness
-      AABB_Collision_Detector();
+      AABB_Collision_Detector() {}
       AABB_Collision_Detector(const AABB_Collision_Detector &);
       AABB_Collision_Detector &operator=(const AABB_Collision_Detector &);
    };

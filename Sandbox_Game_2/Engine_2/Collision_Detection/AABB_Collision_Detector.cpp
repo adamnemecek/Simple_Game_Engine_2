@@ -1,16 +1,15 @@
 #include "AABB_Collision_Detector.h"
 
-
 #include <Utilities\My_Assert.h>
 #include <memory.h>
 
 namespace Collision_Detection
 {
-   AABB_Collision_Detector & AABB_Collision_Detector::get_instance()
+   AABB_Collision_Detector &AABB_Collision_Detector::get_instance()
    {
-      static AABB_Collision_Detector ref;
+      static AABB_Collision_Detector instance;
 
-      return ref;
+      return instance;
    }
 
    bool AABB_Collision_Detector::initialize()
