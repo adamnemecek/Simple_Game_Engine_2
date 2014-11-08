@@ -20,7 +20,7 @@ namespace Entities
       // default shutdown
       void update();
 
-      void calculate_initial_bounds(const Shapes::Geometry *box_this);
+      void calculate_initial_bounds(const Shapes::Geometry &box_this);
 
       // figures out where the two are coliding and returns the point of collision
       // Note: If there is no collision, it returns 0 on all axes.

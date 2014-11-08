@@ -3,7 +3,6 @@
 #include <Entities\Entity.h>
 #include <Shapes\Geometry.h>
 #include <Shapes\My_Vertex.h>
-#include <Utilities\My_Assert.h>
 #include <Utilities\Quaternion_Helper.h>
 
 #include <iostream>
@@ -134,11 +133,9 @@ namespace Entities
       //m_model_space_corners[BOX_CORNERS::MIN_X_MIN_Y_MIN_Z] = glm::vec3(min_x, min_y, min_z);
    }
 
-   void AABB_Component::calculate_initial_bounds(const Shapes::Geometry *box_this)
+   void AABB_Component::calculate_initial_bounds(const Shapes::Geometry &box_this)
    {
-      MY_ASSERT(box_this != 0);
-
-      glm::vec3 initial_vert = (box_this->m_shape_data).m_verts->position;
+      glm::vec3 initial_vert = box_this.m_shape_data.m_verts->position;
       float min_x = initial_vert.x;
       float max_x = initial_vert.x;
       float min_y = initial_vert.y;
@@ -147,8 +144,8 @@ namespace Entities
       float max_z = initial_vert.z;
 
       // go through all the vertices and find the min and max in all axes
-      Shapes::My_Vertex *vertex_data_ptr = (box_this->m_shape_data).m_verts;
-      uint num_verts = (box_this->m_shape_data).m_num_verts;
+      Shapes::My_Vertex *vertex_data_ptr = box_this.m_shape_data.m_verts;
+      uint num_verts = box_this.m_shape_data.m_num_verts;
       for (uint vert_counter = 0; vert_counter < num_verts; vert_counter++)
       {
          glm::vec3 &this_vert = vertex_data_ptr[vert_counter].position;

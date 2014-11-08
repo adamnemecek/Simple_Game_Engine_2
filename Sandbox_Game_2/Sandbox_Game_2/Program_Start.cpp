@@ -20,8 +20,9 @@ these function.
 #include <Engine_2\Entities\Entity.h>
 #include <Engine_2\Entities\Components\Controller_Component.h>
 #include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
-#include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
+#include <Engine_2\Entities\Components\AABB_Component.h>
+#include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
 #include <Engine_2\Utilities\Quaternion_Helper.h>
@@ -49,16 +50,23 @@ Rendering::Camera g_camera;
 
 Shapes::Geometry g_cube_geometry;
 Entities::Entity g_cube_1_entity;
-Entities::Entity g_cube_2_entity;
-Entities::Entity g_cube_3_entity;
-Entities::Entity g_cube_4_entity;
 Rendering::Renderable *g_cube_1_renderable_ptr;
-Rendering::Renderable *g_cube_2_renderable_ptr;
-Rendering::Renderable *g_cube_3_renderable_ptr;
-Rendering::Renderable *g_cube_4_renderable_ptr;
 Entities::Renderable_Updater_Component g_cube_1_renderable_updater_component;
+Entities::Physics_Component g_cube_1_physics;
+Entities::AABB_Component g_cube_1_bounding_box;
+
+Entities::Entity g_cube_2_entity;
+Rendering::Renderable *g_cube_2_renderable_ptr;
 Entities::Renderable_Updater_Component g_cube_2_renderable_updater_component;
+Entities::Physics_Component g_cube_2_physics;
+Entities::AABB_Component g_cube_2_bounding_box;
+
+Entities::Entity g_cube_3_entity;
 Entities::Renderable_Updater_Component g_cube_3_renderable_updater_component;
+Rendering::Renderable *g_cube_3_renderable_ptr;
+
+Entities::Entity g_cube_4_entity;
+Rendering::Renderable *g_cube_4_renderable_ptr;
 Entities::Renderable_Updater_Component g_cube_4_renderable_updater_component;
 
 Entities::Entity g_plane_entity;
@@ -125,59 +133,54 @@ void init()
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
 
+   // for giving each entity an initial orientation
+   glm::fquat quat;
+
+   // entity initialization notes:
+   // - add the physics component before the renderable updater and the bounding box because
+   // the physics component updates the entity's dual quat representing location and orientation
+   // - give the physics initial force values AFTER initialization because initialization 
+   // resets the physics values
+   // - the entity's dual quat can be set any time during initialization because entity 
+   // initialization initializes the components and does not set the dual quat values
+
+   // add physics first so that the entity's dual fquat is updated for the frame
    g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-
    g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
-   g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
-   g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
-   g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
-
+   g_cube_1_bounding_box.calculate_initial_bounds(g_cube_geometry);
+   g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
-   g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
-   g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
-   g_cube_4_entity.add_component(&g_cube_4_renderable_updater_component);
-
-
+   g_cube_1_entity.add_component(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
+   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
+   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-4.0f, +3.0f, +4.0f));   // lower left corner when looking from above
+   g_cube_1_physics.add_sustained_force_vector(glm::vec3(+1.0f, 0.0f, 0.0f));    // force to the right
+
+
+   g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
+   g_cube_2_bounding_box.calculate_initial_bounds(g_cube_geometry);
+   g_cube_2_entity.add_component(&g_cube_1_physics);
+   g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
+   g_cube_2_entity.add_component(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
+   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
+   g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+4.0f, +3.0f, -4.0f));   // upper right corner when looking from above
+   g_cube_2_physics.add_sustained_force_vector(glm::vec3(-1.0f, 0.0f, 0.0f));    // force to the left
+
+   g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
+   g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
    initialize_success = g_cube_3_entity.initialize();
    MY_ASSERT(initialize_success);
+
+   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
+   g_cube_4_entity.add_component(&g_cube_4_renderable_updater_component);
    initialize_success = g_cube_4_entity.initialize();
    MY_ASSERT(initialize_success);
-
-   // set some initial positions and rotations for these cubes
-   //g_cube_1_entity.m_position = glm::vec3(+3.0f, +3.0f, +3.0f);
-   //g_cube_1_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, 1.0f);
-
-   glm::fquat quat;
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
-   //g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+0.0f, +3.0f, +0.0f));
-   
-   //g_cube_2_entity.m_position = glm::vec3(+3.0f, +3.0f, -3.0f);
-   //g_cube_2_entity.m_base_orientation = glm::vec3(1.0f, 1.0f, -1.0f);
-
-   quat = glm::fquat();
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, -1.0f), 0.5f, quat);
-   //g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+3.0f, +3.0f, -3.0f));
-   
-   //g_cube_3_entity.m_position = glm::vec3(-3.0f, +3.0f, -3.0f);
-   //g_cube_3_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, -1.0f);
-
-   quat = glm::fquat();
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
-   //g_cube_3_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, -3.0f));
-   
-   //g_cube_4_entity.m_position = glm::vec3(-3.0f, +3.0f, +3.0f);
-   //g_cube_4_entity.m_base_orientation = glm::vec3(-1.0f, 1.0f, 1.0f);
-
-   quat = glm::fquat();
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, +1.0f), 0.5f, quat);
-   //g_cube_4_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-3.0f, +3.0f, +3.0f));
 
 
    // set up the camera entity
@@ -188,16 +191,19 @@ void init()
    g_camera_entity.add_component(&g_controller_component);
    //g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
    g_camera_entity.initialize();
-   //g_camera_entity.m_position = glm::vec3(-8.0f, +6.0f, -8.0f);
-   //g_camera_entity.m_base_orientation = (-1.0f) * g_camera_entity.m_position;
 
    // start the camera above and looking down at the scene
+   // Note: The camera's world-to-camera matrix will affect the entire scene.
+   // A dual quat will rotate, then translate.  If we create a dual quat out of
+   // our desired orientation and offset, then the world will be rotated and then
+   // moved, which has the affect of rotating the camera's viewpoint, and then 
+   // moving it.  We instead want to translate the world and then rotate it, which
+   // requires the creation of two dual quats.  
+   // Note: The camera is the only thing that requires this reversal .
    quat = glm::fquat();
-   glm::fdualquat translation = Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, quat);
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 1.0, quat);
-   g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_rotation_only(quat) * translation;
-   //g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(0.0f, 10.0f, 0.0f));
+   g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_rotation_only(quat) * 
+      Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
 
 
    // and the plane

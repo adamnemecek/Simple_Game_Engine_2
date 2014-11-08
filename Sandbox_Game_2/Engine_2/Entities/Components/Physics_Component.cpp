@@ -20,8 +20,9 @@ namespace Entities
    bool Physics_Component::initialize()
    {
       m_current_immediate_force_vector_index = 0;
+      m_current_sustained_force_vector_index = 0;
       m_linear_velocity = glm::vec3();
-      m_linear_acceleration = glm::vec3();
+      m_linear_acceleration = glm::vec3();   // TODO: remove acceleration vectors as members (they need to be re-calculated on every update, so it is useless to track them)
       m_angular_rotation_vector = glm::vec3();
       m_angular_velocity = 0.0f;
       m_angular_acceleration = 0.0f;
