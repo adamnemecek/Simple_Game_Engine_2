@@ -33,12 +33,13 @@ namespace Entities
 
    void AABB_Component::update()
    {
-      float min_x = 0.0f;
-      float max_x = 0.0f;
-      float min_y = 0.0f;
-      float max_y = 0.0f;
-      float min_z = 0.0f;
-      float max_z = 0.0f;
+      // give the min/max values some initial values
+      float min_x = m_center.x;
+      float max_x = m_center.x;
+      float min_y = m_center.y;
+      float max_y = m_center.y;
+      float min_z = m_center.z;
+      float max_z = m_center.z;
 
       glm::fdualquat face_centers[NUM_FACES];
 
@@ -132,12 +133,13 @@ namespace Entities
    {
       MY_ASSERT(box_this != 0);
 
-      float min_x = 0.0f;
-      float max_x = 0.0f;
-      float min_y = 0.0f;
-      float max_y = 0.0f;
-      float min_z = 0.0f;
-      float max_z = 0.0f;
+      glm::vec3 initial_vert = (box_this->m_shape_data).m_verts->position;
+      float min_x = initial_vert.x;
+      float max_x = initial_vert.x;
+      float min_y = initial_vert.y;
+      float max_y = initial_vert.y;
+      float min_z = initial_vert.z;
+      float max_z = initial_vert.z;
 
       // go through all the vertices and find the min and max in all axes
       Shapes::My_Vertex *vertex_data_ptr = (box_this->m_shape_data).m_verts;
