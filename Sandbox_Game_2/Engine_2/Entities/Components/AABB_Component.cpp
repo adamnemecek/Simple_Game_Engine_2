@@ -6,6 +6,11 @@
 #include <Utilities\My_Assert.h>
 #include <Utilities\Quaternion_Helper.h>
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
+
 // a helper namespace for helper things
 namespace
 {
@@ -180,15 +185,27 @@ namespace Entities
       float other_front = other_box.m_center.z - other_box.m_half_length;
       float other_back = other_box.m_center.z + other_box.m_half_length;
 
-      bool potential_right_collision = (this_right > other_left) && (this_right < other_right);
-      bool potential_left_collision = (this_left < other_right) && (this_left > other_left);
-      bool potential_top_collision = (this_top > other_bottom) && (this_top < other_top);
-      bool potential_bottom_collision = (this_bottom < other_top) && (this_bottom > other_bottom);
+      bool X_overlap = (this_left < other_right) && (this_right > other_left);   // "left" is negative X
+      bool Y_overlap = (this_top > other_bottom) && (this_bottom < other_top);   // "up" is positive Y
+      bool Z_overlap = (this_front < other_back) && (this_back > other_front);   // "forward" is negative Z
 
-      if (potential_right_collision && potential_left_collision)
+      if (X_overlap)
       {
-
+         cout << " - X overlap";
       }
+      
+      if (Y_overlap)
+      {
+         cout << " - Y overlap";
+      }
+
+      if (Z_overlap)
+      {
+         cout << " - Z overlap";
+      }
+
+      cout << endl;
+
 
       return glm::vec3();
    }
