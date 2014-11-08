@@ -161,7 +161,7 @@ void init()
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
    g_cube_2_bounding_box.calculate_initial_bounds(g_cube_geometry);
-   g_cube_2_entity.add_component(&g_cube_1_physics);
+   g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
@@ -233,13 +233,9 @@ void init()
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
-   //g_rectangle_box_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
-
    g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
-
    initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
-
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
 
    // start the game clock
