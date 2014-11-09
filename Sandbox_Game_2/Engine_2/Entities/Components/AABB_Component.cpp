@@ -80,15 +80,24 @@ namespace Entities
 
    void AABB_Component::update()
    {
+      static uint update_count = 0;
+
+      if (update_count > 10)
+      {
+         glm::normalize(m_parent_entity_ptr->m_where_and_which_way);
+      }
+      update_count++;
+
       // transform the face center points
       glm::fdualquat &transform = m_parent_entity_ptr->m_where_and_which_way;
       glm::fdualquat transform_conjugate = Utilities::Quaternion_Helper::dual_quat_conjugate(transform);
       for (uint face_index = 0; face_index < BOX_FACES::NUM_FACES; face_index++)
       {
-         m_face_centers[face_index] = Utilities::Quaternion_Helper::dual_quat_translate_point(
+         glm::vec3 face_point = Utilities::Quaternion_Helper::dual_quat_translate_point(
             m_face_centers[face_index],
             transform,
             transform_conjugate);
+         m_face_centers[face_index] = face_point;
       }
 
       // give the new min/max values some initial values
@@ -99,6 +108,7 @@ namespace Entities
       float min_z = m_face_centers[0].z;
       float max_z = m_face_centers[0].z;
 
+
       // recalculate the extremeties agains
       for (uint face_index = 0; face_index < BOX_FACES::NUM_FACES; face_index++)
       {
@@ -108,11 +118,17 @@ namespace Entities
          else if (this_vert.x > max_x) { max_x = this_vert.x; }
 
          if (this_vert.y < min_y) { min_y = this_vert.y; }
-         else if (this_vert.y > max_x) { max_y = this_vert.y; }
+         else if (this_vert.y > max_y) { max_y = this_vert.y; }
 
          if (this_vert.z < min_z) { min_z = this_vert.z; }
          else if (this_vert.z > max_z) { max_z = this_vert.z; }
       }
+
+      if (min_z < +0.3f && min_z > -0.3f)
+      {
+         cout << " - something_happened";
+      }
+
 
       // re-calculate the face points
       set_faces(min_x, max_x, min_y, max_y, min_z, max_z);
@@ -246,6 +262,11 @@ namespace Entities
       bool Y_overlap = (this_top > other_bottom) && (this_bottom < other_top);   // "up" is positive Y
       bool Z_overlap = (this_front < other_back) && (this_back > other_front);   // "forward" is negative Z
 
+      if (this_front < +0.3f && this_front > -0.3f)
+      {
+         cout << " - something_happened";
+      }
+
       if (X_overlap)
       {
          cout << " - X overlap";
@@ -254,6 +275,10 @@ namespace Entities
       if (Y_overlap)
       {
          cout << " - Y overlap";
+      }
+      else
+      {
+         //cout << " - no Y overlap";
       }
 
       if (Z_overlap)
@@ -286,7 +311,5 @@ namespace Entities
       m_face_centers[BOX_FACES::BOTTOM_CENTER] = center_point - half_height;
       m_face_centers[BOX_FACES::FRONT_CENTER] = center_point - half_length;
       m_face_centers[BOX_FACES::BACK_CENTER] = center_point + half_length;
-
    }
-
 }

@@ -45,7 +45,10 @@ namespace Utilities
 
          point_dq = transform * point_dq * transform_conjugate;
 
+         glm::fquat trans = (point_dq.dual * 2.0f) * glm::conjugate(point_dq.real);
+
          return glm::vec3(point_dq.dual.x, point_dq.dual.y, point_dq.dual.z);
+         //return glm::vec3(trans.x, trans.y, trans.z);
       }
 
       glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform, const glm::fdualquat transform_conjugate)
@@ -54,7 +57,10 @@ namespace Utilities
 
          point_dq = transform * point_dq * transform_conjugate;
 
+         glm::fquat trans = (point_dq.dual * 2.0f) * glm::conjugate(point_dq.real);
+
          return glm::vec3(point_dq.dual.x, point_dq.dual.y, point_dq.dual.z);
+         //return glm::vec3(trans.x, trans.y, trans.z);
       }
 
       glm::fdualquat dual_quat_rotation_only(const glm::fquat &orientation)
