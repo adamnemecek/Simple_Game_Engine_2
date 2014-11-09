@@ -11,6 +11,15 @@ namespace Utilities
          printf("%s <%.2f, %.2f, %.2f>\n", foreword, vec.x, vec.y, vec.z);
       }
 
+      void print_dual_vec(
+         const char *foreword_v1, const glm::vec3 &v1,
+         const char *foreword_v2, const glm::vec3 &v2)
+      {
+         printf("%s <%.2f, %.2f, %.2f>, %s <%.2f, %.2f, %.2f>\n", 
+            foreword_v1, v1.x, v1.y, v1.z,
+            foreword_v2, v2.x, v2.y, v2.z);
+      }
+
       void print_mat(const char *foreword, const glm::mat4 &mat)
       {
          printf("%s %.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n%.2f, %.2f, %.2f, %.2f\n",
