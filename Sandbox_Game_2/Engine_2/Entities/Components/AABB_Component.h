@@ -67,34 +67,6 @@ namespace Entities
       // same, so I introduced the "index stride" variable (NOT a byte offset!) to account
       // for these different vector storages.
       void recalculate_all_min_max_values(const glm::vec3 *vec_data_source_ptr, const uint max_vectors, const uint index_stride);
-
-      // a helper function that needs access to private data members
-      //void set_faces(
-      //   float min_x, float max_x,
-      //   float min_y, float max_y,
-      //   float min_z, float max_z);
-
-
-      //// a box has 8 corners, so just magically declare them
-      //glm::vec3 m_center;
-      //float m_half_length;    // center to front / center to back
-      //float m_half_width;     // center to left / center to right
-      //float m_half_height;    // center to top / center to bottom
-
-
-      //glm::vec3 m_model_space_corners[8];
-
-      //enum BOX_CORNERS
-      //{
-      //   MAX_X_MAX_Y_MAX_Z = 0,
-      //   MAX_X_MAX_Y_MIN_Z,
-      //   MAX_X_MIN_Y_MAX_Z,
-      //   MAX_X_MIN_Y_MIN_Z,
-      //   MIN_X_MAX_Y_MAX_Z,
-      //   MIN_X_MAX_Y_MIN_Z,
-      //   MIN_X_MIN_Y_MAX_Z,
-      //   MIN_X_MIN_Y_MIN_Z
-      //};
    };
 }
 
