@@ -28,22 +28,41 @@ namespace Utilities
          //glm::vec3 current_view_direction = glm::mat3(glm::mat4_cast(offset_this)) * Utilities::Default_Vectors::WORLD_FORWARD_VECTOR;
       }
 
-      glm::fdualquat make_dual_quat_translation_only(const glm::vec3 &translation)
+      glm::fdualquat dual_quat_translation_only(const glm::vec3 &translation)
       {
          return glm::fdualquat(glm::fquat(), translation);
       }
 
-      glm::fdualquat make_dual_quat_from_point(const glm::vec3 &position)
+      glm::fdualquat dual_quat_from_point(const glm::vec3 &position)
       {
          return glm::fdualquat(glm::fquat(), position);
       }
 
-      glm::fdualquat make_dual_quat_rotation_only(const glm::fquat &orientation)
+      glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform)
+      {
+         glm::fdualquat transform_conjugate = dual_quat_conjugate(transform);
+         glm::fdualquat point_dq = dual_quat_from_point(point);
+
+         point_dq = transform * point_dq * transform_conjugate;
+
+         return glm::vec3(point_dq.dual.x, point_dq.dual.y, point_dq.dual.z);
+      }
+
+      glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform, const glm::fdualquat transform_conjugate)
+      {
+         glm::fdualquat point_dq = dual_quat_from_point(point);
+
+         point_dq = transform * point_dq * transform_conjugate;
+
+         return glm::vec3(point_dq.dual.x, point_dq.dual.y, point_dq.dual.z);
+      }
+
+      glm::fdualquat dual_quat_rotation_only(const glm::fquat &orientation)
       {
          return glm::fdualquat(orientation, glm::fquat(0.0f, 0.0f, 0.0f, 0.0f));
       }
 
-      glm::fdualquat make_dual_quat(const glm::fquat &orientation, const glm::vec3 &position)
+      glm::fdualquat dual_quat(const glm::fquat &orientation, const glm::vec3 &position)
       {
          return glm::fdualquat(orientation, position);
       }

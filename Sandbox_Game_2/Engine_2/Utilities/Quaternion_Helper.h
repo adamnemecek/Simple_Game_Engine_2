@@ -19,18 +19,24 @@ namespace Utilities
       void point_at(const glm::vec3 &look_here, glm::fquat &offset_this);
 
       // creates a purely translational dual quat out of a vector
-      glm::fdualquat make_dual_quat_translation_only(const glm::vec3 &translation);
+      glm::fdualquat dual_quat_translation_only(const glm::vec3 &translation);
 
       // creates a dual quat from a point
       // Note: This function is computationally identical to making a translation-only dual 
       // quat, but I am making this function with a different name to clarify intent.
-      glm::fdualquat make_dual_quat_from_point(const glm::vec3 &position);
+      glm::fdualquat dual_quat_from_point(const glm::vec3 &position);
+
+      // transforms the given point with the provided dual quat transform, and generates its own conjugate for ease of use
+      glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform);
+
+      // transforms the given point with the provided dual quat transform, and uses the provided transform conjugate for efficiency
+      glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform, const glm::fdualquat transform_conjugate);
 
       // creates a purely rotational dual quat out an orientation quat
-      glm::fdualquat make_dual_quat_rotation_only(const glm::fquat &orientation);
+      glm::fdualquat dual_quat_rotation_only(const glm::fquat &orientation);
 
       // creates a dual quat out of an orientation quat and a position in 3D space
-      glm::fdualquat make_dual_quat(const glm::fquat &orientation, const glm::vec3 &position);
+      glm::fdualquat dual_quat(const glm::fquat &orientation, const glm::vec3 &position);
 
       // calculates the conjugate (that is, the inverse) of a dual quaternion because
       // glm doesn't have an overload of glm::conjugate(...) for a dual quat

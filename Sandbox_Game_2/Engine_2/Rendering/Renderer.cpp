@@ -64,8 +64,8 @@ void my_function()
    glm::fquat orientation;
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, orientation);
    //glm::mat4 mat = glm::mat4_cast(orientation);
-   glm::fdualquat fdq1 = Utilities::Quaternion_Helper::make_dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
-   glm::fdualquat fdq2 = Utilities::Quaternion_Helper::make_dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+   glm::fdualquat fdq1 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+   glm::fdualquat fdq2 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
    glm::fdualquat fdq = fdq1 * fdq2;
    
    glm::mat4 mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq1);

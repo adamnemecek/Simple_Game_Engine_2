@@ -57,6 +57,7 @@ namespace Collision_Detection
          {
             m_bounding_boxes[index] = AABB_ptr;
             m_num_bounding_boxes++;
+            break;
          }
       }
 

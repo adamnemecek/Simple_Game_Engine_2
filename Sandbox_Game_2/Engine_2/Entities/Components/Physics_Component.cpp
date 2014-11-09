@@ -83,9 +83,9 @@ namespace Entities
       //printf("position change: <%.2f, %.2f, %.2f>\n", position_change);
 
       glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
-      glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_translation_only(position_change) * previous_where_and_which_way;
-      new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::make_dual_quat_rotation_only(orientation_change);
-      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::make_dual_quat(orientation_change, position_change);
+      glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_translation_only(position_change) * previous_where_and_which_way;
+      new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
+      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::dual_quat(orientation_change, position_change);
    }
 
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)

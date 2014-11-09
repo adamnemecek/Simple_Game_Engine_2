@@ -162,7 +162,7 @@ namespace Entities
       //// replaced with dual quat
       ////m_parent_entity_ptr->m_base_orientation_quat = glm::normalize(new_orientation);
 
-      //glm::fdualquat new_state = glm::normalize(Utilities::Quaternion_Helper::make_dual_quat(new_orientation, new_position));
+      //glm::fdualquat new_state = glm::normalize(Utilities::Quaternion_Helper::dual_quat(new_orientation, new_position));
       //
       //// right or left multiply the entity's dual quat as needed
       //// Note: Right multiply to make the rotation happen relative to the world origin.  

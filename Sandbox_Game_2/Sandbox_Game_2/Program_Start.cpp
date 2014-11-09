@@ -151,7 +151,7 @@ void init()
    // add physics first so that the entity's dual fquat is updated for the frame
    g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
-   g_cube_1_bounding_box.calculate_initial_bounds(g_cube_geometry);
+   g_cube_1_bounding_box.set_geometry(&g_cube_geometry);
    g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
@@ -159,13 +159,13 @@ void init()
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
    //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
-   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(-4.0f, +3.0f, +4.0f));   // lower left corner when looking from above
-   g_cube_1_physics.add_sustained_force_vector(glm::vec3(+1.0f, 0.0f, 0.0f));    // force to the right
+   g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(-4.0f, +3.0f, +4.0f));   // lower left corner when looking from above
+   g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
 
 
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
-   g_cube_2_bounding_box.calculate_initial_bounds(g_cube_geometry);
+   g_cube_2_bounding_box.set_geometry(&g_cube_geometry);
    g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
@@ -173,8 +173,8 @@ void init()
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
    //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
-   g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(quat, glm::vec3(+4.0f, +3.0f, -4.0f));   // upper right corner when looking from above
-   g_cube_2_physics.add_sustained_force_vector(glm::vec3(-1.0f, 0.0f, 0.0f));    // force to the left
+   g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(+4.0f, +3.0f, -4.0f));   // upper right corner when looking from above
+   g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
 
    g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
@@ -208,8 +208,8 @@ void init()
    // Note: The camera is the only thing that requires this reversal .
    quat = glm::fquat();
    Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, quat);
-   g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat_rotation_only(quat) * 
-      Utilities::Quaternion_Helper::make_dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
+   g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_rotation_only(quat) * 
+      Utilities::Quaternion_Helper::dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
 
 
    // and the plane
@@ -228,7 +228,7 @@ void init()
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
    //g_circle_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
 
-   g_circle_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
+   g_circle_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
 
    initialize_success = g_circle_entity.initialize();
    MY_ASSERT(initialize_success);
@@ -239,7 +239,7 @@ void init()
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
-   g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::make_dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
+   g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
    initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
