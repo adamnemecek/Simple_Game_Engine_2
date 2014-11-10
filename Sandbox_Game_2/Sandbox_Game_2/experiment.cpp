@@ -41,10 +41,9 @@ void DrawCircle(const glm::vec3 &center, float r, int num_segments)
 }
 
 #include <glm\glm.hpp>
-#include <glm\gtx\random.hpp>
 void do_something()
 {
    glm::vec3 V1 = glm::vec3(0.0f, 1.0f, 0.0f);
    glm::vec3 V2 = glm::vec3(1.0f, 0.0f, 0.0f);
-   glm::vec3 V3 = glm::dot(V1, V2);
+   float f = glm::dot(V1, V2);
 }
