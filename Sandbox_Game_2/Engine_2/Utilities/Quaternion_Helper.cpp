@@ -57,6 +57,11 @@ namespace Utilities
 
       glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform, const glm::fdualquat transform_conjugate)
       {
+         glm::fquat f(1.1f, 2.2f, 3.3f, 4.4f);
+         //orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 0.5f, f);
+         glm::fquat f_conjugate = glm::conjugate(f);
+         glm::fquat temp_1 = f * f_conjugate;
+
          glm::fdualquat temp = transform * transform_conjugate;
          glm::fdualquat point_dq = dual_quat_from_point(point);
          
