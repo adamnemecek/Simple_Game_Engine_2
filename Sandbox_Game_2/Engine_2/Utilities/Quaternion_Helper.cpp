@@ -64,7 +64,7 @@ namespace Utilities
 
          glm::fdualquat temp = transform * transform_conjugate;
          glm::fdualquat point_dq = dual_quat_from_point(point);
-         
+
          //point_dq = transform * point_dq * transform_conjugate;
          point_dq = transform * point_dq;
          point_dq = point_dq *transform_conjugate;
@@ -88,8 +88,8 @@ namespace Utilities
 
       glm::fdualquat dual_quat_conjugate(const glm::fdualquat &dq)
       {
-         //return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
-         return glm::fdualquat(glm::conjugate(dq.real), glm::conjugate(dq.dual));
+         return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
+         //return glm::fdualquat(glm::conjugate(dq.real), glm::conjugate(dq.dual));
       }
 
       glm::mat4 dual_quat_to_mat4(const glm::fdualquat &dq)
