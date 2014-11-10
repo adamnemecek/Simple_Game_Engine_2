@@ -2,6 +2,10 @@
 
 #include <Utilities\Include_Helpers\Default_Vectors.h>
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
 namespace Utilities
 {
    namespace Quaternion_Helper
@@ -53,9 +57,13 @@ namespace Utilities
 
       glm::vec3 dual_quat_translate_point(const glm::vec3 &point, const glm::fdualquat &transform, const glm::fdualquat transform_conjugate)
       {
+         glm::fdualquat temp = transform * transform_conjugate;
          glm::fdualquat point_dq = dual_quat_from_point(point);
-
-         point_dq = glm::normalize(transform) * glm::normalize(point_dq) * glm::normalize(transform_conjugate);
+         
+         //point_dq = transform * point_dq * transform_conjugate;
+         point_dq = transform * point_dq;
+         point_dq = point_dq *transform_conjugate;
+         //point_dq = glm::normalize(transform) * glm::normalize(point_dq);
 
          //glm::fquat trans = (point_dq.dual * 2.0f) * glm::conjugate(point_dq.real);
 
@@ -75,8 +83,8 @@ namespace Utilities
 
       glm::fdualquat dual_quat_conjugate(const glm::fdualquat &dq)
       {
-         return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
-         //return glm::fdualquat(glm::conjugate(dq.real), glm::conjugate(dq.dual));
+         //return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
+         return glm::fdualquat(glm::conjugate(dq.real), glm::conjugate(dq.dual));
       }
 
       glm::mat4 dual_quat_to_mat4(const glm::fdualquat &dq)
