@@ -93,6 +93,7 @@
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Math\Dual_Quat.cpp" />
+    <ClCompile Include="Math\Float_Quat.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Input\Key_Bindings\Keyboard_Bindings.h" />
     <ClInclude Include="Input\Supported_Bindings.h" />
     <ClInclude Include="Math\Dual_Quat.h" />
+    <ClInclude Include="Math\Float_Quat.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Shapes\Geometry.h" />

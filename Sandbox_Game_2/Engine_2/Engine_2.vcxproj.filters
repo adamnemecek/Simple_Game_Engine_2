@@ -75,6 +75,9 @@
     <ClCompile Include="Collision_Detection\AABB_Collision_Detector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Float_Quat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -183,6 +186,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision_Detection\AABB_Collision_Detector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Float_Quat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
