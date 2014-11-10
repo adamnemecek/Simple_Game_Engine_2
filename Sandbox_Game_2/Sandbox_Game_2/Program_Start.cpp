@@ -158,7 +158,7 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
    g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(-4.0f, +3.0f, +4.0f));   // lower left corner when looking from above
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
 
@@ -172,7 +172,7 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
+   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
    g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(+4.0f, +3.0f, -4.0f));   // upper right corner when looking from above
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
 
