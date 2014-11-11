@@ -82,6 +82,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="experiment.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Program_Start.cpp" />
   </ItemGroup>
   <ItemGroup>

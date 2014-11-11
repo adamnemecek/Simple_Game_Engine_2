@@ -1,3 +1,5 @@
+#include "Start_Engine.h"
+
 
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <glload\gl_load.hpp>
@@ -54,7 +56,7 @@ void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, 
 }
 
 
-int main(int argc, char** argv)
+int start_engine_loop(int argc, char** argv)
 {
    glutInit(&argc, argv);
 
