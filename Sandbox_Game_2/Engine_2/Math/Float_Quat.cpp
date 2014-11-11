@@ -34,8 +34,10 @@ namespace Math
    {
       glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
       glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
+      //glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad);
 
       float scalar = cosf(rotation_angle_rad / 2.0f);
+      //float scalar = cosf(rotation_angle_rad);
 
       return Float_Quat(scalar, rotator_vector);
    }
