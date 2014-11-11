@@ -52,9 +52,11 @@ namespace Math
       Float_Quat operator*=(const Float_Quat &right);
 
       // self-conjugate
+      // Note: Results in a quaterion of the following form:
+      // [new scalar = scalar, new vector = (-1) * vector]
       // Note: Conjugation of a quaternion Q results in a quaternion Q* such that
       // (Q)(Q*) = [new scalar = scalar^2 + dot(vector, vector), new_vector = <0,0,0>]
-      Float_Quat conjugate();
+      Float_Quat conjugate() const;
 
       // self-magnitude
       // Note: Results in a float by the following calculation: 
@@ -62,18 +64,22 @@ namespace Math
       // Note: This is equivalent to sqrt((Q)(Q*)), where Q* is the conjugate of quaternion Q.
       // Note: If magnitude is 1 (or very very close to it because float circuits are not
       // always precise), then the quaternion is a unit quaternion.
-      float magnitude();
+      float magnitude() const;
 
       // self-magnitude squared
       // Note: This can be useful for quick and dirty magnitude comparisons, but most 
       // likely it will be used in calculating an inverse of the following form:
       // Q_inverse = Q_conjugate / (Q.magnitude())^2)
-      Float_Quat inverse();
+      float magnitude_squared() const;
 
       // self-normalization
       // Note: Results in a unit quaternion (magnitude 1) by the following calculation:
       // [new scalar = scalar / magnitude, new vector = vector / magnitude]
       void normalize();
+
+      // self-inverse
+      // Note: Results in a quaternion Q such that '*this' * Q = [1, <0,0,0>].
+      Float_Quat inverse() const;
    };
 
    // scalar multiplication
@@ -82,6 +88,9 @@ namespace Math
 
    // multiplication
    Float_Quat operator*(const Float_Quat &left, const Float_Quat &right);
+
+   // normalization, but don't modify the original
+   Float_Quat normalize(const Float_Quat &fq);
 }
 
 #endif
