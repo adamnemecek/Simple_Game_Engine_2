@@ -33,27 +33,29 @@ namespace Math
    Float_Quat Float_Quat::generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
    {
       glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
-      glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
-      //glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad);
+      //glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
+      glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad);
 
-      float scalar = cosf(rotation_angle_rad / 2.0f);
-      //float scalar = cosf(rotation_angle_rad);
+      //float scalar = cosf(rotation_angle_rad / 2.0f);
+      float scalar = cosf(rotation_angle_rad);
 
       return Float_Quat(scalar, rotator_vector);
    }
 
-   Float_Quat Float_Quat::operator *= (const float right)
+   void Float_Quat::operator *= (const float right)
    {
       // multiply the scalar through
-      return Float_Quat(this->m_scalar * right, this->m_vector * right);
+      this->m_scalar *= right;
+      this->m_vector *= right;
    }
 
-   Float_Quat Float_Quat::operator *= (const Float_Quat &right)
+   void Float_Quat::operator *= (const Float_Quat &right)
    {
       float new_scalar = this->m_scalar * right.m_scalar - glm::dot(this->m_vector, right.m_vector);
-      glm::vec3 new_vector = this->m_scalar * right.m_vector + right.m_scalar * this->m_vector + glm::cross(this->m_vector, right.m_vector);
+      glm::vec3 new_vec = this->m_scalar * right.m_vector + right.m_scalar * this->m_vector + glm::cross(this->m_vector, right.m_vector);
 
-      return Float_Quat(new_scalar, new_vector);
+      this->m_scalar = new_scalar;
+      this->m_vector = new_vec;
    }
 
    Float_Quat Float_Quat::conjugate() const

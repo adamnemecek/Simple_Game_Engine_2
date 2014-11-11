@@ -62,23 +62,23 @@ namespace Experiment
       //point = point * rotator;
       //point *= rotator;
 
-      //glm::vec3 V1(1.1f, 2.2f, 3.3f);
-      //glm::vec3 V2(-3.3f, -2.2f, -1.1f);
-      //glm::vec3 V3 = glm::cross(V1, V2);
+      glm::vec3 V1(1.1f, 2.2f, 3.3f);
+      glm::vec3 V2(-3.3f, -2.2f, -1.1f);
+      glm::vec3 V3 = glm::cross(V1, V2);
 
-      //glm::vec3 sum = (1.0f * V2) + (2.0f * V1) + glm::cross(V1, V2);
-      //float f_sum = 2.0f - glm::dot(V1, V2);
+      glm::vec3 sum = (1.0f * V2) + (2.0f * V1) + glm::cross(V1, V2);
+      float f_sum = 2.0f - glm::dot(V1, V2);
 
-      //float f = glm::dot(V1, V2);
+      float f = glm::dot(V1, V2);
 
-      glm::fquat fq(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      
-      float angle_rad = 3.14159f / 2.0f;
-      glm::vec3 rotation_axis = glm::vec3(+1.0f, 0.0f, 0.0f) * sinf(angle_rad / 2.0f);
-      float scalar = cosf(angle_rad / 2.0f);
-      glm::fquat rotator(scalar, rotation_axis);
+      //glm::fquat fq(1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      //
+      //float angle_rad = 3.14159f / 2.0f;
+      //glm::vec3 rotation_axis = glm::vec3(+1.0f, 0.0f, 0.0f) * sinf(angle_rad / 2.0f);
+      //float scalar = cosf(angle_rad / 2.0f);
+      //glm::fquat rotator(scalar, rotation_axis);
 
-      glm::fquat result = fq * rotator;
+      //glm::fquat result = fq * rotator;
 
       cout << "hello there" << endl;
    }

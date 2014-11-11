@@ -43,13 +43,13 @@ namespace Math
       // scalar self-multiplication
       // Note: Given an original quat Q, results in a quat of the following form
       // [new scalar = Q.scalar * right, new vector = Q.vector * right]
-      Float_Quat operator*=(const float right);
+      void operator*=(const float right);
 
       // self-multiplication
       // Note: For the sake of brevity, let scalar be "S" and vector be "V".  Then given two
       // quats Q1 and Q2, Q1 times Q2 results in a quat of the following form:
       // [S1*S2 - dot(V1, V2), S1*V2 + S2*V1 + cross(V1, V2)]
-      Float_Quat operator*=(const Float_Quat &right);
+      void operator*=(const Float_Quat &right);
 
       // self-conjugate
       // Note: Results in a quaterion of the following form:
