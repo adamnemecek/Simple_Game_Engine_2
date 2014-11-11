@@ -8,7 +8,6 @@ when/why they are called. You can copy this file and simply implement
 these function.
 ***********************************************************************/
 
-#include "Program_Start.h"
 
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
