@@ -25,9 +25,6 @@
 !*.vcxproj
 !*.vcxproj.filters
 
-# now unignore all sub-folders that are not the glsdk middleware folder
-# Note: I want to put the arcsynthesis framework into the repo because I have 
-# to modify it from it's original version (VS2010 and for an older glsdk) to 
-# work with my VS2013 solution.
+# the non-middleware sub-folders
 !**/
-middleware/glsdk_0_5_2
+middleware
