@@ -1,4 +1,12 @@
 
+// for initializing glut in the engine
+//#include <Engine_2\Engine_Startup.h>
+
+
+//#include "Engine_Startup.h"
+
+#include <Sandbox_Game_2\Program_Start.h>
+
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <glload\gl_load.hpp>
 
@@ -8,13 +16,13 @@
 #include <stdio.h>
 #include <string>
 
-// These functions must be defined in the game project
-void init();
-void display();
-void reshape(int w, int h);
-void keyboard(unsigned char key, int x, int y);
+// these are declared in another project
+//void init();
+//void display();
+//void reshape(int w, int h);
+//void keyboard(unsigned char key, int x, int y);
+//unsigned int defaults(unsigned int displayMode, int &width, int &height);
 
-unsigned int defaults(unsigned int displayMode, int &width, int &height);
 
 void APIENTRY DebugFunc(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
    const GLchar* message, const GLvoid* userParam)
@@ -97,5 +105,14 @@ int main(int argc, char** argv)
    glutReshapeFunc(reshape);
    glutKeyboardFunc(keyboard);
    glutMainLoop();
-   return 0;
 }
+
+
+//int main(int argc, char** argv)
+//{
+//   //engine_glut_init(argc, argv);
+//
+//
+//
+//   return 0;
+//}
