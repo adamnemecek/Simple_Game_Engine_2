@@ -68,14 +68,26 @@ TEST(Float_Dual_Quat, Convenience_Constructor)
    EXPECT_FLOAT_EQ(expected_real.m_vector.y, dq.m_real.m_vector.y);
    EXPECT_FLOAT_EQ(expected_real.m_vector.z, dq.m_real.m_vector.z);
    EXPECT_FLOAT_EQ(expected_dual.m_scalar, dq.m_dual.m_scalar);
-   EXPECT_FLOAT_EQ(expected_dual.m_vector.x, dq.m_dual.m_vector.x);
-   EXPECT_FLOAT_EQ(expected_dual.m_vector.y, dq.m_dual.m_vector.y);
-   EXPECT_FLOAT_EQ(expected_dual.m_vector.z, dq.m_dual.m_vector.z);
+   EXPECT_FLOAT_EQ((0.5f) * expected_dual.m_vector.x, dq.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ((0.5f) * expected_dual.m_vector.y, dq.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ((0.5f) * expected_dual.m_vector.z, dq.m_dual.m_vector.z);
 }
 
 TEST(Float_Dual_Quat, Generate_Translate)
 {
+   static const float TRANSLATE_X = -3.3f;
+   static const float TRANSLATE_Y = -2.2f;
+   static const float TRANSLATE_Z = -1.1f;
 
+   F_Dual_Quat dq = F_Dual_Quat::generate_translate_only(glm::vec3(TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z));
+   EXPECT_FLOAT_EQ(1.0f, dq.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, dq.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, dq.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, dq.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(0.0f, dq.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ((0.5f) * TRANSLATE_X, dq.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ((0.5f) * TRANSLATE_Y, dq.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ((0.5f) * TRANSLATE_Z, dq.m_dual.m_vector.z);
 }
 
 TEST(Float_Dual_Quat, Generate_Orientation)
@@ -95,7 +107,20 @@ TEST(Float_Dual_Quat, Normalize)
 
 TEST(Float_Dual_Quat, Conjugate)
 {
+   F_Quat real(1.0f, glm::vec3(1.1f, 2.2f, 3.3f));
+   F_Quat dual(0.0f, glm::vec3(4.4f, 5.5f, 6.6f));
+   F_Dual_Quat dq(real, dual);
 
+   F_Dual_Quat conjugate = dq.conjugate();
+
+   EXPECT_FLOAT_EQ(+1.0f, conjugate.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(-1.1f, conjugate.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(-2.2f, conjugate.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(-3.3f, conjugate.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(+0.0f, conjugate.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ(-4.4f, conjugate.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(-5.5f, conjugate.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(-6.6f, conjugate.m_dual.m_vector.z);
 }
 
 TEST(Float_Dual_Quat, Multiply)
@@ -133,8 +158,6 @@ TEST(Float_Dual_Quat, Multiply)
       EXPECT_FLOAT_EQ(-33.88f, result_2.m_dual.m_vector.y);
       EXPECT_FLOAT_EQ(+19.14f, result_2.m_dual.m_vector.z);
    }
-
-   cout << "hello" << endl;
 }
 
 TEST(Float_Dual_Quat, Multiply_Quat_by_Dual_Quat)

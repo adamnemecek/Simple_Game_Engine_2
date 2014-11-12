@@ -24,7 +24,20 @@ namespace Math
       F_Quat new_translation = F_Quat::generate_pure_quat(translate);
 
       m_real = new_orientation;
-      m_dual = new_translation * new_orientation;
+      m_dual = 0.5f * new_translation * new_orientation;
+   }
+
+   F_Dual_Quat F_Dual_Quat::generate_translate_only(glm::vec3 &translate)
+   {
+      F_Quat new_orientation(1.0f, glm::vec3());
+      F_Quat new_translation = 0.5f * F_Quat::generate_pure_quat(translate);
+
+      return F_Dual_Quat(new_orientation, new_translation);
+   }
+
+   F_Dual_Quat F_Dual_Quat::generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle)
+   {
+      return F_Dual_Quat();
    }
 
    void F_Dual_Quat::operator = (const F_Dual_Quat &right)
@@ -42,6 +55,21 @@ namespace Math
 
       this->m_real = new_real;
       this->m_dual = new_dual;
+   }
+
+   float F_Dual_Quat::magnitude(const F_Dual_Quat &dq)
+   {
+      return 0.0f;
+   }
+
+   F_Dual_Quat F_Dual_Quat::normalize()
+   {
+      return F_Dual_Quat();
+   }
+
+   F_Dual_Quat F_Dual_Quat::conjugate()
+   {
+      return F_Dual_Quat(this->m_real.conjugate(), this->m_dual.conjugate());
    }
 
 

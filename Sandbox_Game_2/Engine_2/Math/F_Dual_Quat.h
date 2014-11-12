@@ -27,29 +27,22 @@ namespace Math
       // Note: Constructs a dual quat to perform the requested rotation followed by the requested translation.
       F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
 
-      // explicit self-assignment operator
-      void operator=(const F_Dual_Quat &right);
-
-      /*
-      TEST(Float_Dual_Quat, Default_Constructor)
-      TEST(Float_Dual_Quat, Explicit_Constructor)
-      TEST(Float_Dual_Quat, Translate)
-      TEST(Float_Dual_Quat, Orientation)
-      TEST(Float_Dual_Quat, Magnitude)
-      TEST(Float_Dual_Quat, Normalize)
-      TEST(Float_Dual_Quat, Conjugate)
-      TEST(Float_Dual_Quat, Multiply)
-      */
-
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form
       // real = [1, <0,0,0>], dual = [0, (1/2)translate_vector]
-      static F_Dual_Quat translate(glm::vec3 &translate_vector);
+      static F_Dual_Quat generate_translate_only(glm::vec3 &translate);
 
       // generates a dual quat that performs a rotation only 
       // Note: Results in a dual quat of the following form:
       // real = [1, orientation vectors], dual = [0, <0,0,0>]
-      static F_Dual_Quat orientation(glm::vec3 &rotation_axis, float rotation_angle);
+      static F_Dual_Quat generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle);
+
+      // explicit self-assignment operator
+      void operator=(const F_Dual_Quat &right);
+
+      // self-multiplication
+      // Note: See description of operator* for details.
+      void operator*=(const F_Dual_Quat &right);
 
       // self-magnitude
       // Note: Results in a float by the following calculation: 
@@ -57,12 +50,11 @@ namespace Math
       // sqrt(DQ.rea) == sqrt(
       float magnitude(const F_Dual_Quat &dq);
 
-      // self-multiplication
-      // Note: See description of operator* for details.
-      void operator*=(const F_Dual_Quat &right);
+      // self-normalize
+      F_Dual_Quat normalize();
 
-      static F_Dual_Quat conjugate(const F_Dual_Quat &dq);
-      static F_Dual_Quat normalize(const F_Dual_Quat &dq);
+      // self-conjugate
+      F_Dual_Quat conjugate();      
    };
 
    // multiplication
