@@ -35,7 +35,7 @@ namespace Math
       // generates a dual quat that performs a rotation only 
       // Note: Results in a dual quat of the following form:
       // real = [1, orientation vectors], dual = [0, <0,0,0>]
-      static F_Dual_Quat generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle);
+      static F_Dual_Quat generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle_rad);
 
       // explicit self-assignment operator
       void operator=(const F_Dual_Quat &right);

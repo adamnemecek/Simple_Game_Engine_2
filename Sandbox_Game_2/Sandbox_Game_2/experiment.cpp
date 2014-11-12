@@ -69,16 +69,33 @@ namespace Experiment
       //glm::vec3 sum = (1.0f * V2) + (2.0f * V1) + glm::cross(V1, V2);
       //float f_sum = 2.0f - glm::dot(V1, V2);
 
-      //float f = glm::dot(V1, V2);
+      //glm::vec3 A(1.0f, 2.0f, 3.0f);
+      //glm::vec3 B(4.0f, 5.0f, 6.0f);
+      //float dot_1 = glm::dot(A, -1.0f * B);
+      //float dot_2 = glm::dot(B, -1.0f * A);
+      //float dot_3 = glm::dot(A, B);
+      //glm::vec3 cross_1 = glm::cross(A, -1.0f * B);
+      //glm::vec3 cross_2 = glm::cross(B, -1.0f * A);
+      //glm::vec3 cross_3 = glm::cross(A, B);
+      //glm::vec3 cross_sum = cross_1 + cross_2;
 
-      glm::fquat rotator;
-      Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, 0.0f), 3.1415926f / 2.0f, rotator);
+      //glm::fquat rotator_1;
+      //glm::fquat rotator_2;
+      //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 1.0f, 0.0f), 3.1415926f / 2.0f, rotator_1);
+      //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 1.0f), 3.1415926f / 4.0f, rotator_2);
+      glm::fquat rotator_1(1.0f, 2.0f, 3.0f, 4.0f);
+      glm::fquat rotator_2(4.0f, 3.0f, 2.0f, 1.0f);
+      glm::fquat q1 = rotator_1 * glm::conjugate(rotator_2);
+      glm::fquat q2 = rotator_2 * glm::conjugate(rotator_1);
+      glm::fquat result = q1 + q2;
+      glm::normalize(result);
 
-      glm::fquat fq(0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+      //glm::fquat fq(0.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-      glm::fquat result = fq * rotator;
+      //glm::fquat result = fq * rotator;
 
-      glm::fdualquat dq = glm::fdualquat(rotator, glm::vec3(0.0f, 1.0f, 0.0f));
+      //glm::fdualquat dq = glm::fdualquat(rotator, glm::vec3(0.0f, 1.0f, 0.0f));
+      //glm::normalize(dq);
 
       cout << "hello there" << endl;
    }

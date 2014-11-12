@@ -21,23 +21,26 @@ namespace Math
    F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
       F_Quat new_orientation = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
-      F_Quat new_translation = F_Quat::generate_pure_quat(translate);
+      F_Quat new_translation = F_Quat::generate_pure_quat(0.5f * translate);
 
       m_real = new_orientation;
-      m_dual = 0.5f * new_translation * new_orientation;
+      m_dual = new_translation * new_orientation;
    }
 
    F_Dual_Quat F_Dual_Quat::generate_translate_only(glm::vec3 &translate)
    {
       F_Quat new_orientation(1.0f, glm::vec3());
-      F_Quat new_translation = 0.5f * F_Quat::generate_pure_quat(translate);
+      F_Quat new_translation = F_Quat::generate_pure_quat(0.5f * translate);
 
       return F_Dual_Quat(new_orientation, new_translation);
    }
 
-   F_Dual_Quat F_Dual_Quat::generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle)
+   F_Dual_Quat F_Dual_Quat::generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle_rad)
    {
-      return F_Dual_Quat();
+      F_Quat new_orientation = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat new_translation = F_Quat::generate_pure_quat(0.5f * glm::vec3());
+
+      return F_Dual_Quat(new_orientation, new_translation);
    }
 
    void F_Dual_Quat::operator = (const F_Dual_Quat &right)
