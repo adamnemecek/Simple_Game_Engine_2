@@ -4,6 +4,8 @@
 
 namespace Math
 {
+   // member functions
+
    F_Dual_Quat::F_Dual_Quat()
       : m_real(),
       m_dual()
@@ -22,9 +24,30 @@ namespace Math
       F_Quat new_translation = F_Quat::generate_pure_quat(translate);
 
       m_real = new_orientation;
-      m_dual = new_translation;
+      m_dual = new_translation * new_orientation;
+   }
+
+   void F_Dual_Quat::operator *= (const F_Dual_Quat &right)
+   {
+      F_Quat new_real = this->m_real * right.m_real;
+
+      F_Quat new_dual = this->m_real * right.m_dual;
+      new_dual += this->m_dual * right.m_real;
+
+      this->m_real = new_real;
+      this->m_dual = new_dual;
    }
 
 
+   // non-member functions
+   F_Dual_Quat &operator*(const F_Dual_Quat &left, const F_Dual_Quat &right)
+   {
+      F_Quat new_real = left.m_real * right.m_real;
+      
+      F_Quat new_dual = left.m_real * right.m_dual;
+      new_dual += left.m_dual * right.m_real;
+
+      return F_Dual_Quat(new_real, new_dual);
+   }
 }
 

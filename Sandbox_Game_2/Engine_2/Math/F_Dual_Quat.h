@@ -56,7 +56,7 @@ namespace Math
 
       // self-multiplication
       // Note: See description of operator* for details.
-      F_Dual_Quat operator*=(const F_Dual_Quat &right);
+      void operator*=(const F_Dual_Quat &right);
 
       static F_Dual_Quat conjugate(const F_Dual_Quat &dq);
       static F_Dual_Quat normalize(const F_Dual_Quat &dq);
