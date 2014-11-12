@@ -5,46 +5,8 @@
 #include <Engine_2\Math\F_Quat.h>
 using Math::F_Quat;
 
-#include <math.h>
-
-// a helper namespace for...helping things
-namespace
-{
-   //void v(const glm::vec3 &V, const float F)
-   //{
-   //   EXPECT_FLOAT_EQ(0.0f, F);
-   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
-   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
-   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
-   //}
-
-   static const float PI = 3.141592653f;
-   static const float PI_over_2 = PI / 2.0f;
-   static const float PI_over_4 = PI / 4.0f;
-   
-   static const float cos_PI = cosf(PI);
-   static const float cos_PI_over_2 = cosf(PI_over_2);
-   static const float cos_PI_over_4 = cosf(PI_over_4);
-
-   static const float sin_PI = sinf(PI);
-   static const float sin_PI_over_2 = sinf(PI_over_2);
-   static const float sin_PI_over_4 = sinf(PI_over_4);
-
-   bool my_float_eq(const float expected, const float actual)
-   {
-      static const float ACCEPTABLE_ERROR = 0.00001f;
-
-      float diff = abs(expected - actual);
-      if (diff > ACCEPTABLE_ERROR)
-      {
-         return false;
-      }
-      else
-      {
-         return true;
-      }
-   }
-}
+// this file contains some useful constants to save time and keep magic numbers constant during testing
+#include "Math_Helper.h"
 
 TEST(F_Quat, Default_Constructor)
 {
@@ -168,11 +130,6 @@ TEST(F_Quat, Inverse)
 
 TEST(F_Quat, Addition)
 {
-
-}
-
-TEST(F_Quat, Scalar_Multiplication)
-{
    static const float V1_SCALAR = 1.0f;
    static const float V1_X = 1.1f;
    static const float V1_Y = 2.2f;
@@ -200,6 +157,11 @@ TEST(F_Quat, Scalar_Multiplication)
    EXPECT_FLOAT_EQ(V1_X + V2_X, result_2.m_vector.x);
    EXPECT_FLOAT_EQ(V1_Y + V2_Y, result_2.m_vector.y);
    EXPECT_FLOAT_EQ(V1_Z + V2_Z, result_2.m_vector.z);
+}
+
+TEST(F_Quat, Scalar_Multiplication)
+{
+
 }
 
 TEST(F_Quat, Multiplicaton)

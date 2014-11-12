@@ -83,6 +83,10 @@
     <ClCompile Include="Float_Dual_Quat_test.cpp" />
     <ClCompile Include="Float_Quat_test.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Math_Helper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Math_Helper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
