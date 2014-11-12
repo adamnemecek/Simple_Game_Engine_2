@@ -12,8 +12,20 @@ namespace Math
       F_Quat m_real;
       F_Quat m_dual;
 
+      // default constructor
+      // Note: Constructs a dual quat composed of two default quats, resulting
+      // in a dual quat of the following form:
+      // real = [0, <0,0,0>], dual = [0, <0,0,0>]
       F_Dual_Quat();
+
+      // explicit constructor
+      // Note: Constructs a dual quat of the following form:
+      // real = argument real, dual = argument dual
       F_Dual_Quat(const F_Quat &real, const F_Quat &dual);
+
+      // convenience constructor
+      // Note: Constructs a dual quat to perform the requested rotation followed by the requested translation.
+      F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
 
       /*
       TEST(Float_Dual_Quat, Default_Constructor)

@@ -13,9 +13,9 @@ namespace
    //void v(const glm::vec3 &V, const float F)
    //{
    //   EXPECT_FLOAT_EQ(0.0f, F);
-   //   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.x);
-   //   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.y);
-   //   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.z);
+   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
+   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
+   //   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
    //}
 
    static const float PI = 3.141592653f;
@@ -48,11 +48,11 @@ namespace
 
 TEST(F_Quat, Default_Constructor)
 {
-   F_Quat fq;
-   EXPECT_FLOAT_EQ(0.0f, fq.m_scalar);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.x);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.y);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.z);
+   F_Quat q;
+   EXPECT_FLOAT_EQ(0.0f, q.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 }
 
 TEST(F_Quat, Explicit_Constructor)
@@ -62,22 +62,22 @@ TEST(F_Quat, Explicit_Constructor)
    static const float VEC_Y = 2.2f;
    static const float VEC_Z = 3.3f;
 
-   F_Quat fq(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
-   EXPECT_FLOAT_EQ(SCALAR, fq.m_scalar);
-   EXPECT_FLOAT_EQ(VEC_X, fq.m_vector.x);
-   EXPECT_FLOAT_EQ(VEC_Y, fq.m_vector.y);
-   EXPECT_FLOAT_EQ(VEC_Z, fq.m_vector.z);
+   F_Quat q(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
+   EXPECT_FLOAT_EQ(SCALAR, q.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X, q.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y, q.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z, q.m_vector.z);
 }
 
 TEST(F_Quat, Real_Quat)
 {
    static const float SCALAR = 99.99f;
 
-   F_Quat fq = F_Quat::generate_real_quat(SCALAR);
-   EXPECT_FLOAT_EQ(SCALAR, fq.m_scalar);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.x);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.y);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.z);
+   F_Quat q = F_Quat::generate_real_quat(SCALAR);
+   EXPECT_FLOAT_EQ(SCALAR, q.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 }
 
 TEST(F_Quat, Pure_Quat)
@@ -86,11 +86,11 @@ TEST(F_Quat, Pure_Quat)
    static const float VEC_Y = 2.2f;
    static const float VEC_Z = 3.3f;
 
-   F_Quat fq = F_Quat::generate_pure_quat(glm::vec3(VEC_X, VEC_Y, VEC_Z));
-   EXPECT_FLOAT_EQ(0.0f, fq.m_scalar);
-   EXPECT_FLOAT_EQ(VEC_X, fq.m_vector.x);
-   EXPECT_FLOAT_EQ(VEC_Y, fq.m_vector.y);
-   EXPECT_FLOAT_EQ(VEC_Z, fq.m_vector.z);
+   F_Quat q = F_Quat::generate_pure_quat(glm::vec3(VEC_X, VEC_Y, VEC_Z));
+   EXPECT_FLOAT_EQ(0.0f, q.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X, q.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y, q.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z, q.m_vector.z);
 }
 
 TEST(F_Quat, Rotator)
@@ -99,35 +99,35 @@ TEST(F_Quat, Rotator)
    glm::vec3 rotation_axis(+1.0f, 0.0f, 0.0f);
    float theta = PI_over_2;
 
-   F_Quat fq = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cosf(theta / 2.0f), fq.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), fq.m_scalar);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), fq.m_vector.x);
-   EXPECT_FLOAT_EQ(sinf(theta), fq.m_vector.x);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.y);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.z);
+   F_Quat q = F_Quat::generate_rotator(rotation_axis, theta);
+   //EXPECT_FLOAT_EQ(cosf(theta / 2.0f), q.m_scalar);
+   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
+   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.x);
+   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Y
    rotation_axis = glm::vec3(0.0f, +1.0f, 0.0f);
 
-   fq = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), fq.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), fq.m_scalar);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.x);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), fq.m_vector.y);
-   EXPECT_FLOAT_EQ(sinf(theta), fq.m_vector.y);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.z);
+   q = F_Quat::generate_rotator(rotation_axis, theta);
+   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
+   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
+   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.y);
+   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Z
    rotation_axis = glm::vec3(0.0f, 0.0f, +1.0f);
 
-   fq = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), fq.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), fq.m_scalar);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.x);
-   EXPECT_FLOAT_EQ(0.0f, fq.m_vector.y);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), fq.m_vector.z);
-   EXPECT_FLOAT_EQ(sinf(theta), fq.m_vector.z);
+   q = F_Quat::generate_rotator(rotation_axis, theta);
+   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
+   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
+   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.z);
+   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.z);
 }
 
 TEST(F_Quat, Conjugate)
@@ -137,9 +137,9 @@ TEST(F_Quat, Conjugate)
    static const float VEC_Y = 2.2f;
    static const float VEC_Z = 3.3f;
 
-   F_Quat fq(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
+   F_Quat q(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
 
-   F_Quat conjugate = fq.conjugate();
+   F_Quat conjugate = q.conjugate();
    EXPECT_FLOAT_EQ(SCALAR, conjugate.m_scalar);
    EXPECT_FLOAT_EQ((-1.0f) * VEC_X, conjugate.m_vector.x);
    EXPECT_FLOAT_EQ((-1.0f) * VEC_Y, conjugate.m_vector.y);
@@ -183,19 +183,19 @@ TEST(F_Quat, Scalar_Multiplication)
    static const float V2_Y = -2.2f;
    static const float V2_Z = -1.1f;
 
-   F_Quat fq1(V1_SCALAR, glm::vec3(V1_X, V1_Y, V1_Z));
-   F_Quat fq2(V2_SCALAR, glm::vec3(V2_X, V2_Y, V2_Z));
+   F_Quat q1(V1_SCALAR, glm::vec3(V1_X, V1_Y, V1_Z));
+   F_Quat q2(V2_SCALAR, glm::vec3(V2_X, V2_Y, V2_Z));
 
    // two operator addition
-   F_Quat result_1 = fq1 + fq2;
+   F_Quat result_1 = q1 + q2;
    EXPECT_FLOAT_EQ(V1_SCALAR + V2_SCALAR, result_1.m_scalar);
    EXPECT_FLOAT_EQ(V1_X + V2_X, result_1.m_vector.x);
    EXPECT_FLOAT_EQ(V1_Y + V2_Y, result_1.m_vector.y);
    EXPECT_FLOAT_EQ(V1_Z + V2_Z, result_1.m_vector.z);
 
    // self-addition
-   fq1 += fq2;
-   F_Quat result_2 = fq1;
+   q1 += q2;
+   F_Quat result_2 = q1;
    EXPECT_FLOAT_EQ(V1_SCALAR + V2_SCALAR, result_2.m_scalar);
    EXPECT_FLOAT_EQ(V1_X + V2_X, result_2.m_vector.x);
    EXPECT_FLOAT_EQ(V1_Y + V2_Y, result_2.m_vector.y);
@@ -214,18 +214,18 @@ TEST(F_Quat, Multiplicaton)
    static const float V2_Y = -2.2f;
    static const float V2_Z = -1.1f;
 
-   F_Quat fq1(1.0f, glm::vec3(1.1f, 2.2f, 3.3f));
-   F_Quat fq2(2.0f, glm::vec3(-3.3, -2.2, -1.1));
+   F_Quat q1(1.0f, glm::vec3(1.1f, 2.2f, 3.3f));
+   F_Quat q2(2.0f, glm::vec3(-3.3, -2.2, -1.1));
 
    // I made the calculations in a notebook with assistence from glm's dot(...) and cross(...)
-   F_Quat result_1 = fq1 * fq2;
+   F_Quat result_1 = q1 * q2;
    EXPECT_FLOAT_EQ(+14.1f, result_1.m_scalar);
    EXPECT_FLOAT_EQ(3.74f, result_1.m_vector.x);
    EXPECT_FLOAT_EQ(-7.48f, result_1.m_vector.y);
    EXPECT_FLOAT_EQ(10.34f, result_1.m_vector.z);
 
-   fq1 *= fq2;
-   F_Quat result_2 = fq1;
+   q1 *= q2;
+   F_Quat result_2 = q1;
    EXPECT_FLOAT_EQ(+14.1f, result_2.m_scalar);
    EXPECT_FLOAT_EQ(3.74f, result_2.m_vector.x);
    EXPECT_FLOAT_EQ(-7.48f, result_2.m_vector.y);
