@@ -92,8 +92,8 @@
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="Start_Engine.cpp" />
-    <ClCompile Include="Math\Dual_Quat.cpp" />
-    <ClCompile Include="Math\Float_Quat.cpp" />
+    <ClCompile Include="Math\F_Dual_Quat.cpp" />
+    <ClCompile Include="Math\F_Quat.cpp" />
     <ClCompile Include="Rendering\Camera.cpp" />
     <ClCompile Include="Rendering\Renderer.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp" />
@@ -118,8 +118,8 @@
     <ClInclude Include="Input\Action_List.h" />
     <ClInclude Include="Input\Key_Bindings\Keyboard_Bindings.h" />
     <ClInclude Include="Input\Supported_Bindings.h" />
-    <ClInclude Include="Math\Dual_Quat.h" />
-    <ClInclude Include="Math\Float_Quat.h" />
+    <ClInclude Include="Math\F_Dual_Quat.h" />
+    <ClInclude Include="Math\F_Quat.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Shapes\Geometry.h" />

@@ -19,7 +19,6 @@ using std::endl;
 #include <glm\gtx\dual_quaternion.hpp>
 #include <Utilities\Quaternion_Helper.h>
 
-#include <Math\Dual_Quat.h>
 
 glm::fdualquat dual_quat_conjugate(glm::fdualquat dq)
 {
@@ -77,9 +76,9 @@ void my_function()
 
 
 
-   //Math::Dual_Quaternion point = Math::Dual_Quaternion::point(glm::vec3(0.0f, 1.0f, 0.0f));
-   //Math::Dual_Quaternion translate = Math::Dual_Quaternion::translate(glm::vec3(0.0f, 2.0f, 0.0f));
-   //Math::Dual_Quaternion result = translate * Math::Dual_Quaternion::conjugate(point);
+   //Math::F_Dual_Quat point = Math::F_Dual_Quat::point(glm::vec3(0.0f, 1.0f, 0.0f));
+   //Math::F_Dual_Quat translate = Math::F_Dual_Quat::translate(glm::vec3(0.0f, 2.0f, 0.0f));
+   //Math::F_Dual_Quat result = translate * Math::F_Dual_Quat::conjugate(point);
 
    printf("hello\n");
 }

@@ -10,7 +10,7 @@ namespace Math
    // GLM fquat is a specific template of the basic quat, and it explicitly uses four floats (w (scalar), x, y, and z).
    // My quat operates explicitly on a floats and a glm::vec3, and I take advantage of the vector's supported functions
    // to satisfy the quaternion math.
-   struct __declspec(dllexport) Float_Quat
+   struct __declspec(dllexport) F_Quat
    {
       float m_scalar;
       glm::vec3 m_vector;
@@ -19,29 +19,34 @@ namespace Math
       // [scalar = 0, vector = <0, 0, 0>]
       // Note: For generating Real (vector = <0,0,0>), and Pure (scalar = 0) quats, please use 
       // the static generator methods of the same names
-      Float_Quat();
+      F_Quat();
 
       // generates a quat Q of the follow
-      Float_Quat(const float scalar, const glm::vec3 &vector);
+      F_Quat(const float scalar, const glm::vec3 &vector);
 
       // generates a Real quat of the following form
       // [scalar = argument, vector = <0,0,0>]
       // Note: This is useful for scalar multiplication. ??should I just have scalar multiplication and avoid use real quats altogether??
-      static Float_Quat generate_real_quat(const float new_scalar);
+      static F_Quat generate_real_quat(const float new_scalar);
 
       // generates a Pure quat of the following form
       // [scalar = 0, vector = argument]
       // Note: This is useful for generating a point that can be rotated by another quat
       // or transform (rotated and translated) by a dual quat.
-      static Float_Quat generate_pure_quat(const glm::vec3 &new_vector);
+      static F_Quat generate_pure_quat(const glm::vec3 &new_vector);
 
       // generate a quat given a rotation axis and a rotation angle
       // Note: The algorithm used here was heavily influenced by the ArcSynthesis tutorial
       // on quaternions (tutorial #8).
-      static Float_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+      static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+
+      // self-addition
+      // Note: Is used by in dual quat multiplication.
+      // Note: Results in a quat of the following form:
+      void operator+=(const F_Quat &right);
 
       // scalar self-multiplication
-      // Note: Given an original quat Q, results in a quat of the following form
+      // Note: Given an original quat Q, results in a quat of the following form:
       // [new scalar = Q.scalar * right, new vector = Q.vector * right]
       void operator*=(const float right);
 
@@ -49,14 +54,14 @@ namespace Math
       // Note: For the sake of brevity, let scalar be "S" and vector be "V".  Then given two
       // quats Q1 and Q2, Q1 times Q2 results in a quat of the following form:
       // [S1*S2 - dot(V1, V2), S1*V2 + S2*V1 + cross(V1, V2)]
-      void operator*=(const Float_Quat &right);
+      void operator*=(const F_Quat &right);
 
       // self-conjugate
       // Note: Results in a quaterion of the following form:
       // [new scalar = scalar, new vector = (-1) * vector]
       // Note: Conjugation of a quaternion Q results in a quaternion Q* such that
       // (Q)(Q*) = [new scalar = scalar^2 + dot(vector, vector), new_vector = <0,0,0>]
-      Float_Quat conjugate() const;
+      F_Quat conjugate() const;
 
       // self-magnitude
       // Note: Results in a float by the following calculation: 
@@ -79,18 +84,21 @@ namespace Math
 
       // self-inverse
       // Note: Results in a quaternion Q such that '*this' * Q = [1, <0,0,0>].
-      Float_Quat inverse() const;
+      F_Quat inverse() const;
    };
 
+   // addition
+   F_Quat operator+(const F_Quat &left, const F_Quat &right);
+
    // scalar multiplication
-   Float_Quat operator*(const float left, const Float_Quat &right);
-   Float_Quat operator*(const Float_Quat &left, const float right);
+   F_Quat operator*(const float left, const F_Quat &right);
+   F_Quat operator*(const F_Quat &left, const float right);
 
    // multiplication
-   Float_Quat operator*(const Float_Quat &left, const Float_Quat &right);
+   F_Quat operator*(const F_Quat &left, const F_Quat &right);
 
    // normalization, but don't modify the original
-   Float_Quat normalize(const Float_Quat &fq);
+   F_Quat normalize(const F_Quat &fq);
 }
 
 #endif

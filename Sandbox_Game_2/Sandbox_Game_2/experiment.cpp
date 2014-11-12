@@ -4,7 +4,7 @@
 #include <GL\GL.h>
 #include <math.h>
 
-#include <Math\Float_Quat.h>
+#include <Math\F_Quat.h>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -53,12 +53,12 @@ namespace Experiment
 
    void do_something()
    {
-      //Math::Float_Quat fq_1;
-      //Math::Float_Quat fq_2;
+      //Math::F_Quat fq_1;
+      //Math::F_Quat fq_2;
       //fq_2 = fq_1 * 2.0f;
 
-      //Math::Float_Quat rotator = Math::Float_Quat::generate_rotator(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f);
-      //Math::Float_Quat point = Math::Float_Quat::generate_pure_quat(glm::vec3(1.0f, 0.0f, 0.0f));
+      //Math::F_Quat rotator = Math::F_Quat::generate_rotator(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f);
+      //Math::F_Quat point = Math::F_Quat::generate_pure_quat(glm::vec3(1.0f, 0.0f, 0.0f));
       //point = point * rotator;
       //point *= rotator;
 

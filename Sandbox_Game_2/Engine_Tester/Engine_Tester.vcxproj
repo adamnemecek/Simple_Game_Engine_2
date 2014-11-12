@@ -52,7 +52,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\middleware\gtest-1.7.0\include;$(SolutionDir)\..\middleware\gtest-1.7.0;$(SolutionDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\middleware\gtest-1.7.0\include;$(SolutionDir)\..\middleware\gtest-1.7.0;$(SolutionDir)\..\middleware\glsdk_0_5_2\glm;$(SolutionDir);$(SolutionDir)\Engine_2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\middleware\gtest-1.7.0\src\gtest-all.cc" />
+    <ClCompile Include="Float_Dual_Quat_test.cpp" />
     <ClCompile Include="Float_Quat_test.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
