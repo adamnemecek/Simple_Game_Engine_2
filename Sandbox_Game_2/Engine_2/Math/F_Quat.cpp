@@ -42,7 +42,13 @@ namespace Math
       return F_Quat(scalar, rotator_vector);
    }
 
-   void F_Quat::operator+=(const F_Quat &right)
+   void F_Quat::operator = (const F_Quat &right)
+   {
+      this->m_scalar = right.m_scalar;
+      this->m_vector = right.m_vector;
+   }
+
+   void F_Quat::operator +=(const F_Quat &right)
    {
       float new_scalar = this->m_scalar + right.m_scalar;
       glm::vec3 new_vector = this->m_vector + right.m_vector;

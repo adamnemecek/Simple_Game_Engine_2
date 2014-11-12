@@ -27,6 +27,9 @@ namespace Math
       // Note: Constructs a dual quat to perform the requested rotation followed by the requested translation.
       F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
 
+      // explicit self-assignment operator
+      void operator=(const F_Dual_Quat &right);
+
       /*
       TEST(Float_Dual_Quat, Default_Constructor)
       TEST(Float_Dual_Quat, Explicit_Constructor)
@@ -66,7 +69,7 @@ namespace Math
    // Note: Given dual quats dq1 = (A + eB) and dq2 = (C + eD), then
    // dq1 * dq2 = AC + e(AD + BC).  There is no BD because e^2 is defined to
    // be 0.
-   F_Dual_Quat &operator*(const F_Dual_Quat &left, const F_Dual_Quat &right);
+   F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right);
 }
 
 #endif

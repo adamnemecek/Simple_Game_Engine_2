@@ -27,6 +27,12 @@ namespace Math
       m_dual = new_translation * new_orientation;
    }
 
+   void F_Dual_Quat::operator = (const F_Dual_Quat &right)
+   {
+      this->m_real = right.m_real;
+      this->m_dual = right.m_dual;
+   }
+
    void F_Dual_Quat::operator *= (const F_Dual_Quat &right)
    {
       F_Quat new_real = this->m_real * right.m_real;
@@ -40,13 +46,13 @@ namespace Math
 
 
    // non-member functions
-   F_Dual_Quat &operator*(const F_Dual_Quat &left, const F_Dual_Quat &right)
+   F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right)
    {
       F_Quat new_real = left.m_real * right.m_real;
       
       F_Quat new_dual = left.m_real * right.m_dual;
       new_dual += left.m_dual * right.m_real;
-
+      
       return F_Dual_Quat(new_real, new_dual);
    }
 }

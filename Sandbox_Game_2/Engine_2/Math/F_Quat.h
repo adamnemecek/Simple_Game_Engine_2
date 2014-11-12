@@ -40,6 +40,9 @@ namespace Math
       // on quaternions (tutorial #8).
       static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
 
+      // explicit self-assignment operator
+      void operator=(const F_Quat &right);
+
       // self-addition
       // Note: Is used by in dual quat multiplication.
       // Note: Results in a quat of the following form:
