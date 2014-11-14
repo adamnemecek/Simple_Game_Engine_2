@@ -173,7 +173,37 @@ TEST(F_Quat, Addition)
 
 TEST(F_Quat, Scalar_Multiplication)
 {
+   static const float SCALAR = 1.0f;
+   static const float VEC_X = 4.0f;
+   static const float VEC_Y = 4.0f;
+   static const float VEC_Z = (-1.0f) * 4.0f;
 
+   F_Quat q(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
+
+   float S = 2.2f;
+
+   // test right multiply
+   F_Quat result = q * S;
+
+   EXPECT_FLOAT_EQ(SCALAR * S, result.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X * S, result.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y * S, result.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z * S, result.m_vector.z);
+
+   // test left multiply
+   result = S * q;
+   EXPECT_FLOAT_EQ(SCALAR * S, result.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X * S, result.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y * S, result.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z * S, result.m_vector.z);
+
+   // test self-multiply
+   q *= S;
+   result = q;
+   EXPECT_FLOAT_EQ(SCALAR * S, result.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X * S, result.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y * S, result.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z * S, result.m_vector.z);
 }
 
 TEST(F_Quat, Multiplicaton)
