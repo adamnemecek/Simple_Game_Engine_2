@@ -91,6 +91,7 @@
     <ClCompile Include="Entities\Components\Renderable_Updater_Component.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
+    <ClCompile Include="Math\F_Dual_Number.cpp" />
     <ClCompile Include="Start_Engine.cpp" />
     <ClCompile Include="Math\F_Dual_Quat.cpp" />
     <ClCompile Include="Math\F_Quat.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Input\Action_List.h" />
     <ClInclude Include="Input\Key_Bindings\Keyboard_Bindings.h" />
     <ClInclude Include="Input\Supported_Bindings.h" />
+    <ClInclude Include="Math\F_Dual_Number.h" />
     <ClInclude Include="Math\F_Dual_Quat.h" />
     <ClInclude Include="Math\F_Quat.h" />
     <ClInclude Include="Rendering\Camera.h" />

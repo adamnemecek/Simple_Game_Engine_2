@@ -78,6 +78,9 @@
     <ClCompile Include="Math\F_Dual_Quat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Math\F_Dual_Number.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -192,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math\F_Dual_Quat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\F_Dual_Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

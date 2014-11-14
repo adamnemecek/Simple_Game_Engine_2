@@ -6,7 +6,7 @@
 
 namespace Math
 {
-   class F_Dual_Quat
+   struct F_Dual_Quat
    {
    public:
       F_Quat m_real;
