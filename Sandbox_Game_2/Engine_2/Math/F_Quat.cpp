@@ -42,6 +42,14 @@ namespace Math
       return F_Quat(scalar, rotator_vector);
    }
 
+   F_Quat F_Quat::normalize(const F_Quat &fq)
+   {
+      float inverse_mag = 1.0f / (fq.magnitude());
+
+      // the F_Quat has an operator for '* float', but not for '/ float'
+      return (fq * inverse_mag);
+   }
+
    void F_Quat::operator = (const F_Quat &right)
    {
       this->m_scalar = right.m_scalar;
@@ -78,6 +86,12 @@ namespace Math
       return F_Quat(this->m_scalar, (-1.0f) * this->m_vector);
    }
 
+   void F_Quat::normalize()
+   {
+      float inverse_mag = 1.0f / (this->magnitude());
+      (*this) *= inverse_mag;
+   }
+
    float F_Quat::magnitude() const
    {
       float mag_squared = this->magnitude_squared();
@@ -88,14 +102,8 @@ namespace Math
    float F_Quat::magnitude_squared() const
    {
       F_Quat mag_square = (*this) * this->conjugate();
-      
-      return (mag_square).m_scalar;
-   }
 
-   void F_Quat::normalize()
-   {
-      float inverse_mag = 1.0f / (this->magnitude());
-      (*this) *= inverse_mag;
+      return (mag_square).m_scalar;
    }
 
    F_Quat F_Quat::inverse() const
@@ -132,11 +140,4 @@ namespace Math
       return F_Quat(new_scalar, new_vector);
    }
 
-   F_Quat normalize(const F_Quat &fq)
-   {
-      float f = fq.magnitude_squared();
-      float inverse_mag = 1.0f / (fq.magnitude());
-
-      return (fq * inverse_mag);
-   }
 }

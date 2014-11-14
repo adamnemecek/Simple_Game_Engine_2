@@ -40,6 +40,10 @@ namespace Math
       // on quaternions (tutorial #8).
       static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
 
+      // normalization, but don't modify the original
+      static F_Quat normalize(const F_Quat &fq);
+
+
       // explicit self-assignment operator
       void operator=(const F_Quat &right);
 
@@ -66,6 +70,20 @@ namespace Math
       // (Q)(Q*) = [new scalar = scalar^2 + dot(vector, vector), new_vector = <0,0,0>]
       F_Quat conjugate() const;
 
+      // self-normalization
+      // Note: Results in a unit quaternion (magnitude 1) by the following calculation:
+      // [new scalar = scalar / magnitude, new vector = vector / magnitude]
+      void normalize();
+
+
+   private:
+      // Note: These functions are private for the following reasons:
+      // - Magnitude: This is only useful for normalization, so I decided that it was best to
+      // have a normalize() function and calculate the magnitude internally.
+      // - Magnitude squared: This is only useful in calculating the inverse, so like the 
+      // magnitude, I will calculate this internally when calculating the inverse.
+      // - Inverse: I have no use for this function now.
+
       // self-magnitude
       // Note: Results in a float by the following calculation: 
       // sqrt(scalar^2 + dot(vector, vector))
@@ -80,13 +98,8 @@ namespace Math
       // Q_inverse = Q_conjugate / (Q.magnitude())^2)
       float magnitude_squared() const;
 
-      // self-normalization
-      // Note: Results in a unit quaternion (magnitude 1) by the following calculation:
-      // [new scalar = scalar / magnitude, new vector = vector / magnitude]
-      void normalize();
-
       // self-inverse
-      // Note: Results in a quaternion Q such that '*this' * Q = [1, <0,0,0>].
+      // Note: Results in a quaternion Q such that 'this' times Q = [1, <0,0,0>].
       F_Quat inverse() const;
    };
 
@@ -99,9 +112,6 @@ namespace Math
 
    // multiplication
    F_Quat operator*(const F_Quat &left, const F_Quat &right);
-
-   // normalization, but don't modify the original
-   F_Quat normalize(const F_Quat &fq);
 }
 
 #endif

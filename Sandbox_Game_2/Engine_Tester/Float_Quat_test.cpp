@@ -92,7 +92,7 @@ TEST(F_Quat, Rotator)
    EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.z);
 }
 
-TEST(F_Quat, Conjugate)
+TEST(F_Quat, Self_Conjugate)
 {
    static const float SCALAR = 99.99f;
    static const float VEC_X = 1.1f;
@@ -108,24 +108,42 @@ TEST(F_Quat, Conjugate)
    EXPECT_FLOAT_EQ((-1.0f) * VEC_Z, conjugate.m_vector.z);
 }
 
-TEST(F_Quat, Magnitude)
+TEST(F_Quat, Self_Normalize)
 {
+   static const float SCALAR = 1.0f;
+   static const float VEC_X = 4.0f;
+   static const float VEC_Y = 4.0f;
+   static const float VEC_Z = (-1.0f) * 4.0f;
 
-}
+   F_Quat q(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
 
-TEST(F_Quat, Magnitude_Squared)
-{
+   q.normalize();
 
+   // I solved this problem by hand, so I am using magic numbers here.
+   // Note: I got the idea from 3dgep.com's article on quaternions.
+   EXPECT_FLOAT_EQ(1.0 / 7, q.m_scalar);
+   EXPECT_FLOAT_EQ(4.0 / 7, q.m_vector.x);
+   EXPECT_FLOAT_EQ(4.0 / 7, q.m_vector.y);
+   EXPECT_FLOAT_EQ(((-1.0f) * 4.0) / 7, q.m_vector.z);
 }
 
 TEST(F_Quat, Normalize)
 {
+   static const float SCALAR = 1.0f;
+   static const float VEC_X = 4.0f;
+   static const float VEC_Y = 4.0f;
+   static const float VEC_Z = (-1.0f) * 4.0f;
 
-}
+   F_Quat q(SCALAR, glm::vec3(VEC_X, VEC_Y, VEC_Z));
 
-TEST(F_Quat, Inverse)
-{
+   F_Quat normalized_q = F_Quat::normalize(q);
 
+   // I solved this problem by hand, so I am using magic numbers here.
+   // Note: I got the idea from 3dgep.com's article on quaternions.
+   EXPECT_FLOAT_EQ(1.0 / 7, normalized_q.m_scalar);
+   EXPECT_FLOAT_EQ(4.0 / 7, normalized_q.m_vector.x);
+   EXPECT_FLOAT_EQ(4.0 / 7, normalized_q.m_vector.y);
+   EXPECT_FLOAT_EQ(((-1.0f) * 4.0) / 7, normalized_q.m_vector.z);
 }
 
 TEST(F_Quat, Addition)
