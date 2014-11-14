@@ -30,14 +30,22 @@ namespace Math
       return F_Quat(0, new_vector);
    }
 
-   F_Quat F_Quat::generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
+   F_Quat F_Quat::generate_rotator_for_pure_quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
    {
       glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
-      //glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
       glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad);
 
-      //float scalar = cosf(rotation_angle_rad / 2.0f);
       float scalar = cosf(rotation_angle_rad);
+
+      return F_Quat(scalar, rotator_vector);
+   }
+   
+   F_Quat F_Quat::generate_rotator_for_dual_quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
+   {
+      glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
+      glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
+
+      float scalar = cosf(rotation_angle_rad / 2.0f);
 
       return F_Quat(scalar, rotator_vector);
    }

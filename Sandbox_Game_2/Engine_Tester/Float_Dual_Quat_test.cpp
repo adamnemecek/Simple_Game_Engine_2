@@ -60,7 +60,7 @@ TEST(Float_Dual_Quat, Convenience_Constructor)
    glm::vec3 translation(TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
 
    F_Dual_Quat dq(rotation_axis, ROT_ANGLE, translation);
-   F_Quat expected_real = F_Quat::generate_rotator(rotation_axis, ROT_ANGLE);
+   F_Quat expected_real = F_Quat::generate_rotator_for_dual_quat(rotation_axis, ROT_ANGLE);
    F_Quat expected_dual = F_Quat::generate_pure_quat(0.5f * translation) * expected_real;
 
    EXPECT_FLOAT_EQ(expected_real.m_scalar, dq.m_real.m_scalar);
@@ -100,7 +100,7 @@ TEST(Float_Dual_Quat, Generate_Orientation)
    static const float ROT_ANGLE = 1.0f;
 
    F_Dual_Quat dq = F_Dual_Quat::generate_rotator_only(rotation_axis, ROT_ANGLE);
-   F_Quat expected_real = F_Quat::generate_rotator(rotation_axis, ROT_ANGLE);
+   F_Quat expected_real = F_Quat::generate_rotator_for_dual_quat(rotation_axis, ROT_ANGLE);
    F_Quat expected_dual = F_Quat::generate_pure_quat(glm::vec3()) * expected_real;
 
    EXPECT_FLOAT_EQ(expected_real.m_scalar, dq.m_real.m_scalar);

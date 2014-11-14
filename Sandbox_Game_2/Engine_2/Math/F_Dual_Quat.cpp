@@ -20,7 +20,7 @@ namespace Math
 
    F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
       F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate);
 
       // these are the rules for making the dual part, and they work, so just say "yes!" and we'll move on
@@ -41,7 +41,7 @@ namespace Math
    F_Dual_Quat F_Dual_Quat::generate_rotator_only(glm::vec3 &rotation_axis, float rotation_angle_rad)
    {
       // in this case, the dual part is all 0s, so don't bother with multiplying by 1/2 and the rotator
-      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
       F_Quat new_translator;
 
       return F_Dual_Quat(new_rotator, new_translator);

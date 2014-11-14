@@ -61,35 +61,29 @@ TEST(F_Quat, Rotator)
    glm::vec3 rotation_axis(+1.0f, 0.0f, 0.0f);
    float theta = Math_Helper::PI_over_2;
 
-   F_Quat q = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cosf(theta / 2.0f), q.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.x);
-   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.x);
+   F_Quat q = F_Quat::generate_rotator_for_dual_quat(rotation_axis, theta);
+   EXPECT_FLOAT_EQ(cosf(theta / 2.0f), q.m_scalar);
+   EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.x);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Y
    rotation_axis = glm::vec3(0.0f, +1.0f, 0.0f);
 
-   q = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
+   q = F_Quat::generate_rotator_for_dual_quat(rotation_axis, theta);
+   EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.y);
-   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.y);
+   EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.y);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Z
    rotation_axis = glm::vec3(0.0f, 0.0f, +1.0f);
 
-   q = F_Quat::generate_rotator(rotation_axis, theta);
-   //EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
-   EXPECT_FLOAT_EQ(cosf(theta), q.m_scalar);
+   q = F_Quat::generate_rotator_for_dual_quat(rotation_axis, theta);
+   EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
-   //EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.z);
-   EXPECT_FLOAT_EQ(sinf(theta), q.m_vector.z);
+   EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.z);
 }
 
 TEST(F_Quat, Self_Conjugate)
@@ -121,10 +115,10 @@ TEST(F_Quat, Self_Normalize)
 
    // I solved this problem by hand, so I am using magic numbers here.
    // Note: I got the idea from 3dgep.com's article on quaternions.
-   EXPECT_FLOAT_EQ(1.0 / 7, q.m_scalar);
-   EXPECT_FLOAT_EQ(4.0 / 7, q.m_vector.x);
-   EXPECT_FLOAT_EQ(4.0 / 7, q.m_vector.y);
-   EXPECT_FLOAT_EQ(((-1.0f) * 4.0) / 7, q.m_vector.z);
+   EXPECT_FLOAT_EQ(SCALAR / 7, q.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X / 7, q.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y / 7, q.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z / 7, q.m_vector.z);
 }
 
 TEST(F_Quat, Normalize)
@@ -140,10 +134,10 @@ TEST(F_Quat, Normalize)
 
    // I solved this problem by hand, so I am using magic numbers here.
    // Note: I got the idea from 3dgep.com's article on quaternions.
-   EXPECT_FLOAT_EQ(1.0 / 7, normalized_q.m_scalar);
-   EXPECT_FLOAT_EQ(4.0 / 7, normalized_q.m_vector.x);
-   EXPECT_FLOAT_EQ(4.0 / 7, normalized_q.m_vector.y);
-   EXPECT_FLOAT_EQ(((-1.0f) * 4.0) / 7, normalized_q.m_vector.z);
+   EXPECT_FLOAT_EQ(SCALAR / 7, normalized_q.m_scalar);
+   EXPECT_FLOAT_EQ(VEC_X / 7, normalized_q.m_vector.x);
+   EXPECT_FLOAT_EQ(VEC_Y / 7, normalized_q.m_vector.y);
+   EXPECT_FLOAT_EQ(VEC_Z / 7, normalized_q.m_vector.z);
 }
 
 TEST(F_Quat, Addition)
@@ -215,7 +209,7 @@ TEST(F_Quat, Multiplicaton)
 TEST(F_Quat, Rotate_Points_Around_X)
 {
    F_Quat point = F_Quat::generate_pure_quat(glm::vec3(0.0f, 1.0f, 0.0f));
-   F_Quat rotator = F_Quat::generate_rotator(glm::vec3(1.0f, 0.0f, 0.0f), Math_Helper::PI_over_2);
+   F_Quat rotator = F_Quat::generate_rotator_for_pure_quat(glm::vec3(1.0f, 0.0f, 0.0f), Math_Helper::PI_over_2);
 
    // transform the point
    F_Quat result = point * rotator;
