@@ -266,8 +266,8 @@ void display()
 
    g_cube_1_entity.update();
    g_cube_2_entity.update();
-   g_cube_3_entity.update();
-   g_cube_4_entity.update();
+   //g_cube_3_entity.update();
+   //g_cube_4_entity.update();
    g_plane_entity.update();
    g_circle_entity.update();
    g_rectangle_box_entity.update();
