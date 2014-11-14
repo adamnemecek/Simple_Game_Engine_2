@@ -24,23 +24,34 @@ namespace Math
       // real = argument real, dual = argument dual
       F_Dual_Quat(const F_Quat &real, const F_Quat &dual);
 
-      // convenience constructor
-      // Note: Constructs a dual quat to perform the requested rotation followed by the requested translation.
-      F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
-
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form
       // real = [1, <0,0,0>], dual = [0, (1/2)translate_vector]
-      static F_Dual_Quat generate_translate_only(glm::vec3 &translate);
+      static F_Dual_Quat generate_translate_only(const glm::vec3 &translate);
 
       // generates a dual quat that performs a rotation only 
       // Note: Results in a dual quat of the following form:
       // real = [1, orientation vectors], dual = [0, <0,0,0>]
-      static F_Dual_Quat generate_rotator_only(glm::vec3 &rotation_axis, float rotation_angle_rad);
+      static F_Dual_Quat generate_rotator_only(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+
+      // generates a dual quat that performs a rotation, then a translation
+      static F_Dual_Quat generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
+
+      // generates a dual quat that performs a translation, then a rotation
+      // Note: This operation requires a translate dual quat and a rotator dual
+      // quat to be constructed an multiplied together, so it is a little more 
+      // expensive computationally.
+      static F_Dual_Quat generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
 
       // normalization, but don't modify the original
       static F_Dual_Quat normalize(const F_Dual_Quat &dq);
 
+      // transform a point
+      // Note: While this operation is an application of a dual quat multiplication, 
+      // there are some optimizations that I can do because the real component of the
+      // point's dual quat will equate to 1.0f (the vector is a zero-vector).  
+      // Therefore I will internalize this operation.
+      static glm::vec3 transform(const F_Dual_Quat &transform, const glm::vec3 &point);
 
       // explicit self-assignment operator
       void operator=(const F_Dual_Quat &right);

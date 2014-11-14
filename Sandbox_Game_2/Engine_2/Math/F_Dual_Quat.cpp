@@ -18,17 +18,17 @@ namespace Math
    {
    }
 
-   F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
-   {
-      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
-      F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate);
+   //F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
+   //{
+   //   F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
+   //   F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate);
 
-      // these are the rules for making the dual part, and they work, so just say "yes!" and we'll move on
-      m_real = new_rotator;
-      m_dual = new_translator * new_rotator;
-   }
+   //   // these are the rules for making the dual part, and they work, so just say "yes!" and we'll move on
+   //   m_real = new_rotator;
+   //   m_dual = new_translator * new_rotator;
+   //}
 
-   F_Dual_Quat F_Dual_Quat::generate_translate_only(glm::vec3 &translate)
+   F_Dual_Quat F_Dual_Quat::generate_translate_only(const glm::vec3 &translate)
    {
       // in this case, the rotator is the quat equivalent of 1, so don't bother multiplying
       // the new_translation component by it (but still halve the vector)
@@ -38,13 +38,42 @@ namespace Math
       return F_Dual_Quat(new_rotator, new_translator);
    }
 
-   F_Dual_Quat F_Dual_Quat::generate_rotator_only(glm::vec3 &rotation_axis, float rotation_angle_rad)
+   F_Dual_Quat F_Dual_Quat::generate_rotator_only(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
    {
       // in this case, the dual part is all 0s, so don't bother with multiplying by 1/2 and the rotator
       F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
       F_Quat new_translator;
 
       return F_Dual_Quat(new_rotator, new_translator);
+   }
+
+   F_Dual_Quat F_Dual_Quat::generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
+   {
+      return F_Dual_Quat();
+   }
+
+   F_Dual_Quat F_Dual_Quat::generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
+   {
+      return F_Dual_Quat();
+   }
+
+
+   F_Dual_Quat F_Dual_Quat::normalize(const F_Dual_Quat &dq)
+   {
+      return F_Dual_Quat();
+   }
+
+   glm::vec3 F_Dual_Quat::transform(const F_Dual_Quat &transform, const glm::vec3 &point)
+   {
+      // make a dual quat out of the point
+      // Note: Result in (1, <0,0,0>) + (0, point)e.
+      F_Dual_Quat point_dq = F_Dual_Quat::generate_translate_only(point);
+
+      F_Dual_Quat temp = transform * point_dq;
+      
+      F_Quat translate = 2.0f * temp.m_dual * temp.m_real.conjugate();
+
+      return glm::vec3(translate.m_vector);
    }
 
    void F_Dual_Quat::operator = (const F_Dual_Quat &right)
