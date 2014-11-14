@@ -52,7 +52,7 @@ TEST(Float_Dual_Quat, Convenience_Constructor)
    static const float ROTATE_Z = 3.3f;
    glm::vec3 rotation_axis(ROTATE_X, ROTATE_Y, ROTATE_Z);
 
-   static const float ROT_ANGLE = PI_over_2;
+   static const float ROT_ANGLE = Math_Helper::PI_over_2;
 
    static const float TRANSLATE_X = -3.3f;
    static const float TRANSLATE_Y = -2.2f;
@@ -99,7 +99,7 @@ TEST(Float_Dual_Quat, Generate_Orientation)
 
    static const float ROT_ANGLE = 1.0f;
 
-   F_Dual_Quat dq = F_Dual_Quat::generate_orientation_only(rotation_axis, ROT_ANGLE);
+   F_Dual_Quat dq = F_Dual_Quat::generate_rotator_only(rotation_axis, ROT_ANGLE);
    F_Quat expected_real = F_Quat::generate_rotator(rotation_axis, ROT_ANGLE);
    F_Quat expected_dual = F_Quat::generate_pure_quat(glm::vec3()) * expected_real;
 
@@ -113,14 +113,35 @@ TEST(Float_Dual_Quat, Generate_Orientation)
    EXPECT_FLOAT_EQ(expected_dual.m_vector.z, dq.m_dual.m_vector.z);
 }
 
-TEST(Float_Dual_Quat, Magnitude)
-{
-
-}
-
 TEST(Float_Dual_Quat, Normalize)
 {
+   F_Quat real(1.0f, glm::vec3(2.0f, 3.0f, 4.0f));
+   F_Quat dual(5.0f, glm::vec3(6.0f, 7.0f, 8.0f));
+   F_Dual_Quat dq(real, dual);
 
+   // I solved this by hand and got some help with C++ for exact float multiplication,
+   // so I am using magic numbers here.
+   dq.normalize();
+   EXPECT_FLOAT_EQ(+0.18257418f, dq.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(+0.36514837f, dq.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(+0.54772258f, dq.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(+0.73029673f, dq.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(+0.48686451f, dq.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ(+0.2434324f, dq.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(+2.3841858e-007f, dq.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(-0.24343204f, dq.m_dual.m_vector.z);
+
+   // multiply the normalized form by its conjugate to see the result is 1 
+   F_Dual_Quat dq_conjugate = dq.conjugate();
+   F_Dual_Quat result = dq * dq_conjugate;
+   EXPECT_FLOAT_EQ(1.0f, result.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.z);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.m_dual.m_scalar));
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.z);
 }
 
 TEST(Float_Dual_Quat, Conjugate)

@@ -42,12 +42,12 @@ namespace Math
       return F_Quat(scalar, rotator_vector);
    }
 
-   F_Quat F_Quat::normalize(const F_Quat &fq)
+   F_Quat F_Quat::normalize(const F_Quat &q)
    {
-      float inverse_mag = 1.0f / (fq.magnitude());
+      float inverse_mag = 1.0f / (q.magnitude());
 
       // the F_Quat has an operator for '* float', but not for '/ float'
-      return (fq * inverse_mag);
+      return (q * inverse_mag);
    }
 
    void F_Quat::operator = (const F_Quat &right)

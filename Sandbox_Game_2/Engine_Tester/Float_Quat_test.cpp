@@ -59,7 +59,7 @@ TEST(F_Quat, Rotator)
 {
    // rotate 90 degrees around X
    glm::vec3 rotation_axis(+1.0f, 0.0f, 0.0f);
-   float theta = PI_over_2;
+   float theta = Math_Helper::PI_over_2;
 
    F_Quat q = F_Quat::generate_rotator(rotation_axis, theta);
    //EXPECT_FLOAT_EQ(cosf(theta / 2.0f), q.m_scalar);
@@ -215,14 +215,14 @@ TEST(F_Quat, Multiplicaton)
 TEST(F_Quat, Rotate_Points_Around_X)
 {
    F_Quat point = F_Quat::generate_pure_quat(glm::vec3(0.0f, 1.0f, 0.0f));
-   F_Quat rotator = F_Quat::generate_rotator(glm::vec3(1.0f, 0.0f, 0.0f), PI_over_2);
+   F_Quat rotator = F_Quat::generate_rotator(glm::vec3(1.0f, 0.0f, 0.0f), Math_Helper::PI_over_2);
 
    // transform the point
    F_Quat result = point * rotator;
    EXPECT_FLOAT_EQ(0.0f, result.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, result.m_vector.x);
    //EXPECT_FLOAT_EQ(0, result.m_vector.y);
-   EXPECT_TRUE(my_float_eq(0.0f, result.m_vector.y));
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.m_vector.y));
    EXPECT_FLOAT_EQ(-1.0f, result.m_vector.z);
 }
 

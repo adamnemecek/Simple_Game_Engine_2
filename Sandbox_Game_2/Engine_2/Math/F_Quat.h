@@ -41,7 +41,7 @@ namespace Math
       static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
 
       // normalization, but don't modify the original
-      static F_Quat normalize(const F_Quat &fq);
+      static F_Quat normalize(const F_Quat &q);
 
 
       // explicit self-assignment operator

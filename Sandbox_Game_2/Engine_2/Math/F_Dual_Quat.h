@@ -3,6 +3,7 @@
 
 #include <Math\F_Quat.h>
 #include <glm\vec3.hpp>
+#include <Math\F_Dual_Number.h>
 
 namespace Math
 {
@@ -35,7 +36,11 @@ namespace Math
       // generates a dual quat that performs a rotation only 
       // Note: Results in a dual quat of the following form:
       // real = [1, orientation vectors], dual = [0, <0,0,0>]
-      static F_Dual_Quat generate_orientation_only(glm::vec3 &rotation_axis, float rotation_angle_rad);
+      static F_Dual_Quat generate_rotator_only(glm::vec3 &rotation_axis, float rotation_angle_rad);
+
+      // normalization, but don't modify the original
+      static F_Dual_Quat normalize(const F_Dual_Quat &dq);
+
 
       // explicit self-assignment operator
       void operator=(const F_Dual_Quat &right);
@@ -44,17 +49,22 @@ namespace Math
       // Note: See description of operator* for details.
       void operator*=(const F_Dual_Quat &right);
 
+      // self-normalize
+      void normalize();
+
+      // self-conjugate
+      F_Dual_Quat conjugate();
+
+   private:
+      // Note: These functions are private for the following reasons:
+      // - Magnitude: This is only useful for normalization, so I decided that it was best to
+      // have a normalize() function and calculate the magnitude internally.
+
       // self-magnitude
       // Note: Results in a float by the following calculation: 
       // dual quat DQ = this * this->conjugate
       // sqrt(DQ.rea) == sqrt(
-      float magnitude(const F_Dual_Quat &dq);
-
-      // self-normalize
-      F_Dual_Quat normalize();
-
-      // self-conjugate
-      F_Dual_Quat conjugate();      
+      F_Dual_Number magnitude();
    };
 
    // multiplication
