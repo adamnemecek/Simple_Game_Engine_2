@@ -49,12 +49,18 @@ namespace Math
 
    F_Dual_Quat F_Dual_Quat::generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      return F_Dual_Quat();
+      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
+      F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate) * new_rotator;
+
+      return F_Dual_Quat(new_rotator, new_translator);
    }
 
    F_Dual_Quat F_Dual_Quat::generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      return F_Dual_Quat();
+      F_Dual_Quat new_rotator = F_Dual_Quat::generate_rotator_only(rotation_axis, rotation_angle_rad);
+      F_Dual_Quat new_translator = F_Dual_Quat::generate_translate_only(translate);
+
+      return new_rotator * new_translator;
    }
 
 

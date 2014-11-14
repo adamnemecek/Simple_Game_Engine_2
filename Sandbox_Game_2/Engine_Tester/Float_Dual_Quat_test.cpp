@@ -255,7 +255,7 @@ TEST(Float_Dual_Quat, Transform_Rotate_Only)
 
 TEST(Float_Dual_Quat, Transform_Screw_Rotate_Then_Translate)
 {
-   glm::vec3 point(0.0f, 1.0f, 0.0f);
+   glm::vec3 point(1.0f, 0.0f, 0.0f);
    glm::vec3 result;
 
    // 180 degrees around Y, up 2.2f, and +1 in X (should bring it back to 0 in X)
@@ -263,14 +263,16 @@ TEST(Float_Dual_Quat, Transform_Screw_Rotate_Then_Translate)
    glm::vec3 move_it(1.0f, 2.2f, 0.0f);
    F_Dual_Quat transform = F_Dual_Quat::generate_rotate_then_translate(rotation_axis, Math_Helper::PI, move_it);
    result = F_Dual_Quat::transform(transform, point);
-   EXPECT_FLOAT_EQ(0.0f, result.x);
+   //EXPECT_FLOAT_EQ(0.0f, result.x);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.x));
    EXPECT_FLOAT_EQ(2.2f, result.y);
-   EXPECT_FLOAT_EQ(0.0f, result.z);
+   //EXPECT_FLOAT_EQ(0.0f, result.z);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
 }
 
 TEST(Float_Dual_Quat, Transform_Screw_Translate_Then_Rotate)
 {
-   glm::vec3 point(0.0f, 1.0f, 0.0f);
+   glm::vec3 point(1.0f, 0.0f, 0.0f);
    glm::vec3 result;
 
    // up 2.2f, +1 in X, then 180 degrees around Y (should move X out to +2, then rotate it around to -2)
@@ -280,5 +282,6 @@ TEST(Float_Dual_Quat, Transform_Screw_Translate_Then_Rotate)
    result = F_Dual_Quat::transform(transform, point);
    EXPECT_FLOAT_EQ((-1.0f) * 2.0f, result.x);
    EXPECT_FLOAT_EQ(2.2f, result.y);
-   EXPECT_FLOAT_EQ(0.0f, result.z);
+   //EXPECT_FLOAT_EQ(0.0f, result.z);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
 }
