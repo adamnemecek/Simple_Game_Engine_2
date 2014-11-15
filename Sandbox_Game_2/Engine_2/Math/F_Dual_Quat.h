@@ -6,6 +6,8 @@
 #include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Number.h>
 
+#include <glm\gtx\dual_quaternion.hpp>
+
 namespace Math
 {
    struct F_Dual_Quat
@@ -24,6 +26,9 @@ namespace Math
       // Note: Constructs a dual quat of the following form:
       // real = argument real, dual = argument dual
       F_Dual_Quat(const F_Quat &real, const F_Quat &dual);
+
+      // temporary constructor while I convert from gll::fdualquat to this class
+      F_Dual_Quat(const glm::fdualquat &dq);
 
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form

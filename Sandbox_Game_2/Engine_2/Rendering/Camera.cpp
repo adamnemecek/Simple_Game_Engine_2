@@ -85,7 +85,9 @@ namespace Rendering
          Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
 
          //m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
-         m_where_and_which_way = Math::F_Dual_Quat(temp_real, temp_dual);
+         
+         //m_where_and_which_way = Math::F_Dual_Quat(temp_real, temp_dual);
+         m_where_and_which_way = Math::F_Dual_Quat(m_follow_this_entity_ptr->m_where_and_which_way);
       }
    }
 

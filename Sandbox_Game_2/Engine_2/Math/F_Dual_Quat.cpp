@@ -18,6 +18,17 @@ namespace Math
    {
    }
 
+   F_Dual_Quat::F_Dual_Quat(const glm::fdualquat &dq)
+   {
+      glm::fquat r = dq.real;
+      glm::fquat d = dq.dual;
+
+      m_real = Math::F_Quat(r.w, glm::vec3(r.x, r.y, r.z));
+      m_dual = Math::F_Quat(d.w, glm::vec3(d.x, d.y, d.z));
+      //Math::F_Quat temp_real(r.w, glm::vec3(r.x, r.y, r.z));
+      //Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
+   }
+
    //F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    //{
    //   F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
