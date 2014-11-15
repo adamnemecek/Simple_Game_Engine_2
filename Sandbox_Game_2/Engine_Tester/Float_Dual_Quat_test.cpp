@@ -146,6 +146,33 @@ TEST(Float_Dual_Quat, Self_Normalize)
 
 TEST(Float_Dual_Quat, Normalize)
 {
+   F_Quat real(1.0f, glm::vec3(2.0f, 3.0f, 4.0f));
+   F_Quat dual(5.0f, glm::vec3(6.0f, 7.0f, 8.0f));
+   F_Dual_Quat dq(real, dual);
+
+   // I solved this by hand and got some help with C++ for exact float multiplication,
+   // so I am using magic numbers here.
+   F_Dual_Quat normalized_dq = F_Dual_Quat::normalize(dq);
+   EXPECT_FLOAT_EQ(+0.18257418f, normalized_dq.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(+0.36514837f, normalized_dq.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(+0.54772258f, normalized_dq.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(+0.73029673f, normalized_dq.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(+0.48686451f, normalized_dq.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ(+0.2434324f, normalized_dq.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(+2.3841858e-007f, normalized_dq.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(-0.24343204f, normalized_dq.m_dual.m_vector.z);
+
+   // multiply the normalized form by its conjugate to verify that the result is 1 
+   F_Dual_Quat normalized_dq_conjugate = normalized_dq.conjugate();
+   F_Dual_Quat result = normalized_dq * normalized_dq_conjugate;
+   EXPECT_FLOAT_EQ(1.0f, result.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, result.m_real.m_vector.z);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.m_dual.m_scalar));
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(0.0f, result.m_dual.m_vector.z);
 
 }
 

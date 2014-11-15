@@ -66,7 +66,24 @@ namespace Math
 
    F_Dual_Quat F_Dual_Quat::normalize(const F_Dual_Quat &dq)
    {
-      return F_Dual_Quat();
+      // see the explanation in the self-normalization method
+
+      F_Dual_Number dn = dq.magnitude();
+
+      F_Quat a = dq.m_real;
+      F_Quat b = dq.m_dual;
+      float c = dn.m_real;
+      float inverse_c = 1 / c;
+      float inverse_c_squared = inverse_c * inverse_c;
+      float d = dn.m_dual;
+
+      // ac / c^2 = a/c
+      F_Quat new_real = a * inverse_c;
+
+      // (-ad + bc)e / c^2
+      F_Quat new_dual = ((-1.0f) * a * d * inverse_c_squared) + (b * inverse_c);
+
+      return F_Dual_Quat(new_real, new_dual);
    }
 
    glm::vec3 F_Dual_Quat::transform(const F_Dual_Quat &transform, const glm::vec3 &point)
@@ -99,7 +116,7 @@ namespace Math
       this->m_dual = new_dual;
    }
 
-   F_Dual_Number F_Dual_Quat::magnitude()
+   F_Dual_Number F_Dual_Quat::magnitude() const
    {
       // here's how this will go down:
       // Note: Legend:
@@ -145,7 +162,7 @@ namespace Math
       return F_Dual_Number(real_of_root, dual_of_root);
    }
 
-   F_Dual_Quat F_Dual_Quat::conjugate()
+   F_Dual_Quat F_Dual_Quat::conjugate() const
    {
       return F_Dual_Quat(this->m_real.conjugate(), this->m_dual.conjugate());
    }

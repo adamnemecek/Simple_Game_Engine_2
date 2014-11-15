@@ -64,7 +64,7 @@ namespace Math
       void normalize();
 
       // self-conjugate
-      F_Dual_Quat conjugate();
+      F_Dual_Quat conjugate() const;
 
    private:
       // Note: These functions are private for the following reasons:
@@ -75,7 +75,7 @@ namespace Math
       // Note: Results in a float by the following calculation: 
       // dual quat DQ = this * this->conjugate
       // sqrt(DQ.rea) == sqrt(
-      F_Dual_Number magnitude();
+      F_Dual_Number magnitude() const;
    };
 
    // multiplication
