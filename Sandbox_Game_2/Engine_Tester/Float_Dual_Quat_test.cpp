@@ -257,16 +257,24 @@ TEST(Float_Dual_Quat, Transform_Screw_Rotate_Then_Translate)
 {
    glm::vec3 point(1.0f, 0.0f, 0.0f);
    glm::vec3 result;
+   glm::vec3 rotation_axis(0.0f, 1.0f, 0.0f);
 
    // 180 degrees around Y, up 2.2f, and +1 in X (should bring it back to 0 in X)
-   glm::vec3 rotation_axis(0.0f, 1.0f, 0.0f);
-   glm::vec3 move_it(1.0f, 2.2f, 0.0f);
-   F_Dual_Quat transform = F_Dual_Quat::generate_rotate_then_translate(rotation_axis, Math_Helper::PI, move_it);
-   result = F_Dual_Quat::transform(transform, point);
-   //EXPECT_FLOAT_EQ(0.0f, result.x);
+   glm::vec3 move_it_1(1.0f, 2.2f, 0.0f);
+   F_Dual_Quat transform_1 = F_Dual_Quat::generate_rotate_then_translate(rotation_axis, Math_Helper::PI, move_it_1);
+   result = F_Dual_Quat::transform(transform_1, point);
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.x));
    EXPECT_FLOAT_EQ(2.2f, result.y);
-   //EXPECT_FLOAT_EQ(0.0f, result.z);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
+
+   // now rotate +90 around Y, up 3.3, and -2 in X (should bring X from 0 out to -2)
+   glm::vec3 move_it_2(-2.0f, 3.3f, 0.0f);
+   F_Dual_Quat transform_2 = F_Dual_Quat::generate_rotate_then_translate(rotation_axis, Math_Helper::PI_over_2, move_it_2);
+   F_Dual_Quat net_transform = transform_2 * transform_1;
+
+   result = F_Dual_Quat::transform(net_transform, point);
+   EXPECT_FLOAT_EQ(-2.0f, result.x);
+   EXPECT_FLOAT_EQ(5.5f, result.y);
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
 }
 
@@ -282,6 +290,47 @@ TEST(Float_Dual_Quat, Transform_Screw_Translate_Then_Rotate)
    result = F_Dual_Quat::transform(transform, point);
    EXPECT_FLOAT_EQ((-1.0f) * 2.0f, result.x);
    EXPECT_FLOAT_EQ(2.2f, result.y);
-   //EXPECT_FLOAT_EQ(0.0f, result.z);
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
+
+   // do it again to make sure that they stack
+   result = F_Dual_Quat::transform(transform * transform, point);
+   EXPECT_FLOAT_EQ(1.0f, result.x);
+   EXPECT_FLOAT_EQ(4.4f, result.y);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
+}
+
+TEST(Float_Dual_Quat, Transforms_With_Normalization_Gone_Crazy)
+{
+   glm::vec3 point(1.0f, 0.0f, 0.0f);
+   glm::vec3 result;
+   glm::vec3 rotation_axis(0.0f, 1.0f, 0.0f);
+
+   // up 2.2f, +1 in X, then 180 degrees around Y (should move X out to +2, then rotate it around to -2)
+   glm::vec3 move_it_1(1.0f, 2.2f, 0.0f);
+   F_Dual_Quat transform_1 = F_Dual_Quat::generate_translate_then_rotate(rotation_axis, Math_Helper::PI, move_it_1);
+   transform_1.normalize();
+   result = F_Dual_Quat::transform(transform_1, point);
+   EXPECT_FLOAT_EQ((-1.0f) * 2.0f, result.x);
+   EXPECT_FLOAT_EQ(2.2f, result.y);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
+
+   // now up 3.3f, -2 in X, then +90 degrees around Y (should move X from -2 out to -4, then swing it around from -X to +Z axis)
+   glm::vec3 move_it_2(-2.0f, 3.3f, 0.0f);
+   F_Dual_Quat transform_2 = F_Dual_Quat::generate_translate_then_rotate(rotation_axis, Math_Helper::PI_over_2, move_it_2);
+   F_Dual_Quat net_transform = transform_2 * transform_1;
+   net_transform.normalize();
+   result = F_Dual_Quat::transform(net_transform, point);
+   EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.x));
+   EXPECT_FLOAT_EQ(5.5f, result.y);
+   EXPECT_FLOAT_EQ(4.0f, result.z);
+
+   // now rotate it +45 degrees around Y, then down by 1.1 (should swing it around to the +X/+Z axis)
+   glm::vec3 move_it_3(0.0f, -1.1f, 0.0f);
+   F_Dual_Quat transform_3 = F_Dual_Quat::generate_translate_then_rotate(rotation_axis, Math_Helper::PI_over_4, move_it_3);
+   net_transform = transform_3 * transform_2 * transform_1;
+   net_transform.normalize();
+   result = F_Dual_Quat::transform(net_transform, point);
+   EXPECT_FLOAT_EQ(4.0f * Math_Helper::cos_PI_over_4, result.x);
+   EXPECT_FLOAT_EQ(4.4f, result.y);
+   EXPECT_FLOAT_EQ(4.0f * Math_Helper::cos_PI_over_4, result.z);
 }
