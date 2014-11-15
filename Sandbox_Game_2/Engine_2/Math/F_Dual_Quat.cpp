@@ -116,41 +116,55 @@ namespace Math
       this->m_dual = new_dual;
    }
 
-   glm::mat4 F_Dual_Quat::to_mat4() const
+   F_Dual_Number F_Dual_Quat::magnitude() const
    {
-      F_Dual_Quat norm_dq = F_Dual_Quat::normalize(*this);
+      // here's how this will go down:
+      // Note: Legend:
+      // - q = real quaternion of the form 'scalar + xi + yj + zk)
+      // - q' = real quaternion in the dual part
+      // - q* = conjugate of the real quaternion
+      // - q'* = conjugate of the real quaternion in the dual part
 
-      // get an identity matrix
-      glm::mat4 mat;
+      // Note: Let there be a dual quat dq = q + (q')e, where 'e' is the dual operator. 
+      // The square of its magnitude is a dual quat 'result' and is given by 
+      // result = dq * dq.conjugate() 
+      // (I don't know why, but these are the rules and they work, so I'll go with them).  
+      // This multiplication results in a dual quat of the following form:
+      // result = (dq)(dq*) = qq* + (qq'* + q'q*)e
+      // 
+      // Solve for the parts; the negative signs of the conjugates work out; trust me :)
+      // - qq* = (q.scalar)^2 + dot(q.vector,q.vector) + 0i + 0j + 0k
+      // - (qq'* + q'q*) = 2(q.scalar)(q'.scalar) + 2dot(q'.vector,q.vector) + 0i + 0j + 0k
+      //
+      // => result = ((q.scalar)^2 + dot(q.vector,q.vector)) + (2(q.scalar)(q'.scalar) + 2dot(q'.vector,q.vector))e
+      // So this dual quat has zero-vectors in its real and dual quats and is therefore 
+      // a dual number.
+      F_Dual_Quat dq = *this;
+      F_Dual_Quat dq_conjugate = dq.conjugate();
+      F_Dual_Quat magnitude_squared = (*this) * this->conjugate();
 
-      // extract rotational information
-      float scalar = norm_dq.m_real.m_scalar;
-      float x = norm_dq.m_dual.m_vector.x;
-      float y = norm_dq.m_dual.m_vector.y;
-      float z = norm_dq.m_dual.m_vector.z;
+      // I can't take the square root of a dual number directly, but I can solve for it
+      // Ex: Solve for sqrt(30 + 140e)
+      // Let a + (b)e = sqrt(30 + 140e), where 'a' and 'b' are real numbers and 'e' is the dual operator.
+      // Then (a + (b)e)^2 = 30 + 140e
+      // a^2 + (2ab)e = 30 + 140e
+      // 
+      // Solve for the parts:
+      // - a = sqrt(30)
+      // - b = 140 / (2a) = 140 / (2sqrt(30))
+      //
+      // General case:
+      // sqrt(a + (b)e), where 'a' and 'b' are real numbers and 'e' is the dual operator, 
+      //  = sqrt(a) + (b / (2a))e
+      float real_of_root = sqrtf(magnitude_squared.m_real.m_scalar);
+      float dual_of_root = magnitude_squared.m_dual.m_scalar / (2.0f * real_of_root);
 
-      mat[0][0] = (scalar * scalar) + (x * x) - (y * y) - (z * z);
-      mat[0][1] = (2 * x * y) + (2 * scalar * z);
-      mat[0][2] = (2 * x * z) - (2 * scalar * y);
+      return F_Dual_Number(real_of_root, dual_of_root);
+   }
 
-      mat[1][0] = (2 * x * y) - (2 * scalar * z);
-      mat[1][1] = (scalar * scalar) + (y * y) - (x * x) - (z * z);
-      mat[1][2] = (2 * y * z) + (2 * scalar * x);
-
-      mat[2][0] = (2 * x * z) + (2 * scalar * y);
-      mat[2][1] = (2 * y * z) - (2 * scalar * x);
-      mat[2][2] = (scalar * scalar) + (z * z) - (x * x) - (y * y);
-
-      // extract translational information
-      F_Quat trans = (norm_dq.m_dual * 2.0f) * norm_dq.m_real.conjugate();
-      mat[3][0] = trans.m_vector.x;
-      mat[3][1] = trans.m_vector.y;
-      mat[3][2] = trans.m_vector.z;
-
-      // the last row remains untouched; that row is the realm of clip space and perspective division 
-
-      // return a copy of the local matrix
-      return mat;
+   F_Dual_Quat F_Dual_Quat::conjugate() const
+   {
+      return F_Dual_Quat(this->m_real.conjugate(), this->m_dual.conjugate());
    }
 
    void F_Dual_Quat::normalize()
@@ -232,57 +246,6 @@ namespace Math
       // assign the values
       this->m_real = new_real;
       this->m_dual = new_dual;
-   }
-
-   F_Dual_Quat F_Dual_Quat::conjugate() const
-   {
-      return F_Dual_Quat(this->m_real.conjugate(), this->m_dual.conjugate());
-   }
-
-   F_Dual_Number F_Dual_Quat::magnitude() const
-   {
-      // here's how this will go down:
-      // Note: Legend:
-      // - q = real quaternion of the form 'scalar + xi + yj + zk)
-      // - q' = real quaternion in the dual part
-      // - q* = conjugate of the real quaternion
-      // - q'* = conjugate of the real quaternion in the dual part
-
-      // Note: Let there be a dual quat dq = q + (q')e, where 'e' is the dual operator. 
-      // The square of its magnitude is a dual quat 'result' and is given by 
-      // result = dq * dq.conjugate() 
-      // (I don't know why, but these are the rules and they work, so I'll go with them).  
-      // This multiplication results in a dual quat of the following form:
-      // result = (dq)(dq*) = qq* + (qq'* + q'q*)e
-      // 
-      // Solve for the parts; the negative signs of the conjugates work out; trust me :)
-      // - qq* = (q.scalar)^2 + dot(q.vector,q.vector) + 0i + 0j + 0k
-      // - (qq'* + q'q*) = 2(q.scalar)(q'.scalar) + 2dot(q'.vector,q.vector) + 0i + 0j + 0k
-      //
-      // => result = ((q.scalar)^2 + dot(q.vector,q.vector)) + (2(q.scalar)(q'.scalar) + 2dot(q'.vector,q.vector))e
-      // So this dual quat has zero-vectors in its real and dual quats and is therefore 
-      // a dual number.
-      F_Dual_Quat dq = *this;
-      F_Dual_Quat dq_conjugate = dq.conjugate();
-      F_Dual_Quat magnitude_squared = (*this) * this->conjugate();
-
-      // I can't take the square root of a dual number directly, but I can solve for it
-      // Ex: Solve for sqrt(30 + 140e)
-      // Let a + (b)e = sqrt(30 + 140e), where 'a' and 'b' are real numbers and 'e' is the dual operator.
-      // Then (a + (b)e)^2 = 30 + 140e
-      // a^2 + (2ab)e = 30 + 140e
-      // 
-      // Solve for the parts:
-      // - a = sqrt(30)
-      // - b = 140 / (2a) = 140 / (2sqrt(30))
-      //
-      // General case:
-      // sqrt(a + (b)e), where 'a' and 'b' are real numbers and 'e' is the dual operator, 
-      //  = sqrt(a) + (b / (2a))e
-      float real_of_root = sqrtf(magnitude_squared.m_real.m_scalar);
-      float dual_of_root = magnitude_squared.m_dual.m_scalar / (2.0f * real_of_root);
-
-      return F_Dual_Number(real_of_root, dual_of_root);
    }
 
 

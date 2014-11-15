@@ -4,7 +4,7 @@
 #include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
-//#include <Utilities\Quaternion_Helper.h>
+#include <Utilities\Quaternion_Helper.h>
 
 namespace Rendering
 {
@@ -25,18 +25,10 @@ namespace Rendering
    {
       //return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
 
-      //glm::fdualquat dq = m_where_and_which_way;
+      glm::fdualquat dq = m_where_and_which_way;
       //dq.real = glm::conjugate(dq.real);
-      //dq.dual *= -1.0f;
-      Math::F_Dual_Quat dq = m_where_and_which_way;
-      dq.m_real = dq.m_real.conjugate();
-      dq.m_dual *= -1.0f;
-      
-      //return dq.to_mat4();
-      //return m_where_and_which_way.to_mat4();
-      return glm::mat4();
-
-      //return Utilities::Quaternion_Helper::dual_quat_to_mat4(dq);
+      dq.dual *= -1.0f;
+      return Utilities::Quaternion_Helper::dual_quat_to_mat4(dq);
       //return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
    }
 
@@ -99,11 +91,10 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      return glm::vec3();
-      //return glm::vec3(
-      //   m_where_and_which_way.dual.x,
-      //   m_where_and_which_way.dual.y,
-      //   m_where_and_which_way.dual.z);
+      return glm::vec3(
+         m_where_and_which_way.dual.x,
+         m_where_and_which_way.dual.y,
+         m_where_and_which_way.dual.z);
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

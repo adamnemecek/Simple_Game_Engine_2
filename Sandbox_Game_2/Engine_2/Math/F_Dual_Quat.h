@@ -3,7 +3,6 @@
 
 #include <Math\F_Quat.h>
 #include <glm\vec3.hpp>
-#include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Number.h>
 
 namespace Math
@@ -60,9 +59,6 @@ namespace Math
       // self-multiplication
       // Note: See description of operator* for details.
       void operator*=(const F_Dual_Quat &right);
-
-      // make mat4 out of self
-      glm::mat4 to_mat4() const;
 
       // self-normalize
       void normalize();
