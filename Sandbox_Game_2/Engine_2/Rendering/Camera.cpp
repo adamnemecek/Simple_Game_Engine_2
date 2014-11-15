@@ -25,11 +25,16 @@ namespace Rendering
    {
       //return glm::translate(glm::mat4_cast(m_view_orientation), -m_position);
 
-      glm::fdualquat dq = m_where_and_which_way;
-      //dq.real = glm::conjugate(dq.real);
-      dq.dual *= -1.0f;
-      return Utilities::Quaternion_Helper::dual_quat_to_mat4(dq);
-      //return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
+      //glm::fdualquat dq = m_where_and_which_way;
+      ////dq.real = glm::conjugate(dq.real);
+      //dq.dual *= -1.0f;
+      //return Utilities::Quaternion_Helper::dual_quat_to_mat4(dq);
+      ////return Utilities::Quaternion_Helper::dual_quat_to_mat4(m_where_and_which_way);
+
+      Math::F_Dual_Quat dq = m_where_and_which_way;
+      dq.m_dual *= -1.0f;
+
+      return dq.to_mat4();
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -69,11 +74,18 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+         //glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
          //m_position = (m_follow_this_entity_ptr->m_position);
          //m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
 
-         m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+         glm::fquat r = m_follow_this_entity_ptr->m_where_and_which_way.real;
+         glm::fquat d = m_follow_this_entity_ptr->m_where_and_which_way.dual;
+         
+         Math::F_Quat temp_real(r.w, glm::vec3(r.x, r.y, r.z));
+         Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
+
+         //m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+         m_where_and_which_way = Math::F_Dual_Quat(temp_real, temp_dual);
       }
    }
 
@@ -91,10 +103,12 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      return glm::vec3(
-         m_where_and_which_way.dual.x,
-         m_where_and_which_way.dual.y,
-         m_where_and_which_way.dual.z);
+      //return glm::vec3(
+      //   m_where_and_which_way.dual.x,
+      //   m_where_and_which_way.dual.y,
+      //   m_where_and_which_way.dual.z);
+
+      return glm::vec3();
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

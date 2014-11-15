@@ -3,6 +3,7 @@
 
 #include <Math\F_Quat.h>
 #include <glm\vec3.hpp>
+#include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Number.h>
 
 namespace Math
@@ -65,6 +66,9 @@ namespace Math
 
       // self-conjugate
       F_Dual_Quat conjugate() const;
+
+      // turn self to mat4
+      glm::mat4 to_mat4() const;
 
    private:
       // Note: These functions are private for the following reasons:
