@@ -11,7 +11,8 @@
 
 #include <Entities\Entity.h>
 
-#include <Utilities\Quaternion_Helper.h>
+//#include <Utilities\Quaternion_Helper.h>
+#include <Math\F_Dual_Quat.h>
 #include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Utilities\Printer_Helper.h>
 
@@ -82,16 +83,23 @@ namespace Entities
 
       //printf("position change: <%.2f, %.2f, %.2f>\n", position_change);
 
-      glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
-      glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_translation_only(position_change) * previous_where_and_which_way;
-      new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
-      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::dual_quat(orientation_change, position_change);
+      //glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
+      Math::F_Dual_Quat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
+      //glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_translation_only(position_change) * previous_where_and_which_way;
+      Math::F_Dual_Quat new_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, position_change);
+      //new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
+      //new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
+      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way * previous_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::dual_quat(orientation_change, position_change);
    }
 
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)
    {
       // ??remove assertion and make into a try-throw check or maybe just refuse to add too many??
-      MY_ASSERT(m_current_immediate_force_vector_index != m_MAX_IMMEDIATE_FORCE_VECTORS);
+      //MY_ASSERT(m_current_immediate_force_vector_index != m_MAX_IMMEDIATE_FORCE_VECTORS);
+      if (m_current_immediate_force_vector_index == m_MAX_IMMEDIATE_FORCE_VECTORS)
+      {
+         printf("whoops");
+      }
       m_immediate_force_vectors_this_frame[m_current_immediate_force_vector_index++] = force_vec;
    }
 

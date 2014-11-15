@@ -33,11 +33,11 @@ namespace Entities
       uint m_current_sustained_force_vector_index;
 
       glm::vec3 m_linear_velocity;
-      glm::vec3 m_linear_acceleration;
+      glm::vec3 m_linear_acceleration; // TODO: remove this
 
       glm::vec3 m_angular_rotation_vector;
       float m_angular_velocity;
-      float m_angular_acceleration;
+      float m_angular_acceleration; // TODO: remove this
    };
 }
 

@@ -16,72 +16,72 @@
 using std::cout;
 using std::endl;
 
-#include <glm\gtx\dual_quaternion.hpp>
-#include <Utilities\Quaternion_Helper.h>
+//#include <glm\gtx\dual_quaternion.hpp>
+//#include <Utilities\Quaternion_Helper.h>
 
 
-glm::fdualquat dual_quat_conjugate(glm::fdualquat dq)
-{
-   return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
-}
-void my_function()
-{
-   glm::fquat point(1.0f, 3.0f, 4.0f, 5.0f);
-   glm::fdualquat point_dq(glm::fquat(), point);
-
-   glm::vec3 translate(4.0f, 2.0f, 6.0f);
-   glm::fdualquat translate_dq(glm::fquat(), translate);
-
-   glm::fquat rotation;
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f/2.0f, rotation);
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, rotation);
-   glm::fdualquat rotation_dq(rotation, glm::fquat(0.0, 0.0f, 0.0f, 0.0f));
-
-   // pure rotation
-   //glm::vec4 v = glm::vec4(3.0f, 4.0f, 5.0f, 1.0f);
-   //glm::vec4 result = glm::mat4_cast(rotation) * v;
-   //glm::fdualquat result_1 = rotation_dq * point_dq * rotation_dq;
-   //glm::fdualquat result_2 = glm::normalize(rotation_dq) * point_dq * glm::normalize(rotation_dq);
-
-   // pure translation
-   //glm::fdualquat result_1 = translate_dq * point_dq * dual_quat_conjugate(translate_dq);
-   //glm::fdualquat result_2 = glm::normalize(translate_dq) * point_dq * glm::normalize(dual_quat_conjugate(translate_dq));
-
-   // rotate, then translate
-   glm::fdualquat transform(rotation, translate);
-   glm::fdualquat result_1 = transform * point_dq * dual_quat_conjugate(transform);
-   glm::fdualquat result_2 = glm::normalize(transform) * point_dq * glm::normalize(dual_quat_conjugate(transform));
-
-   result_2 = glm::normalize(result_2);
-   glm::fquat T = (result_2.dual * 2.0f) * glm::conjugate(result_2.real);
-
-   //glm::fdualquat dq(glm::fquat(), glm::fquat(0.0f, 0.0f, 5.0f, 0.0f));
-   //dq = glm::normalize(dq);
-
-
-   glm::vec4 vec = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-   glm::fquat orientation;
-   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, orientation);
-   //glm::mat4 mat = glm::mat4_cast(orientation);
-   glm::fdualquat fdq1 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
-   glm::fdualquat fdq2 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
-   glm::fdualquat fdq = fdq1 * fdq2;
-   
-   glm::mat4 mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq1);
-   glm::vec4 point1 = mat * vec;
-   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq2);
-   glm::vec4 point_2 = mat * vec;
-   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq);
-   glm::vec4 point_3 = mat * vec;
-
-
-
-   //Math::F_Dual_Quat point = Math::F_Dual_Quat::point(glm::vec3(0.0f, 1.0f, 0.0f));
-   //Math::F_Dual_Quat translate = Math::F_Dual_Quat::translate(glm::vec3(0.0f, 2.0f, 0.0f));
-   //Math::F_Dual_Quat result = translate * Math::F_Dual_Quat::conjugate(point);
-
-   printf("hello\n");
-}
+//glm::fdualquat dual_quat_conjugate(glm::fdualquat dq)
+//{
+//   return glm::fdualquat(glm::conjugate(dq.real), (-1.0f) * glm::conjugate(dq.dual));
+//}
+//void my_function()
+//{
+//   glm::fquat point(1.0f, 3.0f, 4.0f, 5.0f);
+//   glm::fdualquat point_dq(glm::fquat(), point);
+//
+//   glm::vec3 translate(4.0f, 2.0f, 6.0f);
+//   glm::fdualquat translate_dq(glm::fquat(), translate);
+//
+//   glm::fquat rotation;
+//   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f/2.0f, rotation);
+//   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, rotation);
+//   glm::fdualquat rotation_dq(rotation, glm::fquat(0.0, 0.0f, 0.0f, 0.0f));
+//
+//   // pure rotation
+//   //glm::vec4 v = glm::vec4(3.0f, 4.0f, 5.0f, 1.0f);
+//   //glm::vec4 result = glm::mat4_cast(rotation) * v;
+//   //glm::fdualquat result_1 = rotation_dq * point_dq * rotation_dq;
+//   //glm::fdualquat result_2 = glm::normalize(rotation_dq) * point_dq * glm::normalize(rotation_dq);
+//
+//   // pure translation
+//   //glm::fdualquat result_1 = translate_dq * point_dq * dual_quat_conjugate(translate_dq);
+//   //glm::fdualquat result_2 = glm::normalize(translate_dq) * point_dq * glm::normalize(dual_quat_conjugate(translate_dq));
+//
+//   // rotate, then translate
+//   glm::fdualquat transform(rotation, translate);
+//   glm::fdualquat result_1 = transform * point_dq * dual_quat_conjugate(transform);
+//   glm::fdualquat result_2 = glm::normalize(transform) * point_dq * glm::normalize(dual_quat_conjugate(transform));
+//
+//   result_2 = glm::normalize(result_2);
+//   glm::fquat T = (result_2.dual * 2.0f) * glm::conjugate(result_2.real);
+//
+//   //glm::fdualquat dq(glm::fquat(), glm::fquat(0.0f, 0.0f, 5.0f, 0.0f));
+//   //dq = glm::normalize(dq);
+//
+//
+//   glm::vec4 vec = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+//   glm::fquat orientation;
+//   Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, orientation);
+//   //glm::mat4 mat = glm::mat4_cast(orientation);
+//   glm::fdualquat fdq1 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+//   glm::fdualquat fdq2 = Utilities::Quaternion_Helper::dual_quat(orientation, glm::vec3(0.0f, 2.0f, 0.0f));
+//   glm::fdualquat fdq = fdq1 * fdq2;
+//   
+//   glm::mat4 mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq1);
+//   glm::vec4 point1 = mat * vec;
+//   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq2);
+//   glm::vec4 point_2 = mat * vec;
+//   mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(fdq);
+//   glm::vec4 point_3 = mat * vec;
+//
+//
+//
+//   //Math::F_Dual_Quat point = Math::F_Dual_Quat::point(glm::vec3(0.0f, 1.0f, 0.0f));
+//   //Math::F_Dual_Quat translate = Math::F_Dual_Quat::translate(glm::vec3(0.0f, 2.0f, 0.0f));
+//   //Math::F_Dual_Quat result = translate * Math::F_Dual_Quat::conjugate(point);
+//
+//   printf("hello\n");
+//}
 
 
 namespace Rendering

@@ -5,7 +5,8 @@
 #include <glm\vec2.hpp>
 #include <glm\mat4x4.hpp>
 //#include <Utilities\Include_Helpers\GLM_Quaternion.h>
-#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
+//#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
+#include <Math\F_Dual_Quat.h>
 
 namespace Entities
 {
@@ -46,7 +47,8 @@ namespace Rendering
       // replaced with dual quat
       //glm::vec3 m_position;
       //glm::fquat m_view_orientation;
-      glm::fdualquat m_where_and_which_way;
+      //glm::fdualquat m_where_and_which_way;
+      Math::F_Dual_Quat m_where_and_which_way;
 
       glm::vec2 m_prev_mouse_position;
 
