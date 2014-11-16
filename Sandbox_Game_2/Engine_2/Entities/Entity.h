@@ -7,6 +7,8 @@
 #include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 #include <Utilities\Typedefs.h>
 
+#include <Math\F_Dual_Quat.h>
+
 namespace Entities
 {
    class Game_Component;
@@ -43,6 +45,7 @@ namespace Entities
       // use a dual quaternion for both orientation and position so that we only have to multiply a 
       // single item when transforming child entities
       glm::fdualquat m_where_and_which_way;
+      //Math::F_Dual_Quat m_where_and_which_way;
 
    protected:
       // these are protected instead of private so that the Controllable_Entity can also access them
