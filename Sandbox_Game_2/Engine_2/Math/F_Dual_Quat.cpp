@@ -25,8 +25,17 @@ namespace Math
 
       m_real = Math::F_Quat(r.w, glm::vec3(r.x, r.y, r.z));
       m_dual = Math::F_Quat(d.w, glm::vec3(d.x, d.y, d.z));
-      //Math::F_Quat temp_real(r.w, glm::vec3(r.x, r.y, r.z));
-      //Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
+   }
+
+   glm::fdualquat F_Dual_Quat::to_glm_dq() const
+   {
+      Math::F_Quat r = this->m_real;
+      Math::F_Quat d = this->m_dual;
+      
+      glm::fquat temp_r(r.m_scalar, r.m_vector);
+      glm::fquat temp_d(d.m_scalar, d.m_vector);
+      
+      return glm::fdualquat(temp_r, temp_d);
    }
 
    //F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)

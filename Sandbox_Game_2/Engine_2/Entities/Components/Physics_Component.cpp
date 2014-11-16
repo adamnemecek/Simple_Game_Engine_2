@@ -15,6 +15,8 @@
 #include <Utilities\Include_Helpers\Default_Vectors.h>
 #include <Utilities\Printer_Helper.h>
 
+#include <Math\F_Dual_Quat.h>
+
 namespace Entities
 {
    bool Physics_Component::initialize()
@@ -65,14 +67,14 @@ namespace Entities
 
       // calculate torque and rotate the entity
       m_angular_rotation_vector = Utilities::Default_Vectors::WORLD_UP_VECTOR;
-      m_angular_acceleration = glm::length(net_force_vector) / 2.0f;
+      //m_angular_acceleration = glm::length(net_force_vector) / 2.0f;
       m_angular_velocity += m_angular_acceleration * delta_time;
       double rotation_angle = m_angular_velocity * delta_time;
 
       //printf("angle: %.2lf", rotation_angle);
       
       glm::fquat orientation_change;
-      //Utilities::Quaternion_Helper::orientation_offset(m_angular_rotation_vector, rotation_angle, orientation_change);
+      Utilities::Quaternion_Helper::orientation_offset(m_angular_rotation_vector, rotation_angle, orientation_change);
 
       // calculate the linear acceleraiton and move it in the new direction
       m_linear_acceleration = net_force_vector;
@@ -82,10 +84,20 @@ namespace Entities
 
       //printf("position change: <%.2f, %.2f, %.2f>\n", position_change);
 
-      glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
-      glm::fdualquat new_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_translation_only(position_change) * previous_where_and_which_way;
-      new_where_and_which_way = new_where_and_which_way * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
-      m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way;//previous_where_and_which_way * Utilities::Quaternion_Helper::dual_quat(orientation_change, position_change);
+
+      //glm::fdualquat previous_where_and_which_way = m_parent_entity_ptr->m_where_and_which_way;
+      //glm::fdualquat new_where_and_which_way_1 = Utilities::Quaternion_Helper::dual_quat_translation_only(position_change) * previous_where_and_which_way;
+      //glm::fdualquat new_where_and_which_way_2 = new_where_and_which_way_1 * Utilities::Quaternion_Helper::dual_quat_rotation_only(orientation_change);
+      //m_parent_entity_ptr->m_where_and_which_way = new_where_and_which_way_2;//previous_where_and_which_way * Utilities::Quaternion_Helper::dual_quat(orientation_change, position_change);
+
+      Math::F_Dual_Quat prev_state(m_parent_entity_ptr->m_where_and_which_way);
+      //Math::F_Dual_Quat delta_state = Math::F_Dual_Quat::generate_translate_then_rotate(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, position_change);
+      Math::F_Dual_Quat delta_state = Math::F_Dual_Quat::generate_rotate_then_translate(Utilities::Default_Vectors::WORLD_UP_VECTOR, rotation_angle, position_change);
+      Math::F_Dual_Quat new_state = delta_state * prev_state;
+      //Math::F_Dual_Quat delta_state_1 = Math::F_Dual_Quat::generate_translate_only(position_change) * prev_state;
+      //Math::F_Dual_Quat delta_state_2 = delta_state_1 * Math::F_Dual_Quat::generate_rotator_only(m_angular_rotation_vector, rotation_angle);
+      //Math::F_Dual_Quat new_state = delta_state_2;
+      m_parent_entity_ptr->m_where_and_which_way = new_state.to_glm_dq();
    }
 
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)

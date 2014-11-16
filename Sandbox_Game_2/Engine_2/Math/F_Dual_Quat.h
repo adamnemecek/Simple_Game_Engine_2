@@ -29,6 +29,9 @@ namespace Math
 
       // temporary constructor while I convert from gll::fdualquat to this class
       F_Dual_Quat(const glm::fdualquat &dq);
+      
+      // temporary exporter while I convert from gll::fdualquat to this class
+      glm::fdualquat to_glm_dq() const;
 
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form
