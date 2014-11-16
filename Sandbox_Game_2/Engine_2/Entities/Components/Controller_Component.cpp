@@ -193,7 +193,8 @@ namespace Entities
 
       Math::F_Dual_Quat prev_state(m_parent_entity_ptr->m_where_and_which_way);
       Math::F_Dual_Quat new_state(new_orientation, new_dual);
-      m_parent_entity_ptr->m_where_and_which_way = (new_state * prev_state).to_glm_dq();
+      //m_parent_entity_ptr->m_where_and_which_way = (new_state * prev_state).to_glm_dq();
+      m_parent_entity_ptr->m_where_and_which_way = new_state * prev_state;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

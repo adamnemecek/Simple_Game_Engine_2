@@ -74,20 +74,21 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         //glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
-         //m_position = (m_follow_this_entity_ptr->m_position);
-         //m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
+         ////glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+         ////m_position = (m_follow_this_entity_ptr->m_position);
+         ////m_view_orientation = m_follow_this_entity_ptr->m_base_orientation_quat;
 
-         glm::fquat r = m_follow_this_entity_ptr->m_where_and_which_way.real;
-         glm::fquat d = m_follow_this_entity_ptr->m_where_and_which_way.dual;
-         
-         Math::F_Quat temp_real(r.w, glm::vec3(r.x, r.y, r.z));
-         Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
+         //glm::fquat r = m_follow_this_entity_ptr->m_where_and_which_way.real;
+         //glm::fquat d = m_follow_this_entity_ptr->m_where_and_which_way.dual;
+         //
+         //Math::F_Quat temp_real(r.w, glm::vec3(r.x, r.y, r.z));
+         //Math::F_Quat temp_dual(d.w, glm::vec3(d.x, d.y, d.z));
 
-         //m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
-         
-         //m_where_and_which_way = Math::F_Dual_Quat(temp_real, temp_dual);
-         m_where_and_which_way = Math::F_Dual_Quat(m_follow_this_entity_ptr->m_where_and_which_way);
+         ////m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+         //
+         ////m_where_and_which_way = Math::F_Dual_Quat(temp_real, temp_dual);
+         //m_where_and_which_way = Math::F_Dual_Quat(m_follow_this_entity_ptr->m_where_and_which_way);
+         m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
       }
    }
 

@@ -35,7 +35,8 @@ namespace Entities
       //   rotation_matrix;
 
 
-      m_renderable_ptr->m_model_to_world_mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(m_parent_entity_ptr->m_where_and_which_way);
+      //m_renderable_ptr->m_model_to_world_mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(m_parent_entity_ptr->m_where_and_which_way);
+      m_renderable_ptr->m_model_to_world_mat = m_parent_entity_ptr->m_where_and_which_way.to_mat4();
 
 
       //// update the entity's orientation vector for the sake of the camera

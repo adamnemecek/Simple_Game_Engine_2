@@ -97,7 +97,8 @@ namespace Entities
       //Math::F_Dual_Quat delta_state_1 = Math::F_Dual_Quat::generate_translate_only(position_change) * prev_state;
       //Math::F_Dual_Quat delta_state_2 = delta_state_1 * Math::F_Dual_Quat::generate_rotator_only(m_angular_rotation_vector, rotation_angle);
       //Math::F_Dual_Quat new_state = delta_state_2;
-      m_parent_entity_ptr->m_where_and_which_way = new_state.to_glm_dq();
+      //m_parent_entity_ptr->m_where_and_which_way = new_state.to_glm_dq();
+      m_parent_entity_ptr->m_where_and_which_way = new_state;
    }
 
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec)

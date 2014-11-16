@@ -7,6 +7,7 @@ namespace Math
    // member functions
 
    F_Dual_Quat::F_Dual_Quat()
+      //: m_real(1.0f, glm::vec3()),
       : m_real(),
       m_dual()
    {
@@ -79,6 +80,8 @@ namespace Math
    {
       F_Dual_Quat new_rotator = F_Dual_Quat::generate_rotator_only(rotation_axis, rotation_angle_rad);
       F_Dual_Quat new_translator = F_Dual_Quat::generate_translate_only(translate);
+
+      F_Dual_Quat temp = new_rotator * new_translator;
 
       return new_rotator * new_translator;
    }

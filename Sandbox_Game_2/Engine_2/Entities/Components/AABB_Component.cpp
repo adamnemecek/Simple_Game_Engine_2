@@ -80,7 +80,8 @@ namespace Entities
       glm::vec3 curr_face_centers[BOX_FACES::NUM_FACES];
 
       // transform the face center points
-      Math::F_Dual_Quat transform(m_parent_entity_ptr->m_where_and_which_way);
+      //Math::F_Dual_Quat transform(m_parent_entity_ptr->m_where_and_which_way);
+      const Math::F_Dual_Quat &transform = m_parent_entity_ptr->m_where_and_which_way;
       //glm::fdualquat &transform = m_parent_entity_ptr->m_where_and_which_way;
       //glm::fdualquat transform_conjugate = Utilities::Quaternion_Helper::dual_quat_conjugate(transform);
 

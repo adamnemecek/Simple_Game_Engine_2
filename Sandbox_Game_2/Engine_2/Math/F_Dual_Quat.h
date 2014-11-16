@@ -20,6 +20,7 @@ namespace Math
       // Note: Constructs a dual quat composed of two default quats, resulting
       // in a dual quat of the following form:
       // real = [0, <0,0,0>], dual = [0, <0,0,0>]
+      // TODO: ??change the real portion's scalar to default to 1??
       F_Dual_Quat();
 
       // explicit constructor
@@ -31,7 +32,7 @@ namespace Math
       F_Dual_Quat(const glm::fdualquat &dq);
       
       // temporary exporter while I convert from gll::fdualquat to this class
-      glm::fdualquat to_glm_dq() const;
+      glm::fdualquat to_glm_dq() const;   // TODO: change to 'to_glm_mat4()'
 
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form
