@@ -4,8 +4,6 @@
 #include <glm\vec3.hpp>
 #include <glm\vec2.hpp>
 #include <glm\mat4x4.hpp>
-//#include <Utilities\Include_Helpers\GLM_Quaternion.h>
-#include <Utilities\Include_Helpers\GLM_Dual_Quaternion.h>
 #include <Math\F_Dual_Quat.h>
 
 namespace Entities
@@ -34,21 +32,8 @@ namespace Rendering
       // Note: If no entity is assigned, then the camera will remain at the origin and not move.
       void set_entity_to_follow(Entities::Entity *entity_ptr);
 
-      // basic camera controls
-      //void move_forward();
-      //void move_back();
-      //void strafe_left();
-      //void strafe_right();
-      //void move_up();
-      //void move_down();
-
 
    private:
-      // replaced with dual quat
-      //glm::vec3 m_position;
-      //glm::fquat m_view_orientation;
-      
-      //glm::fdualquat m_where_and_which_way;
       Math::F_Dual_Quat m_where_and_which_way;
 
       glm::vec2 m_prev_mouse_position;

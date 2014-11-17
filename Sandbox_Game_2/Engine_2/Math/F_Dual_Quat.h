@@ -28,12 +28,6 @@ namespace Math
       // real = argument real, dual = argument dual
       F_Dual_Quat(const F_Quat &real, const F_Quat &dual);
 
-      // temporary constructor while I convert from gll::fdualquat to this class
-      F_Dual_Quat(const glm::fdualquat &dq);
-      
-      // temporary exporter while I convert from gll::fdualquat to this class
-      glm::fdualquat to_glm_dq() const;   // TODO: change to 'to_glm_mat4()'
-
       // generates a dual quat that performs a translation only
       // Note: Results in a dual quat of the following form
       // real = [1, <0,0,0>], dual = [0, (1/2)translate_vector]

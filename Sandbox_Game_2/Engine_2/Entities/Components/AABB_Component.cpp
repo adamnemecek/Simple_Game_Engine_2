@@ -3,13 +3,10 @@
 #include <Entities\Entity.h>
 #include <Shapes\Geometry.h>
 #include <Shapes\My_Vertex.h>
-#include <Utilities\Quaternion_Helper.h>
 #include <memory.h>
 #include <Utilities\My_Assert.h>
 
 #include <Utilities\Printer_Helper.h>
-
-#include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
 
 #include <Math\F_Dual_Quat.h>
 
@@ -69,35 +66,13 @@ namespace Entities
 
    void AABB_Component::update()
    {
-      //static uint update_count = 0;
-
-      //if (update_count > 10)
-      //{
-      //   glm::normalize(m_parent_entity_ptr->m_where_and_which_way);
-      //}
-      //update_count++;
-
       glm::vec3 curr_face_centers[BOX_FACES::NUM_FACES];
 
       // transform the face center points
-      //Math::F_Dual_Quat transform(m_parent_entity_ptr->m_where_and_which_way);
       const Math::F_Dual_Quat &transform = m_parent_entity_ptr->m_where_and_which_way;
-      //glm::fdualquat &transform = m_parent_entity_ptr->m_where_and_which_way;
-      //glm::fdualquat transform_conjugate = Utilities::Quaternion_Helper::dual_quat_conjugate(transform);
-
-      //glm::mat4 mat = Utilities::Quaternion_Helper::dual_quat_to_mat4(transform);
       for (uint face_index = 0; face_index < BOX_FACES::NUM_FACES; face_index++)
       {
          curr_face_centers[face_index] = Math::F_Dual_Quat::transform(transform, m_default_face_centers[face_index]);
-
-         //curr_face_centers[face_index] = Utilities::Quaternion_Helper::dual_quat_translate_point(
-         //   m_default_face_centers[face_index],
-         //   transform,
-         //   transform_conjugate);
-
-         //glm::vec4 v = glm::vec4(m_default_face_centers[face_index], 1.0f);
-         //glm::vec3 v2 = glm::vec3(mat * v);
-         //curr_face_centers[face_index] = v2;
       }
 
       // data is closely packed, so index_stride is 1

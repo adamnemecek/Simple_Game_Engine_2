@@ -19,36 +19,6 @@ namespace Math
    {
    }
 
-   F_Dual_Quat::F_Dual_Quat(const glm::fdualquat &dq)
-   {
-      glm::fquat r = dq.real;
-      glm::fquat d = dq.dual;
-
-      m_real = Math::F_Quat(r.w, glm::vec3(r.x, r.y, r.z));
-      m_dual = Math::F_Quat(d.w, glm::vec3(d.x, d.y, d.z));
-   }
-
-   glm::fdualquat F_Dual_Quat::to_glm_dq() const
-   {
-      Math::F_Quat r = this->m_real;
-      Math::F_Quat d = this->m_dual;
-      
-      glm::fquat temp_r(r.m_scalar, r.m_vector);
-      glm::fquat temp_d(d.m_scalar, d.m_vector);
-      
-      return glm::fdualquat(temp_r, temp_d);
-   }
-
-   //F_Dual_Quat::F_Dual_Quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
-   //{
-   //   F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
-   //   F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate);
-
-   //   // these are the rules for making the dual part, and they work, so just say "yes!" and we'll move on
-   //   m_real = new_rotator;
-   //   m_dual = new_translator * new_rotator;
-   //}
-
    F_Dual_Quat F_Dual_Quat::generate_translate_only(const glm::vec3 &translate)
    {
       // in this case, the rotator is the quat equivalent of 1, so don't bother multiplying
@@ -147,10 +117,6 @@ namespace Math
       glm::mat4 mat;
 
       // extract rotational information
-      //float scalar = norm_dq.real.w;
-      //float x = norm_dq.real.x;
-      //float y = norm_dq.real.y;
-      //float z = norm_dq.real.z;
       float scalar = this->m_real.m_scalar;
       float x = this->m_real.m_vector.x;
       float y = this->m_real.m_vector.y;
@@ -169,11 +135,7 @@ namespace Math
       mat[2][2] = (scalar * scalar) + (z * z) - (x * x) - (y * y);
 
       // extract translational information
-      //glm::fquat trans = (norm_dq.dual * 2.0f) * glm::conjugate(norm_dq.real);
       Math::F_Quat trans = (this->m_dual * 2.0f) * this->m_real.conjugate();
-      //mat[3][0] = trans.x;
-      //mat[3][1] = trans.y;
-      //mat[3][2] = trans.z;
       mat[3][0] = trans.m_vector.x;
       mat[3][1] = trans.m_vector.y;
       mat[3][2] = trans.m_vector.z;

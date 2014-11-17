@@ -158,9 +158,6 @@
     <ClInclude Include="Entities\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Quaternion_Helper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utilities\My_Assert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -198,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Math\F_Dual_Number.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Quaternion_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

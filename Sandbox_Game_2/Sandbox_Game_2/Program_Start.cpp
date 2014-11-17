@@ -26,7 +26,6 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
-#include <Engine_2\Utilities\Quaternion_Helper.h>
 #include <Engine_2\Utilities\Printer_Helper.h>
 #include <Engine_2\Utilities\My_Assert.h>
 
