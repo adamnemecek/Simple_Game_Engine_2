@@ -296,22 +296,22 @@ void keyboard(unsigned char key, int x, int y)
    {
    case 'w':
    {
-      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, -20.0f));
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3());
       break;
    }
    case 'a':
    {
-      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(-20.0f, 0.0f, 0.0f));
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(-20.0f, 0.0f, 0.0f), glm::vec3());
       break;
    }
    case 's': 
    {
-      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, +20.0f));
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, +20.0f), glm::vec3());
       break;
    }
    case 'd':
    {
-      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(+20.0f, 0.0f, 0.0f));
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(+20.0f, 0.0f, 0.0f), glm::vec3());
       break;
    }
    case 32:

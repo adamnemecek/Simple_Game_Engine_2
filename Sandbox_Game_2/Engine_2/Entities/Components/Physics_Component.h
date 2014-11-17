@@ -14,7 +14,12 @@ namespace Entities
       // default shutdown()
       void update();
       
-      void add_immediate_force_vector(const glm::vec3 &force_vec);
+      // an immediate force vector will likely induce both linear and angular acceleration, so we need 
+      // to know where the force vector was applied relative to the center of mass
+      void add_immediate_force_vector(const glm::vec3 &force_vec, const glm::vec3 &lever_arm);
+
+      // a sustained force vector will be considered to act on the entire object, so we will assume
+      // that it acts only on the center of mass and we therefore do not need a lever arm vector
       void add_sustained_force_vector(const glm::vec3 &force_vec);
 
       // this is the "bounce off surface" function
@@ -33,11 +38,8 @@ namespace Entities
       uint m_current_sustained_force_vector_index;
 
       glm::vec3 m_linear_velocity;
-      glm::vec3 m_linear_acceleration;
-
       glm::vec3 m_angular_rotation_vector;
       float m_angular_velocity;
-      float m_angular_acceleration;
    };
 }
 
