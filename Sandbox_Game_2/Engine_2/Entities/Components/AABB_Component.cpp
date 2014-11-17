@@ -77,6 +77,15 @@ namespace Entities
 
       // data is closely packed, so index_stride is 1
       recalculate_all_min_max_values(curr_face_centers, BOX_FACES::NUM_FACES, 1);
+
+      static int count = 0;
+      printf("Z min:%.2f, Z max:%.2f, Z diff:%.2f - ", m_curr_min_z, m_curr_max_z, m_curr_max_z - m_curr_min_z);
+      count += 1;
+      if (2 == count)
+      {
+         count = 0;
+         printf("\n");
+      }
    }
 
 
@@ -90,12 +99,12 @@ namespace Entities
 
       if (X_overlap)
       {
-         cout << " - X overlap";
+         //cout << " - X overlap";
       }
       
       if (Y_overlap)
       {
-         cout << " - Y overlap";
+         //cout << " - Y overlap";
       }
 
       if (Z_overlap)

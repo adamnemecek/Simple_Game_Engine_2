@@ -7,6 +7,9 @@ using Math::F_Dual_Quat;
 #include <Engine_2\Math\F_Quat.h>
 using Math::F_Quat;
 
+#include <glm\vec3.hpp>
+#include <glm\mat4x4.hpp>
+
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -45,34 +48,6 @@ TEST(Float_Dual_Quat, Explicit_Constructor)
    EXPECT_FLOAT_EQ(-1.1f, dq.m_dual.m_vector.z);
 }
 
-TEST(Float_Dual_Quat, Convenience_Constructor)
-{
-   //static const float ROTATE_X = 1.1f;
-   //static const float ROTATE_Y = 2.2f;
-   //static const float ROTATE_Z = 3.3f;
-   //glm::vec3 rotation_axis(ROTATE_X, ROTATE_Y, ROTATE_Z);
-
-   //static const float ROT_ANGLE = Math_Helper::PI_over_2;
-
-   //static const float TRANSLATE_X = -3.3f;
-   //static const float TRANSLATE_Y = -2.2f;
-   //static const float TRANSLATE_Z = -1.1f;
-   //glm::vec3 translation(TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z);
-
-   //F_Dual_Quat dq(rotation_axis, ROT_ANGLE, translation);
-   //F_Quat expected_real = F_Quat::generate_rotator_for_dual_quat(rotation_axis, ROT_ANGLE);
-   //F_Quat expected_dual = F_Quat::generate_pure_quat(0.5f * translation) * expected_real;
-
-   //EXPECT_FLOAT_EQ(expected_real.m_scalar, dq.m_real.m_scalar);
-   //EXPECT_FLOAT_EQ(expected_real.m_vector.x, dq.m_real.m_vector.x);
-   //EXPECT_FLOAT_EQ(expected_real.m_vector.y, dq.m_real.m_vector.y);
-   //EXPECT_FLOAT_EQ(expected_real.m_vector.z, dq.m_real.m_vector.z);
-   //EXPECT_FLOAT_EQ(expected_dual.m_scalar, dq.m_dual.m_scalar);
-   //EXPECT_FLOAT_EQ(expected_dual.m_vector.x, dq.m_dual.m_vector.x);
-   //EXPECT_FLOAT_EQ(expected_dual.m_vector.y, dq.m_dual.m_vector.y);
-   //EXPECT_FLOAT_EQ(expected_dual.m_vector.z, dq.m_dual.m_vector.z);
-}
-
 TEST(Float_Dual_Quat, Generate_Translate)
 {
    static const float TRANSLATE_X = -3.3f;
@@ -101,7 +76,7 @@ TEST(Float_Dual_Quat, Generate_Orientation)
 
    F_Dual_Quat dq = F_Dual_Quat::generate_rotator_only(rotation_axis, ROT_ANGLE);
    F_Quat expected_real = F_Quat::generate_rotator_for_dual_quat(rotation_axis, ROT_ANGLE);
-   F_Quat expected_dual = F_Quat::generate_pure_quat(glm::vec3()) * expected_real;
+   F_Quat expected_dual = (1 / 2.0f) * F_Quat::generate_pure_quat(glm::vec3()) * expected_real;
 
    EXPECT_FLOAT_EQ(expected_real.m_scalar, dq.m_real.m_scalar);
    EXPECT_FLOAT_EQ(expected_real.m_vector.x, dq.m_real.m_vector.x);
@@ -270,14 +245,14 @@ TEST(Float_Dual_Quat, Transform_Rotate_Only)
    result = F_Dual_Quat::transform(rotator_1, point);
    EXPECT_FLOAT_EQ(Math_Helper::cos_PI_over_4, result.x);
    EXPECT_FLOAT_EQ(0.0f, result.y);
-   EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::cos_PI_over_4, result.z);
+   EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::sin_PI_over_4, result.z);
 
    // 45 + 90 degrees around Y
    F_Dual_Quat rotator_2 = F_Dual_Quat::generate_rotator_only(glm::vec3(0.0f, 1.0f, 0.0f), Math_Helper::PI_over_2);
    result = F_Dual_Quat::transform(rotator_1 * rotator_2, point);
    EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::cos_PI_over_4, result.x);
    EXPECT_FLOAT_EQ(0.0f, result.y);
-   EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::cos_PI_over_4, result.z);
+   EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::sin_PI_over_4, result.z);
 }
 
 TEST(Float_Dual_Quat, Transform_Screw_Rotate_Then_Translate)
@@ -360,4 +335,18 @@ TEST(Float_Dual_Quat, Transforms_With_Normalization_Gone_Crazy)
    EXPECT_FLOAT_EQ(4.0f * Math_Helper::cos_PI_over_4, result.x);
    EXPECT_FLOAT_EQ(4.4f, result.y);
    EXPECT_FLOAT_EQ(4.0f * Math_Helper::cos_PI_over_4, result.z);
+}
+
+TEST(Float_Dual_Quat, Mat4_Conversion)
+{
+   // the last point must be 1 to enable translation
+   glm::vec4 point(+1.0f, 0.0f, 0.0f, 1.0f);
+
+   // rotate the point +45 degrees around Y, then up 2.2
+   glm::mat4 mat_transform = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), Math_Helper::PI_over_4, glm::vec3(0.0f, +2.2f, 0.0f)).to_mat4();
+
+   glm::vec4 result = mat_transform * point;
+   EXPECT_FLOAT_EQ(Math_Helper::cos_PI_over_4, result.x);
+   EXPECT_FLOAT_EQ(+2.2f, result.y);
+   EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::sin_PI_over_4, result.z);
 }
