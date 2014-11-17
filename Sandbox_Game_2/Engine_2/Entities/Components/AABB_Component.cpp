@@ -53,30 +53,31 @@ namespace Entities
          sizeof(Shapes::My_Vertex) / sizeof(glm::vec3));
 
       // set the default vectors so that they can be transformed on the next update
-      m_default_face_centers[BOX_FACES::LEFT_CENTER] = glm::vec3(m_curr_min_x, 0.0f, 0.0f);
-      m_default_face_centers[BOX_FACES::RIGHT_CENTER] = glm::vec3(m_curr_max_x, 0.0f, 0.0f);
-      m_default_face_centers[BOX_FACES::TOP_CENTER] = glm::vec3(0.0f, m_curr_max_y, 0.0f);
-      m_default_face_centers[BOX_FACES::BOTTOM_CENTER] = glm::vec3(0.0f, m_curr_min_y, 0.0f);
-      m_default_face_centers[BOX_FACES::FRONT_CENTER] = glm::vec3(0.0f, 0.0f, m_curr_min_z);
-      m_default_face_centers[BOX_FACES::BACK_CENTER] = glm::vec3(0.0f, 0.0f, m_curr_max_z);
-
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(m_curr_max_x, m_curr_max_y, m_curr_min_z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_BACK] = glm::vec3(m_curr_max_x, m_curr_max_y, m_curr_max_z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_FRONT] = glm::vec3(m_curr_min_x, m_curr_max_y, m_curr_min_z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_BACK] = glm::vec3(m_curr_min_x, m_curr_max_y, m_curr_max_z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(m_curr_max_x, m_curr_min_y, m_curr_min_z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(m_curr_max_x, m_curr_min_y, m_curr_max_z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_FRONT] = glm::vec3(m_curr_min_x, m_curr_min_y, m_curr_min_z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_BACK] = glm::vec3(m_curr_min_x, m_curr_min_y, m_curr_max_z);
 
       return true;
    }
 
    void AABB_Component::update()
    {
-      glm::vec3 curr_face_centers[BOX_FACES::NUM_FACES];
+      glm::vec3 curr_box_corners[BOX_CORNERS::NUM_CORNERS];
 
       // transform the face center points
       const Math::F_Dual_Quat &transform = m_parent_entity_ptr->m_where_and_which_way;
-      for (uint face_index = 0; face_index < BOX_FACES::NUM_FACES; face_index++)
+      for (uint index = 0; index < BOX_CORNERS::NUM_CORNERS; index++)
       {
-         curr_face_centers[face_index] = Math::F_Dual_Quat::transform(transform, m_default_face_centers[face_index]);
+         curr_box_corners[index] = Math::F_Dual_Quat::transform(transform, m_default_box_corners[index]);
       }
 
       // data is closely packed, so index_stride is 1
-      recalculate_all_min_max_values(curr_face_centers, BOX_FACES::NUM_FACES, 1);
+      recalculate_all_min_max_values(curr_box_corners, BOX_CORNERS::NUM_CORNERS, 1);
 
       static int count = 0;
       printf("Z min:%.2f, Z max:%.2f, Z diff:%.2f - ", m_curr_min_z, m_curr_max_z, m_curr_max_z - m_curr_min_z);

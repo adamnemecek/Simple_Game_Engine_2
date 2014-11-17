@@ -35,15 +35,17 @@ namespace Entities
       const Shapes::Geometry *m_geometry_data_ptr;
 
       // a box has six faces, so just magically declare them
-      enum BOX_FACES
+      enum BOX_CORNERS
       {
-         TOP_CENTER = 0,   // max Y
-         BOTTOM_CENTER,    // min Y
-         LEFT_CENTER,      // min X
-         RIGHT_CENTER,     // max X
-         FRONT_CENTER,     // min Z
-         BACK_CENTER,      // MAX Z
-         NUM_FACES
+         RIGHT_UPPER_FRONT,
+         RIGHT_UPPER_BACK,
+         LEFT_UPPER_FRONT,
+         LEFT_UPPER_BACK,
+         RIGHT_LOWER_FRONT,
+         RIGHT_LOWER_BACK,
+         LEFT_LOWER_FRONT,
+         LEFT_LOWER_BACK,
+         NUM_CORNERS
       };
 
       // use vec3s for the default face centers and floats for the current extremities of the box
@@ -51,7 +53,7 @@ namespace Entities
       // compare, but I can only translate vectors, so I create the default face vectors as vec3s
       // that can be easily translated with the entity's latest position and orientation on every
       // frame (the update() method).
-      glm::vec3 m_default_face_centers[BOX_FACES::NUM_FACES];
+      glm::vec3 m_default_box_corners[BOX_CORNERS::NUM_CORNERS];
       float m_curr_min_x;
       float m_curr_max_x;
       float m_curr_min_y;
