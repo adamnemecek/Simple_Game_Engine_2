@@ -8,12 +8,11 @@
 
 // for glm::perspective
 #include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
-#include <vector>
-#include <string>
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <Shapes\Geometry.h>
 #include <Utilities\Printer_Helper.h>
 #include <Rendering\Camera.h>
+
 #include <iostream>
 using std::cout;
 using std::endl;

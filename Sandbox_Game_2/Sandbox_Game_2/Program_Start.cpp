@@ -26,7 +26,7 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
-#include <Engine_2\Utilities\Printer_Helper.h>
+//#include <Engine_2\Utilities\Printer_Helper.h>
 #include <Engine_2\Utilities\My_Assert.h>
 
 #include <Engine_2\Math\F_Dual_Quat.h>
@@ -140,9 +140,6 @@ void init()
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
 
-   // for giving each entity an initial orientation
-   glm::fquat quat;
-
    // entity initialization notes:
    // - add the physics component before the renderable updater and the bounding box because
    // the physics component updates the entity's dual quat representing location and orientation
@@ -161,13 +158,9 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, quat);
-   //g_cube_1_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(-4.0f, +3.0f, +4.0f));   // lower left corner when looking from above
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(-4.0f, +3.0f, +4.0f));
-   //g_cube_1_entity.m_where_and_which_way = entity_1_offset.to_glm_dq();
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
-
 
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
@@ -178,10 +171,7 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, quat);
-   //g_cube_2_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(quat, glm::vec3(+4.0f, +3.0f, -4.0f));   // upper right corner when looking from above
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(+4.0f, +3.0f, -4.0f));
-   //g_cube_2_entity.m_where_and_which_way = entity_2_offset.to_glm_dq();
    g_cube_2_entity.m_where_and_which_way = entity_2_offset;
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
 
@@ -204,7 +194,6 @@ void init()
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
    g_camera_entity.add_component(&g_controller_component);
-   //g_camera_entity.add_component(&g_cube_1_renderable_updater_component);
    g_camera_entity.initialize();
 
    // start the camera above and looking down at the scene
@@ -215,12 +204,7 @@ void init()
    // moving it.  We instead want to translate the world and then rotate it, which
    // requires the creation of two dual quats.  
    // Note: The camera is the only thing that requires this reversal .
-   quat = glm::fquat();
-   //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, quat);
-   //g_camera_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat_rotation_only(quat) * 
-   //   Utilities::Quaternion_Helper::dual_quat_translation_only(glm::vec3(0.0f, 20.0f, 0.0f));
    Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
-   //g_camera_entity.m_where_and_which_way = entity_camera_offset.to_glm_dq();
    g_camera_entity.m_where_and_which_way = entity_camera_offset;
 
 
@@ -238,11 +222,7 @@ void init()
    g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
    g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
-   //g_circle_entity.m_position = glm::vec3(0.0f, +3.0f, 0.0f);
-
-   //g_circle_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
    Math::F_Dual_Quat entity_circle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
-   //g_circle_entity.m_where_and_which_way = entity_circle_offset.to_glm_dq();
    g_circle_entity.m_where_and_which_way = entity_circle_offset;
 
    initialize_success = g_circle_entity.initialize();
@@ -254,9 +234,7 @@ void init()
    g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
-   //g_rectangle_box_entity.m_where_and_which_way = Utilities::Quaternion_Helper::dual_quat(glm::fquat(), glm::vec3(0.0f, +3.0f, 0.0f));
    Math::F_Dual_Quat entity_rectangle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
-   //g_rectangle_box_entity.m_where_and_which_way = entity_rectangle_offset.to_glm_dq();
    g_rectangle_box_entity.m_where_and_which_way = entity_rectangle_offset;
    initialize_success = g_rectangle_box_entity.initialize();
    MY_ASSERT(initialize_success);
@@ -282,15 +260,13 @@ void display()
 
    g_cube_1_entity.update();
    g_cube_2_entity.update();
-   //g_cube_3_entity.update();
-   //g_cube_4_entity.update();
+   g_cube_3_entity.update();
+   g_cube_4_entity.update();
    g_plane_entity.update();
    g_circle_entity.update();
    g_rectangle_box_entity.update();
 
    Collision_Detection::AABB_Collision_Detector::get_instance().update();
-
-   //Utilities::Printer_Helper::print_dual_quat("rectangle: ", g_rectangle_box_entity.m_where_and_which_way);
 
    g_camera_entity.update();
    g_camera.update();

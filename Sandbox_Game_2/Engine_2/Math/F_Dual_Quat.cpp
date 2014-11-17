@@ -7,7 +7,6 @@ namespace Math
    // member functions
 
    F_Dual_Quat::F_Dual_Quat()
-      //: m_real(1.0f, glm::vec3()),
       : m_real(),
       m_dual()
    {

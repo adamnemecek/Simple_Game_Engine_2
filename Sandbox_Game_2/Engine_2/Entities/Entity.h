@@ -2,7 +2,6 @@
 #define ENGINE_Entity_H
 
 #include <glm\vec3.hpp>
-#include <glm\mat4x4.hpp>
 #include <Utilities\Typedefs.h>
 
 #include <Math\F_Dual_Quat.h>
