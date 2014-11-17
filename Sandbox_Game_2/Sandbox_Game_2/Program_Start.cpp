@@ -193,7 +193,7 @@ void init()
    g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
-   g_camera_entity.add_component(&g_controller_component);
+   //g_camera_entity.add_component(&g_controller_component);
    g_camera_entity.initialize();
 
    // start the camera above and looking down at the scene
@@ -294,32 +294,32 @@ void keyboard(unsigned char key, int x, int y)
 
    switch (key)
    {
-   //case 'w':
-   //{
-   //   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, -20.0f));
-   //   break;
-   //}
-   //case 'a':
-   //{
-   //   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(-20.0f, 0.0f, 0.0f));
-   //   break;
-   //}
-   //case 's': 
-   //{
-   //   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, +20.0f));
-   //   break;
-   //}
-   //case 'd':
-   //{
-   //   g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(+20.0f, 0.0f, 0.0f));
-   //   break;
-   //}
-   //case 32:
-   //{
-   //   // space bar
-   //   g_rectangle_box_physics.reflect_linear_velocity_around_vector(glm::vec3(0.0f, 0.0f, -1.0f));
-   //   break;
-   //}
+   case 'w':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, -20.0f));
+      break;
+   }
+   case 'a':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(-20.0f, 0.0f, 0.0f));
+      break;
+   }
+   case 's': 
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(0.0f, 0.0f, +20.0f));
+      break;
+   }
+   case 'd':
+   {
+      g_rectangle_box_physics.add_immediate_force_vector(glm::vec3(+20.0f, 0.0f, 0.0f));
+      break;
+   }
+   case 32:
+   {
+      // space bar
+      g_rectangle_box_physics.reflect_linear_velocity_around_vector(glm::vec3(0.0f, 0.0f, -1.0f));
+      break;
+   }
 
    case 27:
    {
