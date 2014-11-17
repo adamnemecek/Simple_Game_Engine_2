@@ -81,11 +81,14 @@ namespace Math
 
    glm::vec3 F_Dual_Quat::transform(const F_Dual_Quat &transform, const glm::vec3 &point)
    {
-      // make a dual quat out of the point
-      // Note: Result in (1, <0,0,0>) + (0, point)e.
-      F_Dual_Quat point_dq = F_Dual_Quat::generate_translate_only(point);
+      // Note: This transformation can be naively performed by turning the point into a dual 
+      // quat as follows:
+      // (1, <0,0,0>) + (0, (1/2)*point)e
+      // The real part is "1 + 0i + 0j +0k = 1", so we can simplify the dual quat multiplication
+      // and only consider the dual part
+      F_Quat point_dual = F_Dual_Quat::generate_translate_only(point).m_dual;
 
-      F_Dual_Quat temp = transform * point_dq;
+      F_Dual_Quat temp(transform.m_real, transform.m_real * point_dual + transform.m_dual);
       
       F_Quat translate = 2.0f * temp.m_dual * temp.m_real.conjugate();
 
@@ -111,8 +114,6 @@ namespace Math
 
    glm::mat4 F_Dual_Quat::to_mat4() const
    {
-      //glm::fdualquat norm_dq = glm::normalize(dq);
-
       // get an identity matrix
       glm::mat4 mat;
 

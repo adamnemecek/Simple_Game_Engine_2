@@ -6,8 +6,6 @@
 #include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Number.h>
 
-#include <glm\gtx\dual_quaternion.hpp>
-
 namespace Math
 {
    struct F_Dual_Quat
