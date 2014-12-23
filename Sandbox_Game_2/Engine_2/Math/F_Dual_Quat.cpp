@@ -31,7 +31,7 @@ namespace Math
    F_Dual_Quat F_Dual_Quat::generate_rotator_only(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
    {
       // in this case, the dual part is all 0s, so don't bother with multiplying by 1/2 and the rotator
-      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
       F_Quat new_translator;
 
       return F_Dual_Quat(new_rotator, new_translator);
@@ -39,7 +39,7 @@ namespace Math
 
    F_Dual_Quat F_Dual_Quat::generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      F_Quat new_rotator = F_Quat::generate_rotator_for_dual_quat(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
       F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate) * new_rotator;
 
       return F_Dual_Quat(new_rotator, new_translator);
@@ -47,12 +47,36 @@ namespace Math
 
    F_Dual_Quat F_Dual_Quat::generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      F_Dual_Quat new_rotator = F_Dual_Quat::generate_rotator_only(rotation_axis, rotation_angle_rad);
-      F_Dual_Quat new_translator = F_Dual_Quat::generate_translate_only(translate);
+      // Note: There is a naive approach and an optimized approach
+      // The naive approach is to make a new pure rotor dual quat of the following form:
+      //    rotor_quat + (0, <0,0,0>)e
+      // Then make a pure translator dual quat of the following form:
+      //    (1, <0,0,0>) + (translate_quat)e
+      // Then right-multiply the rotor by the translator to get the new transform.
+      //
+      // This approach requires a dual quaternion multiplication, but we can avoid it by
+      // taking advantage of the rotor's dual part (0) and the translator's real part (1).
+      // 
+      // The naive dual quat multiplication would result in the following:
+      //    (rotor.real + (rotor.dual)e) * (trans.real + (trans.dual)e)
+      //    = (rotor.real)(trans.real) + (rotor.real)(trans.dual)e + (rotor.dual)e(trans.real) + (rotor.dual)e(trans.dual)e
+      //    = (rotor.real)(1) + (rotor.real)(trans.dual)e + (0)e(1) + 0
+      //    = rotor.real + (rotor.real)(trans.dual)e
+      //
+      // Now we only have to construct the real part with the cosine and sine of half the
+      // angle, as we would with a rotate-first dual quaternion, and then we left-multiply
+      // the dual part by the rotational part.
+      //
+      // To recap:
+      //    rotate-then-translate dual quat = rotor_quat + (translate)(rotor_quat)e
+      //    translate-then-rotate dual quat = rotor_quat + (rotor_quat)(translate)e    <-- this is what we're doing here
 
-      F_Dual_Quat temp = new_rotator * new_translator;
+      //TODO: replace "rotation axis" with "rotation vector"
 
-      return new_rotator * new_translator;
+      F_Quat real = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat dual = real * F_Quat::generate_pure_quat(0.5f * translate);
+
+      return F_Dual_Quat(real, dual);
    }
 
 
@@ -83,13 +107,19 @@ namespace Math
       // Note: This transformation can be naively performed by turning the point into a dual 
       // quat as follows:
       // (1, <0,0,0>) + (0, (1/2)*point)e
-      // The real part is "1 + 0i + 0j +0k = 1", so we can simplify the dual quat multiplication
-      // and only consider the dual part
-      F_Quat point_dual = F_Dual_Quat::generate_translate_only(point).m_dual;
+      // The real part is "1 + 0i + 0j +0k = 1", so a dual quat multiplication would result as
+      // follows:
+      // transform.real * point.real, transform.real * point.dual + transform.dual * point.real
+      // == transform.real * (1), transform.real * point.dual + transform.dual * (1)
+      // == transform.real, transform.real * point.dual + transform.dual
+      //
+      // Conclusion: only build and use the point's dual part.  There is no point in building a 
+      // whole dual quat and wasting float multiplication on 1's and 0's.
+      F_Quat point_dual = F_Quat::generate_pure_quat(0.5f * point);
 
       F_Dual_Quat temp(transform.m_real, transform.m_real * point_dual + transform.m_dual);
       
-      F_Quat translate = 2.0f * temp.m_dual * temp.m_real.conjugate();
+      F_Quat translate = 2* temp.m_dual * temp.m_real.conjugate();
 
       return glm::vec3(translate.m_vector);
    }

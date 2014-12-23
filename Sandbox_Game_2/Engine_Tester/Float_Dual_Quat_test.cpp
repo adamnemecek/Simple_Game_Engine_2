@@ -75,7 +75,7 @@ TEST(Float_Dual_Quat, Generate_Orientation)
    static const float ROT_ANGLE = 1.0f;
 
    F_Dual_Quat dq = F_Dual_Quat::generate_rotator_only(rotation_axis, ROT_ANGLE);
-   F_Quat expected_real = F_Quat::generate_rotator_for_dual_quat(rotation_axis, ROT_ANGLE);
+   F_Quat expected_real = F_Quat::generate_rotator(rotation_axis, ROT_ANGLE);
    F_Quat expected_dual = (1 / 2.0f) * F_Quat::generate_pure_quat(glm::vec3()) * expected_real;
 
    EXPECT_FLOAT_EQ(expected_real.m_scalar, dq.m_real.m_scalar);
@@ -248,6 +248,8 @@ TEST(Float_Dual_Quat, Transform_Rotate_Only)
    EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::sin_PI_over_4, result.z);
 
    // 45 + 90 degrees around Y
+   // Note: This second transformation is still around the vertical axis, but this axis is no 
+   // longer parallel to the point.  This non-parallel axis rotation is a necessary part of the test.
    F_Dual_Quat rotator_2 = F_Dual_Quat::generate_rotator_only(glm::vec3(0.0f, 1.0f, 0.0f), Math_Helper::PI_over_2);
    result = F_Dual_Quat::transform(rotator_1 * rotator_2, point);
    EXPECT_FLOAT_EQ((-1.0f) * Math_Helper::cos_PI_over_4, result.x);
@@ -270,6 +272,8 @@ TEST(Float_Dual_Quat, Transform_Screw_Rotate_Then_Translate)
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
 
    // now rotate +90 around Y, up 3.3, and -2 in X (should bring X from 0 out to -2)
+   // Note: This second transformation is still around the vertical axis, but this axis is no 
+   // longer parallel to the point.  This non-parallel axis rotation is a necessary part of the test.
    glm::vec3 move_it_2(-2.0f, 3.3f, 0.0f);
    F_Dual_Quat transform_2 = F_Dual_Quat::generate_rotate_then_translate(rotation_axis, Math_Helper::PI_over_2, move_it_2);
    F_Dual_Quat net_transform = transform_2 * transform_1;
@@ -295,6 +299,8 @@ TEST(Float_Dual_Quat, Transform_Screw_Translate_Then_Rotate)
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.z));
 
    // do it again to make sure that they stack
+   // Note: This second transformation is still around the vertical axis, but this axis is no 
+   // longer parallel to the point.  This non-parallel axis rotation is a necessary part of the test.
    result = F_Dual_Quat::transform(transform * transform, point);
    EXPECT_FLOAT_EQ(1.0f, result.x);
    EXPECT_FLOAT_EQ(4.4f, result.y);

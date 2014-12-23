@@ -38,12 +38,8 @@ namespace Math
       // generate a quat given a rotation axis and a rotation angle
       // Note: The algorithm used here was heavily influenced by the ArcSynthesis tutorial
       // on quaternions (tutorial #8).
-      // Note: In this version, the angle is not altered.
-      static F_Quat generate_rotator_for_pure_quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
-      
-      // generate a quat given a rotation axis and a rotation angle
-      // Note: In this version, the angle is divided by 2 before calculating sine or cosine.
-      static F_Quat generate_rotator_for_dual_quat(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+      // Note: The angle is divided by 2 before calculating sine or cosine.
+      static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
 
       // normalization, but don't modify the original
       static F_Quat normalize(const F_Quat &q);

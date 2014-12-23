@@ -83,32 +83,32 @@ namespace Entities
 
       if (active_actions & ACTION_LIST::YAW_LEFT)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(relative_up, -ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::YAW_RIGHT)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(relative_up, +ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::PITCH_FORWARD)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(left_vector, +ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::PITCH_BACK)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(left_vector, -ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::ROLL_LEFT)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(forward_vector, +ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED) * new_orientation;
       }
 
       if (active_actions & ACTION_LIST::ROLL_RIGHT)
       {
-         new_orientation = Math::F_Quat::generate_rotator_for_dual_quat(forward_vector, -ROTATION_SPEED) * new_orientation;
+         new_orientation = Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED) * new_orientation;
       }
 
       // construct the dual part of the transformational dual quat
