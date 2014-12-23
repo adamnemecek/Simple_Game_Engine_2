@@ -12,7 +12,7 @@ namespace Utilities
    {
       // takes a quaternion and rotates it (with right-multiplying) by the requested number of radians around the requested axis
       // Note: This function is an adaption of OrientationOffset(...) from ArcSynthesis Tutorial 0.3.8, tutorial 8, QuaternionYPR.cpp.
-      void orientation_offset(const glm::vec3 &rotation_axis, const float rotation_angle_rad, glm::fquat &offset_this);
+      void orientation_offset(const glm::vec3 &rotation_vector, const float rotation_angle_rad, glm::fquat &offset_this);
 
       // this will be useful to force the camera to point at something rather than having the user flail about in relativistic angles
       // Note: IN PROGRESS  (??how to do this??)

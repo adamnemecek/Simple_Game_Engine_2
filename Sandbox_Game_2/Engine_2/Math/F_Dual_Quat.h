@@ -34,16 +34,15 @@ namespace Math
       // generates a dual quat that performs a rotation only 
       // Note: Results in a dual quat of the following form:
       // real = [1, orientation vectors], dual = [0, <0,0,0>]
-      static F_Dual_Quat generate_rotator_only(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+      static F_Dual_Quat generate_rotator_only(const glm::vec3 &rotation_vector, const float rotation_angle_rad);
 
       // generates a dual quat that performs a rotation, then a translation
-      static F_Dual_Quat generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
+      static F_Dual_Quat generate_rotate_then_translate(const glm::vec3 &rotation_vector, const float rotation_angle_rad, const glm::vec3 &translate);
 
       // generates a dual quat that performs a translation, then a rotation
-      // Note: This operation requires a translate dual quat and a rotator dual
-      // quat to be constructed an multiplied together, so it is a little more 
-      // expensive computationally.
-      static F_Dual_Quat generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate);
+      // Note: This generation is optimized so that it is just as computationally cheap 
+      // as rotating first, then translating.
+      static F_Dual_Quat generate_translate_then_rotate(const glm::vec3 &rotation_vector, const float rotation_angle_rad, const glm::vec3 &translate);
 
       // normalization, but don't modify the original
       static F_Dual_Quat normalize(const F_Dual_Quat &dq);

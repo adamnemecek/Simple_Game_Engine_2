@@ -30,10 +30,10 @@ namespace Math
       return F_Quat(0, new_vector);
    }
 
-   F_Quat F_Quat::generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
+   F_Quat F_Quat::generate_rotator(const glm::vec3 &rotation_vector, const float rotation_angle_rad)
    {
-      glm::vec3 normalized_rotation_axis = glm::normalize(rotation_axis);
-      glm::vec3 rotator_vector = normalized_rotation_axis * sinf(rotation_angle_rad / 2.0f);
+      glm::vec3 normalized_rotation_vector = glm::normalize(rotation_vector);
+      glm::vec3 rotator_vector = normalized_rotation_vector * sinf(rotation_angle_rad / 2.0f);
 
       float scalar = cosf(rotation_angle_rad / 2.0f);
 

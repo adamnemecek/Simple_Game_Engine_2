@@ -35,11 +35,11 @@ namespace Math
       // or transform (rotated and translated) by a dual quat.
       static F_Quat generate_pure_quat(const glm::vec3 &new_vector);
 
-      // generate a quat given a rotation axis and a rotation angle
+      // generate a quat given a rotation vector and a rotation angle
       // Note: The algorithm used here was heavily influenced by the ArcSynthesis tutorial
       // on quaternions (tutorial #8).
       // Note: The angle is divided by 2 before calculating sine or cosine.
-      static F_Quat generate_rotator(const glm::vec3 &rotation_axis, const float rotation_angle_rad);
+      static F_Quat generate_rotator(const glm::vec3 &rotation_vector, const float rotation_angle_rad);
 
       // normalization, but don't modify the original
       static F_Quat normalize(const F_Quat &q);

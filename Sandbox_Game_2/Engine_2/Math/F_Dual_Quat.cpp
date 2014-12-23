@@ -28,24 +28,24 @@ namespace Math
       return F_Dual_Quat(new_rotator, new_translator);
    }
 
-   F_Dual_Quat F_Dual_Quat::generate_rotator_only(const glm::vec3 &rotation_axis, const float rotation_angle_rad)
+   F_Dual_Quat F_Dual_Quat::generate_rotator_only(const glm::vec3 &rotation_vector, const float rotation_angle_rad)
    {
       // in this case, the dual part is all 0s, so don't bother with multiplying by 1/2 and the rotator
-      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator(rotation_vector, rotation_angle_rad);
       F_Quat new_translator;
 
       return F_Dual_Quat(new_rotator, new_translator);
    }
 
-   F_Dual_Quat F_Dual_Quat::generate_rotate_then_translate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
+   F_Dual_Quat F_Dual_Quat::generate_rotate_then_translate(const glm::vec3 &rotation_vector, const float rotation_angle_rad, const glm::vec3 &translate)
    {
-      F_Quat new_rotator = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat new_rotator = F_Quat::generate_rotator(rotation_vector, rotation_angle_rad);
       F_Quat new_translator = F_Quat::generate_pure_quat(0.5f * translate) * new_rotator;
 
       return F_Dual_Quat(new_rotator, new_translator);
    }
 
-   F_Dual_Quat F_Dual_Quat::generate_translate_then_rotate(const glm::vec3 &rotation_axis, const float rotation_angle_rad, const glm::vec3 &translate)
+   F_Dual_Quat F_Dual_Quat::generate_translate_then_rotate(const glm::vec3 &rotation_vector, const float rotation_angle_rad, const glm::vec3 &translate)
    {
       // Note: There is a naive approach and an optimized approach
       // The naive approach is to make a new pure rotor dual quat of the following form:
@@ -71,9 +71,7 @@ namespace Math
       //    rotate-then-translate dual quat = rotor_quat + (translate)(rotor_quat)e
       //    translate-then-rotate dual quat = rotor_quat + (rotor_quat)(translate)e    <-- this is what we're doing here
 
-      //TODO: replace "rotation axis" with "rotation vector"
-
-      F_Quat real = F_Quat::generate_rotator(rotation_axis, rotation_angle_rad);
+      F_Quat real = F_Quat::generate_rotator(rotation_vector, rotation_angle_rad);
       F_Quat dual = real * F_Quat::generate_pure_quat(0.5f * translate);
 
       return F_Dual_Quat(real, dual);

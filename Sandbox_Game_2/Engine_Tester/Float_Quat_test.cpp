@@ -58,28 +58,28 @@ TEST(F_Quat, Pure_Quat)
 TEST(F_Quat, Rotator)
 {
    // rotate 90 degrees around X
-   glm::vec3 rotation_axis(+1.0f, 0.0f, 0.0f);
+   glm::vec3 rotation_vector(+1.0f, 0.0f, 0.0f);
    float theta = Math_Helper::PI_over_2;
 
-   F_Quat q = F_Quat::generate_rotator(rotation_axis, theta);
+   F_Quat q = F_Quat::generate_rotator(rotation_vector, theta);
    EXPECT_FLOAT_EQ(cosf(theta / 2.0f), q.m_scalar);
    EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.x);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Y
-   rotation_axis = glm::vec3(0.0f, +1.0f, 0.0f);
+   rotation_vector = glm::vec3(0.0f, +1.0f, 0.0f);
 
-   q = F_Quat::generate_rotator(rotation_axis, theta);
+   q = F_Quat::generate_rotator(rotation_vector, theta);
    EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
    EXPECT_FLOAT_EQ(sin(theta / 2.0f), q.m_vector.y);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.z);
 
    // rotate 90 degrees around Z
-   rotation_axis = glm::vec3(0.0f, 0.0f, +1.0f);
+   rotation_vector = glm::vec3(0.0f, 0.0f, +1.0f);
 
-   q = F_Quat::generate_rotator(rotation_axis, theta);
+   q = F_Quat::generate_rotator(rotation_vector, theta);
    EXPECT_FLOAT_EQ(cos(theta / 2.0f), q.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.x);
    EXPECT_FLOAT_EQ(0.0f, q.m_vector.y);
@@ -242,12 +242,12 @@ TEST(F_Quat, Rotate_Points_Around_X)
    F_Quat rotator = F_Quat::generate_rotator(glm::vec3(1.0f, 0.0f, 0.0f), Math_Helper::PI_over_2);
 
    // transform the point
-   F_Quat result = point * rotator * point.conjugate();
+   F_Quat result = rotator * point * rotator.conjugate();
    EXPECT_FLOAT_EQ(0.0f, result.m_scalar);
    EXPECT_FLOAT_EQ(0.0f, result.m_vector.x);
    //EXPECT_FLOAT_EQ(0, result.m_vector.y);
    EXPECT_TRUE(Math_Helper::my_float_eq(0.0f, result.m_vector.y));
-   EXPECT_FLOAT_EQ(-1.0f, result.m_vector.z);
+   EXPECT_FLOAT_EQ(1.0f, result.m_vector.z);
 }
 
 TEST(F_Quat, Rotate_Points_Around_Y)
