@@ -2,6 +2,7 @@
 
 #include <Entities\Entity.h>
 #include <Shapes\Geometry.h>
+#include <Shapes\Geometry_Meta_Data.h>
 #include <Shapes\My_Vertex.h>
 #include <memory.h>
 #include <Utilities\My_Assert.h>
@@ -47,21 +48,22 @@ namespace Entities
       // can't initialize without any geometry
       MY_ASSERT(m_geometry_data_ptr != 0);
 
-      // give the min/max calculator function the vertices of the geometry, complete with index stride
-      recalculate_all_min_max_values(
-         &(m_geometry_data_ptr->m_shape_data.m_verts->position), 
-         m_geometry_data_ptr->m_shape_data.m_num_verts,
-         sizeof(Shapes::My_Vertex) / sizeof(glm::vec3));
+      //// give the min/max calculator function the vertices of the geometry, complete with index stride
+      //recalculate_all_min_max_values(
+      //   &(m_geometry_data_ptr->m_shape_data.m_verts->position), 
+      //   m_geometry_data_ptr->m_shape_data.m_num_verts,
+      //   sizeof(Shapes::My_Vertex) / sizeof(glm::vec3));
+      const Shapes::Geometry_Meta_Data &meta_data_ref = m_geometry_data_ptr->m_meta_data;
 
       // set the default vectors so that they can be transformed on the next update
-      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(m_curr_max_x, m_curr_max_y, m_curr_min_z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_BACK] = glm::vec3(m_curr_max_x, m_curr_max_y, m_curr_max_z);
-      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_FRONT] = glm::vec3(m_curr_min_x, m_curr_max_y, m_curr_min_z);
-      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_BACK] = glm::vec3(m_curr_min_x, m_curr_max_y, m_curr_max_z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(m_curr_max_x, m_curr_min_y, m_curr_min_z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(m_curr_max_x, m_curr_min_y, m_curr_max_z);
-      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_FRONT] = glm::vec3(m_curr_min_x, m_curr_min_y, m_curr_min_z);
-      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_BACK] = glm::vec3(m_curr_min_x, m_curr_min_y, m_curr_max_z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_BACK] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_max_Y, meta_data_ref.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_min_Y, meta_data_ref.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_min_Y, meta_data_ref.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_FRONT] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_min_Y, meta_data_ref.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_BACK] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_min_Y, meta_data_ref.m_max_Z);
 
       return true;
    }
