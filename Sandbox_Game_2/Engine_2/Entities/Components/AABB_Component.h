@@ -62,13 +62,7 @@ namespace Entities
       float m_curr_max_z;
 
       // a helper function that needs access to private data members
-      // Note: The vector data source may refer to closely packed vec3s like this class'
-      // "default face centers" member, or it may refer to geometry data in a My_Vertex 
-      // structure in which the next position vec3 is 3 vectors ahead, or maybe other
-      // data sources in the future.  The loop and the conditions in it though are the
-      // same, so I introduced the "index stride" variable (NOT a byte offset!) to account
-      // for these different vector storages.
-      void recalculate_all_min_max_values(const glm::vec3 *vec_data_source_ptr, const uint max_vectors, const uint index_stride);
+      void recalculate_all_min_max_values(const glm::vec3 *curr_box_corners, const int max_vectors);
    };
 }
 

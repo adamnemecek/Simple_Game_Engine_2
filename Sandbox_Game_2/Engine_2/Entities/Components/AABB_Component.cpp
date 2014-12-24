@@ -80,7 +80,7 @@ namespace Entities
       }
 
       // data is closely packed, so index_stride is 1
-      recalculate_all_min_max_values(curr_box_corners, BOX_CORNERS::NUM_CORNERS, 1);
+      recalculate_all_min_max_values(curr_box_corners, BOX_CORNERS::NUM_CORNERS);
 
       //static int count = 0;
       //printf("Z min:%.2f, Z max:%.2f, Z diff:%.2f - ", m_curr_min_z, m_curr_max_z, m_curr_max_z - m_curr_min_z);
@@ -125,11 +125,18 @@ namespace Entities
       return glm::vec3();
    }
 
-
-   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *vec_data_source, const uint max_vectors, const uint index_stride)
+   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners, const int max_vectors)
    {
-      // give the min/max values initial data that is within the boundaries of the data
-      const glm::vec3 &initial_vert = *vec_data_source;
+      // start the min/max values with an initial data point that is within the boundaries 
+      // of the data
+      // Note: If I don't, then you may start this comparison with a minimum value that 
+      // is less than all of the box's actual corner positions.  For example, the entity
+      // that this box is bounding can move up.  The current box corners are arguments to
+      // this function, and if the box moved up, then they will be above all the previous 
+      // minimum values.  If I don't reset the minimum value with one of the box's current
+      // corners, then I could have an erroneously low minimum Y value.  Ditto for all 
+      // box corner extremeties.
+      const glm::vec3 &initial_vert = *curr_box_corners;
       m_curr_min_x = initial_vert.x;
       m_curr_max_x = initial_vert.x;
       m_curr_min_y = initial_vert.y;
@@ -138,17 +145,9 @@ namespace Entities
       m_curr_max_z = initial_vert.z;
 
       // go through all the vectors and find the min and max in all axes
-      for (uint vec_counter = 0; vec_counter < max_vectors; vec_counter++)
+      for (uint vec_index = 0; vec_index < max_vectors; vec_index++)
       {
-         // calculate the index location of the vector data
-         // Ex: In My_Vertex, there are position, normal, and color vec3s, so the
-         // first position index (in vec3 land, not in My_Vertex land) is [0], the
-         // next is [3], the next is [6], etc.
-         // Ex: In m_default_face_centers, the vectors are closely packed, so the
-         // first position is at index [0], the next at [1], the next at [2], etc.
-         uint vec_index = vec_counter * index_stride;
-
-         const glm::vec3 &vec_ref = vec_data_source[vec_index];
+         const glm::vec3 &vec_ref = curr_box_corners[vec_index];
 
          if (vec_ref.x < m_curr_min_x) { m_curr_min_x = vec_ref.x; }
          else if (vec_ref.x > m_curr_max_x) { m_curr_max_x = vec_ref.x; }
