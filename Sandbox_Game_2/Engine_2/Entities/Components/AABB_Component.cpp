@@ -16,21 +16,6 @@ using std::cout;
 using std::endl;
 
 
-// a helper namespace for non-class helper things
-namespace
-{
-   inline float avg(float min, float max)
-   {
-      return (max + min) / 2.0f;
-   }
-
-   inline float half_distance(float min, float max)
-   {
-      return (max - min) / 2.0f;
-   }
-
-}
-
 namespace Entities
 {
    AABB_Component::AABB_Component()
@@ -48,11 +33,6 @@ namespace Entities
       // can't initialize without any geometry
       MY_ASSERT(m_geometry_data_ptr != 0);
 
-      //// give the min/max calculator function the vertices of the geometry, complete with index stride
-      //recalculate_all_min_max_values(
-      //   &(m_geometry_data_ptr->m_shape_data.m_verts->position), 
-      //   m_geometry_data_ptr->m_shape_data.m_num_verts,
-      //   sizeof(Shapes::My_Vertex) / sizeof(glm::vec3));
       const Shapes::Geometry_Meta_Data &meta_data_ref = m_geometry_data_ptr->m_meta_data;
 
       // set the default vectors so that they can be transformed on the next update
@@ -81,15 +61,6 @@ namespace Entities
 
       // data is closely packed, so index_stride is 1
       recalculate_all_min_max_values(curr_box_corners, BOX_CORNERS::NUM_CORNERS);
-
-      //static int count = 0;
-      //printf("Z min:%.2f, Z max:%.2f, Z diff:%.2f - ", m_curr_min_z, m_curr_max_z, m_curr_max_z - m_curr_min_z);
-      //count += 1;
-      //if (2 == count)
-      //{
-      //   count = 0;
-      //   printf("\n");
-      //}
    }
 
 
@@ -101,26 +72,10 @@ namespace Entities
       bool Y_overlap = (m_curr_max_y > other_box.m_curr_min_y) && (m_curr_min_y < other_box.m_curr_max_y);   // "up" is positive Y
       bool Z_overlap = (m_curr_min_z < other_box.m_curr_max_z) && (m_curr_max_z > other_box.m_curr_min_z);   // "forward" is negative Z
 
-      if (X_overlap)
-      {
-         //cout << " - X overlap";
-      }
-      
-      if (Y_overlap)
-      {
-         //cout << " - Y overlap";
-      }
-
-      if (Z_overlap)
-      {
-         //cout << " - Z overlap";
-      }
-
       if (X_overlap && Y_overlap && Z_overlap)
       {
          cout << "collission" << endl;
       }
-
 
       return glm::vec3();
    }
