@@ -200,6 +200,9 @@
     <ClInclude Include="Utilities\Quaternion_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Shapes\Geometry_Meta_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />

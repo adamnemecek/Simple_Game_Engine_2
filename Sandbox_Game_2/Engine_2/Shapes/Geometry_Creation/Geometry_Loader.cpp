@@ -2,6 +2,7 @@
 
 #include <Shapes\Geometry.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
+#include <Shapes\Geometry_Meta_Data.h>
 
 #include <glm\vec3.hpp>
 using glm::vec3;
@@ -77,6 +78,44 @@ namespace Shapes
          glBindVertexArray(0);
          glBindBuffer(GL_ARRAY_BUFFER, 0);
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      }
+
+      void Geometry_Loader::calculate_geometry_meta_data(Geometry *geo, const Shape_Data &data_ref)
+      {
+            double sum_x = 0.0;
+            double sum_y = 0.0;
+            double sum_z = 0.0;
+
+            Geometry_Meta_Data &meta_data_ref = geo->m_meta_data;
+
+            for (size_t index_counter = 0; index_counter < data_ref.m_num_verts; index_counter++)
+            {
+               glm::vec3 &this_pos = data_ref.m_verts[index_counter].position;
+
+               sum_x += this_pos.x;
+               sum_y += this_pos.y;
+               sum_z += this_pos.z;
+
+               if (this_pos.x < meta_data_ref.m_min_X) { meta_data_ref.m_min_X = this_pos.x; }
+               else if (this_pos.x > meta_data_ref.m_max_X) { meta_data_ref.m_max_X = this_pos.x; }
+
+               if (this_pos.y < meta_data_ref.m_min_Y) { meta_data_ref.m_min_Y = this_pos.y; }
+               else if (this_pos.y > meta_data_ref.m_max_Y) { meta_data_ref.m_max_Y = this_pos.y; }
+
+               if (this_pos.z < meta_data_ref.m_min_Z) { meta_data_ref.m_min_Z = this_pos.z; }
+               else if (this_pos.z > meta_data_ref.m_max_Z) { meta_data_ref.m_max_Z = this_pos.z; }
+            }
+
+            // do this division so that you keep the precision of the double
+            double inverse_num_verts = 1.0 / data_ref.m_num_verts;
+
+            // perform the double multiplication version of division in order to keep precision
+            // of the double, THEN jam the result into the vec3's float
+            // Note: This approach should result in minimal precision loss because the float 
+            // cast happens after the high-precision sum and division operations.
+            meta_data_ref.m_center_of_geometry.x = sum_x * inverse_num_verts;
+            meta_data_ref.m_center_of_geometry.y = sum_y * inverse_num_verts;
+            meta_data_ref.m_center_of_geometry.z = sum_z * inverse_num_verts;
       }
 
       void Geometry_Loader::load_cube(Geometry *put_geometry_here)
