@@ -47,6 +47,7 @@ namespace Entities
       // can't initialize without any geometry
       MY_ASSERT(m_geometry_data_ptr != 0);
 
+      // give the min/max calculator function the vertices of the geometry, complete with index stride
       recalculate_all_min_max_values(
          &(m_geometry_data_ptr->m_shape_data.m_verts->position), 
          m_geometry_data_ptr->m_shape_data.m_num_verts,
@@ -110,12 +111,12 @@ namespace Entities
 
       if (Z_overlap)
       {
-         cout << " - Z overlap";
+         //cout << " - Z overlap";
       }
 
-      if (X_overlap || Y_overlap || Z_overlap)
+      if (X_overlap && Y_overlap && Z_overlap)
       {
-         cout << endl;
+         cout << "collission" << endl;
       }
 
 

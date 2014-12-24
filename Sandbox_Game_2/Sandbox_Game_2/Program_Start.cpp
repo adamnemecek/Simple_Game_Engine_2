@@ -148,7 +148,7 @@ void init()
    // - the entity's dual quat can be set any time during initialization because entity 
    // initialization initializes the components and does not set the dual quat values
 
-   // add physics first so that the entity's dual fquat is updated for the frame
+   // add physics first so that the entity's transform is updated for the frame
    g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
    g_cube_1_bounding_box.set_geometry(&g_cube_geometry);
@@ -158,7 +158,7 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
-   Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(-4.0f, +3.0f, +4.0f));
+   Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
    //Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+0.0f, 1.0f, +0.0f), 3.1415926f / 2, glm::vec3(0.0f, +3.0f, +0.0f));
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
@@ -172,7 +172,7 @@ void init()
    Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
-   Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(+4.0f, +3.0f, -4.0f));
+   Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
    g_cube_2_entity.m_where_and_which_way = entity_2_offset;
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
 
