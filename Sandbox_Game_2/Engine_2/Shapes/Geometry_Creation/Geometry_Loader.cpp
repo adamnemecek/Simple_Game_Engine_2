@@ -2,6 +2,7 @@
 
 #include <Shapes\Geometry.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
+#include <Shapes\Shape_Data.h>
 #include <Shapes\Geometry_Meta_Data.h>
 
 #include <glm\vec3.hpp>
@@ -80,17 +81,20 @@ namespace Shapes
          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
       }
 
-      void Geometry_Loader::calculate_geometry_meta_data(Geometry *geo, const Shape_Data &data_ref)
+      void Geometry_Loader::calculate_geometry_meta_data(Geometry *geo)
       {
             double sum_x = 0.0;
             double sum_y = 0.0;
             double sum_z = 0.0;
 
+            // declarations to make dereferencing easier
             Geometry_Meta_Data &meta_data_ref = geo->m_meta_data;
+            Shape_Data &shape_data_ref = geo->m_shape_data;
 
-            for (size_t index_counter = 0; index_counter < data_ref.m_num_verts; index_counter++)
+            // go through the geometry data and analyze it
+            for (size_t index_counter = 0; index_counter < shape_data_ref.m_num_verts; index_counter++)
             {
-               glm::vec3 &this_pos = data_ref.m_verts[index_counter].position;
+               glm::vec3 &this_pos = shape_data_ref.m_verts[index_counter].position;
 
                sum_x += this_pos.x;
                sum_y += this_pos.y;
@@ -107,7 +111,7 @@ namespace Shapes
             }
 
             // do this division so that you keep the precision of the double
-            double inverse_num_verts = 1.0 / data_ref.m_num_verts;
+            double inverse_num_verts = 1.0 / shape_data_ref.m_num_verts;
 
             // perform the double multiplication version of division in order to keep precision
             // of the double, THEN jam the result into the vec3's float
@@ -124,6 +128,7 @@ namespace Shapes
          put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
+         calculate_geometry_meta_data(put_geometry_here);
       }
 
       void Geometry_Loader::load_plane(Geometry *put_geometry_here, const uint num_unit_segments_on_a_side)
@@ -132,6 +137,7 @@ namespace Shapes
          put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
+         calculate_geometry_meta_data(put_geometry_here);
       }
 
       void Geometry_Loader::load_triangle(Geometry *put_geometry_here)
@@ -140,6 +146,7 @@ namespace Shapes
          put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
+         calculate_geometry_meta_data(put_geometry_here);
       }
 
       void Geometry_Loader::load_circle(Geometry *put_geometry_here, const uint num_arc_segments, const float radius)
@@ -148,7 +155,7 @@ namespace Shapes
          put_geometry_here->m_render_mode = GL_LINE_STRIP;
 
          initialize_attributes(put_geometry_here);
-
+         calculate_geometry_meta_data(put_geometry_here);
       }
 
       void Geometry_Loader::load_box(Geometry *put_geometry_here, const float width, const float length)
@@ -157,7 +164,7 @@ namespace Shapes
          put_geometry_here->m_render_mode = GL_LINE_STRIP;
 
          initialize_attributes(put_geometry_here);
-
+         calculate_geometry_meta_data(put_geometry_here);
       }
 
 

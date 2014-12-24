@@ -43,7 +43,7 @@ namespace Shapes
 
          // helper functions are private
          static void initialize_attributes(Geometry *geo);
-         static void calculate_geometry_meta_data(Geometry *geo, const Shape_Data &data_ref);
+         static void calculate_geometry_meta_data(Geometry *geo);
       };
    }
 }
