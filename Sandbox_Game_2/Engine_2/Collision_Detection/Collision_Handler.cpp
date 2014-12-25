@@ -1,18 +1,18 @@
-#include "AABB_Collision_Detector.h"
+#include "Collision_Handler.h"
 
 #include <Utilities\My_Assert.h>
 #include <memory.h>
 
 namespace Collision_Detection
 {
-   AABB_Collision_Detector &AABB_Collision_Detector::get_instance()
+   Collision_Handler &Collision_Handler::get_instance()
    {
-      static AABB_Collision_Detector instance;
+      static Collision_Handler instance;
 
       return instance;
    }
 
-   bool AABB_Collision_Detector::initialize()
+   bool Collision_Handler::initialize()
    {
       // erase all pointer data that might be in the box
       memset(m_bounding_boxes, 0, sizeof(Entities::AABB_Component *) * m_MAX_BOUNDING_BOXES);
@@ -22,7 +22,7 @@ namespace Collision_Detection
       return true;
    }
 
-   void AABB_Collision_Detector::update()
+   void Collision_Handler::update()
    {
       // check each box against every other box once
       // Note: The following nested for-loop conditions will only run if there are at least 2 boxes.
@@ -39,7 +39,7 @@ namespace Collision_Detection
    }
 
 
-   int AABB_Collision_Detector::add_AABB(Entities::AABB_Component *AABB_ptr)
+   int Collision_Handler::add_AABB(Entities::AABB_Component *AABB_ptr)
    {
       MY_ASSERT(AABB_ptr != 0);
 
@@ -64,7 +64,7 @@ namespace Collision_Detection
       return index;
    }
 
-   void AABB_Collision_Detector::remove_AABB(const int &AABB_ID)
+   void Collision_Handler::remove_AABB(const int &AABB_ID)
    {
       MY_ASSERT(AABB_ID < m_MAX_BOUNDING_BOXES);
 

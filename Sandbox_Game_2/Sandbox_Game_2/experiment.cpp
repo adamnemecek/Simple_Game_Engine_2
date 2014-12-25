@@ -89,7 +89,6 @@ namespace Experiment
       //Math::F_Dual_Quat dq = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(+2.0f, +3.0f, 0.0f));
       //glm::vec3 result = Math::F_Dual_Quat::transform(dq, glm::vec3(1.0f, 1.0f, 0.0f));
 
-
       glm::vec3 point_original = glm::vec3(1.0f, 1.0f, 0.0f);
       Math::F_Dual_Quat dq_1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), (3.14159f) / 2.0f, glm::vec3(0.0f, 2.0f, 0.0f));
       Math::F_Dual_Quat dq_2 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 0.0f, 1.0f), (3.14159f) / 2.0f, glm::vec3(5.0f, 0.0f, 0.0f));

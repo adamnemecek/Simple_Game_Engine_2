@@ -1,6 +1,7 @@
 #include "AABB_Component.h"
 
 #include <Entities\Entity.h>
+#include <Entities\Components\Physics_Component.h>
 #include <Shapes\Geometry.h>
 #include <Shapes\Geometry_Meta_Data.h>
 #include <Shapes\My_Vertex.h>
@@ -74,7 +75,7 @@ namespace Entities
 
       if (X_overlap && Y_overlap && Z_overlap)
       {
-         cout << "collission" << endl;
+         //cout << "collision" << endl;
       }
 
       return glm::vec3();

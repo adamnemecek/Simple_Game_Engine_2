@@ -26,7 +26,9 @@ namespace Entities
       // default shutdown
       void update();
 
-      // figures out where the two are coliding and returns the point of collision
+      // figures out if/where the two are colliding and returns the overlap on all axes
+      // Note: Two boxes will only collide if they have overlapped on all axes, but the
+      // time and location of collision can only be calculated with the physics
       // Note: If there is no collision, it returns 0 on all axes.
       glm::vec3 is_colliding_with_AABB(const AABB_Component &other_box);
 

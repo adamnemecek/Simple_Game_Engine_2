@@ -5,6 +5,7 @@
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
+
 namespace Entities
 {
    class __declspec(dllexport) Physics_Component : public Game_Component
@@ -24,6 +25,8 @@ namespace Entities
 
       // this is the "bounce off surface" function
       void reflect_linear_velocity_around_vector(const glm::vec3 &reflection_axis);
+
+      void collision_with_entity_at_location(const Physics_Component &other);
       
    private:
       static const uint m_MAX_IMMEDIATE_FORCE_VECTORS = 20;

@@ -22,7 +22,7 @@ these function.
 #include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
 #include <Engine_2\Entities\Components\AABB_Component.h>
-#include <Engine_2\Collision_Detection\AABB_Collision_Detector.h>
+#include <Engine_2\Collision_Detection\Collision_Handler.h>
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
@@ -135,7 +135,7 @@ void init()
    g_renderer.set_camera_to_render(&g_camera);
 
    // initialize the collision detector, which causes it to forget any bounding boxes that had been added
-   Collision_Detection::AABB_Collision_Detector::get_instance().initialize();
+   Collision_Detection::Collision_Handler::get_instance().initialize();
    
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
@@ -155,7 +155,7 @@ void init()
    g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
-   Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_1_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
@@ -169,7 +169,7 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
-   Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_2_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
@@ -267,7 +267,7 @@ void display()
    g_circle_entity.update();
    g_rectangle_box_entity.update();
 
-   Collision_Detection::AABB_Collision_Detector::get_instance().update();
+   Collision_Detection::Collision_Handler::get_instance().update();
 
    g_camera_entity.update();
    g_camera.update();
