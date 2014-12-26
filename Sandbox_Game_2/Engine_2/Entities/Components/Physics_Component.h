@@ -5,6 +5,11 @@
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
+// forward declaration of friend class
+namespace Collision_Detection
+{
+   class Collision_Handler;
+}
 
 namespace Entities
 {
@@ -29,6 +34,12 @@ namespace Entities
       void collision_with_entity_at_location(const Physics_Component &other);
       
    private:
+      // the collision handler class will need access to the entity's mass and velocity to calculate
+      // the point of impact and the force exerted at that point, and then this physics class will 
+      // react to the applied force
+      friend class Collision_Detection::Collision_Handler;
+
+      // private helper constants
       static const uint m_MAX_IMMEDIATE_FORCE_VECTORS = 20;
       static const uint m_MAX_SUSTAINED_FORCE_VECTORS = 5;
 
@@ -40,8 +51,9 @@ namespace Entities
       glm::vec3 m_sustained_force_vectors_this_frame[m_MAX_SUSTAINED_FORCE_VECTORS];
       uint m_current_sustained_force_vector_index;
 
+      // these are the primary two things that this class was designed to track; everything else
+      // is helper data
       glm::vec3 m_linear_velocity;
-      glm::vec3 m_angular_rotation_vector;
       float m_angular_velocity;
    };
 }
