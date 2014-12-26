@@ -1,11 +1,25 @@
 #ifndef ENGINE_AABB_COLLISION_DETECTION_H
 #define ENGINE_AABB_COLLISION_DETECTION_H
 
-#include <Entities\Components\AABB_Component.h>
+//#include <Entities\Components\AABB_Component.h>
 #include <Utilities\Typedefs.h>
+#include <deque>
+
+// forward declarations
+namespace Entities
+{
+   class AABB_Component;
+   class Physics_Component;
+}
 
 namespace Collision_Detection
 {
+   // a go-between class for collision detection and resolution
+   // Note: Individual AABBs handle the collision detection, and the physics components
+   // handle forces and moments, but collision requires both.  Collison resolution 
+   // requires figuring out the exact point of collision and the force exerted by each 
+   // entity on the other at that point.  Calculating these requires overlap data from 
+   // the bounding box components and velocity and mass from the physics component. 
    class __declspec(dllexport) Collision_Handler
    {
    public:
@@ -14,27 +28,33 @@ namespace Collision_Detection
       bool initialize();
 
       // checks for collisions between every box and every other box exactly once
-      // Note: Update all AABB components BEFORE calling this method.
-      // Note: The individual boxes handle the actual collision.  This class is a
-      // support and organizer class.
+      // Note: Update physics and bounding box components BEFORE calling this method.
       void update();
 
-      // returns the index of the AABB as an ID, or -1 if no space available
-      // Note: The argument is not const because there was a compiler error that I
-      // couldn't resolve between a dereferenced const ptr and the const reference 
-      // that the AABB component's collision method required.
-      // TODO: figure out how to make it const
-      int add_AABB(Entities::AABB_Component *AABB_ptr);
+      // adds some information to a list of collidable objects
+      // Note: This function returns the index of the entity as an ID, or -1 if the list
+      // is full.
+      // Note: It is the responsibility of the caller to make sure that both of these correspond 
+      // to the same entity.
+      int add_collision_data(const Entities::AABB_Component *bounding_box_ptr, const Entities::Physics_Component *physics_ptr);
 
-      // removes the specified AABB from the collection
+      // removes the specified entity's collision data from the collection
       // Note: Contains an assertion to check that the ID is within bounds, but
       // this check will only run if the DEBUG preprocessor is defined.
-      void remove_AABB(const int &AABB_ID);
+      void remove_collision_data(const int &collision_data_ID);
 
    private:
-      static const uint m_MAX_BOUNDING_BOXES = 10;
-      uint m_num_bounding_boxes;
-      Entities::AABB_Component *m_bounding_boxes[m_MAX_BOUNDING_BOXES];
+      static const uint m_MAX_ENTITIES = 10;
+
+      // Note: I went with this approach instead of a simple "number of current entities" counter because
+      // the deque approach allowed for much easier finding of available indices.  I would have had to 
+      // search through the entire pointer array for a null pointer if I was using the counter, and the 
+      // counter is redundant if I am using a deque, so I went with the vector of available indices 
+      // instead of the counter for number of current entities.  Note that these two values are additive
+      // inverses.
+      std::deque<uint> m_available_indices;
+      const Entities::AABB_Component *m_bounding_box_arr[m_MAX_ENTITIES];
+      const Entities::Physics_Component *m_physics_arr[m_MAX_ENTITIES];
 
       // enforce singleton-ness
       Collision_Handler() {}

@@ -23,7 +23,6 @@ namespace Entities
       m_current_immediate_force_vector_index = 0;
       m_current_sustained_force_vector_index = 0;
       m_linear_velocity = glm::vec3();
-      m_angular_rotation_vector = glm::vec3();
       m_angular_velocity = 0.0f;
 
       // don't bother clearing the force vectors array because it will be overwritten on every frame
@@ -61,7 +60,6 @@ namespace Entities
       static const uint ENTITY_MASS = 5.0f;  // TODO: make this an adjustable property of the entity, perhaps with a 'material' component or property
 
       // calculate torque and rotate the entity
-      m_angular_rotation_vector = Utilities::Default_Vectors::WORLD_UP_VECTOR;
       float angular_accel = 0.0f; //glm::length(net_force_vector) / 2.0f;
       m_angular_velocity += angular_accel * delta_time;
       double rotation_angle = m_angular_velocity * delta_time;
