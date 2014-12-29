@@ -3,6 +3,7 @@
 
 #include <Utilities\Typedefs.h>
 #include <deque>
+#include <glm\vec3.hpp>
 
 // forward declarations
 namespace Entities
@@ -62,10 +63,21 @@ namespace Collision_Detection
 
       
       // helper functions are private
-      
-      // the "overlap vector" is a vector describing the distance of X, Y, and Z overlap between two 
-      // bounding boxes, assuming that they already overlap
-      //glm::vec3 locate_impact_point(const glm::vec3 &overlap_vector);
+
+      // returns the delta time from the most recent axis overlap (the one that caused the collision)
+      // Note: This function assumes that a collision already occured.
+      // Note: This is a general helper function, and as such the "time" is mostly a mathematical 
+      // placeholder with the units of seconds.  The "time" value can be negative.  Positive/negative
+      // signs are useful in determining the correct backoff vector.
+      float calculate_time_from_collision_until_now(
+         const glm::vec3 &this_velocity, 
+         const glm::vec3 &other_velocity, 
+         const glm::vec3 &overlap_vector) const;
+
+      void locate_overlap_corners(
+         const Entities::AABB_Component *this_BB_ptr, glm::vec3 *put_this_collision_corner_here,
+         const Entities::AABB_Component *other_BB_ptr, glm::vec3 *put_other_collision_corner_here,
+         const glm::vec3 &overlap_vector) const;
    };
 }
 
