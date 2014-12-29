@@ -155,11 +155,10 @@ void init()
    g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
-   //Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_1_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_1_bounding_box, &g_cube_1_physics);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
-   //Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+0.0f, 1.0f, +0.0f), 3.1415926f / 2, glm::vec3(0.0f, +3.0f, +0.0f));
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
 
@@ -169,7 +168,7 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
-   //Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_2_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_2_bounding_box, &g_cube_2_physics);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));

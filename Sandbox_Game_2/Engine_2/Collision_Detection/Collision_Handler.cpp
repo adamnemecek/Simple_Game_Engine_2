@@ -6,6 +6,11 @@
 #include <Utilities\My_Assert.h>
 #include <memory.h>
 
+#include <iostream>
+using std::cout;
+using std::endl;
+
+
 namespace Collision_Detection
 {
    Collision_Handler &Collision_Handler::get_instance()
@@ -47,7 +52,14 @@ namespace Collision_Detection
          for (uint other_BB_index = this_BB_index + 1; other_BB_index < num_current_collision_IDs; other_BB_index++)
          {
             //m_bounding_boxes[this_BB_index]->is_colliding_with_AABB(*m_bounding_boxes[other_BB_index]);
-            m_bounding_box_ptr_arr[this_BB_index]->is_colliding_with_AABB(*m_bounding_box_ptr_arr[other_BB_index]);
+            glm::vec3 overlap_vector;
+            bool collision_is_a_thing = m_bounding_box_ptr_arr[this_BB_index]->is_colliding_with_AABB(*m_bounding_box_ptr_arr[other_BB_index], &overlap_vector);
+
+            if (collision_is_a_thing)
+            {
+               static int counter = 0;
+               cout << "collision! - " << counter++ << " - <" << overlap_vector.x << ", " << overlap_vector.y << ", " << overlap_vector.z << ">" << endl;
+            }
 
             // check for collision
             // if collision, then 

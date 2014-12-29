@@ -1,7 +1,6 @@
 #ifndef ENGINE_AABB_COLLISION_DETECTION_H
 #define ENGINE_AABB_COLLISION_DETECTION_H
 
-//#include <Entities\Components\AABB_Component.h>
 #include <Utilities\Typedefs.h>
 #include <deque>
 

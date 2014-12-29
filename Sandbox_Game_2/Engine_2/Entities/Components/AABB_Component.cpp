@@ -65,20 +65,59 @@ namespace Entities
    }
 
 
-   glm::vec3 AABB_Component::is_colliding_with_AABB(const AABB_Component &other_box) const
+   bool AABB_Component::is_colliding_with_AABB(const AABB_Component &other_box, glm::vec3 *put_overlap_here) const
    {
       // this overlap section does not make sense without imagining the boundaries of two cubes 
       // infringing on each other on a given axis, but it works
-      bool X_overlap = (m_curr_min_x < other_box.m_curr_max_x) && (m_curr_max_x > other_box.m_curr_min_x);   // "left" is negative X
-      bool Y_overlap = (m_curr_max_y > other_box.m_curr_min_y) && (m_curr_min_y < other_box.m_curr_max_y);   // "up" is positive Y
-      bool Z_overlap = (m_curr_min_z < other_box.m_curr_max_z) && (m_curr_max_z > other_box.m_curr_min_z);   // "forward" is negative Z
+      //bool X_overlap = (m_curr_min_X < other_box.m_curr_max_X) && (m_curr_max_X > other_box.m_curr_min_X);   // "left" is negative X
+      //bool Y_overlap = (m_curr_max_Y > other_box.m_curr_min_Y) && (m_curr_min_Y < other_box.m_curr_max_Y);   // "up" is positive Y
+      //bool Z_overlap = (m_curr_min_Z < other_box.m_curr_max_Z) && (m_curr_max_Z > other_box.m_curr_min_Z);   // "forward" is negative Z
 
-      if (X_overlap && Y_overlap && Z_overlap)
+      //if (X_overlap && Y_overlap && Z_overlap)
+      //{
+      //   //cout << "collision" << endl;
+      //}
+
+      // Note: I wanted this calculation to be a general approach, so I am using positive/negtive 
+      // signs to build directions into the overlap data.  
+      // Ex: A positive X overlap means that the overlap happened on the +X side of this box (as 
+      // opposed to the other box).  A negative X overlap means that the overlap happened on the -X 
+      // side of this box.
+      float other_max_to_this_min = 0.0f;
+      float this_max_to_other_min = 0.0f;
+      bool X_does_overlap = false;
+      bool Y_does_overlap = false;
+      bool Z_does_overlap = false;
+
+      // X overlap
+      other_max_to_this_min = other_box.m_curr_max_X - m_curr_min_X;
+      this_max_to_other_min = m_curr_max_X - other_box.m_curr_min_X;
+      X_does_overlap = calculate_overlap_on_axis(other_max_to_this_min, this_max_to_other_min, &(put_overlap_here->x));
+
+      // Y overlap (if X succeeded)
+      if (X_does_overlap)
       {
-         //cout << "collision" << endl;
+         other_max_to_this_min = other_box.m_curr_max_Y - m_curr_min_Y;
+         this_max_to_other_min = m_curr_max_Y - other_box.m_curr_min_Y;
+         Y_does_overlap = calculate_overlap_on_axis(other_max_to_this_min, this_max_to_other_min, &(put_overlap_here->y));
       }
 
-      return glm::vec3();
+      // Z overlap (if Y succeeded)
+      if (Y_does_overlap)
+      {
+         other_max_to_this_min = other_box.m_curr_max_Z - m_curr_min_Z;
+         this_max_to_other_min = m_curr_max_Z - other_box.m_curr_min_Z;
+         Z_does_overlap = calculate_overlap_on_axis(other_max_to_this_min, this_max_to_other_min, &(put_overlap_here->z));
+      }
+
+      if (X_does_overlap && Y_does_overlap && Z_does_overlap)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
    }
 
    void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const int max_vectors)
@@ -93,26 +132,52 @@ namespace Entities
       // corners, then I could have an erroneously low minimum Y value.  Ditto for all 
       // box corner extremeties.
       const glm::vec3 &initial_vert = *curr_box_corners_arr;
-      m_curr_min_x = initial_vert.x;
-      m_curr_max_x = initial_vert.x;
-      m_curr_min_y = initial_vert.y;
-      m_curr_max_y = initial_vert.y;
-      m_curr_min_z = initial_vert.z;
-      m_curr_max_z = initial_vert.z;
+      m_curr_min_X = initial_vert.x;
+      m_curr_max_X = initial_vert.x;
+      m_curr_min_Y = initial_vert.y;
+      m_curr_max_Y = initial_vert.y;
+      m_curr_min_Z = initial_vert.z;
+      m_curr_max_Z = initial_vert.z;
 
       // go through all the vectors and find the min and max in all axes
       for (uint vec_index = 0; vec_index < max_vectors; vec_index++)
       {
          const glm::vec3 &vec_ref = curr_box_corners_arr[vec_index];
 
-         if (vec_ref.x < m_curr_min_x) { m_curr_min_x = vec_ref.x; }
-         else if (vec_ref.x > m_curr_max_x) { m_curr_max_x = vec_ref.x; }
+         if (vec_ref.x < m_curr_min_X) { m_curr_min_X = vec_ref.x; }
+         else if (vec_ref.x > m_curr_max_X) { m_curr_max_X = vec_ref.x; }
 
-         if (vec_ref.y < m_curr_min_y) { m_curr_min_y = vec_ref.y; }
-         else if (vec_ref.y > m_curr_max_y) { m_curr_max_y = vec_ref.y; }
+         if (vec_ref.y < m_curr_min_Y) { m_curr_min_Y = vec_ref.y; }
+         else if (vec_ref.y > m_curr_max_Y) { m_curr_max_Y = vec_ref.y; }
 
-         if (vec_ref.z < m_curr_min_z) { m_curr_min_z = vec_ref.z; }
-         else if (vec_ref.z > m_curr_max_z) { m_curr_max_z = vec_ref.z; }
+         if (vec_ref.z < m_curr_min_Z) { m_curr_min_Z = vec_ref.z; }
+         else if (vec_ref.z > m_curr_max_Z) { m_curr_max_Z = vec_ref.z; }
+      }
+   }
+
+   bool AABB_Component::calculate_overlap_on_axis(const float other_max_to_this_min, const float this_max_to_other_min, float *put_overlap_here) const
+   {
+      if ((other_max_to_this_min < 0) ||
+         (this_max_to_other_min < 0))
+      {
+         // no overlap
+         *put_overlap_here = 0.0f;
+         return false;
+      }
+      else
+      {
+         if (other_max_to_this_min < this_max_to_other_min)
+         {
+            // collision is on the -axis side, so overlap magnitude will be negative
+            *put_overlap_here = (-1.0f) * other_max_to_this_min;
+            return true;
+         }
+         else
+         {
+            // collision is on the +axis side, so no sign change
+            *put_overlap_here = this_max_to_other_min;
+            return true;
+         }
       }
    }
 }
