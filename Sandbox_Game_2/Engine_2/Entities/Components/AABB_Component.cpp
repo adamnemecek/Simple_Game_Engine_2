@@ -65,7 +65,7 @@ namespace Entities
    }
 
 
-   glm::vec3 AABB_Component::is_colliding_with_AABB(const AABB_Component &other_box)
+   glm::vec3 AABB_Component::is_colliding_with_AABB(const AABB_Component &other_box) const
    {
       // this overlap section does not make sense without imagining the boundaries of two cubes 
       // infringing on each other on a given axis, but it works
@@ -81,7 +81,7 @@ namespace Entities
       return glm::vec3();
    }
 
-   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners, const int max_vectors)
+   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const int max_vectors)
    {
       // start the min/max values with an initial data point that is within the boundaries 
       // of the data
@@ -92,7 +92,7 @@ namespace Entities
       // minimum values.  If I don't reset the minimum value with one of the box's current
       // corners, then I could have an erroneously low minimum Y value.  Ditto for all 
       // box corner extremeties.
-      const glm::vec3 &initial_vert = *curr_box_corners;
+      const glm::vec3 &initial_vert = *curr_box_corners_arr;
       m_curr_min_x = initial_vert.x;
       m_curr_max_x = initial_vert.x;
       m_curr_min_y = initial_vert.y;
@@ -103,7 +103,7 @@ namespace Entities
       // go through all the vectors and find the min and max in all axes
       for (uint vec_index = 0; vec_index < max_vectors; vec_index++)
       {
-         const glm::vec3 &vec_ref = curr_box_corners[vec_index];
+         const glm::vec3 &vec_ref = curr_box_corners_arr[vec_index];
 
          if (vec_ref.x < m_curr_min_x) { m_curr_min_x = vec_ref.x; }
          else if (vec_ref.x > m_curr_max_x) { m_curr_max_x = vec_ref.x; }

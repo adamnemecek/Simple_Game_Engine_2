@@ -17,9 +17,9 @@ namespace Collision_Detection
 
    bool Collision_Handler::initialize()
    {
-      // erase all pointer data that might be in the box
-      memset(m_bounding_box_arr, 0, sizeof(Entities::AABB_Component *) * m_MAX_ENTITIES);
-      memset(m_physics_arr, 0, sizeof(Entities::Physics_Component *) * m_MAX_ENTITIES);
+      // erase all pointer data that might exist
+      memset(m_bounding_box_ptr_arr, 0, sizeof(Entities::AABB_Component *) * m_MAX_ENTITIES);
+      memset(m_physics_ptr_arr, 0, sizeof(Entities::Physics_Component *) * m_MAX_ENTITIES);
 
       // all indices are available at the start
       // Note: Clear the data structure anyway in the event that initialization is called 
@@ -47,6 +47,7 @@ namespace Collision_Detection
          for (uint other_BB_index = this_BB_index + 1; other_BB_index < num_current_collision_IDs; other_BB_index++)
          {
             //m_bounding_boxes[this_BB_index]->is_colliding_with_AABB(*m_bounding_boxes[other_BB_index]);
+            m_bounding_box_ptr_arr[this_BB_index]->is_colliding_with_AABB(*m_bounding_box_ptr_arr[other_BB_index]);
 
             // check for collision
             // if collision, then 
@@ -78,8 +79,8 @@ namespace Collision_Detection
       m_available_indices.pop_front();
 
       // insert the pointers
-      m_bounding_box_arr[index] = bounding_box_ptr;
-      m_physics_arr[index] = physics_ptr;
+      m_bounding_box_ptr_arr[index] = bounding_box_ptr;
+      m_physics_ptr_arr[index] = physics_ptr;
 
       // return the index as an ID
       return index;
@@ -90,8 +91,8 @@ namespace Collision_Detection
       MY_ASSERT(collision_data_ID < m_MAX_ENTITIES);
 
       // nullify the pointers
-      m_bounding_box_arr[collision_data_ID] = 0;
-      m_physics_arr[collision_data_ID] = 0;
+      m_bounding_box_ptr_arr[collision_data_ID] = 0;
+      m_physics_ptr_arr[collision_data_ID] = 0;
 
       // add the index back into the pool of available indices
       m_available_indices.push_back(collision_data_ID);

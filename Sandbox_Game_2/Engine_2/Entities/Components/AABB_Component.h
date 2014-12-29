@@ -6,10 +6,17 @@
 #include <Entities\Game_Component.h>
 #include <Utilities\Typedefs.h>
 
+// forward declaration of friend classes
 namespace Shapes
 {
    class Geometry;
 }
+
+namespace Collision_Detection
+{
+   class Collision_Handler;
+}
+
 
 namespace Entities
 {
@@ -30,9 +37,14 @@ namespace Entities
       // Note: Two boxes will only collide if they have overlapped on all axes, but the
       // time and location of collision can only be calculated with the physics
       // Note: If there is no collision, it returns 0 on all axes.
-      glm::vec3 is_colliding_with_AABB(const AABB_Component &other_box);
+      glm::vec3 is_colliding_with_AABB(const AABB_Component &other_box) const;
 
    private:
+      // the collision handler class will need access to the entity's mass and velocity to calculate
+      // the point of impact and the force exerted at that point, and then this physics class will 
+      // react to the applied force
+      friend class Collision_Detection::Collision_Handler;
+      
       // keep this pointer around in case you need to re-calculate something from the geometry
       const Shapes::Geometry *m_geometry_data_ptr;
 
@@ -64,7 +76,7 @@ namespace Entities
       float m_curr_max_z;
 
       // a helper function that needs access to private data members
-      void recalculate_all_min_max_values(const glm::vec3 *curr_box_corners, const int max_vectors);
+      void recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const int max_vectors);
    };
 }
 

@@ -53,13 +53,20 @@ namespace Collision_Detection
       // instead of the counter for number of current entities.  Note that these two values are additive
       // inverses.
       std::deque<uint> m_available_indices;
-      const Entities::AABB_Component *m_bounding_box_arr[m_MAX_ENTITIES];
-      const Entities::Physics_Component *m_physics_arr[m_MAX_ENTITIES];
+      const Entities::AABB_Component *m_bounding_box_ptr_arr[m_MAX_ENTITIES];
+      const Entities::Physics_Component *m_physics_ptr_arr[m_MAX_ENTITIES];
 
       // enforce singleton-ness
       Collision_Handler() {}
       Collision_Handler(const Collision_Handler &);
       Collision_Handler &operator=(const Collision_Handler &);
+
+      
+      // helper functions are private
+      
+      // the "overlap vector" is a vector describing the distance of X, Y, and Z overlap between two 
+      // bounding boxes, assuming that they already overlap
+      //glm::vec3 locate_impact_point(const glm::vec3 &overlap_vector);
    };
 }
 

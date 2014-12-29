@@ -97,7 +97,7 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   //Experiment::do_something();
+   Experiment::do_something();
 
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
@@ -155,7 +155,7 @@ void init()
    g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
-   Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_1_bounding_box);
+   //Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_1_bounding_box);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
@@ -169,7 +169,7 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
-   Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_2_bounding_box);
+   //Collision_Detection::Collision_Handler::get_instance().add_AABB(&g_cube_2_bounding_box);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));

@@ -56,59 +56,15 @@ namespace Experiment
 
    void do_something()
    {
-      //glm::vec3 point(1.0f, 0.0f, 0.0f);
-      //glm::mat4 old_transform = glm::translate(glm::mat4(), glm::vec3(0.0f, 2.2f, 0.0f));
-      //glm::mat4 new_rotate = glm::rotate(glm::mat4(), 3.1415926f / 2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-      //glm::mat4 new_transform = glm::translate(new_rotate, glm::vec3(0.0f, 2.2f, 0.0f));
-      //glm::mat4 net_transform = new_transform * old_transform;
-
-      //glm::vec3 result = glm::vec3(net_transform * glm::vec4(point, 1.0f));
-
-
-      //Math::F_Dual_Quat dq = Math::F_Dual_Quat::generate_rotator_only(Utilities::Default_Vectors::WORLD_UP_VECTOR, 3.14159f / 4);
-      //glm::vec3 point(1.0f, 0.0f, 0.0f);
-      //glm::vec3 result = Math::F_Dual_Quat::transform(dq, point);
-
-      //Math::F_Quat q1 = Math::F_Quat::generate_rotator_for_pure_quat(glm::vec3(1.0f, 0.0f, 0.0f), 3.14159f / 4);
-      //Math::F_Quat p = Math::F_Quat::generate_pure_quat(glm::vec3(1.0f, 1.0f, 0.0f));
-      //Math::F_Quat result_quat1 = q1 * p;
-      //Math::F_Quat result_quat2 = q1 * q1 * p;
-      //Math::F_Quat result_quat3 = q1 * q1 * q1 * q1 * p;
-
-      //glm::fquat q;
-      //Utilities::Quaternion_Helper::orientation_offset(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2, q);
-      //glm::fquat p(0.0f, glm::vec3(1.0f, 1.0f, 0.0f));
-      //glm::fquat result_quat1 = q * p * glm::conjugate(glm::normalize(q));
-
-      //glm::mat4 mat = glm::mat4_cast(q);
-      //glm::vec4 point(glm::vec3(1.0f, 1.0f, 0.0f), 0.0f);
-      //glm::vec4 result = mat * point;
-
-      //glm::mat3 mat3 = glm::rotate(glm::mat3(), 3.14159f / 2)
-
-      //Math::F_Dual_Quat dq = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(+2.0f, +3.0f, 0.0f));
-      //glm::vec3 result = Math::F_Dual_Quat::transform(dq, glm::vec3(1.0f, 1.0f, 0.0f));
-
-      glm::vec3 point_original = glm::vec3(1.0f, 1.0f, 0.0f);
-      Math::F_Dual_Quat dq_1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), (3.14159f) / 2.0f, glm::vec3(0.0f, 2.0f, 0.0f));
-      Math::F_Dual_Quat dq_2 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 0.0f, 1.0f), (3.14159f) / 2.0f, glm::vec3(5.0f, 0.0f, 0.0f));
-      Math::F_Dual_Quat dq_3 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 0.0f, -1.0f), 3.14159f, glm::vec3(0.0f, -4.0f, 0.0f));
-      Math::F_Dual_Quat dq_temp = dq_2 * dq_1;
-      Math::F_Dual_Quat dq_net = dq_3 * dq_temp;
-      glm::vec3 result_point = Math::F_Dual_Quat::transform(dq_net, point_original);
-
-
-      float sqrt_2 = sqrtf(2.0f);
-      glm::vec3 v1(-5.0f / 4.0f, 1.0f / 4.0f, -7.0f / 4.0f);
-      glm::vec3 v2(-1.0f / 2.0f, -1.0f / 2.0f, 1.0f / 2.0f);
-      glm::vec3 v3 = (-3.0f / 4.0f) * v2;
-      glm::vec3 v4 = (1.0f / 2.0f) * v1;
+      glm::vec3 v1(2, -3, 2);
+      glm::vec3 v2(2, 3, -2);
+      float mag_v1 = glm::length(v1);
+      float mag_v2 = glm::length(v2);
+      float mag_v1_times_mag_v2 = mag_v1 * mag_v2;
 
       glm::vec3 cross1 = glm::cross(v1, v2);
-      glm::vec3 result = v3 + v4 + cross1;
-      float f1 = glm::dot(v1, v2);
-      float f2 = v1.x * v2.z;
-      //float f2 = (-92.0f) * (1.0f) - f1;
+      float mag_cross1 = glm::length(cross1);
+
 
       cout << "hello there" << endl;
    }
