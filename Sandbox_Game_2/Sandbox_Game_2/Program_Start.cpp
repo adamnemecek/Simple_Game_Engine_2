@@ -161,6 +161,7 @@ void init()
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
+   g_cube_1_physics.add_mass(5.0f);
 
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
@@ -174,6 +175,7 @@ void init()
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
    g_cube_2_entity.m_where_and_which_way = entity_2_offset;
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
+   g_cube_2_physics.add_mass(10.0f);
 
    g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);

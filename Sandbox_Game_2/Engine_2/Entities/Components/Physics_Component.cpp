@@ -75,6 +75,20 @@ namespace Entities
       m_parent_entity_ptr->m_where_and_which_way = delta_state * prev_state;
    }
 
+   void Physics_Component::add_mass(const float additional_mass)
+   {
+      m_mass += additional_mass;
+   }
+
+   void Physics_Component::remove_mass(const float mass_to_go_bye_bye)
+   {
+      m_mass -= mass_to_go_bye_bye;
+      if (m_mass < 0.0f)
+      {
+         m_mass = 0.0f;
+      }
+   }
+
    void Physics_Component::add_immediate_force_vector(const glm::vec3 &force_vec, const glm::vec3 &lever_arm)
    {
       // TODO: Change the "immediate force vectors" array to two arrays: a torque vector array and a 
