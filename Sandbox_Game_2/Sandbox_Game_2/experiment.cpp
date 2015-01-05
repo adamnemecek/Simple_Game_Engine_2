@@ -242,11 +242,10 @@ namespace Experiment
 
       //solve_for_and_verify_v_b_f(v_a_i, v_b_i, mass_a, mass_b);
 
-      glm::vec3 angular_velocity(0.5f, 1.0f, 0.2f);
-      glm::vec3 r_i(0.3f, 0.4f, 0.5f);
-
-      glm::vec3 result1 = glm::cross(r_i, glm::cross(angular_velocity, r_i));
-      glm::vec3 result2 = (glm::dot(r_i, r_i) * angular_velocity) - (glm::dot(r_i, angular_velocity) * r_i);
+      float intensity = 0.0f;
+      float k = 1.0f;
+      float distance_squared = 4.0f;
+      float attenuation_factor = intensity / (1.0f + (k * distance_squared));
 
       cout << "hello there" << endl;
    }
