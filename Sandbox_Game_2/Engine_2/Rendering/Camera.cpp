@@ -67,7 +67,7 @@ namespace Rendering
       {
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
 
-         Utilities::Printer_Helper::print_my_dual_quat("camera: ", m_where_and_which_way);
+         //Utilities::Printer_Helper::print_my_dual_quat("camera: ", m_where_and_which_way);
       }
    }
 
