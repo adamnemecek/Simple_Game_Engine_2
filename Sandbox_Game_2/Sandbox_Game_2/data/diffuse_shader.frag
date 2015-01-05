@@ -55,37 +55,6 @@ void main()
    //??why??
 
    // multiply the base vertex color by the lighting factors to get the final color
-   vec4 temp_final_color;
-   if (dot(normalize(light_1_position_world), normalize(vertex_normal_world)) < 0.0f)
-   {
-      // red-shift it
-      temp_final_color = clamp(vertex_base_color + vec4(0.5f, 0.0f, 0.0f, 0.0f), 0, 1);
-   }
-   else
-   {
-      // green-shift it
-      temp_final_color = clamp(vertex_base_color + vec4(0.0f, 0.5f, 0.0f, 0.0f), 0, 1);
-   }
-
-   float diffuse_factor = clamp(clamp(light_1_diffuse_factor, 0, 1) + clamp(light_2_diffuse_factor, 0, 0), 0.0f, 1.0f);
-   float attenuation_factor = clamp(clamp(light_1_attenuation_factor, 0, 1) + clamp(light_2_attenuation_factor, 0, 0), 0.0f, 1.0f);
-   temp_final_color = 
-      clamp(vertex_base_color, 0, 1) *
-      diffuse_factor *
-      attenuation_factor;
-   float color_intensity = sqrt(dot(vec3(temp_final_color), vec3(temp_final_color)));
-
-   if (attenuation_factor < 0.01f)
-   {
-      // red-shift it
-      final_color = clamp(temp_final_color + vec4(0.5f, 0.0f, 0.0f, 0.0f), 0, 1);
-   }
-   else
-   {
-      // green-shift it
-      final_color = clamp(temp_final_color + vec4(0.0f, 0.5f, 0.0f, 0.0f), 0, 1);
-   }
-
    float light_1_factor = clamp(light_1_diffuse_factor * light_1_attenuation_factor, 0, 1);
    float light_2_factor = clamp(light_2_diffuse_factor * light_2_attenuation_factor, 0, 1);
    final_color = clamp(normalize(vertex_base_color), 0, 1) * (light_1_factor + light_2_factor);
