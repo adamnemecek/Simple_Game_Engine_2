@@ -85,12 +85,9 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      //return glm::vec3(
-      //   m_where_and_which_way.dual.x,
-      //   m_where_and_which_way.dual.y,
-      //   m_where_and_which_way.dual.z);
+      Math::F_Quat where_quat = m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
 
-      return glm::vec3();
+      return where_quat.m_vector;
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

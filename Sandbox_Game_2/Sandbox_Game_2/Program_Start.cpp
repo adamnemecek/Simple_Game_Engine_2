@@ -115,8 +115,8 @@ void init()
 
    std::string file_paths[] =
    {
-      "data/diffuse_shader.vert",
-      "data/diffuse_shader.frag",
+      "data/experimental_shader.vert",
+      "data/experimental_shader.frag",
    };
    GLenum shader_types[] =
    {

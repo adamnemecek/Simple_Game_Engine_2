@@ -242,10 +242,11 @@ namespace Experiment
 
       //solve_for_and_verify_v_b_f(v_a_i, v_b_i, mass_a, mass_b);
 
-      float intensity = 0.0f;
-      float k = 1.0f;
-      float distance_squared = 4.0f;
-      float attenuation_factor = intensity / (1.0f + (k * distance_squared));
+      glm::vec3 v3(2.0f, 3.0f, 4.0f);
+      glm::vec4 v4(2.0f, 3.0f, 4.0f, 1.0f);
+
+      float f1 = glm::dot(glm::normalize(v3), glm::normalize(v3));
+      float f2 = glm::dot(glm::normalize(v4), glm::normalize(v4));
 
       cout << "hello there" << endl;
    }
