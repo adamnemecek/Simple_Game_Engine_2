@@ -234,17 +234,19 @@ namespace Experiment
 
    void do_something()
    {
-      glm::vec3 v_a_i(1.0f, 2.0f, 3.0f);
-      glm::vec3 v_b_i(-3.0f, -2.0f, -1.0f);
-      glm::vec3 v_b_f(+2.0f, +5.0f, -1.0f);
-      float mass_a = 5.0f;
-      float mass_b = 10.0f;
+      //glm::vec3 v_a_i(1.0f, 2.0f, 3.0f);
+      //glm::vec3 v_b_i(-3.0f, -2.0f, -1.0f);
+      //glm::vec3 v_b_f(+2.0f, +5.0f, -1.0f);
+      //float mass_a = 5.0f;
+      //float mass_b = 10.0f;
 
       //solve_for_and_verify_v_b_f(v_a_i, v_b_i, mass_a, mass_b);
 
-      glm::vec3 v(-1.0f, -1.0f, 0.0f);
-      glm::vec3 thing(0.0f, 1.0f, 0.0f);
-      glm::vec3 result = glm::reflect(v, thing);
+      glm::vec3 angular_velocity(0.5f, 1.0f, 0.2f);
+      glm::vec3 r_i(0.3f, 0.4f, 0.5f);
+
+      glm::vec3 result1 = glm::cross(r_i, glm::cross(angular_velocity, r_i));
+      glm::vec3 result2 = (glm::dot(r_i, r_i) * angular_velocity) - (glm::dot(r_i, angular_velocity) * r_i);
 
       cout << "hello there" << endl;
    }
