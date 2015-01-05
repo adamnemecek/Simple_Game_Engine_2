@@ -10,9 +10,9 @@
 #include <Utilities\Include_Helpers\GLM_Mat_Transform.h>
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <Shapes\Geometry.h>
-#include <Utilities\Printer_Helper.h>
 #include <Rendering\Camera.h>
 
+#include <Utilities\Printer_Helper.h>
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -25,9 +25,10 @@ namespace Rendering
       //my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
-      m_full_transform_uniform_location = -1;
-      m_model_to_world_uniform_location = -1;
-      m_light_position_world_uniform_location = -1;
+      m_uniform_location_full_transform = -1;
+      m_uniform_location_model_to_world = -1;
+      m_uniform_location_light_1_position_world = -1;
+      m_uniform_location_light_1_intensity = -1;
 
       m_num_current_renderables = 0;
 
@@ -63,37 +64,29 @@ namespace Rendering
       glUseProgram(program_ID);
 
       std::string uniform_name_str = "full_transform_matrix";
-      try
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_full_transform)) 
       {
-         m_full_transform_uniform_location = find_uniform(program_ID, uniform_name_str);
-      }
-      catch (std::exception &e)
-      {
-         fprintf(stderr, "%s\n", e.what());
          glUseProgram(0);
          return false;
       }
 
       uniform_name_str = "model_to_world_matrix";
-      try
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_model_to_world))
       {
-         m_model_to_world_uniform_location = find_uniform(program_ID, uniform_name_str);
-      }
-      catch (std::exception &e)
-      {
-         fprintf(stderr, "%s\n", e.what());
          glUseProgram(0);
          return false;
       }
 
-      uniform_name_str = "light_position_world";
-      try
+      uniform_name_str = "light_1_position_world";
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_position_world))
       {
-         m_light_position_world_uniform_location = find_uniform(program_ID, uniform_name_str);
+         glUseProgram(0);
+         return false;
       }
-      catch (std::exception &e)
+
+      uniform_name_str = "light_1_intensity";
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_intensity))
       {
-         fprintf(stderr, "%s\n", e.what());
          glUseProgram(0);
          return false;
       }
@@ -125,7 +118,7 @@ namespace Rendering
       float fov_radians = (1.0f / 4.0f) * 3.14159f;   // 1/2 pi
       float aspect_ratio = (float)width / height;
       float near_plane_dist = 0.1f;
-      float far_plane_dist = 40.0f;
+      float far_plane_dist = 100.0f;
       m_perspective_mat = glm::perspective(fov_radians, aspect_ratio, near_plane_dist, far_plane_dist);
 
       cout << "resizing to aspect ratio " << aspect_ratio << endl;
@@ -152,8 +145,10 @@ namespace Rendering
       // - draw elements 
 
       // the light is independent of each renderable
-      static glm::vec4 translation(0.0f, +0.5f, 0.0f, 1.0f);
-      glUniform4fv(m_light_position_world_uniform_location, 1, glm::value_ptr(translation));
+      static glm::vec4 translation(0.0f, +2.0f, 0.0f, 1.0f);
+      float light_intensity = 100.0f;
+      glUniform4fv(m_uniform_location_light_1_position_world, 1, glm::value_ptr(translation));
+      glUniform1f(m_uniform_location_light_1_intensity, light_intensity);
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
       glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
@@ -165,8 +160,8 @@ namespace Rendering
 
          glm::mat4 full_transform_matrix = world_to_projection * r.m_model_to_world_mat;
 
-         glUniformMatrix4fv(m_full_transform_uniform_location, 1, GL_FALSE, glm::value_ptr(full_transform_matrix));
-         glUniformMatrix4fv(m_model_to_world_uniform_location, 1, GL_FALSE, glm::value_ptr(r.m_model_to_world_mat));
+         glUniformMatrix4fv(m_uniform_location_full_transform, 1, GL_FALSE, glm::value_ptr(full_transform_matrix));
+         glUniformMatrix4fv(m_uniform_location_model_to_world, 1, GL_FALSE, glm::value_ptr(r.m_model_to_world_mat));
 
          glDrawElements(
             (r.m_geometry_ptr)->m_render_mode, 
@@ -179,19 +174,20 @@ namespace Rendering
    // Private functions
 
    // throws an "out of range" exception if the uniform's location is < 0
-   GLint Renderer::find_uniform(const GLuint program_ID, const std::string &uniform_name)
+   bool Renderer::find_uniform(const GLuint program_ID, const std::string &uniform_name, GLint *put_uniform_location_here)
    {
-      GLint uniform_location = 0;
-      uniform_location = glGetUniformLocation(program_ID, uniform_name.c_str());
-      if (uniform_location < 0)
+      GLint temp_uniform_location = 0;
+      temp_uniform_location = glGetUniformLocation(program_ID, uniform_name.c_str());
+      if (temp_uniform_location < 0)
       {
-         char err_str[256];
-         _snprintf(err_str, 256, "find_uniform(...): could not find uniform '%s' in program '%u'; the requested uniform is either mispelled or unused in the program", uniform_name.c_str(), program_ID);
-         throw std::out_of_range(err_str);
-         return -1;
+         printf("find_uniform(...): could not find uniform '%s' in program '%u'; the requested uniform is either mispelled or unused in the program", uniform_name.c_str(), program_ID);
+         *put_uniform_location_here = -1;
+         return false;
       }
 
-      return uniform_location;
+      *put_uniform_location_here = temp_uniform_location;
+
+      return true;
    }
 }
 
