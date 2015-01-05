@@ -64,32 +64,22 @@ namespace Rendering
       glUseProgram(program_ID);
 
       std::string uniform_name_str = "full_transform_matrix";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_full_transform)) 
-      {
-         glUseProgram(0);
-         return false;
-      }
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_full_transform)) { glUseProgram(0); return false; }
 
       uniform_name_str = "model_to_world_matrix";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_model_to_world))
-      {
-         glUseProgram(0);
-         return false;
-      }
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_model_to_world)) { glUseProgram(0); return false; }
 
       uniform_name_str = "light_1_position_world";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_position_world))
-      {
-         glUseProgram(0);
-         return false;
-      }
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_position_world)) { glUseProgram(0); return false; }
 
       uniform_name_str = "light_1_intensity";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_intensity))
-      {
-         glUseProgram(0);
-         return false;
-      }
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_intensity)) { glUseProgram(0); return false; }
+
+      uniform_name_str = "light_2_position_world";
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_2_position_world)) { glUseProgram(0); return false; }
+
+      uniform_name_str = "light_2_intensity";
+      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_2_intensity)) { glUseProgram(0); return false; }
 
       return true;
    }
@@ -144,11 +134,15 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      // the light is independent of each renderable
-      static glm::vec4 translation(0.0f, +2.0f, 0.0f, 1.0f);
-      float light_intensity = 100.0f;
-      glUniform4fv(m_uniform_location_light_1_position_world, 1, glm::value_ptr(translation));
-      glUniform1f(m_uniform_location_light_1_intensity, light_intensity);
+      // the lights are independent of each renderable
+      static glm::vec4 light_1_location(+5.0f, +3.0f, -5.0f, 1.0f);
+      float light_1_intensity = 500.0f;
+      static glm::vec4 light_2_location(-5.0f, +3.0f, +5.0f, 1.0f);
+      float light_2_intensity = 1000.0f;
+      glUniform4fv(m_uniform_location_light_1_position_world, 1, glm::value_ptr(light_1_location));
+      glUniform1f(m_uniform_location_light_1_intensity, light_1_intensity);
+      glUniform4fv(m_uniform_location_light_2_position_world, 1, glm::value_ptr(light_2_location));
+      glUniform1f(m_uniform_location_light_2_intensity, light_2_intensity);
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
       glm::mat4 world_to_projection = m_perspective_mat * camera_mat;

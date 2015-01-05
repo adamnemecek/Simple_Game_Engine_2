@@ -49,6 +49,8 @@ namespace Rendering
       GLint m_uniform_location_model_to_world;
       GLint m_uniform_location_light_1_position_world;
       GLint m_uniform_location_light_1_intensity;
+      GLint m_uniform_location_light_2_position_world;
+      GLint m_uniform_location_light_2_intensity;
 
 
       glm::mat4 m_perspective_mat;
