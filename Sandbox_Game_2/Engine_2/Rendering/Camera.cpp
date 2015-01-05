@@ -4,6 +4,11 @@
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
 
+#include <Utilities\Printer_Helper.h>
+#include <iostream>
+using std::cout;
+using std::endl;
+
 namespace Rendering
 {
    Camera::Camera()
@@ -61,6 +66,8 @@ namespace Rendering
       if (m_follow_this_entity_ptr != 0)
       {
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+
+         Utilities::Printer_Helper::print_my_dual_quat("camera: ", m_where_and_which_way);
       }
    }
 

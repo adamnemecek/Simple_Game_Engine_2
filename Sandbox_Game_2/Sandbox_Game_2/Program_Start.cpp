@@ -195,7 +195,7 @@ void init()
    g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
-   //g_camera_entity.add_component(&g_controller_component);
+   g_camera_entity.add_component(&g_controller_component);
    g_camera_entity.initialize();
 
    // start the camera above and looking down at the scene
@@ -206,8 +206,14 @@ void init()
    // moving it.  We instead want to translate the world and then rotate it, which
    // requires the creation of two dual quats.  
    // Note: The camera is the only thing that requires this reversal .
-   Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
-   g_camera_entity.m_where_and_which_way = entity_camera_offset;
+   //Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
+
+   // I got these numbers by having the camera print out its dual quat, and then I 
+   // copied the numbers when the camera was at the desired starting point.
+   Math::F_Quat temp_real(0.80f, glm::vec3(0.12f, -0.57f, -0.14f));
+   Math::F_Quat temp_dual(2.02f, glm::vec3(4.51f, 2.27f, 6.08f));
+   Math::F_Dual_Quat entity_camera_offset(temp_real, temp_dual);
+      g_camera_entity.m_where_and_which_way = entity_camera_offset;
 
 
    // and the plane
