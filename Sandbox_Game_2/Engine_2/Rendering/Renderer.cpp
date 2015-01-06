@@ -139,9 +139,9 @@ namespace Rendering
 
       // the lights are independent of each renderable
       static glm::vec4 light_1_location(+5.0f, +3.0f, -7.0f, 1.0f);
-      float light_1_intensity = 500.0f;
+      float light_1_intensity = 00.0f;
       static glm::vec4 light_2_location(-5.0f, +3.0f, +5.0f, 1.0f);
-      float light_2_intensity = 100.0f;
+      float light_2_intensity = 50.0f;
       glUniform4fv(m_uniform_location_light_1_position_world, 1, glm::value_ptr(light_1_location));
       glUniform1f(m_uniform_location_light_1_intensity, light_1_intensity);
       glUniform4fv(m_uniform_location_light_2_position_world, 1, glm::value_ptr(light_2_location));

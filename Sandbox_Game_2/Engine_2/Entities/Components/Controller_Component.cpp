@@ -73,12 +73,12 @@ namespace Entities
 
       if (active_actions & ACTION_LIST::GO_UP)
       {
-         new_position += Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position += relative_up * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::GO_DOWN)
       {
-         new_position -= Utilities::Default_Vectors::WORLD_UP_VECTOR * LINEAR_SPEED;
+         new_position -= relative_up * LINEAR_SPEED;
       }
 
       if (active_actions & ACTION_LIST::YAW_LEFT)

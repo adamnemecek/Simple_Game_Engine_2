@@ -85,7 +85,10 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      Math::F_Quat where_quat = m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
+      m_where_and_which_way.normalize();
+      Math::F_Quat where_quat = 2.0f * m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
+
+      Utilities::Printer_Helper::print_vec("camera position: ", where_quat.m_vector);
 
       return where_quat.m_vector;
    }

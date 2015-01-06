@@ -242,11 +242,28 @@ namespace Experiment
 
       //solve_for_and_verify_v_b_f(v_a_i, v_b_i, mass_a, mass_b);
 
-      glm::vec3 v3(2.0f, 3.0f, 4.0f);
-      glm::vec4 v4(2.0f, 3.0f, 4.0f, 1.0f);
+      //X	Y	Z
+      //   camera	0.436	3.126	15.997
+      //   light 2 - 5	3	5
+      //   cube 3 - 5.5	0	5.5
 
-      float f1 = glm::dot(glm::normalize(v3), glm::normalize(v3));
-      float f2 = glm::dot(glm::normalize(v4), glm::normalize(v4));
+
+      Math::F_Dual_Quat dq1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 4.0f, glm::vec3(5.35f, 0.0f, 0.0f));
+      glm::vec3 v1 = (2.0f * dq1.m_dual * dq1.m_real.conjugate()).m_vector;
+
+      Math::F_Dual_Quat dq2 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 4.0f, glm::vec3(5.35f, 0.0f, 0.0f));
+      glm::vec3 v2 = (2.0f * dq2.m_dual * dq2.m_real.conjugate()).m_vector;
+
+
+      //glm::vec3 camera(0.436f, 3.126f, 15.997f);
+      //glm::vec3 light(-5.0f, 3.0f, 5.0f);
+      //glm::vec3 cube(-5.5f, 0.0f, 5.5f);
+      //glm::vec3 cube_surface_normal(+1.0f, 0.0f, 0.0f);
+
+      //glm::vec3 vertex_to_light_vector = glm::normalize(light - cube);
+      //glm::vec3 vertex_to_camera_vector = glm::normalize(camera - cube);
+      //glm::vec3 reflected_light_vector = glm::reflect(-vertex_to_light_vector, cube_surface_normal);
+      //float the_dot = glm::dot(reflected_light_vector, vertex_to_camera_vector);
 
       cout << "hello there" << endl;
    }
