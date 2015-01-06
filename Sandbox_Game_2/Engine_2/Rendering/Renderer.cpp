@@ -25,10 +25,13 @@ namespace Rendering
       //my_function();
 
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
-      m_uniform_location_full_transform = -1;
-      m_uniform_location_model_to_world = -1;
-      m_uniform_location_light_1_position_world = -1;
-      m_uniform_location_light_1_intensity = -1;
+      m_unif_loc_model_to_camera_matrix = -1;
+      m_unif_loc_camera_to_clip_matrix = -1;
+      m_unif_loc_cam_pos_cs = -1;
+      m_unif_loc_light_1_pos_cs = -1;
+      m_unif_loc_light_1_intensity = -1;
+      m_unif_loc_light_2_pos_cs = -1;
+      m_unif_loc_light_2_intensity = -1;
 
       m_num_current_renderables = 0;
 
@@ -63,26 +66,26 @@ namespace Rendering
    {
       glUseProgram(program_ID);
 
-      std::string uniform_name_str = "unif_full_transform_matrix";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_full_transform)) { glUseProgram(0); return false; }
+      std::string uniform_name_str = "unif_model_to_camera_matrix";
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_model_to_camera_matrix)) { glUseProgram(0); return false; }
 
-      uniform_name_str = "unif_model_to_world_matrix";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_model_to_world)) { glUseProgram(0); return false; }
+      uniform_name_str = "unif_camera_to_clip_matrix";
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_camera_to_clip_matrix)) { glUseProgram(0); return false; }
 
-      uniform_name_str = "unif_camera_position_world_space";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_camera_position_world)) { glUseProgram(0); return false; }
+      uniform_name_str = "unif_cam_pos_cs";
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_cam_pos_cs)) { glUseProgram(0); return false; }
 
-      uniform_name_str = "unif_light_1_position_world_space";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_position_world)) { glUseProgram(0); return false; }
+      uniform_name_str = "unif_light_1_pos_cs";
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_1_pos_cs)) { glUseProgram(0); return false; }
 
       uniform_name_str = "unif_light_1_intensity";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_1_intensity)) { glUseProgram(0); return false; }
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_1_intensity)) { glUseProgram(0); return false; }
 
-      uniform_name_str = "unif_light_2_position_world_space";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_2_position_world)) { glUseProgram(0); return false; }
+      uniform_name_str = "unif_light_2_pos_cs";
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_2_pos_cs)) { glUseProgram(0); return false; }
 
       uniform_name_str = "unif_light_2_intensity";
-      if (!find_uniform(program_ID, uniform_name_str, &m_uniform_location_light_2_intensity)) { glUseProgram(0); return false; }
+      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_2_intensity)) { glUseProgram(0); return false; }
 
       return true;
    }
@@ -137,31 +140,32 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      // the lights are independent of each renderable
-      static glm::vec4 light_1_location(+5.0f, +3.0f, -7.0f, 1.0f);
-      float light_1_intensity = 00.0f;
-      static glm::vec4 light_2_location(-5.0f, +3.0f, +5.0f, 1.0f);
-      float light_2_intensity = 50.0f;
-      glUniform4fv(m_uniform_location_light_1_position_world, 1, glm::value_ptr(light_1_location));
-      glUniform1f(m_uniform_location_light_1_intensity, light_1_intensity);
-      glUniform4fv(m_uniform_location_light_2_position_world, 1, glm::value_ptr(light_2_location));
-      glUniform1f(m_uniform_location_light_2_intensity, light_2_intensity);
-
-      // the camera position is independent of each renderable
-      glUniform4fv(m_uniform_camera_position_world, 1, glm::value_ptr(m_camera_ptr->get_position()));
+      //// the camera position is independent of each renderable
+      //glUniform4fv(m_, 1, glm::value_ptr(m_camera_ptr->get_position()));
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
-      glm::mat4 world_to_projection = m_perspective_mat * camera_mat;
+
+      // the lights are independent of each renderable
+      // Note: The light locations that are hard-coded here are in world space, so I only need
+      // to transform them with the camera matrix to get them into camera space.
+      glm::vec3 light_1_location = glm::vec3(camera_mat * glm::vec4(+5.0f, +3.0f, -7.0f, 1.0f));
+      float light_1_intensity = 00.0f;
+      glm::vec3 light_2_location = glm::vec3(camera_mat * glm::vec4(-5.0f, +3.0f, +5.0f, 1.0f));
+      float light_2_intensity = 50.0f;
+      glUniform3fv(m_unif_loc_light_1_pos_cs, 1, glm::value_ptr(light_1_location));
+      glUniform1f(m_unif_loc_light_1_intensity, light_1_intensity);
+      glUniform3fv(m_unif_loc_light_2_pos_cs, 1, glm::value_ptr(light_2_location));
+      glUniform1f(m_unif_loc_light_2_intensity, light_2_intensity);
 
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
          Renderable &r = m_renderables[renderable_count];
          glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
 
-         glm::mat4 full_transform_matrix = world_to_projection * r.m_model_to_world_mat;
+         glm::mat4 model_to_camera = camera_mat * r.m_model_to_world_mat;
 
-         glUniformMatrix4fv(m_uniform_location_full_transform, 1, GL_FALSE, glm::value_ptr(full_transform_matrix));
-         glUniformMatrix4fv(m_uniform_location_model_to_world, 1, GL_FALSE, glm::value_ptr(r.m_model_to_world_mat));
+         glUniformMatrix4fv(m_unif_loc_model_to_camera_matrix, 1, GL_FALSE, glm::value_ptr(model_to_camera));
+         glUniformMatrix4fv(m_unif_loc_camera_to_clip_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_mat));
 
          glDrawElements(
             (r.m_geometry_ptr)->m_render_mode, 

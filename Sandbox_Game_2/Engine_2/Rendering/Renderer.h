@@ -45,13 +45,13 @@ namespace Rendering
       Camera *m_camera_ptr;
 
       std::vector<GLuint> m_shader_programs;
-      GLint m_uniform_location_full_transform;
-      GLint m_uniform_location_model_to_world;
-      GLint m_uniform_camera_position_world;
-      GLint m_uniform_location_light_1_position_world;
-      GLint m_uniform_location_light_1_intensity;
-      GLint m_uniform_location_light_2_position_world;
-      GLint m_uniform_location_light_2_intensity;
+      GLint m_unif_loc_model_to_camera_matrix;
+      GLint m_unif_loc_camera_to_clip_matrix;
+      GLint m_unif_loc_cam_pos_cs;
+      GLint m_unif_loc_light_1_pos_cs;
+      GLint m_unif_loc_light_1_intensity;
+      GLint m_unif_loc_light_2_pos_cs;
+      GLint m_unif_loc_light_2_intensity;
 
 
       glm::mat4 m_perspective_mat;
