@@ -83,7 +83,7 @@
   <ItemGroup>
     <ClCompile Include="experiment.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Program_Start.cpp" />
+    <ClCompile Include="Genesis.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="things_to_do.txt" />
