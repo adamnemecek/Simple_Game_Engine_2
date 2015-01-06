@@ -248,16 +248,10 @@ namespace Experiment
       //   cube 3 - 5.5	0	5.5
 
 
-      Math::F_Dual_Quat dq1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 4.0f, glm::vec3(5.35f, 0.0f, 0.0f));
-      glm::vec3 v1 = (2.0f * dq1.m_dual * dq1.m_real.conjugate()).m_vector;
+      glm::vec3 v1 = glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f));
+      glm::vec3 v2(0.0f, -1.0f, 0.0f);
+      float the_dot = glm::dot(v1, v2);
 
-      Math::F_Dual_Quat dq2 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 1.0f, 0.0f), 3.14159f / 4.0f, glm::vec3(5.35f, 0.0f, 0.0f));
-      glm::vec3 v2 = (2.0f * dq2.m_dual * dq2.m_real.conjugate()).m_vector;
-
-
-      glm::vec3 v(1.0f, 2.0f, 3.0f);
-      float f = 10;
-      glm::vec3 result = v - f;
 
       //glm::vec3 camera(0.436f, 3.126f, 15.997f);
       //glm::vec3 light(-5.0f, 3.0f, 5.0f);

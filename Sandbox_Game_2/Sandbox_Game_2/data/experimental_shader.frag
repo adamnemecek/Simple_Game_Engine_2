@@ -40,16 +40,15 @@ float calculate_attenuation_factor(in vec3 light_pos_cs, in float light_intensit
    // scalar for a cheap normalization.
    n_vert_to_light_vec = vert_to_light_vec * inversesqrt(light_vec_squared);
 
-   // return the attenuation factor
    return attenuation_factor;
 }
 
 
-float calculate_light_angle(in vec3 n_vert_to_light_vec)
+float calculate_cosine_of_light_angle(in vec3 n_vert_to_light_vec)
 {
    vec3 n_vert_normal_cs = vert_norm_cs * inversesqrt(dot(vert_norm_cs, vert_norm_cs));
    
-   return dot(n_vert_normal_cs, n_vert_normal_cs);
+   return dot(n_vert_to_light_vec, n_vert_normal_cs);
 }
 
 
@@ -68,10 +67,6 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
    // clamp the phong term so that it doesn't return a negative value
    //float phong_term = clamp(dot(n_vert_to_camera_vec, n_reflected_light_vec), 0, 1);
    float phong_term = dot(n_vert_to_camera_vec, n_reflected_light_vec);
-   if (phong_term < 0.0f)
-   {
-      //return 0.2f;
-   }
 
    return phong_term;
 }
@@ -90,13 +85,11 @@ void main()
    // fraction of light that is reflected in all directions given the angle of the
    // light relative to the fragment and the distance form the light to fragment
    
-   float light_1_angle = calculate_light_angle(n_vert_to_light_1_vec);
-   float light_1_diffuse_factor = clamp(light_1_angle * light_1_attenuation_factor, 0, 1);
-   float light_1_phong = calculate_phong_term(n_vert_to_light_1_vec);
+   float light_1_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_1_vec) * light_1_attenuation_factor;
+   float light_1_specular_factor = calculate_phong_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
 
-   float light_2_angle = calculate_light_angle(n_vert_to_light_2_vec);
-   float light_2_diffuse_factor = clamp(light_2_angle * light_2_attenuation_factor, 0, 1);
-   float light_2_phong = calculate_phong_term(n_vert_to_light_2_vec);
+   float light_2_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_2_vec) * light_2_attenuation_factor;
+   float light_2_specular_factor = calculate_phong_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
 
    // Note: Do not factor in the camera's distance to the light in a secondary attenuation 
    // factor.  Someone on reddit explained it to me this way: Imagine a 1 meter square plane
@@ -110,28 +103,12 @@ void main()
    // This mostly makes sense to me.
 
    vec3 temp_vert_color = vec3(0.25f, 0.25f, 0.25f);
+
    vec3 temp_final_color = 
       clamp(temp_vert_color * light_1_diffuse_factor, 0, 1) +
       clamp(temp_vert_color * light_2_diffuse_factor, 0, 1) +
-      //(specular_color) +
-      clamp((specular_color * light_1_attenuation_factor * light_1_phong), 0, 0) +
-      clamp((specular_color * light_2_attenuation_factor * light_2_phong), 0, 0);
-   
-   if (light_1_phong < 0.02f && light_1_phong > -0.02f)
-   {
-      // red-shift it
-      //temp_final_color += vec3(0.5f, 0.0f, 0.0f);
-   }
-   else if (light_1_phong < 0.5f && light_1_phong > -0.5f)
-   {
-      //green-shift it
-      //temp_final_color += vec3(0.0f, 0.5f, 0.0f);
-   }
-   else
-   {
-      // blue-shift it
-      //temp_final_color += vec3(0.0f, 0.0f, 0.5f);
-   }
+      clamp((specular_color * light_1_specular_factor), 0, 1) +
+      clamp((specular_color * light_2_specular_factor), 0, 1);
 
    final_color = vec4(temp_final_color, 1.0f);
 }
