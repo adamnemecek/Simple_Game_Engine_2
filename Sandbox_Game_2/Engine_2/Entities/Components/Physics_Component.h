@@ -5,14 +5,31 @@
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
 
+// forward declaration of friend class
+namespace Collision_Detection
+{
+   class Collision_Handler;
+}
+
 namespace Entities
 {
+   // starts with the following:
+   // - 0 kg of mass
+   // - 0 m/s linear velocity on all axes
+   // - 0 radians/s angular velocity
    class __declspec(dllexport) Physics_Component : public Game_Component
    {
    public:
       bool initialize();
       // default shutdown()
       void update();
+
+      // self-explanatory
+      void add_mass(const float additional_mass);
+
+      // removes mass from the entity
+      // Note: Will not allow the mass to drop below.
+      void remove_mass(const float mass_to_go_bye_bye);
       
       // an immediate force vector will likely induce both linear and angular acceleration, so we need 
       // to know where the force vector was applied relative to the center of mass
@@ -24,8 +41,14 @@ namespace Entities
 
       // this is the "bounce off surface" function
       void reflect_linear_velocity_around_vector(const glm::vec3 &reflection_axis);
-      
+
    private:
+      // the collision handler class will need access to the entity's mass and velocity to calculate
+      // the point of impact and the force exerted at that point, and then this physics class will 
+      // react to the applied force
+      friend class Collision_Detection::Collision_Handler;
+
+      // private helper constants
       static const uint m_MAX_IMMEDIATE_FORCE_VECTORS = 20;
       static const uint m_MAX_SUSTAINED_FORCE_VECTORS = 5;
 
@@ -37,9 +60,11 @@ namespace Entities
       glm::vec3 m_sustained_force_vectors_this_frame[m_MAX_SUSTAINED_FORCE_VECTORS];
       uint m_current_sustained_force_vector_index;
 
+      // these are the primary things that this class was designed to track; everything else
+      // is helper data
       glm::vec3 m_linear_velocity;
-      glm::vec3 m_angular_rotation_vector;
       float m_angular_velocity;
+      float m_mass;
    };
 }
 

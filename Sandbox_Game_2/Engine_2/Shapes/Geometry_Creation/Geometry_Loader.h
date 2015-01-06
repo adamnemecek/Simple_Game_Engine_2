@@ -4,10 +4,16 @@
 #include <Utilities\Typedefs.h>
 #include <glm\vec3.hpp>
 
+
+// forward declarations
 namespace Shapes
 {
    class Geometry;
+   class Shape_Data;
+}
 
+namespace Shapes
+{
    namespace Geometry_Creation
    {
       class __declspec(dllexport) Geometry_Loader
@@ -35,8 +41,9 @@ namespace Shapes
          Geometry_Loader(const Geometry_Loader&);
          Geometry_Loader &operator=(const Geometry_Loader&);
 
-         // helper function is private
+         // helper functions are private
          static void initialize_attributes(Geometry *geo);
+         static void calculate_geometry_meta_data(Geometry *geo);
       };
    }
 }

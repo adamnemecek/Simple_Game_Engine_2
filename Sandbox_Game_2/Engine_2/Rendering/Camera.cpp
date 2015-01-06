@@ -4,6 +4,11 @@
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
 
+#include <Utilities\Printer_Helper.h>
+#include <iostream>
+using std::cout;
+using std::endl;
+
 namespace Rendering
 {
    Camera::Camera()
@@ -61,6 +66,8 @@ namespace Rendering
       if (m_follow_this_entity_ptr != 0)
       {
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+
+         //Utilities::Printer_Helper::print_my_dual_quat("camera: ", m_where_and_which_way);
       }
    }
 
@@ -78,12 +85,12 @@ namespace Rendering
 
    glm::vec3 Camera::get_position()
    {
-      //return glm::vec3(
-      //   m_where_and_which_way.dual.x,
-      //   m_where_and_which_way.dual.y,
-      //   m_where_and_which_way.dual.z);
+      m_where_and_which_way.normalize();
+      Math::F_Quat where_quat = 2.0f * m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
 
-      return glm::vec3();
+      Utilities::Printer_Helper::print_vec("camera position: ", where_quat.m_vector);
+
+      return where_quat.m_vector;
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

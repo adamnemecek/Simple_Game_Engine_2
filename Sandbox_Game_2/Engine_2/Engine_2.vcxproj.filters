@@ -66,9 +66,6 @@
     <ClCompile Include="Entities\Components\AABB_Component.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Collision_Detection\AABB_Collision_Detector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Start_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,6 +76,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Math\F_Dual_Number.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision_Detection\Collision_Handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,9 +182,6 @@
     <ClInclude Include="Entities\Components\AABB_Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collision_Detection\AABB_Collision_Detector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Start_Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -198,6 +195,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Quaternion_Helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Geometry_Meta_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision_Detection\Collision_Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

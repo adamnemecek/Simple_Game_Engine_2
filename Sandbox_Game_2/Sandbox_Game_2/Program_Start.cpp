@@ -22,7 +22,7 @@ these function.
 #include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
 #include <Engine_2\Entities\Components\AABB_Component.h>
-#include <Engine_2\Collision_Detection\AABB_Collision_Detector.h>
+#include <Engine_2\Collision_Detection\Collision_Handler.h>
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
@@ -97,7 +97,7 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   //Experiment::do_something();
+   Experiment::do_something();
 
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);
@@ -115,8 +115,8 @@ void init()
 
    std::string file_paths[] =
    {
-      "data/diffuse_shader.vert",
-      "data/diffuse_shader.frag",
+      "data/experimental_shader.vert",
+      "data/experimental_shader.frag",
    };
    GLenum shader_types[] =
    {
@@ -135,7 +135,7 @@ void init()
    g_renderer.set_camera_to_render(&g_camera);
 
    // initialize the collision detector, which causes it to forget any bounding boxes that had been added
-   Collision_Detection::AABB_Collision_Detector::get_instance().initialize();
+   Collision_Detection::Collision_Handler::get_instance().initialize();
    
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
@@ -148,20 +148,20 @@ void init()
    // - the entity's dual quat can be set any time during initialization because entity 
    // initialization initializes the components and does not set the dual quat values
 
-   // add physics first so that the entity's dual fquat is updated for the frame
+   // add physics first so that the entity's transform is updated for the frame
    g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
    g_cube_1_bounding_box.set_geometry(&g_cube_geometry);
    g_cube_1_entity.add_component(&g_cube_1_physics);
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
-   Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_1_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_1_bounding_box, &g_cube_1_physics);
    initialize_success = g_cube_1_entity.initialize();
    MY_ASSERT(initialize_success);
-   Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(-4.0f, +3.0f, +4.0f));
-   //Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+0.0f, 1.0f, +0.0f), 3.1415926f / 2, glm::vec3(0.0f, +3.0f, +0.0f));
+   Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
-   g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -1.0f));    // force to the right
+   g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -0.0f));
+   g_cube_1_physics.add_mass(5.0f);
 
    g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
@@ -169,18 +169,21 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_physics);
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
-   Collision_Detection::AABB_Collision_Detector::get_instance().add_AABB(&g_cube_2_bounding_box);
+   Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_2_bounding_box, &g_cube_2_physics);
    initialize_success = g_cube_2_entity.initialize();
    MY_ASSERT(initialize_success);
-   Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(+4.0f, +3.0f, -4.0f));
+   Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
    g_cube_2_entity.m_where_and_which_way = entity_2_offset;
-   g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +1.0f));    // force to the left
+   g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +0.0f));
+   g_cube_2_physics.add_mass(10.0f);
 
    g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
    g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
    initialize_success = g_cube_3_entity.initialize();
    MY_ASSERT(initialize_success);
+   Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
+   g_cube_3_entity.m_where_and_which_way = entity_3_offset;
 
    g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
@@ -194,7 +197,7 @@ void init()
    g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
-   //g_camera_entity.add_component(&g_controller_component);
+   g_camera_entity.add_component(&g_controller_component);
    g_camera_entity.initialize();
 
    // start the camera above and looking down at the scene
@@ -205,7 +208,14 @@ void init()
    // moving it.  We instead want to translate the world and then rotate it, which
    // requires the creation of two dual quats.  
    // Note: The camera is the only thing that requires this reversal .
-   Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
+   //Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
+   //Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.436f, 3.126f, 15.997f));
+
+   // I got these numbers by having the camera print out its dual quat, and then I 
+   // copied the numbers when the camera was at the desired starting point.
+   Math::F_Quat temp_real(0.80f, glm::vec3(0.12f, -0.57f, -0.14f));
+   Math::F_Quat temp_dual(2.02f, glm::vec3(4.51f, 2.27f, 6.08f));
+   Math::F_Dual_Quat entity_camera_offset(temp_real, temp_dual);
    g_camera_entity.m_where_and_which_way = entity_camera_offset;
 
 
@@ -267,7 +277,7 @@ void display()
    g_circle_entity.update();
    g_rectangle_box_entity.update();
 
-   Collision_Detection::AABB_Collision_Detector::get_instance().update();
+   Collision_Detection::Collision_Handler::get_instance().update();
 
    g_camera_entity.update();
    g_camera.update();

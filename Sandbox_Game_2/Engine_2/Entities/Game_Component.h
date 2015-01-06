@@ -1,12 +1,15 @@
 #ifndef ENGINE_GAME_COMPONENT_H
 #define ENGINE_GAME_COMPONENT_H
 
+// forward declaration
 namespace Entities
 {
-   // just declare it so you don't have to include anything
    class Entity;
    class Controllable_Entity;
+}
 
+namespace Entities
+{
    // the compiler gives a warning for a non dll-interface class being used as a 
    // base for a dll-interface class when I didn't declare this pure virtual base 
    // class for dll export, so I should probably declare it

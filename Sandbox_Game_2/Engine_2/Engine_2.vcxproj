@@ -82,7 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collision_Detection\AABB_Collision_Detector.cpp" />
+    <ClCompile Include="Collision_Detection\Collision_Handler.cpp" />
     <ClCompile Include="DebugTools\Profiling\Profiler.cpp" />
     <ClCompile Include="Entities\Components\AABB_Component.cpp" />
     <ClCompile Include="Entities\Components\Border_Handler_Component.cpp" />
@@ -106,7 +106,7 @@
     <ClCompile Include="Utilities\Shader_Maker.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collision_Detection\AABB_Collision_Detector.h" />
+    <ClInclude Include="Collision_Detection\Collision_Handler.h" />
     <ClInclude Include="DebugTools\Profiling\Profiler.h" />
     <ClInclude Include="Entities\Components\AABB_Component.h" />
     <ClInclude Include="Entities\Components\Border_Handler_Component.h" />
@@ -127,6 +127,7 @@
     <ClInclude Include="Shapes\Geometry.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />
+    <ClInclude Include="Shapes\Geometry_Meta_Data.h" />
     <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />
     <ClInclude Include="Start_Engine.h" />
