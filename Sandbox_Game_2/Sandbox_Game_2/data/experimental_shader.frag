@@ -65,14 +65,29 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
    vec3 n_reflected_light_vec = reflect(-n_vert_to_light_vec, vert_norm_cs);
 
    // clamp the phong term so that it doesn't return a negative value
-   //float phong_term = clamp(dot(n_vert_to_camera_vec, n_reflected_light_vec), 0, 1);
-   float phong_term = dot(n_vert_to_camera_vec, n_reflected_light_vec);
+   // Note: The arguments are normalized, so there is no risk of exceeding 1.0f, but 
+   // clamp it anyway to avoid a negative value, which would cause the pow(...) function 
+   // to explode.
+   float phong_term = clamp(dot(n_vert_to_camera_vec, n_reflected_light_vec), 0, 1);
 
    // incorporate the "shininess factor" power
    // Note: It's a magic number for now.
-   phong_term = pow(phong_term, 50.0f);
+   phong_term = pow(phong_term, 5.0f);
 
    return phong_term;
+}
+
+
+// similar to the phong term, the blinn-phong (commonly shortened to simply "blinn") has fewer
+// artifacts at low specular exponents
+float calculate_blinn_term(in vec3 n_vert_to_light_vec)
+{
+   vec3 n_vert_to_camera_vec = normalize(-vert_pos_cs);
+   vec3 half_angle = normalize(n_vert_to_light_vec + n_vert_to_camera_vec);
+   float blinn_term = clamp(dot(half_angle, normalize(vert_norm_cs)), 0, 1);
+   blinn_term = pow(blinn_term, 5.0f);
+
+   return blinn_term;
 }
 
 void main()
@@ -90,9 +105,11 @@ void main()
    // light relative to the fragment and the distance form the light to fragment
    
    float light_1_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_1_vec) * light_1_attenuation_factor;
+   //float light_1_specular_factor = calculate_blinn_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
    float light_1_specular_factor = calculate_phong_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
 
    float light_2_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_2_vec) * light_2_attenuation_factor;
+   //float light_2_specular_factor = calculate_blinn_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
    float light_2_specular_factor = calculate_phong_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
 
    // Note: Do not factor in the camera's distance to the light in a secondary attenuation 
