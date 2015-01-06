@@ -120,6 +120,11 @@ namespace Math
       return F_Quat(left.m_scalar + right.m_scalar, left.m_vector + right.m_vector);
    }
 
+   F_Quat operator-(const F_Quat &left, const F_Quat &right)
+   {
+      return F_Quat(left.m_scalar - right.m_scalar, left.m_vector - right.m_vector);
+   }
+
    F_Quat operator*(const float left, const F_Quat &right)
    {
       return F_Quat(left * right.m_scalar, left * right.m_vector);

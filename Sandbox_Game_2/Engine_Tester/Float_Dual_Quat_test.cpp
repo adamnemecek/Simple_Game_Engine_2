@@ -201,15 +201,38 @@ TEST(Float_Dual_Quat, Multiply)
    F_Quat dual_2(0.0f, glm::vec3(-6.6f, -5.5f, -4.4f));
    F_Dual_Quat dq2(real_2, dual_2);
 
-      F_Dual_Quat result = dq1 * dq2;
-      EXPECT_FLOAT_EQ(+13.1f, result.m_real.m_scalar);
-      EXPECT_FLOAT_EQ(+2.64f, result.m_real.m_vector.x);
-      EXPECT_FLOAT_EQ(-9.68f, result.m_real.m_vector.y);
-      EXPECT_FLOAT_EQ(+7.04f, result.m_real.m_vector.z);
-      EXPECT_FLOAT_EQ(+67.76f, result.m_dual.m_scalar);
-      EXPECT_FLOAT_EQ(+14.74f, result.m_dual.m_vector.x);
-      EXPECT_FLOAT_EQ(-33.88f, result.m_dual.m_vector.y);
-      EXPECT_FLOAT_EQ(+19.14f, result.m_dual.m_vector.z);
+   F_Dual_Quat result = dq1 * dq2;
+   EXPECT_FLOAT_EQ(+13.1f, result.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(+2.64f, result.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(-9.68f, result.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(+7.04f, result.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(+67.76f, result.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ(+14.74f, result.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(-33.88f, result.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(+19.14f, result.m_dual.m_vector.z);
+}
+
+TEST(Float_Dual_Quat, Subtraction)
+{
+   F_Quat real_1(1.0f, glm::vec3(1.1f, 2.2f, 3.3f));
+   F_Quat dual_1(0.0f, glm::vec3(4.4f, 5.5f, 6.6f));
+   F_Dual_Quat dq1(real_1, dual_1);
+
+   F_Quat real_2(1.0f, glm::vec3(-3.3f, -2.2f, -1.1f));
+   F_Quat dual_2(0.0f, glm::vec3(-6.6f, -5.5f, -4.4f));
+   F_Dual_Quat dq2(real_2, dual_2);
+
+   F_Dual_Quat result = dq1 - dq2;
+   F_Quat q_real_result = real_1 - real_2;
+   F_Quat q_dual_result = dual_1 - dual_2;
+   EXPECT_FLOAT_EQ(q_real_result.m_scalar, result.m_real.m_scalar);
+   EXPECT_FLOAT_EQ(q_real_result.m_vector.x, result.m_real.m_vector.x);
+   EXPECT_FLOAT_EQ(q_real_result.m_vector.y, result.m_real.m_vector.y);
+   EXPECT_FLOAT_EQ(q_real_result.m_vector.z, result.m_real.m_vector.z);
+   EXPECT_FLOAT_EQ(q_dual_result.m_scalar, result.m_dual.m_scalar);
+   EXPECT_FLOAT_EQ(q_dual_result.m_vector.x, result.m_dual.m_vector.x);
+   EXPECT_FLOAT_EQ(q_dual_result.m_vector.y, result.m_dual.m_vector.y);
+   EXPECT_FLOAT_EQ(q_dual_result.m_vector.z, result.m_dual.m_vector.z);
 }
 
 

@@ -255,6 +255,10 @@ namespace Experiment
       glm::vec3 v2 = (2.0f * dq2.m_dual * dq2.m_real.conjugate()).m_vector;
 
 
+      glm::vec3 v(1.0f, 2.0f, 3.0f);
+      float f = 10;
+      glm::vec3 result = v - f;
+
       //glm::vec3 camera(0.436f, 3.126f, 15.997f);
       //glm::vec3 light(-5.0f, 3.0f, 5.0f);
       //glm::vec3 cube(-5.5f, 0.0f, 5.5f);

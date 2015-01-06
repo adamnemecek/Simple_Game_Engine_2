@@ -87,6 +87,13 @@ namespace Math
    // dq1 * dq2 = AC + e(AD + BC).  There is no BD because e^2 is defined to
    // be 0.
    F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right);
+
+   // subtraction
+   // Note: Given dual quats dq1 = (A + eB) and dq2 = (C + eD), then
+   // dq1 - dq2 = (A - C) + e(B - D).
+   // Note: I am defining this function for debugging purposes.  I want to 
+   // find the difference between two dual quats.
+   F_Dual_Quat operator-(const F_Dual_Quat &left, const F_Dual_Quat &right);
 }
 
 #endif

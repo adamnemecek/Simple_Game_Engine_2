@@ -310,12 +310,12 @@ namespace Math
    // non-member functions
    F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right)
    {
-      F_Quat new_real = left.m_real * right.m_real;
-      
-      F_Quat new_dual = left.m_real * right.m_dual;
-      new_dual += left.m_dual * right.m_real;
-      
-      return F_Dual_Quat(new_real, new_dual);
+      return F_Dual_Quat(left.m_real * right.m_real, (left.m_real * right.m_dual) + (left.m_dual * right.m_real));
+   }
+
+   F_Dual_Quat operator-(const F_Dual_Quat &left, const F_Dual_Quat &right)
+   {
+      return F_Dual_Quat(left.m_real - right.m_real, left.m_dual - right.m_dual);
    }
 }
 

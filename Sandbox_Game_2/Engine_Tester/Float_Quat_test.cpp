@@ -171,6 +171,29 @@ TEST(F_Quat, Addition)
    EXPECT_FLOAT_EQ(V1_Z + V2_Z, result_2.m_vector.z);
 }
 
+TEST(F_Quat, Subtraction)
+{
+   static const float V1_SCALAR = 1.0f;
+   static const float V1_X = 1.1f;
+   static const float V1_Y = 2.2f;
+   static const float V1_Z = 3.3f;
+
+   static const float V2_SCALAR = 1.0f;
+   static const float V2_X = -3.3f;
+   static const float V2_Y = -2.2f;
+   static const float V2_Z = -1.1f;
+
+   F_Quat q1(V1_SCALAR, glm::vec3(V1_X, V1_Y, V1_Z));
+   F_Quat q2(V2_SCALAR, glm::vec3(V2_X, V2_Y, V2_Z));
+
+   // two operator addition
+   F_Quat result_1 = q1 - q2;
+   EXPECT_FLOAT_EQ(V1_SCALAR - V2_SCALAR, result_1.m_scalar);
+   EXPECT_FLOAT_EQ(V1_X - V2_X, result_1.m_vector.x);
+   EXPECT_FLOAT_EQ(V1_Y - V2_Y, result_1.m_vector.y);
+   EXPECT_FLOAT_EQ(V1_Z - V2_Z, result_1.m_vector.z);
+}
+
 TEST(F_Quat, Scalar_Multiplication)
 {
    static const float SCALAR = 1.0f;

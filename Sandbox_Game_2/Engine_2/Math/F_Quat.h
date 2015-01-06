@@ -107,6 +107,9 @@ namespace Math
    // addition
    F_Quat operator+(const F_Quat &left, const F_Quat &right);
 
+   // subtraction
+   F_Quat operator-(const F_Quat &left, const F_Quat &right);
+
    // scalar multiplication
    F_Quat operator*(const float left, const F_Quat &right);
    F_Quat operator*(const F_Quat &left, const float right);

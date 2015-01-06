@@ -26,6 +26,11 @@ using std::endl;
 
 namespace Entities
 {
+   void Controller_Component::set_camera(Rendering::Camera *camera_ptr)
+   {
+      m_camera_ptr = camera_ptr;
+   }
+
    bool Controller_Component::initialize()
    {
       m_easy_physics_ptr = m_parent_entity_ptr->get_component_ptr<Physics_Component>();
@@ -111,11 +116,16 @@ namespace Entities
          new_orientation = Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED) * new_orientation;
       }
 
+      //m_camera_ptr->adjust_position(new_position);
+
       // construct the dual part of the transformational dual quat
-      Math::F_Quat new_dual = (1 / 2.0f) * Math::F_Quat::generate_pure_quat(new_position) * new_orientation;
+      Math::F_Quat new_dual = 0.5f * Math::F_Quat::generate_pure_quat(new_position) * new_orientation;
       
       Math::F_Dual_Quat prev_state(m_parent_entity_ptr->m_where_and_which_way);
       Math::F_Dual_Quat new_state(new_orientation, new_dual);
+
+      Math::F_Quat temp_pos = 2.0f * new_state.m_dual * new_state.m_real.conjugate();
+      m_camera_ptr->adjust_position(temp_pos.m_vector);
 
       m_parent_entity_ptr->m_where_and_which_way = new_state * prev_state;
    }

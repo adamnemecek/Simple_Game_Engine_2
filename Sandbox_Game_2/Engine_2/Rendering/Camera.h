@@ -13,7 +13,7 @@ namespace Entities
 
 namespace Rendering
 {
-   class Camera
+   class __declspec(dllexport) Camera
    {
    public:
       Camera();
@@ -28,12 +28,16 @@ namespace Rendering
       glm::vec3 get_forward_vector();
       glm::vec3 get_position();
 
+      void adjust_position(const glm::vec3 &delta_position);
+
       // use this to assign an entity to follow
       // Note: If no entity is assigned, then the camera will remain at the origin and not move.
       void set_entity_to_follow(Entities::Entity *entity_ptr);
 
 
    private:
+      glm::vec3 m_position;
+
       Math::F_Dual_Quat m_where_and_which_way;
 
       glm::vec2 m_prev_mouse_position;
