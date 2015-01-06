@@ -73,7 +73,7 @@ namespace Rendering
       if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_camera_to_clip_matrix)) { glUseProgram(0); return false; }
 
       uniform_name_str = "unif_cam_pos_cs";
-      if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_cam_pos_cs)) { glUseProgram(0); return false; }
+      //if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_cam_pos_cs)) { glUseProgram(0); return false; }
 
       uniform_name_str = "unif_light_1_pos_cs";
       if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_1_pos_cs)) { glUseProgram(0); return false; }
