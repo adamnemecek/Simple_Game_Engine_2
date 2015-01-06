@@ -68,6 +68,10 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
    //float phong_term = clamp(dot(n_vert_to_camera_vec, n_reflected_light_vec), 0, 1);
    float phong_term = dot(n_vert_to_camera_vec, n_reflected_light_vec);
 
+   // incorporate the "shininess factor" power
+   // Note: It's a magic number for now.
+   phong_term = pow(phong_term, 50.0f);
+
    return phong_term;
 }
 
