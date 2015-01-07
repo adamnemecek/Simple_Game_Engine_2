@@ -210,8 +210,11 @@ namespace Shapes
          struct attribute_node_data
          {
             const rapidxml::xml_node<> *node_ptr;
-            char *node_value;
-            uint node_value_byte_size;
+            char *data;
+            uint unparsed_size_bytes;
+            std::string index;
+            std::string type;
+            std::string num_values_per;
          };
          std::vector<attribute_node_data> node_data_vector;
          node_data_vector.reserve(3);
@@ -227,8 +230,12 @@ namespace Shapes
          {
             attribute_node_data this_node_data;
             this_node_data.node_ptr = node_ptr;
-            this_node_data.node_value = node_ptr->value();
-            this_node_data.node_value_byte_size = node_ptr->value_size();
+            this_node_data.data = node_ptr->value();
+            this_node_data.unparsed_size_bytes = node_ptr->value_size();
+            
+            this_node_data.index = rapidxml::get_attrib_string(*node_ptr, "index");
+            this_node_data.type = rapidxml::get_attrib_string(*node_ptr, "type");
+            this_node_data.num_values_per = rapidxml::get_attrib_string(*node_ptr, "size");
 
             node_data_vector.push_back(this_node_data);
             //attribute_nodes.push_back(node_ptr);
