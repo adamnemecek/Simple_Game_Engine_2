@@ -3,7 +3,7 @@
 
 #include <Utilities\Typedefs.h>
 #include <glm\vec3.hpp>
-
+#include <string>
 
 // forward declarations
 namespace Shapes
@@ -33,6 +33,8 @@ namespace Shapes
          static void load_triangle(Geometry *put_geometry_here);
          static void load_circle(Geometry *put_geometry_here, const uint num_arc_segments = 16, const float radius = 1.0f);
          static void load_box(Geometry *put_geometry_here, const float width = 1.0f, const float length = 1.0f);
+
+         static void load_arcsynthesis_xml_file(const std::string &file_path);
 
 
       private:

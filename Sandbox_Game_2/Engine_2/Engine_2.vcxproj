@@ -141,6 +141,7 @@
     <ClInclude Include="Utilities\My_Assert.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Quaternion_Helper.h" />
+    <ClInclude Include="Utilities\rapidxml.hpp" />
     <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Renderable.h" />

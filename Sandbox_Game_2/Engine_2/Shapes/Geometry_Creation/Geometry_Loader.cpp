@@ -6,19 +6,13 @@
 #include <Shapes\Geometry_Meta_Data.h>
 
 #include <glm\vec3.hpp>
-using glm::vec3;
-
-#include <glm\mat4x4.hpp>
-using glm::mat4;
-
-// to make buffer data passing easier
-#include <glm\gtc\type_ptr.hpp>
-using glm::value_ptr;
-
-// for GL typedefs
-#include <Utilities\Include_Helpers\GL_Version.h>
-
+#include <glm\gtc\type_ptr.hpp> // to make buffer data passing easier
+#include <Utilities\Include_Helpers\GL_Version.h> // for GL typedefs
 #include <Utilities\Typedefs.h>
+
+#include <Utilities\rapidxml.hpp>   // courtesy of Arcsynthesis
+#include <fstream>
+#include <vector>
 
 namespace Shapes
 {
@@ -165,6 +159,27 @@ namespace Shapes
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
+      }
+
+      void Geometry_Loader::load_arcsynthesis_xml_file(const std::string &file_path)
+      {
+         // this function is heavily influenced by the arcsynthesis framework's Mesh 
+         // class constructor, and some lines are copied verbatim except for the 
+         // camel-case-to-underscore notaion change
+         std::ifstream file_stream(file_path);
+         if (!file_stream.is_open())
+         {
+            throw std::runtime_error("Could not find the mesh file: " + file_path);
+         }
+
+         //??why does arcsynthesis do this??
+         std::vector<char> file_data;
+         file_data.reserve(2 * 1024 * 1024);
+         file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
+            std::istreambuf_iterator<char>());
+         file_data.push_back('\0');
+
+         rapidxml::xml_document<> doc;
       }
    }
 }

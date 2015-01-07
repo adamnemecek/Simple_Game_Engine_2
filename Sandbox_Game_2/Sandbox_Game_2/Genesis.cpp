@@ -140,6 +140,21 @@ void init()
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
 
+
+
+
+   Geometry_Loader::load_arcsynthesis_xml_file("data/ArcsynthesisUnitCube.xml");
+
+
+
+
+
+
+
+
+
+
+
    // entity initialization notes:
    // - add the physics component before the renderable updater and the bounding box because
    // the physics component updates the entity's dual quat representing location and orientation
