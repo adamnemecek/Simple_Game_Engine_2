@@ -10,9 +10,11 @@
 #include <Utilities\Include_Helpers\GL_Version.h> // for GL typedefs
 #include <Utilities\Typedefs.h>
 
-#include <Utilities\rapidxml.hpp>   // courtesy of Arcsynthesis
+//#include <Utilities\rapidxml.hpp>   // courtesy of Arcsynthesis
+#include <middleware\arcsynthesis_framework\framework\rapidxml.hpp>
 #include <fstream>
 #include <vector>
+
 
 namespace Shapes
 {
@@ -180,6 +182,7 @@ namespace Shapes
          file_data.push_back('\0');
 
          rapidxml::xml_document<> doc;
+
       }
    }
 }

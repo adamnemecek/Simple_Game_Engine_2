@@ -142,8 +142,15 @@ void init()
 
 
 
-
-   Geometry_Loader::load_arcsynthesis_xml_file("data/ArcsynthesisUnitCube.xml");
+   try
+   {
+      Geometry_Loader::load_arcsynthesis_xml_file("data/ArcsynthesisUnitCube.xml");
+   }
+   catch (std::exception &e)
+   {
+      printf("%s\n", e.what());
+      throw;
+   }
 
 
 

@@ -55,7 +55,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>DEBUG;FREEGLUT_STATIC;_LIB;FREEGLUT_LIB_PRAGMAS=0;PROFILER_ON;WIN32;_DEBUG;_WINDOWS;_USRDLL;ENGINE_2_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\boost\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)\..\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glm\;$(SolutionDir)\..\middleware\glsdk_0_5_2\glload\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\freeglut\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\glutil\include;$(SolutionDir)\..\middleware\glsdk_0_5_2\boost\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,7 +141,6 @@
     <ClInclude Include="Utilities\My_Assert.h" />
     <ClInclude Include="Utilities\Printer_Helper.h" />
     <ClInclude Include="Utilities\Quaternion_Helper.h" />
-    <ClInclude Include="Utilities\rapidxml.hpp" />
     <ClInclude Include="Utilities\Shader_Maker.h" />
     <ClInclude Include="Utilities\Typedefs.h" />
     <ClInclude Include="Rendering\Renderable.h" />

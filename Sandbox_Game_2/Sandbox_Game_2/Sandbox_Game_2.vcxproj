@@ -91,9 +91,6 @@
   <ItemGroup>
     <ClInclude Include="experiment.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Xml Include="data\ArcsynthesisUnitCube.xml" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
