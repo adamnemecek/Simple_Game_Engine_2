@@ -168,13 +168,13 @@ namespace Experiment
       const float m_a, const float m_b)
    {
       glm::vec3 b = ((-1.0f) * v_a_i * m_b) - (m_b * m_b / m_a) * v_b_i;
-      glm::vec3 negative_b = (-1.0f) * b;
-      glm::vec3 result_of_root = my_square_root_b_squared_minus_4ac(v_a_i, v_b_i, m_a, m_b);
-      glm::vec3 result = negative_b - result_of_root;
+glm::vec3 negative_b = (-1.0f) * b;
+glm::vec3 result_of_root = my_square_root_b_squared_minus_4ac(v_a_i, v_b_i, m_a, m_b);
+glm::vec3 result = negative_b - result_of_root;
 
-      glm::vec3 simplified = ((m_b * m_b / m_a) * v_b_i) + (m_b * v_b_i);
+glm::vec3 simplified = ((m_b * m_b / m_a) * v_b_i) + (m_b * v_b_i);
 
-      return simplified;
+return simplified;
    }
 
    glm::vec3 my_negative_b_plus_square_root_b_squared_minus_4_a_c_all_over_2a(
@@ -248,10 +248,11 @@ namespace Experiment
       //   cube 3 - 5.5	0	5.5
 
 
-      glm::vec3 v1 = glm::normalize(glm::vec3(1.0f, 1.0f, 0.0f));
-      glm::vec3 v2(0.0f, -1.0f, 0.0f);
-      float the_dot = glm::dot(v1, v2);
+      glm::vec3 v1(0.0f, 0.0f, -1.0f);
+      glm::vec3 v2(0.0f, -2.0f, 0.0f);
+      glm::vec3 result = glm::cross(v2, v1);
 
+      glm::mat4 mat = glm::rotate(glm::mat4(), 0.15f, glm::vec3(0.05f, 0.2f, 2.5f));
 
       //glm::vec3 camera(0.436f, 3.126f, 15.997f);
       //glm::vec3 light(-5.0f, 3.0f, 5.0f);

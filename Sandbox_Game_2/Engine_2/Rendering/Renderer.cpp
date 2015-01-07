@@ -157,6 +157,9 @@ namespace Rendering
       glUniform3fv(m_unif_loc_light_2_pos_cs, 1, glm::value_ptr(light_2_location));
       glUniform1f(m_unif_loc_light_2_intensity, light_2_intensity);
 
+      // the camera-to-clip matrix is independent of each renderable
+      glUniformMatrix4fv(m_unif_loc_camera_to_clip_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_mat));
+
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
          Renderable &r = m_renderables[renderable_count];
@@ -165,7 +168,6 @@ namespace Rendering
          glm::mat4 model_to_camera = camera_mat * r.m_model_to_world_mat;
 
          glUniformMatrix4fv(m_unif_loc_model_to_camera_matrix, 1, GL_FALSE, glm::value_ptr(model_to_camera));
-         glUniformMatrix4fv(m_unif_loc_camera_to_clip_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_mat));
 
          glDrawElements(
             (r.m_geometry_ptr)->m_render_mode, 
