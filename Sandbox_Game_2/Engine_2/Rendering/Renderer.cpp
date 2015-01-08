@@ -149,9 +149,9 @@ namespace Rendering
       // Note: The light locations that are hard-coded here are in world space, so I only need
       // to transform them with the camera matrix to get them into camera space.
       glm::vec3 light_1_location = glm::vec3(camera_mat * glm::vec4(+5.0f, +6.0f, -7.0f, 1.0f));
-      float light_1_intensity = 100.0f;
+      float light_1_intensity = 90.0f;
       glm::vec3 light_2_location = glm::vec3(camera_mat * glm::vec4(-5.0f, +3.0f, +5.0f, 1.0f));
-      float light_2_intensity = 50.0f;
+      float light_2_intensity = 30.0f;
       glUniform3fv(m_unif_loc_light_1_pos_cs, 1, glm::value_ptr(light_1_location));
       glUniform1f(m_unif_loc_light_1_intensity, light_1_intensity);
       glUniform3fv(m_unif_loc_light_2_pos_cs, 1, glm::value_ptr(light_2_location));

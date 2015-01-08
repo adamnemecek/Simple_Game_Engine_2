@@ -55,10 +55,6 @@ float calculate_cosine_of_light_angle(in vec3 n_vert_to_light_vec)
 // this function calculates a basic specular highlight, which is traditionally referred to as the "phong" term
 float calculate_phong_term(in vec3 n_vert_to_light_vec)
 {
-   // in camera space, the camera's position is implicitly at the origin <0,0,0>, and 
-   // origin - any_vector = -any_vector
-   vec3 n_vert_to_camera_vec = normalize(-vert_pos_cs);
-   
    // There is a corner case in which a light could be below the horizon of a surface,
    // but it is at a shallow negative angle relative to surface (example, the sun just 
    // set, so there should be no direct illumination of the ground) and therefore the 
@@ -83,6 +79,12 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
       return 0.0f;
    }
 
+   // the light is above the surface horizon; carry on
+
+   // in camera space, the camera's position is implicitly at the origin <0,0,0>, and 
+   // origin - any_vector = -any_vector
+   vec3 n_vert_to_camera_vec = normalize(-vert_pos_cs);
+   
    // The reflect(...) function requires that the light vector be incident to the point of reflection,
    // which is why I negated the vertex-to-light vector.  That vector is also already normalized (or should be 
    // because the argument's name commands normalization), so I don't need to re-normalize it.
@@ -107,6 +109,13 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
 // artifacts at low specular exponents
 float calculate_blinn_term(in vec3 n_vert_to_light_vec)
 {
+   float horizon_check_dot = dot(n_vert_to_light_vec, vert_norm_cs);
+   if (horizon_check_dot <= 0)
+   {
+      // the light is below the horizon, so don't bother reflecting the light
+      return 0.0f;
+   }
+
    vec3 n_vert_to_camera_vec = normalize(-vert_pos_cs);
    vec3 half_angle = normalize(n_vert_to_light_vec + n_vert_to_camera_vec);
    float blinn_term = clamp(dot(half_angle, normalize(vert_norm_cs)), 0, 1);
@@ -130,12 +139,12 @@ void main()
    // light relative to the fragment and the distance form the light to fragment
    
    float light_1_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_1_vec) * light_1_attenuation_factor;
-   //float light_1_specular_factor = calculate_blinn_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
-   float light_1_specular_factor = calculate_phong_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
+   float light_1_specular_factor = calculate_blinn_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
+   //float light_1_specular_factor = calculate_phong_term(n_vert_to_light_1_vec) * light_1_attenuation_factor;
 
    float light_2_diffuse_factor = calculate_cosine_of_light_angle(n_vert_to_light_2_vec) * light_2_attenuation_factor;
-   //float light_2_specular_factor = calculate_blinn_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
-   float light_2_specular_factor = calculate_phong_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
+   float light_2_specular_factor = calculate_blinn_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
+   //float light_2_specular_factor = calculate_phong_term(n_vert_to_light_2_vec) * light_2_attenuation_factor;
 
    // Note: Do not factor in the camera's distance to the light in a secondary attenuation 
    // factor.  Someone on reddit explained it to me this way: Imagine a 1 meter square plane
