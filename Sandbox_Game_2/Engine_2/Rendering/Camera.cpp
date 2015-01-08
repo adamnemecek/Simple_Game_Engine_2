@@ -16,8 +16,7 @@ namespace Rendering
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
-      m_entity_backoff_distance(0.0f),
-      m_position(0.0f)
+      m_entity_backoff_distance(0.0f)
    {
    }
 
@@ -68,37 +67,8 @@ namespace Rendering
       {
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
 
-         Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", m_where_and_which_way);
+         //Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", m_where_and_which_way);
       }
-   }
-
-   glm::vec3 Camera::get_strafe_vector()
-   {
-      //return m_strafe_direction;
-      return glm::vec3(0.0f);
-   }
-
-   glm::vec3 Camera::get_forward_vector()
-   {
-      //return m_view_direction;
-      return glm::vec3(0.0f);
-   }
-
-   glm::vec3 Camera::get_position()
-   {
-      m_where_and_which_way.normalize();
-      Math::F_Quat where_quat = 2.0f * m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
-      
-      Utilities::Printer_Helper::print_vec("cam vec: ", where_quat.m_vector);
-
-      return where_quat.m_vector;
-   }
-
-   void Camera::adjust_position(const glm::vec3 &delta_position)
-   {
-      //m_position += delta_position;
-
-      //Utilities::Printer_Helper::print_vec("camera position vec: ", m_position);
    }
 
    void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)

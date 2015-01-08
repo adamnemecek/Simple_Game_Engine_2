@@ -93,7 +93,7 @@ namespace Collision_Detection
             if (collision_is_a_thing)
             {
                static int counter = 0;
-               cout << "collision! - " << counter++ << " - <" << collision_point.x << ", " << collision_point.y << ", " << collision_point.z << ">" << endl;
+               //cout << "collision! - " << counter++ << " - <" << collision_point.x << ", " << collision_point.y << ", " << collision_point.z << ">" << endl;
             }
 
             // check for collision

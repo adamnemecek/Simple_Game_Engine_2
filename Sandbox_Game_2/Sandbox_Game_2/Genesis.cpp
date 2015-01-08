@@ -221,7 +221,6 @@ void init()
    MY_ASSERT(initialize_success);
    g_camera_entity.add_component(&g_controller_component);
    g_camera_entity.initialize();
-   g_controller_component.set_camera(&g_camera);
 
    // start the camera above and looking down at the scene
    // Note: The camera's world-to-camera matrix will affect the entire scene.
@@ -240,7 +239,6 @@ void init()
    Math::F_Quat temp_dual(2.02f, glm::vec3(4.51f, 2.27f, 6.08f));
    Math::F_Dual_Quat entity_camera_offset(temp_real, temp_dual);
    g_camera_entity.m_where_and_which_way = entity_camera_offset;
-   g_camera.adjust_position(glm::vec3(0.0f, 0.0f, 0.0f));
 
 
    // and the plane
