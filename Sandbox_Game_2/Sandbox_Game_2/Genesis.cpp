@@ -204,7 +204,8 @@ void init()
    g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
    initialize_success = g_cube_3_entity.initialize();
    MY_ASSERT(initialize_success);
-   Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
+   //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
+   Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +3.0f, +5.0f));
    g_cube_3_entity.m_where_and_which_way = entity_3_offset;
 
    g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
@@ -212,7 +213,7 @@ void init()
    g_cube_4_entity.add_component(&g_cube_4_renderable_updater_component);
    initialize_success = g_cube_4_entity.initialize();
    MY_ASSERT(initialize_success);
-
+   
 
    // set up the camera entity
    // Note: Set it to be off to the side of and above the scene and looking into it.

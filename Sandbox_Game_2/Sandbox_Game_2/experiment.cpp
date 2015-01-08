@@ -248,21 +248,31 @@ return simplified;
       //   cube 3 - 5.5	0	5.5
 
 
-      glm::vec2 v2(1.1);
-      glm::vec3 v3;
-      //glm::vec4 v4(0.0f, );
+      glm::vec3 camera(1.0f, 1.0f, 0.0f);
+      glm::vec3 light(-3.0f, -1.0f, 0.0f);
+      glm::vec3 cube(0.0f, 0.0f, 0.0f);
+      glm::vec3 cube_surface_normal(0.0f, 1.0f, 0.0f);
 
-      glm::mat4 mat = glm::rotate(glm::mat4(), 0.15f, glm::vec3(0.05f, 0.2f, 2.5f));
+      glm::vec3 vertex_to_light_vector = glm::normalize(light - cube);
+      glm::vec3 vertex_to_camera_vector = glm::normalize(camera - cube);
+      glm::vec3 reflected_light_vector = glm::reflect(-vertex_to_light_vector, cube_surface_normal);
+      
+      // There is a corner case in which a light could be below the horizon of a surface,
+      // but it is at a shallow angle (example, the sun just set, so there should be no 
+      // direct illumination of ground) and therefore the reflected light vector will also 
+      // be at a shallow angle.  The dot product between the reflected light vector and the 
+      // vertex-to-camera vector will therefore be greater than zero, and therefore the phong
+      // factor would be calculated as positive, thus providing specular lighting on a surface 
+      // from a light that is below its horizon!  
+      // This should not happen.
+      // Compensate by checking the dot product between the reflected light vector and the
+      // vertex normal.  If it is greater than 0, then the light is above the horizon, and
+      // if it is less than 0, then it is below the horizon.  If the light is above the 
+      // surface horizon, calculate the phong factor from the dot product of the 
+      // vertex-to-camera vector and the reflected light vector.  However, if the light is
+      // below the horizon, then hard-code the phong factor to 0.0f and be done.
 
-      //glm::vec3 camera(0.436f, 3.126f, 15.997f);
-      //glm::vec3 light(-5.0f, 3.0f, 5.0f);
-      //glm::vec3 cube(-5.5f, 0.0f, 5.5f);
-      //glm::vec3 cube_surface_normal(+1.0f, 0.0f, 0.0f);
-
-      //glm::vec3 vertex_to_light_vector = glm::normalize(light - cube);
-      //glm::vec3 vertex_to_camera_vector = glm::normalize(camera - cube);
-      //glm::vec3 reflected_light_vector = glm::reflect(-vertex_to_light_vector, cube_surface_normal);
-      //float the_dot = glm::dot(reflected_light_vector, vertex_to_camera_vector);
+      float the_dot = glm::dot(reflected_light_vector, vertex_to_camera_vector);
 
       cout << "hello there" << endl;
    }

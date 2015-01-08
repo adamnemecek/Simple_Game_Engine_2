@@ -59,6 +59,30 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
    // origin - any_vector = -any_vector
    vec3 n_vert_to_camera_vec = normalize(-vert_pos_cs);
    
+   // There is a corner case in which a light could be below the horizon of a surface,
+   // but it is at a shallow negative angle relative to surface (example, the sun just 
+   // set, so there should be no direct illumination of the ground) and therefore the 
+   // reflected light vector will also be at a shallow negative angle.  If the camera 
+   // is above the surface's horizon and looking at the surface, then the dot product 
+   // between the reflected light vector and the vertex-to-camera vector could be 
+   // greater than zero, and therefore the phong factor would be calculated as positive, 
+   // thus providing specular lighting on a surface from a light that is below its horizon!  
+   //
+   // This should not happen.
+   //
+   // Compensate by checking the dot product between the vertex-to-light vector and the
+   // vertex normal.  If it is greater than 0, then the light is above the horizon, and
+   // if it is less than 0, then it is below the horizon.  If the light is above the 
+   // surface horizon, calculate the phong factor from the dot product of the 
+   // vertex-to-camera vector and the reflected light vector.  However, if the light is
+   // below the horizon, then hard-code the phong factor to 0.0f and be done.
+   float horizon_check_dot = dot(n_vert_to_light_vec, vert_norm_cs);
+   if (horizon_check_dot <= 0)
+   {
+      // the light is below the horizon, so don't bother reflecting the light
+      return 0.0f;
+   }
+
    // The reflect(...) function requires that the light vector be incident to the point of reflection,
    // which is why I negated the vertex-to-light vector.  That vector is also already normalized (or should be 
    // because the argument's name commands normalization), so I don't need to re-normalize it.
@@ -69,10 +93,11 @@ float calculate_phong_term(in vec3 n_vert_to_light_vec)
    // clamp it anyway to avoid a negative value, which would cause the pow(...) function 
    // to explode.
    float phong_term = clamp(dot(n_vert_to_camera_vec, n_reflected_light_vec), 0, 1);
+   //float phong_term = dot(n_vert_to_camera_vec, n_reflected_light_vec);
 
    // incorporate the "shininess factor" power
    // Note: It's a magic number for now.
-   phong_term = pow(phong_term, 5.0f);
+   phong_term = pow(phong_term, 100.0f);
 
    return phong_term;
 }
@@ -123,14 +148,14 @@ void main()
    // and the matrix transforms have already taken care of this.
    // This mostly makes sense to me.
 
-   vec3 temp_vert_color = vec3(0.25f, 0.25f, 0.25f);
+   vec3 bland_vert_color = vec3(0.25f, 0.25f, 0.25f);
+   vec3 color_sum = 
+      bland_vert_color * light_1_diffuse_factor +
+      bland_vert_color * light_2_diffuse_factor +
+      specular_color * light_1_specular_factor +
+      specular_color * light_2_specular_factor;
 
-   vec3 temp_final_color = 
-      clamp(temp_vert_color * light_1_diffuse_factor, 0, 1) +
-      clamp(temp_vert_color * light_2_diffuse_factor, 0, 1) +
-      clamp((specular_color * light_1_specular_factor), 0, 1) +
-      clamp((specular_color * light_2_specular_factor), 0, 1);
-
+   vec3 temp_final_color = clamp(color_sum, 0.0f, 1.0f);
    final_color = vec4(temp_final_color, 1.0f);
 }
 
