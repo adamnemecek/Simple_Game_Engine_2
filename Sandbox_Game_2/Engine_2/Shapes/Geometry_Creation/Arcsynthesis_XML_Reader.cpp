@@ -21,7 +21,7 @@ namespace Shapes
       {
          // open the file
          rapidxml::xml_document<> doc;
-         std::vector<char> file_data;
+         std::vector<char> file_data;     // apparently this needs to be in the same scope as the xml_document<> object
 
 
          //// this function is heavily influenced by the arcsynthesis framework's Mesh 
@@ -292,7 +292,7 @@ namespace Shapes
          }
 
          // scan through white space 
-         char *c_ptr;
+         const char *c_ptr = start_ptr;
          char c = *c_ptr;
          while ('\n' == c || '\r' == c || '\t' == c || ' ' == c)
          {
