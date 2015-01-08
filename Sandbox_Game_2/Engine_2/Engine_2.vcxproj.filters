@@ -81,6 +81,9 @@
     <ClCompile Include="Collision_Detection\Collision_Handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -201,6 +204,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision_Detection\Collision_Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

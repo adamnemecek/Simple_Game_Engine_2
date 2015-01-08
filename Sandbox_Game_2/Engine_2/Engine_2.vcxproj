@@ -92,6 +92,7 @@
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="Math\F_Dual_Number.cpp" />
+    <ClCompile Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.cpp" />
     <ClCompile Include="Start_Engine.cpp" />
     <ClCompile Include="Math\F_Dual_Quat.cpp" />
     <ClCompile Include="Math\F_Quat.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Shapes\Geometry.h" />
+    <ClInclude Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />
     <ClInclude Include="Shapes\Geometry_Meta_Data.h" />
