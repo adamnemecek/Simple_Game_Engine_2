@@ -248,9 +248,9 @@ return simplified;
       //   cube 3 - 5.5	0	5.5
 
 
-      glm::vec3 v1(0.0f, 0.0f, -1.0f);
-      glm::vec3 v2(0.0f, -2.0f, 0.0f);
-      glm::vec3 result = glm::cross(v2, v1);
+      glm::vec2 v2(1.1);
+      glm::vec3 v3;
+      //glm::vec4 v4(0.0f, );
 
       glm::mat4 mat = glm::rotate(glm::mat4(), 0.15f, glm::vec3(0.05f, 0.2f, 2.5f));
 

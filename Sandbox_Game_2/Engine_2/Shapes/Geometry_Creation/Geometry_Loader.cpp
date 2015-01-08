@@ -2,6 +2,7 @@
 
 #include <Shapes\Geometry.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
+#include <Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h>
 #include <Shapes\Shape_Data.h>
 #include <Shapes\Geometry_Meta_Data.h>
 
@@ -9,15 +10,6 @@
 #include <glm\gtc\type_ptr.hpp> // to make buffer data passing easier
 #include <Utilities\Include_Helpers\GL_Version.h> // for GL typedefs
 #include <Utilities\Typedefs.h>
-
-//#include <Utilities\rapidxml.hpp>   // courtesy of Arcsynthesis
-#include <middleware\arcsynthesis\framework\rapidxml.hpp>
-#include <middleware\arcsynthesis\framework\rapidxml_helpers.h>
-#include <fstream>
-#include <vector>
-#include <iostream>
-using std::cout;
-using std::endl;
 
 namespace Shapes
 {
@@ -168,7 +160,7 @@ namespace Shapes
 
       void Geometry_Loader::load_arcsynthesis_xml_file(Geometry *put_geometry_here, const std::string &file_path)
       {
-
+         Arcsynthesis_XML_Reader::load_xml_file(put_geometry_here, file_path);
       }
    }
 }
