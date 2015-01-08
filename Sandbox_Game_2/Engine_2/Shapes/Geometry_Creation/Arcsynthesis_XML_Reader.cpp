@@ -17,39 +17,49 @@ namespace Shapes
 {
    namespace Geometry_Creation
    {
-      void Arcsynthesis_XML_Reader::load_xml_file(Shape_Data *put_shape_data_here, const std::string &file_path)
+      void Arcsynthesis_XML_Reader::load_from_xml_file(Shape_Data *put_shape_data_here, const std::string &file_path)
       {
-         // this function is heavily influenced by the arcsynthesis framework's Mesh 
-         // class constructor, and some lines are copied verbatim except for the 
-         // camel-case-to-underscore notaion change
-         std::ifstream file_stream(file_path);
-         if (!file_stream.is_open())
-         {
-            throw std::runtime_error("Could not find the mesh file: " + file_path);
-         }
-
+         // open the file
+         rapidxml::xml_document<> doc;
          std::vector<char> file_data;
 
-         // reserve memory
-         // Note: Reserving memory ensures contiguency of memory, which allows the 
-         // rpaidxml parser to run through the data with just a pointer.
-         file_data.reserve(2 * 1024 * 1024);
-         file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
-            std::istreambuf_iterator<char>());
-         file_data.push_back('\0');
 
-         rapidxml::xml_document<> doc;
-         try
-         {
-            doc.parse<0>(&(file_data[0]));
-         }
-         catch (rapidxml::parse_error &e)
-         {
-            // this is a special rapidxml exception, so handle it here
-            std::cout << file_path << ": Parse error in the mesh file." << std::endl;
-            std::cout << e.what() << std::endl << e.where<char>() << std::endl;
-            throw;
-         }
+         //// this function is heavily influenced by the arcsynthesis framework's Mesh 
+         //// class constructor, and some lines are copied verbatim except for the 
+         //// camel-case-to-underscore notaion change
+         //std::ifstream file_stream(file_path);
+         //if (!file_stream.is_open())
+         //{
+         //   throw std::runtime_error("Could not find the mesh file: " + file_path);
+         //}
+
+         //std::vector<char> file_data;
+
+         //// reserve memory
+         //// Note: Reserving memory ensures contiguency of memory, which allows the 
+         //// rpaidxml parser to run through the data with just a pointer.
+         //file_data.reserve(2 * 1024 * 1024);
+         //file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
+         //   std::istreambuf_iterator<char>());
+         //file_data.push_back('\0');
+
+         //try
+         //{
+         //   doc.parse<0>(&(file_data[0]));
+         //}
+         //catch (rapidxml::parse_error &e)
+         //{
+         //   // this is a special rapidxml exception, so handle it here
+         //   std::cout << file_path << ": Parse error in the mesh file." << std::endl;
+         //   std::cout << e.what() << std::endl << e.where<char>() << std::endl;
+         //   throw;
+         //}
+
+
+         open_xml_file(&doc, file_data, file_path);
+
+
+
 
          // make sure that there is a "mesh" root node
          rapidxml::xml_node<> *root_node_ptr = doc.first_node("mesh");
@@ -61,12 +71,14 @@ namespace Shapes
          // make sure that there is at least one "attribute" node
          // Note: There is at least two attribute nodes (attribute layout indices 0 and 2, 
          // which are used for vertex position and normal) in all the Arcsynthesis XML files.
-         std::vector<const rapidxml::xml_node<> *> attribute_node_ptrs;
          const rapidxml::xml_node<> *node_ptr = root_node_ptr->first_node("attribute");
          if (0 == node_ptr)
          {
             throw std::runtime_error("'mesh' node must have at least one 'attribute' child.  File: " + file_path);
          }
+
+         // collect the attribute pointers together
+         std::vector<const rapidxml::xml_node<> *> attribute_node_ptrs;
          for (;
             node_ptr && ("attribute" == rapidxml::make_string_name(*node_ptr));
             node_ptr = rapidxml::next_element(node_ptr))
@@ -99,17 +111,18 @@ namespace Shapes
          }
 
          // build a contiguous array of My_Vertex structures
+         // Note: The memory calculation is this:
+         //  number of attributes * number of vectors per attribute * 3 floats per vector * number of bytes per float
+         put_shape_data_here->m_verts = (My_Vertex *)malloc(all_attribute_data.size() * all_attribute_data[0].num_vectors * 3 * sizeof(float));
+         
+         // fill out the contiguous array of My_Vertex structures
          // Note: Each My_Vertex structure stores a vec3 for position, normal, and color.
          // The Arcsynthesis XML files always seem to have a vec3 for position and normal, 
          // but sometimes has a vec4 for color instead of vec3.  If it has a vec4, just 
          // chop off the last value, which is the alpha value that I am not making any
          // use of right now.
-         // Note: The memory calculation is this:
-         //  number of attributes * number of vectors per attribute * 3 floats per vector * number of bytes per float
-         put_shape_data_here->m_verts = (My_Vertex *)malloc(all_attribute_data.size() * all_attribute_data[0].num_vectors * 3 * sizeof(float));
-         
-         // all the attributes have the same number of vectors, so one of their vector counts 
-         // is identical to the number of vertices
+         // Note: All the attributes have the same number of vectors, so one of their 
+         // vector counts is identical to the number of vertices.
          uint total_num_vertices = all_attribute_data[0].num_vectors;
          for (uint vertex_count = 0; vertex_count < total_num_vertices; vertex_count++)
          {
@@ -127,8 +140,8 @@ namespace Shapes
                // Note: The attribute data has a pointer to float, and pointer arithmetic says
                // that adding, for example, 17 to the pointer will increase the pointer by
                // (17 * sizeof(float)) bytes.  It is therefore possible to get to the starting 
-               // float of the desired attribute vector by adding the number of floats that
-               // have been processed so far to the original float pointer.
+               // float of the desired vector for this attribute by adding the number of floats 
+               // that have been processed so far to the original float pointer.
                float *curr_vector_f_ptr = this_attrib_ref.float_data_ptr + (vertex_count * this_attrib_ref.floats_per_vector);
 
                // check how many floats this vector should have and make an appropriate vector
@@ -183,7 +196,48 @@ namespace Shapes
             }
          }
 
+         // free the memory that was allocated for the attribute data by the parse_attribute_node(...) method
+         for (uint attrib_data_index = 0; attrib_data_index < all_attribute_data.size(); attrib_data_index++)
+         {
+            attrib_data &this_attrib_ref = all_attribute_data[attrib_data_index];
+            free(this_attrib_ref.float_data_ptr);
+         }
+
          cout << "hello" << endl;
+      }
+
+      void Arcsynthesis_XML_Reader::open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
+      {
+         // this function is heavily influenced by the arcsynthesis framework's Mesh 
+         // class constructor, and some lines are copied verbatim except for the 
+         // camel-case-to-underscore notaion change
+         std::ifstream file_stream(file_path);
+         if (!file_stream.is_open())
+         {
+            throw std::runtime_error("Could not find the mesh file: " + file_path);
+         }
+
+         //std::vector<char> file_data;
+
+         // reserve memory
+         // Note: Reserving memory ensures contiguency of memory, which allows the 
+         // rpaidxml parser to run through the data with just a pointer.
+         file_data.reserve(2 * 1024 * 1024);
+         file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
+            std::istreambuf_iterator<char>());
+         file_data.push_back('\0');
+
+         try
+         {
+            (*put_parsed_xml_document_here).parse<0>(&(file_data[0]));
+         }
+         catch (rapidxml::parse_error &e)
+         {
+            // this is a special rapidxml exception, so handle it here
+            std::cout << file_path << ": Parse error in the mesh file." << std::endl;
+            std::cout << e.what() << std::endl << e.where<char>() << std::endl;
+            throw;
+         }
       }
 
       void Arcsynthesis_XML_Reader::parse_attribute_node(attrib_data *put_attrib_data_here, const rapidxml::xml_node<> *node_ptr)

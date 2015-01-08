@@ -160,7 +160,7 @@ namespace Shapes
 
       void Geometry_Loader::load_arcsynthesis_xml_file(Geometry *put_geometry_here, const std::string &file_path)
       {
-         Arcsynthesis_XML_Reader::load_xml_file(put_geometry_here, file_path);
+         Arcsynthesis_XML_Reader::load_from_xml_file(&(put_geometry_here->m_shape_data), file_path);
       }
    }
 }
