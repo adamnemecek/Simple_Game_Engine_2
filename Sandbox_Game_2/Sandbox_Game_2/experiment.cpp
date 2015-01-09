@@ -248,14 +248,35 @@ return simplified;
       //   cube 3 - 5.5	0	5.5
 
 
-      glm::vec3 camera(1.0f, 1.0f, 0.0f);
-      glm::vec3 light(-3.0f, -1.0f, 0.0f);
-      glm::vec3 cube(0.0f, 0.0f, 0.0f);
-      glm::vec3 cube_surface_normal(0.0f, 1.0f, 0.0f);
+      glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-      glm::vec3 vertex_to_light_vector = glm::normalize(light - cube);
-      glm::vec3 vertex_to_camera_vector = glm::normalize(camera - cube);
-      glm::vec3 reflected_light_vector = glm::reflect(-vertex_to_light_vector, cube_surface_normal);
+      Math::F_Quat q_real(0.5f, glm::vec3(0.5f, 0.5f, -0.5f));
+      Math::F_Quat q_real_c = q_real.conjugate();
+      Math::F_Quat q_dual(-0.75f, glm::vec3(-1.25f, 0.25f, -1.75f));
+      Math::F_Quat q_result = q_dual * q_real_c;
+
+      Math::F_Dual_Quat dq_transform_1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, +1.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +2.0f, 0.0f));
+      Math::F_Dual_Quat dq_transform_2 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 0.0f, +1.0f), 3.14159f / 2.0f, glm::vec3(+5.0f, 0.0f, 0.0f));
+      Math::F_Dual_Quat dq_transform_3 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 0.0f, -1.0f), 3.14159f, glm::vec3(0.0f, -4.0f, 0.0f));
+      Math::F_Dual_Quat dq_net = dq_transform_3 * dq_transform_2 * dq_transform_1;
+
+      glm::vec3 point(1.0f, 1.0f, 0.0f);
+      glm::vec3 result_1 = Math::F_Dual_Quat::transform(dq_transform_1, point);
+      glm::vec3 result_2 = Math::F_Dual_Quat::transform(dq_transform_2, result_1);
+      glm::vec3 result_3 = Math::F_Dual_Quat::transform(dq_transform_3, result_2);
+
+      glm::vec3 result_net = Math::F_Dual_Quat::transform(dq_net, point);
+
+
+
+      //glm::vec3 camera(1.0f, 1.0f, 0.0f);
+      //glm::vec3 light(-3.0f, -1.0f, 0.0f);
+      //glm::vec3 cube(0.0f, 0.0f, 0.0f);
+      //glm::vec3 cube_surface_normal(0.0f, 1.0f, 0.0f);
+
+      //glm::vec3 vertex_to_light_vector = glm::normalize(light - cube);
+      //glm::vec3 vertex_to_camera_vector = glm::normalize(camera - cube);
+      //glm::vec3 reflected_light_vector = glm::reflect(-vertex_to_light_vector, cube_surface_normal);
       
       // There is a corner case in which a light could be below the horizon of a surface,
       // but it is at a shallow angle (example, the sun just set, so there should be no 
@@ -272,7 +293,7 @@ return simplified;
       // vertex-to-camera vector and the reflected light vector.  However, if the light is
       // below the horizon, then hard-code the phong factor to 0.0f and be done.
 
-      float the_dot = glm::dot(reflected_light_vector, vertex_to_camera_vector);
+      //float the_dot = glm::dot(reflected_light_vector, vertex_to_camera_vector);
 
       cout << "hello there" << endl;
    }
