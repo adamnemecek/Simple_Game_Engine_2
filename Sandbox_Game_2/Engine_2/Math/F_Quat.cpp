@@ -56,11 +56,8 @@ namespace Math
 
    void F_Quat::operator +=(const F_Quat &right)
    {
-      float new_scalar = this->m_scalar + right.m_scalar;
-      glm::vec3 new_vector = this->m_vector + right.m_vector;
-
-      this->m_scalar = new_scalar;
-      this->m_vector = new_vector;
+      this->m_scalar = this->m_scalar + right.m_scalar;
+      this->m_vector = this->m_vector + right.m_vector;
    }
 
    void F_Quat::operator *= (const float right)
@@ -72,11 +69,8 @@ namespace Math
 
    void F_Quat::operator *= (const F_Quat &right)
    {
-      float new_scalar = this->m_scalar * right.m_scalar - glm::dot(this->m_vector, right.m_vector);
-      glm::vec3 new_vec = this->m_scalar * right.m_vector + right.m_scalar * this->m_vector + glm::cross(this->m_vector, right.m_vector);
-
-      this->m_scalar = new_scalar;
-      this->m_vector = new_vec;
+      this->m_scalar = this->m_scalar * right.m_scalar - glm::dot(this->m_vector, right.m_vector);
+      this->m_vector = this->m_scalar * right.m_vector + right.m_scalar * this->m_vector + glm::cross(this->m_vector, right.m_vector);
    }
 
    F_Quat F_Quat::conjugate() const
@@ -86,19 +80,30 @@ namespace Math
 
    void F_Quat::normalize()
    {
+      // calculate the inverse magnitude and multiply it through the 4 components
+      // Note: 1 division and 4 multiplications is cheaper than 4 divisions.
       float inverse_mag = 1.0f / (this->magnitude());
       (*this) *= inverse_mag;
    }
 
    float F_Quat::magnitude() const
    {
-      float mag_squared = this->magnitude_squared();
+      //float mag_squared = this->magnitude_squared();
+      
+      // optimize by squaring each term manually
+      // Note: this cuts the number of multiplications from 16 to 4 and the additions from 13 to 3
+      float mag_squared =
+         (this->m_scalar * this->m_scalar) +
+         (this->m_vector.x * this->m_vector.x) +
+         (this->m_vector.y + this->m_vector.y) +
+         (this->m_vector.z + this->m_vector.z);
 
       return sqrtf(mag_squared);
    }
 
    float F_Quat::magnitude_squared() const
    {
+      // ??do I even need this??
       F_Quat mag_square = (*this) * this->conjugate();
 
       return (mag_square).m_scalar;

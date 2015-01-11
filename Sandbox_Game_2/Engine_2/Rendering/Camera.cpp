@@ -68,6 +68,9 @@ namespace Rendering
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
 
          //Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", m_where_and_which_way);
+         Math::F_Quat q = 2.0f * m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
+         glm::vec3 current_location = q.m_vector;
+         Utilities::Printer_Helper::print_vec("cam location: ", current_location);
       }
    }
 

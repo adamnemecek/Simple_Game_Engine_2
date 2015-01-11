@@ -247,6 +247,8 @@ return simplified;
       //   light 2 - 5	3	5
       //   cube 3 - 5.5	0	5.5
 
+      glm::fquat fq(0.01f, 2.0f, 4.05f, 4.3f);
+      glm::mat4 m = glm::mat4_cast(fq);
 
       glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
 
