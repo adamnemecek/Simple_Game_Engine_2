@@ -232,6 +232,42 @@ return simplified;
       glm::vec3 result2 = solve_for_zero(v_a_i, v_b_i, v_b_f_minus, m_a, m_b);
    }
 
+
+   void calculate_magnitude_squared_of_dual_quat()
+   {
+      //glm::fquat q1(1.0f, 2.0f, 3.0f, 4.0f);
+      //glm::fquat q1_normalized = glm::normalize(q1);
+
+      //float f =
+      //   (q1_normalized.w * q1_normalized.w) +
+      //   (q1_normalized.x * q1_normalized.x) +
+      //   (q1_normalized.y * q1_normalized.y) +
+      //   (q1_normalized.z * q1_normalized.z);
+
+      //glm::fquat q_result = q1_normalized * glm::conjugate(q1_normalized);
+
+
+
+      Math::F_Quat q1(1.0f, glm::vec3(2.0f, 3.0f, 4.0f));
+      Math::F_Quat q2(5.0f, glm::vec3(6.0f, 7.0f, 8.0f));
+      Math::F_Dual_Quat dq(q1, q2);
+      dq.normalize();
+
+      glm::mat4 m4;
+      glm::vec3 translation_vector(0.0f, 1.0f, 0.0f);
+      glm::translate(m4, translation_vector);
+      float f =
+         (dq.m_real.m_scalar * dq.m_real.m_scalar) +
+         (dq.m_real.m_vector.x * dq.m_real.m_vector.x) +
+         (dq.m_real.m_vector.y * dq.m_real.m_vector.y) +
+         (dq.m_real.m_vector.z * dq.m_real.m_vector.z) +
+         (dq.m_dual.m_scalar * dq.m_dual.m_scalar) +
+         (dq.m_dual.m_vector.x * dq.m_dual.m_vector.x) +
+         (dq.m_dual.m_vector.y * dq.m_dual.m_vector.y) +
+         (dq.m_dual.m_vector.z * dq.m_dual.m_vector.z);
+      Math::F_Dual_Quat dq_result = dq * dq.conjugate();
+   }
+
    void do_something()
    {
       //glm::vec3 v_a_i(1.0f, 2.0f, 3.0f);
@@ -247,55 +283,24 @@ return simplified;
       //   light 2 - 5	3	5
       //   cube 3 - 5.5	0	5.5
 
-      Math::F_Quat q1(1.0f, glm::vec3(2.0f, 3.0f, 4.0f));
-      Math::F_Quat q2(5.0f, glm::vec3(6.0f, 7.0f, 8.0f));
-      Math::F_Dual_Quat dq(q1, q2);
-      dq.normalize();
-      
-      glm::mat4 m4;
-      glm::vec3 translation_vector(0.0f, 1.0f, 0.0f);
-      glm::translate(m4, translation_vector);
-      float f =
-         (dq.m_real.m_scalar * dq.m_real.m_scalar) +
-         (dq.m_real.m_vector.x * dq.m_real.m_vector.x) +
-         (dq.m_real.m_vector.y * dq.m_real.m_vector.y) +
-         (dq.m_real.m_vector.z * dq.m_real.m_vector.z) +
-         (dq.m_dual.m_scalar * dq.m_dual.m_scalar) +
-         (dq.m_dual.m_vector.x * dq.m_dual.m_vector.x) +
-         (dq.m_dual.m_vector.y * dq.m_dual.m_vector.y) +
-         (dq.m_dual.m_vector.z * dq.m_dual.m_vector.z);
-      Math::F_Dual_Quat dq_result = dq * dq.conjugate();
-
-      //glm::fquat q1(1.0f, 2.0f, 3.0f, 4.0f);
-      //glm::fquat q1_normalized = glm::normalize(q1);
-
-      //float f =
-      //   (q1_normalized.w * q1_normalized.w) +
-      //   (q1_normalized.x * q1_normalized.x) +
-      //   (q1_normalized.y * q1_normalized.y) +
-      //   (q1_normalized.z * q1_normalized.z);
-
-      //glm::fquat q_result = q1_normalized * glm::conjugate(q1_normalized);
 
 
-      glm::rotate(glm::mat4(), 0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+      Math::F_Quat q_real(0.5f, glm::vec3(0.5f, 0.5f, -0.5f));
+      Math::F_Quat q_real_c = q_real.conjugate();
+      Math::F_Quat q_dual(-0.75f, glm::vec3(-1.25f, 0.25f, -1.75f));
+      Math::F_Quat q_result = q_dual * q_real_c;
 
-      //Math::F_Quat q_real(0.5f, glm::vec3(0.5f, 0.5f, -0.5f));
-      //Math::F_Quat q_real_c = q_real.conjugate();
-      //Math::F_Quat q_dual(-0.75f, glm::vec3(-1.25f, 0.25f, -1.75f));
-      //Math::F_Quat q_result = q_dual * q_real_c;
+      Math::F_Dual_Quat dq_transform_1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, +1.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +2.0f, 0.0f));
+      Math::F_Dual_Quat dq_transform_2 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 0.0f, +1.0f), 3.14159f / 2.0f, glm::vec3(+5.0f, 0.0f, 0.0f));
+      Math::F_Dual_Quat dq_transform_3 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 0.0f, -1.0f), 3.14159f, glm::vec3(0.0f, -4.0f, 0.0f));
+      Math::F_Dual_Quat dq_net = dq_transform_3 * dq_transform_2 * dq_transform_1;
 
-      //Math::F_Dual_Quat dq_transform_1 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, +1.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +2.0f, 0.0f));
-      //Math::F_Dual_Quat dq_transform_2 = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(0.0f, 0.0f, +1.0f), 3.14159f / 2.0f, glm::vec3(+5.0f, 0.0f, 0.0f));
-      //Math::F_Dual_Quat dq_transform_3 = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(0.0f, 0.0f, -1.0f), 3.14159f, glm::vec3(0.0f, -4.0f, 0.0f));
-      //Math::F_Dual_Quat dq_net = dq_transform_3 * dq_transform_2 * dq_transform_1;
+      glm::vec3 point(1.0f, 1.0f, 0.0f);
+      glm::vec3 result_1 = Math::F_Dual_Quat::transform(dq_transform_1, point);
+      glm::vec3 result_2 = Math::F_Dual_Quat::transform(dq_transform_2, result_1);
+      glm::vec3 result_3 = Math::F_Dual_Quat::transform(dq_transform_3, result_2);
 
-      //glm::vec3 point(1.0f, 1.0f, 0.0f);
-      //glm::vec3 result_1 = Math::F_Dual_Quat::transform(dq_transform_1, point);
-      //glm::vec3 result_2 = Math::F_Dual_Quat::transform(dq_transform_2, result_1);
-      //glm::vec3 result_3 = Math::F_Dual_Quat::transform(dq_transform_3, result_2);
-
-      //glm::vec3 result_net = Math::F_Dual_Quat::transform(dq_net, point);
+      glm::vec3 result_net = Math::F_Dual_Quat::transform(dq_net, point);
 
 
 

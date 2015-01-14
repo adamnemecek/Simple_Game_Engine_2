@@ -2,6 +2,7 @@
 #define ENGINE_CAMERA_H
 
 #include <glm\vec2.hpp>
+#include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Quat.h>
 
@@ -33,7 +34,7 @@ namespace Rendering
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;
-      float m_entity_backoff_distance;
+      glm::vec3 m_position_relative_to_entity;
 
       float m_camera_move_speed;
    };

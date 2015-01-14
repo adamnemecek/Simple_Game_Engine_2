@@ -18,7 +18,7 @@ namespace Rendering
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
-      m_entity_backoff_distance(20.0f)
+      m_position_relative_to_entity(0.0f, +3.0f, -15.0f)
    {
    }
 
@@ -29,6 +29,7 @@ namespace Rendering
       dq.m_dual *= 1.0f;
 
       return dq.conjugate().to_mat4();
+      //return dq.to_mat4();
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -68,7 +69,12 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * (-1.0f) * m_entity_backoff_distance);
+         //Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * (-1.0f) * m_entity_backoff_distance);
+         glm::vec3 world_space_backoff_vector(
+            Utilities::Default_Vectors::WORLD_LEFT_VECTOR * m_position_relative_to_entity.x +
+            Utilities::Default_Vectors::WORLD_UP_VECTOR * m_position_relative_to_entity.y +
+            Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * m_position_relative_to_entity.z);
+         Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(world_space_backoff_vector);
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way * backoff;
 
 
