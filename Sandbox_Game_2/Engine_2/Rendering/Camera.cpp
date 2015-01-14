@@ -22,6 +22,7 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
+      // ??why negate the dual part? some guy on OpenGL reddit told me so, and it seems to work, and if I don't negate it then things don't seem to render somehow??
       Math::F_Dual_Quat dq = m_where_and_which_way;
       dq.m_dual *= -1.0f;
 
@@ -67,10 +68,12 @@ namespace Rendering
       {
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
 
-         //Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", m_where_and_which_way);
-         Math::F_Quat q = 2.0f * m_where_and_which_way.m_dual * m_where_and_which_way.m_real.conjugate();
-         glm::vec3 current_location = q.m_vector;
-         Utilities::Printer_Helper::print_vec("cam location: ", current_location);
+
+         Math::F_Dual_Quat dq = m_where_and_which_way;
+         glm::vec3 start_location(0.0f, 0.0f, 0.0f);
+         glm::vec3 current_location = Math::F_Dual_Quat::transform(dq, start_location);
+         //Utilities::Printer_Helper::print_vec("cam location: ", current_location);
+         //Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", dq);
       }
    }
 

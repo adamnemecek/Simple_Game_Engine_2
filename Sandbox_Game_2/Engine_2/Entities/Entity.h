@@ -37,6 +37,8 @@ namespace Entities
       Math::F_Dual_Quat m_where_and_which_way;
 
    protected:
+      glm::vec3 m_original_location;
+
       // these are protected instead of private so that the Controllable_Entity can also access them
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;

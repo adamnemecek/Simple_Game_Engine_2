@@ -148,4 +148,13 @@ namespace Math
       return F_Quat(new_scalar, new_vector);
    }
 
+   bool operator==(const F_Quat &left, const F_Quat &right)
+   {
+      return (left.m_scalar == right.m_scalar && left.m_vector == right.m_vector);
+   }
+
+   bool operator!=(const F_Quat &left, const F_Quat &right)
+   {
+      return (left.m_scalar != right.m_scalar || left.m_vector != right.m_vector);
+   }
 }

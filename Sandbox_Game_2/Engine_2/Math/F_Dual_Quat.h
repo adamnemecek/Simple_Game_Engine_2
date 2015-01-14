@@ -94,6 +94,11 @@ namespace Math
    // Note: I am defining this function for debugging purposes.  I want to 
    // find the difference between two dual quats.
    F_Dual_Quat operator-(const F_Dual_Quat &left, const F_Dual_Quat &right);
+
+   // equivalence
+   // Note: I am mostly using this for helper purposes, but someone may find it useful
+   bool operator==(const F_Dual_Quat &left, const F_Dual_Quat &right);
+   bool operator!=(const F_Dual_Quat &left, const F_Dual_Quat &right);
 }
 
 #endif

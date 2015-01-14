@@ -12,6 +12,7 @@ using std::memset;
 
 #include <Utilities\Typedefs.h>
 
+#include <Utilities\Printer_Helper.h>
 
 namespace Entities
 {
@@ -63,5 +64,7 @@ namespace Entities
       {
          m_components[index]->update();
       }
+
+      //glm::vec3 curr_location = Math::F_Dual_Quat::transform(m_where_and_which_way, m_original_location);
    }
 }

@@ -317,5 +317,15 @@ namespace Math
    {
       return F_Dual_Quat(left.m_real - right.m_real, left.m_dual - right.m_dual);
    }
+
+   bool operator==(const F_Dual_Quat &left, const F_Dual_Quat &right)
+   {
+      return (left.m_real == right.m_real && left.m_dual == right.m_dual);
+   }
+
+   bool operator!=(const F_Dual_Quat &left, const F_Dual_Quat &right)
+   {
+      return (left.m_real != right.m_real || left.m_dual != right.m_dual);
+   }
 }
 

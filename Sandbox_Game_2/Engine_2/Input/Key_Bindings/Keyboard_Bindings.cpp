@@ -79,12 +79,12 @@ namespace Input
 
       if (GetAsyncKeyState(VK_UP))
       {
-         active_actions |= ACTION_LIST::PITCH_FORWARD;
+         active_actions |= ACTION_LIST::PITCH_BACK;
       }
 
       if (GetAsyncKeyState(VK_DOWN))
       {
-         active_actions |= ACTION_LIST::PITCH_BACK;
+         active_actions |= ACTION_LIST::PITCH_FORWARD;
       }
 
       return active_actions;

@@ -116,6 +116,10 @@ namespace Math
 
    // multiplication
    F_Quat operator*(const F_Quat &left, const F_Quat &right);
+
+   // equivalence
+   bool operator==(const F_Quat &left, const F_Quat &right);
+   bool operator!=(const F_Quat &left, const F_Quat &right);
 }
 
 #endif
