@@ -4,6 +4,8 @@
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
 
+#include <Utilities\Include_Helpers\Default_Vectors.h>
+
 #include <Utilities\Printer_Helper.h>
 #include <iostream>
 using std::cout;
@@ -16,7 +18,7 @@ namespace Rendering
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
-      m_entity_backoff_distance(0.0f)
+      m_entity_backoff_distance(20.0f)
    {
    }
 
@@ -24,9 +26,9 @@ namespace Rendering
    {
       // ??why negate the dual part? some guy on OpenGL reddit told me so, and it seems to work, and if I don't negate it then things don't seem to render somehow??
       Math::F_Dual_Quat dq = m_where_and_which_way;
-      dq.m_dual *= -1.0f;
+      dq.m_dual *= 1.0f;
 
-      return dq.to_mat4();
+      return dq.conjugate().to_mat4();
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -66,7 +68,8 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way;
+         Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * (-1.0f) * m_entity_backoff_distance);
+         m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way * backoff;
 
 
          Math::F_Dual_Quat dq = m_where_and_which_way;

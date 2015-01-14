@@ -27,7 +27,8 @@ namespace Entities
    bool Controller_Component::initialize()
    {
       m_easy_physics_ptr = m_parent_entity_ptr->get_component_ptr<Physics_Component>();
-      return (m_easy_physics_ptr != 0);
+      //return (m_easy_physics_ptr != 0);
+      return true;
    }
 
    void Controller_Component::update()
@@ -121,7 +122,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::YAW_LEFT)
       {
          //new_orientation = Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(relative_up, -ROTATION_SPEED);
 
@@ -131,7 +132,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::YAW_RIGHT)
       {
          //new_orientation = Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(relative_up, +ROTATION_SPEED);
 
@@ -141,7 +142,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::PITCH_FORWARD)
       {
          //new_orientation = Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(left_vector, -ROTATION_SPEED);
 
@@ -151,7 +152,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::PITCH_BACK)
       {
          //new_orientation = Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(left_vector, +ROTATION_SPEED);
 
@@ -161,7 +162,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::ROLL_LEFT)
       {
          //new_orientation = Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(forward_vector, +ROTATION_SPEED);
 
@@ -171,7 +172,7 @@ namespace Entities
       if (active_actions & ACTION_LIST::ROLL_RIGHT)
       {
          //new_orientation = Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED) * new_orientation;
-         new_orientation *= Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED);
+         new_orientation *= Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED);
 
          temp_dq *= Math::F_Dual_Quat::generate_rotator_only(forward_vector, -ROTATION_SPEED);
 
@@ -186,20 +187,24 @@ namespace Entities
       Math::F_Dual_Quat prev_state(m_parent_entity_ptr->m_where_and_which_way);
       Math::F_Dual_Quat new_state(new_orientation, new_dual);
 
-      Math::F_Dual_Quat cumulative_state = new_state * prev_state;
+      Math::F_Dual_Quat cumulative_state_1 = prev_state * new_state;
+      Math::F_Dual_Quat cumulative_state_2 = new_state * prev_state;
 
-      if (prev_state != cumulative_state)
+      if (prev_state != cumulative_state_1)
       {
          glm::vec3 V;
-         glm::vec3 transformed_V = Math::F_Dual_Quat::transform(cumulative_state, V);
+         glm::vec3 transformed_V = Math::F_Dual_Quat::transform(cumulative_state_1, V);
          Utilities::Printer_Helper::print_vec("V: ", transformed_V);
+
+         //Utilities::Printer_Helper::print_my_dual_quat("cum_1: ", cumulative_state_1);
+         //Utilities::Printer_Helper::print_my_dual_quat("cum_2: ", cumulative_state_2);
       }
 
 
       //m_parent_entity_ptr->m_where_and_which_way = new_state * prev_state;
       
       //m_parent_entity_ptr->m_where_and_which_way = prev_state * temp_dq;
-      m_parent_entity_ptr->m_where_and_which_way = temp_dq * prev_state;
+      m_parent_entity_ptr->m_where_and_which_way = cumulative_state_1;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)

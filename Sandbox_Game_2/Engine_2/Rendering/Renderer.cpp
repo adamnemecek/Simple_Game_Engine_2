@@ -144,6 +144,7 @@ namespace Rendering
       //glUniform4fv(m_, 1, glm::value_ptr(m_camera_ptr->get_position()));
 
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
+      //glm::mat4 camera_mat = glm::mat4();
 
       // the lights are independent of each renderable
       // Note: The light locations that are hard-coded here are in world space, so I only need
