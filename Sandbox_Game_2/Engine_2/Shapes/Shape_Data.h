@@ -4,6 +4,8 @@
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <Utilities\Typedefs.h>
 #include <Shapes\My_Vertex.h>
+#include <vector>
+#include <Shapes\Index_Meta_Data.h>
 
 namespace Shapes
 {
@@ -43,10 +45,22 @@ namespace Shapes
          return 0;
       }
       
+      // store a pointer to the vertex data 
       My_Vertex *m_verts;
       uint m_num_verts;
+
+      // store an array index data
+      // Note: Rather than store an array of indices (GLushort), I am adjusting to 
+      // ArcSynthesis' XML mesh files, some of which have multiple sets of indices
+      // that each use their own drawing commands.  I will still store all the indices
+      // in a single array, but I will also store additional information that says 
+      // which indices use which draw command. 
       GLushort *m_indices;
       uint m_num_indices;
+
+      // stores the drawing command and the number of consecutive indices draw
+      //std::vector<std::pair<GLenum, uint>> m_index_meta_data;
+      std::vector<Index_Meta_Data> m_index_meta_data;
    };
 }
 
