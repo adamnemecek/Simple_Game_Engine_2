@@ -17,10 +17,6 @@
 #include <Utilities\My_Assert.h>
 #include <Math\F_Dual_Quat.h>
 
-#include <Utilities\Printer_Helper.h>
-#include <iostream>
-using std::cout;
-using std::endl;
 
 namespace Entities
 {
@@ -40,15 +36,15 @@ namespace Entities
       static const float ROTATION_SPEED = 0.02f;
 
       // position adjustment will be additive, so start the relative new position at all zeros
+      // Note: Use a vec3 rather than a dual quaternion because this is much cheaper to 
+      // constructor and change in the following condition statements.  I'll construct the
+      // dual part of the full transformation AFTER the conditionals are all finished.
       glm::vec3 new_position;
 
       // orientation adjustment will be multiplicitive with a quaternion, so start it at one
       // so that the first orientation adjustment will simply be itself
+      // Note: Remember that the usual multiplication order is NEWEST * NEW * OLD * OLDER.
       Math::F_Quat new_orientation(1.0f, glm::vec3());
-
-
-      glm::vec3 position_adjustment(0.0f);
-      Math::F_Dual_Quat temp_dq(new_orientation, Math::F_Quat());
 
 
       // define these to avoid lots of repetious dereferencing
@@ -62,149 +58,88 @@ namespace Entities
       if (active_actions & ACTION_LIST::FORWARD)
       {
          new_position += forward_vector * LINEAR_SPEED;
-
-         position_adjustment = forward_vector * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "forward";
       }
 
       if (active_actions & ACTION_LIST::BACK)
       {
          new_position -= forward_vector * LINEAR_SPEED;
-
-         position_adjustment = -forward_vector * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "-back";
       }
 
       if (active_actions & ACTION_LIST::STRAFE_LEFT)
       {
          new_position += left_vector * LINEAR_SPEED;
-
-         position_adjustment = left_vector * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "-left";
       }
 
       if (active_actions & ACTION_LIST::STRAFE_RIGHT)
       {
          new_position -= left_vector * LINEAR_SPEED;
-
-         position_adjustment = -left_vector * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "-right";
       }
 
       if (active_actions & ACTION_LIST::GO_UP)
       {
          new_position += relative_up * LINEAR_SPEED;
-
-         position_adjustment = relative_up * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "-up";
       }
 
       if (active_actions & ACTION_LIST::GO_DOWN)
       {
          new_position -= relative_up * LINEAR_SPEED;
-
-         position_adjustment = -relative_up * LINEAR_SPEED;
-         temp_dq *= Math::F_Dual_Quat::generate_translate_only(position_adjustment);
-
-         //cout<< "-down";
       }
 
       if (active_actions & ACTION_LIST::YAW_LEFT)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(relative_up, -ROTATION_SPEED);
-
-         //cout<< "-yaw left";
       }
 
       if (active_actions & ACTION_LIST::YAW_RIGHT)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(relative_up, +ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(relative_up, +ROTATION_SPEED);
-
-         //cout<< "-yaw right";
       }
 
       if (active_actions & ACTION_LIST::PITCH_FORWARD)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(left_vector, -ROTATION_SPEED);
-
-         //cout<< "-pitch forw";
       }
 
       if (active_actions & ACTION_LIST::PITCH_BACK)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(left_vector, +ROTATION_SPEED);
-
-         //cout<< "-pitch back";
       }
 
       if (active_actions & ACTION_LIST::ROLL_LEFT)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(forward_vector, +ROTATION_SPEED);
-
-         //cout<< "-roll left";
       }
 
       if (active_actions & ACTION_LIST::ROLL_RIGHT)
       {
-         //new_orientation = Math::F_Quat::generate_rotator(forward_vector, -ROTATION_SPEED) * new_orientation;
          new_orientation *= Math::F_Quat::generate_rotator(forward_vector, +ROTATION_SPEED);
-
-         temp_dq *= Math::F_Dual_Quat::generate_rotator_only(forward_vector, -ROTATION_SPEED);
-
-         //cout<< "-roll right";
       }
 
-      //cout<< endl;
-
       // construct the translational part of the transformation
+      // Note: The orientation quaternion was already constructed, 
       Math::F_Quat new_dual = 0.5f * Math::F_Quat::generate_pure_quat(new_position) * new_orientation;
       
       Math::F_Dual_Quat prev_state(m_parent_entity_ptr->m_where_and_which_way);
-      Math::F_Dual_Quat new_state(new_orientation, new_dual);
+      Math::F_Dual_Quat delta_state(new_orientation, new_dual);
 
-      Math::F_Dual_Quat cumulative_state_1 = prev_state * new_state;
-      Math::F_Dual_Quat cumulative_state_2 = new_state * prev_state;
-
-      if (prev_state != cumulative_state_1)
-      {
-         glm::vec3 V;
-         glm::vec3 transformed_V = Math::F_Dual_Quat::transform(cumulative_state_1, V);
-         Utilities::Printer_Helper::print_vec("V: ", transformed_V);
-
-         //Utilities::Printer_Helper::print_my_dual_quat("cum_1: ", cumulative_state_1);
-         //Utilities::Printer_Helper::print_my_dual_quat("cum_2: ", cumulative_state_2);
-      }
-
-
-      //m_parent_entity_ptr->m_where_and_which_way = new_state * prev_state;
-      
-      //m_parent_entity_ptr->m_where_and_which_way = prev_state * temp_dq;
-      m_parent_entity_ptr->m_where_and_which_way = cumulative_state_1;
+      // apply the change in transformation 
+      // Note: I am multiplying the transformations with OLD * NEW instead of the usual order.  
+      // Why?
+      //
+      // This is because, in the current program, the camera follows the controlled entity
+      // verbatim.  The camera matrix needs to be constructed with reversed transformation
+      // order because the camera is mathematically modeled to remain stationary while the 
+      // world is transformed around it.  Recall that all renderables have a "full transform"
+      // applied to them, which uses the renderable's model-to-world matrix, the world-to-camera
+      // matrix, and the perspective matrix (camera-to-window).  ALL renderables have this
+      // applied to them.  So to give the illusion that the camera rotates and then translates,
+      // the whole world must be translated first, then rotated.  It's like the whole is on
+      // the end of a stick that the camera pushes around and rotates at will while the camera
+      // remains stationary.
+      //
+      // TODO: When implementing camera controls, keep this transformation or, but when 
+      // controlling something else, use the usual order of NEWER * OLDER.
+      m_parent_entity_ptr->m_where_and_which_way = prev_state * delta_state;
    }
 
    bool Controller_Component::set_key_binding(const Input::SUPPORTED_BINDINGS binding)
