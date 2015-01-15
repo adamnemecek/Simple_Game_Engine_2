@@ -140,11 +140,8 @@ namespace Rendering
       // - send "full transform" and "orientation only" matrices to GPU
       // - draw elements 
 
-      //// the camera position is independent of each renderable
-      //glUniform4fv(m_, 1, glm::value_ptr(m_camera_ptr->get_position()));
-
+      // the camera position is independent of each renderable
       glm::mat4 camera_mat = m_camera_ptr->get_world_to_view_matrix();
-      //glm::mat4 camera_mat = glm::mat4();
 
       // the lights are independent of each renderable
       // Note: The light locations that are hard-coded here are in world space, so I only need
