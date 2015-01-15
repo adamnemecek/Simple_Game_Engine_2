@@ -12,7 +12,9 @@
 #include <Entities\Entity.h>
 
 #include <Utilities\Include_Helpers\Default_Vectors.h>
-#include <Utilities\Printer_Helper.h>
+
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\detail\func_geometric.hpp>
 
 #include <Math\F_Dual_Quat.h>
 

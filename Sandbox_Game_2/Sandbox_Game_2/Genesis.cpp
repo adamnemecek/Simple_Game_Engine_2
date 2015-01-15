@@ -223,6 +223,7 @@ void init()
 
    // set up the camera entity
    // Note: Set it to be off to the side of and above the scene and looking into it.
+   // Note: Also, steal the 4th cube's renderable so that the camera's entity can sit out in front of it and I can see it.
    g_camera.set_entity_to_follow(&g_camera_entity);
    initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
    MY_ASSERT(initialize_success);
@@ -232,27 +233,14 @@ void init()
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
    g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
 
-
    g_camera_entity.initialize();
    MY_ASSERT(initialize_success);
 
-   // start the camera above and looking down at the scene
-   // Note: The camera's world-to-camera matrix will affect the entire scene.
-   // A dual quat will rotate, then translate.  If we create a dual quat out of
-   // our desired orientation and offset, then the world will be rotated and then
-   // moved, which has the affect of rotating the camera's viewpoint, and then 
-   // moving it.  We instead want to translate the world and then rotate it, which
-   // requires the creation of two dual quats.  
-   // Note: The camera is the only thing that requires this reversal .
-   //Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_translate_then_rotate(glm::vec3(+1.0f, 0.0f, 0.0f), 3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
-   //Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, 0.0f), -3.14159f / 2.0f, glm::vec3(0.0f, +20.0f, 0.0f));
-   Math::F_Dual_Quat entity_camera_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.0f, +0.0f, 0.0f));
-
    // I got these numbers by having the camera print out its dual quat, and then I 
    // copied the numbers when the camera was at the desired starting point.
-   //Math::F_Quat temp_real(0.80f, glm::vec3(0.12f, -0.57f, -0.14f));
-   //Math::F_Quat temp_dual(2.02f, glm::vec3(4.51f, 2.27f, 6.08f));
-   //Math::F_Dual_Quat entity_camera_offset(temp_real, temp_dual);
+   Math::F_Quat temp_real(0.92f, glm::vec3(-0.17f, 0.32f, 0.09f));
+   Math::F_Quat temp_dual(-0.44f, glm::vec3(0.47f, 0.42f, 3.41f));
+   Math::F_Dual_Quat entity_camera_offset(temp_real, temp_dual);
    g_camera_entity.m_where_and_which_way = entity_camera_offset;
 
 
