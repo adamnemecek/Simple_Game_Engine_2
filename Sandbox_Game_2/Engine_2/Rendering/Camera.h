@@ -34,6 +34,9 @@ namespace Rendering
       glm::vec2 m_prev_mouse_position;
 
       Entities::Entity *m_follow_this_entity_ptr;
+
+      // this vector is used to reposition the camera relative to the entity being followed
+      // TODO: ??make this a dual quaternion as well??
       glm::vec3 m_position_relative_to_entity;
 
       float m_camera_move_speed;

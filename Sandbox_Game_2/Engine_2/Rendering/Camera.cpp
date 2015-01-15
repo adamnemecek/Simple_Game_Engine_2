@@ -4,12 +4,6 @@
 #include <Entities\Entity.h>
 #include <Utilities\My_Assert.h>
 
-#include <Utilities\Include_Helpers\Default_Vectors.h>
-
-#include <Utilities\Printer_Helper.h>
-#include <iostream>
-using std::cout;
-using std::endl;
 
 namespace Rendering
 {
@@ -24,12 +18,8 @@ namespace Rendering
 
    glm::mat4 Camera::get_world_to_view_matrix() const
    {
-      // ??why negate the dual part? some guy on OpenGL reddit told me so, and it seems to work, and if I don't negate it then things don't seem to render somehow??
-      Math::F_Dual_Quat dq = m_where_and_which_way;
-      dq.m_dual *= 1.0f;
-
-      return dq.conjugate().to_mat4();
-      //return dq.to_mat4();
+      // why take the conjugate?  I don't know
+      return m_where_and_which_way.conjugate().to_mat4();
    }
 
    //void Camera::mouse_update(const glm::vec2 &new_mouse_position)
@@ -69,20 +59,12 @@ namespace Rendering
       // only do something if you have an entity to follow
       if (m_follow_this_entity_ptr != 0)
       {
-         //Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * (-1.0f) * m_entity_backoff_distance);
          glm::vec3 world_space_backoff_vector(
             Utilities::Default_Vectors::WORLD_LEFT_VECTOR * m_position_relative_to_entity.x +
             Utilities::Default_Vectors::WORLD_UP_VECTOR * m_position_relative_to_entity.y +
             Utilities::Default_Vectors::WORLD_FORWARD_VECTOR * m_position_relative_to_entity.z);
          Math::F_Dual_Quat backoff = Math::F_Dual_Quat::generate_translate_only(world_space_backoff_vector);
          m_where_and_which_way = m_follow_this_entity_ptr->m_where_and_which_way * backoff;
-
-
-         Math::F_Dual_Quat dq = m_where_and_which_way;
-         glm::vec3 start_location(0.0f, 0.0f, 0.0f);
-         glm::vec3 current_location = Math::F_Dual_Quat::transform(dq, start_location);
-         //Utilities::Printer_Helper::print_vec("cam location: ", current_location);
-         //Utilities::Printer_Helper::print_my_dual_quat("cam dq: ", dq);
       }
    }
 
