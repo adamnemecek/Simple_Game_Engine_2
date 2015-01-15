@@ -109,9 +109,7 @@ void init()
    glDepthRange(0.0f, 1.0f);
 
 
-   bool initialize_success = false;
-   initialize_success = g_renderer.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_renderer.initialize());
 
    std::string file_paths[] =
    {
@@ -125,10 +123,8 @@ void init()
    };
 
    GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
-   initialize_success = g_renderer.add_shader_program(program_ID);
-   MY_ASSERT(initialize_success);
-   initialize_success = g_renderer.bind_shader_program(program_ID);
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_renderer.add_shader_program(program_ID));
+   MY_ASSERT(g_renderer.bind_shader_program(program_ID));
 
    cout << "Program ID: " << program_ID << endl;
 
@@ -178,8 +174,7 @@ void init()
    g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_1_bounding_box, &g_cube_1_physics);
-   initialize_success = g_cube_1_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_cube_1_entity.initialize());
    Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
    g_cube_1_entity.m_where_and_which_way = entity_1_offset;
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -0.0f));
@@ -192,8 +187,7 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_2_bounding_box, &g_cube_2_physics);
-   initialize_success = g_cube_2_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_cube_2_entity.initialize());
    Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
    g_cube_2_entity.m_where_and_which_way = entity_2_offset;
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +0.0f));
@@ -202,39 +196,24 @@ void init()
    g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
    g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
-   initialize_success = g_cube_3_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_cube_3_entity.initialize());
    //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
    Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +3.0f, +5.0f));
    g_cube_3_entity.m_where_and_which_way = entity_3_offset;
 
 
-   //g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   //g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
-   //g_cube_4_entity.add_component(&g_cube_4_renderable_updater_component);
-
-   //initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
-   //MY_ASSERT(initialize_success);
-   //g_cube_4_entity.add_component(&g_controller_component);
-
-   initialize_success = g_cube_4_entity.initialize();
-   MY_ASSERT(initialize_success);
-   
-
    // set up the camera entity
    // Note: Set it to be off to the side of and above the scene and looking into it.
    // Note: Also, steal the 4th cube's renderable so that the camera's entity can sit out in front of it and I can see it.
    g_camera.set_entity_to_follow(&g_camera_entity);
-   initialize_success = g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD));
    g_camera_entity.add_component(&g_controller_component);
 
    g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
    g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
 
-   g_camera_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_camera_entity.initialize());
 
    // I got these numbers by having the camera print out its dual quat, and then I 
    // copied the numbers when the camera was at the desired starting point.
@@ -250,8 +229,7 @@ void init()
    g_plane_renderable_ptr = g_renderer.add_renderable(&g_plane_geometry);
    g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
    g_plane_entity.add_component(&g_plane_renderable_updater_component);
-   initialize_success = g_plane_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_plane_entity.initialize());
 
    // and the circle
    Geometry_Loader::load_circle(&g_circle_geometry);
@@ -260,9 +238,7 @@ void init()
    g_circle_entity.add_component(&g_circle_renderable_updater_component);
    Math::F_Dual_Quat entity_circle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
    g_circle_entity.m_where_and_which_way = entity_circle_offset;
-
-   initialize_success = g_circle_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_circle_entity.initialize());
 
    // and the box
    Geometry_Loader::load_box(&g_rectangle_box_geometry, 5.0f, 2.0f);
@@ -272,14 +248,12 @@ void init()
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
    Math::F_Dual_Quat entity_rectangle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
    g_rectangle_box_entity.m_where_and_which_way = entity_rectangle_offset;
-   initialize_success = g_rectangle_box_entity.initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(g_rectangle_box_entity.initialize());
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
 
 
    // start the game clock
-   initialize_success = Timing::Game_Clock::get_instance().initialize();
-   MY_ASSERT(initialize_success);
+   MY_ASSERT(Timing::Game_Clock::get_instance().initialize());
 }
 
 //Called to update the display.
