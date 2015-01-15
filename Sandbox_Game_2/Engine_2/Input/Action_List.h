@@ -13,8 +13,8 @@ namespace Input
       GO_DOWN = (1 << 6),
       ROLL_LEFT = (1 << 7),
       ROLL_RIGHT = (1 << 8),
-      PITCH_FORWARD = (1 << 9),
-      PITCH_BACK = (1 << 10),
+      LOOK_DOWN = (1 << 9),
+      LOOK_UP = (1 << 10),
       STRAFE_LEFT = (1 << 11),
       STRAFE_RIGHT = (1 << 12),
    };

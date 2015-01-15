@@ -95,12 +95,12 @@ namespace Entities
          new_orientation *= Math::F_Quat::generate_rotator(relative_up, -ROTATION_SPEED);
       }
 
-      if (active_actions & ACTION_LIST::PITCH_FORWARD)
+      if (active_actions & ACTION_LIST::LOOK_DOWN)
       {
          new_orientation *= Math::F_Quat::generate_rotator(left_vector, +ROTATION_SPEED);
       }
 
-      if (active_actions & ACTION_LIST::PITCH_BACK)
+      if (active_actions & ACTION_LIST::LOOK_UP)
       {
          new_orientation *= Math::F_Quat::generate_rotator(left_vector, -ROTATION_SPEED);
       }
