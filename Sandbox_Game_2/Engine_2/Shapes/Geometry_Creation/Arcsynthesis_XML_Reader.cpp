@@ -386,10 +386,10 @@ namespace Shapes
       {
          uint characters_scanned = 0;
 
+         put_number_string_here->clear();
          if (0 == *start_ptr)
          {
-            // already at end of data set; clear the input and don't read anything
-            put_number_string_here->clear();
+            // already at end of data set; don't read anything
             return 0;
          }
 

@@ -83,9 +83,9 @@ namespace Shapes
             Shape_Data &shape_data_ref = geo->m_shape_data;
 
             // go through the geometry data and analyze it
-            for (size_t index_counter = 0; index_counter < shape_data_ref.m_num_verts; index_counter++)
+            for (size_t vertex_counter = 0; vertex_counter < shape_data_ref.m_num_verts; vertex_counter++)
             {
-               glm::vec3 &this_pos = shape_data_ref.m_verts[index_counter].position;
+               glm::vec3 &this_pos = shape_data_ref.m_verts[vertex_counter].position;
 
                sum_x += this_pos.x;
                sum_y += this_pos.y;
