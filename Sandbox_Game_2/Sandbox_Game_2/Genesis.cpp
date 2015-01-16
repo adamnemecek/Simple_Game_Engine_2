@@ -51,6 +51,8 @@ Rendering::Renderer g_renderer;
 Rendering::Camera g_camera;
 
 Shapes::Geometry g_cube_geometry;
+Shapes::Geometry g_arcsynthesis_cube_geometry;
+
 Entities::Entity g_cube_1_entity;
 Rendering::Renderable *g_cube_1_renderable_ptr;
 Entities::Renderable_Updater_Component g_cube_1_renderable_updater_component;
@@ -136,11 +138,9 @@ void init()
    using Shapes::Geometry_Creation::Geometry_Loader;
    Geometry_Loader::load_cube(&g_cube_geometry);
 
-
-   Shapes::Geometry arcsynthesis_cube_geometry;
    try
    {
-      Geometry_Loader::load_arcsynthesis_xml_file(&arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
+      Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
    }
    catch (std::exception &e)
    {
@@ -209,7 +209,8 @@ void init()
    MY_ASSERT(g_controller_component.set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD));
    g_camera_entity.add_component(&g_controller_component);
 
-   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   //g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
+   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
    g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
 

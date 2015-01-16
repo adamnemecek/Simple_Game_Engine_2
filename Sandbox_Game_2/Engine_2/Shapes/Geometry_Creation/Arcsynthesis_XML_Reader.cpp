@@ -142,7 +142,9 @@ namespace Shapes
          //  number of attributes * number of vectors per attribute * 3 floats per vector * number of bytes per float
          // Note: I assume 3 floats per vector to keep things easy.  I can truncate this 
          // down to 2 for texture coordinates, and I can chop a vec4 into a vec3.
-         put_shape_data_here->m_verts = (My_Vertex *)malloc(all_attribute_data.size() * all_attribute_data[0].num_vectors * 3 * sizeof(float));
+         uint total_num_vertices = all_attribute_data[0].num_vectors;
+         put_shape_data_here->m_verts = (My_Vertex *)malloc(all_attribute_data.size() * total_num_vertices * 3 * sizeof(float));
+         put_shape_data_here->m_num_verts = total_num_vertices;
 
          // fill out the contiguous array of My_Vertex structures
          // Note: Each My_Vertex structure stores a vec3 for position, normal, and color.
@@ -152,7 +154,6 @@ namespace Shapes
          // use of right now.
          // Note: All the attributes have the same number of vectors, so one of their 
          // vector counts is identical to the number of vertices.
-         uint total_num_vertices = all_attribute_data[0].num_vectors;
          for (uint vertex_count = 0; vertex_count < total_num_vertices; vertex_count++)
          {
             // get a reference to the current vertex for easier data entry (it's easier
