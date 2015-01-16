@@ -116,7 +116,7 @@ namespace Shapes
       void Geometry_Loader::load_cube(Geometry *put_geometry_here)
       {
          Shape_Generator::generate_cube(&(put_geometry_here->m_shape_data));
-         put_geometry_here->m_render_mode = GL_TRIANGLES;
+         //put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -125,7 +125,7 @@ namespace Shapes
       void Geometry_Loader::load_plane(Geometry *put_geometry_here, const uint num_unit_segments_on_a_side)
       {
          Shape_Generator::generate_plane(num_unit_segments_on_a_side, &(put_geometry_here->m_shape_data));
-         put_geometry_here->m_render_mode = GL_TRIANGLES;
+         //put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -134,7 +134,7 @@ namespace Shapes
       void Geometry_Loader::load_triangle(Geometry *put_geometry_here)
       {
          Shape_Generator::generate_triangle(&(put_geometry_here->m_shape_data));
-         put_geometry_here->m_render_mode = GL_TRIANGLES;
+         //put_geometry_here->m_render_mode = GL_TRIANGLES;
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -143,7 +143,7 @@ namespace Shapes
       void Geometry_Loader::load_circle(Geometry *put_geometry_here, const uint num_arc_segments, const float radius)
       {
          Shape_Generator::generate_circle(num_arc_segments, radius, &(put_geometry_here->m_shape_data));
-         put_geometry_here->m_render_mode = GL_LINE_STRIP;
+         //put_geometry_here->m_render_mode = GL_LINE_STRIP;
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -152,7 +152,7 @@ namespace Shapes
       void Geometry_Loader::load_box(Geometry *put_geometry_here, const float width, const float length)
       {
          Shape_Generator::generate_box(width, length, &(put_geometry_here->m_shape_data));
-         put_geometry_here->m_render_mode = GL_LINE_STRIP;
+         //put_geometry_here->m_render_mode = GL_LINE_STRIP;
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);

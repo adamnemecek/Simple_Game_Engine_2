@@ -69,7 +69,7 @@ namespace Shapes
       // but the geometry loader will need to call it's analyze(...) function
       Geometry_Meta_Data m_meta_data;
 
-      GLenum m_render_mode;
+      //GLenum m_render_mode;
    };
 }
 

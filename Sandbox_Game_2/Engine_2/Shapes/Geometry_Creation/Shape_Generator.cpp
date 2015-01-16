@@ -2,6 +2,7 @@
 
 #include <Shapes\Shape_Data.h>
 #include <Shapes\My_Vertex.h>
+#include <Shapes\Index_Meta_Data.h>
 
 #include <glm\vec3.hpp>
 using glm::vec3;
@@ -61,10 +62,12 @@ namespace Shapes
          // copy away!
          array_size_bytes = sizeof(local_indices);
          uint num_indices = array_size_bytes / sizeof(*local_indices);
-         put_data_here->m_num_indices = num_indices;
+         put_data_here->m_num_total_indices = num_indices;
          put_data_here->m_indices = new GLushort[num_indices];
          memcpy(put_data_here->m_indices, local_indices, array_size_bytes);
 
+         Index_Meta_Data i_meta_data(GL_TRIANGLES, num_indices);
+         put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
 
@@ -96,7 +99,7 @@ namespace Shapes
          // 6 indices to draw a square (every adjacent set of 4 vertices (including overlap))
          // Note: 3x3 is a 2x2 set of 4 vertices, 4x4 is a 3x3 set of 4, etc.
          uint index_count = (row_max_count - 1) * (col_max_count - 1) * 6;
-         put_data_here->m_num_indices = index_count;
+         put_data_here->m_num_total_indices = index_count;
          put_data_here->m_indices = new GLushort[index_count];
          int index_counter = 0;
          for (int row_count = 0; row_count < (row_max_count - 1); row_count++)
@@ -112,6 +115,9 @@ namespace Shapes
                put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + col_count;
             }
          }
+
+         Index_Meta_Data i_meta_data(GL_TRIANGLES, index_count);
+         put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
 
@@ -159,7 +165,7 @@ namespace Shapes
          }
 
          uint index_count = num_arc_segments * 2;
-         put_data_here->m_num_indices = index_count;
+         put_data_here->m_num_total_indices = index_count;
          put_data_here->m_indices = new GLushort[index_count];
          int index_counter = 0;
          for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
@@ -178,6 +184,8 @@ namespace Shapes
             }
          }
 
+         Index_Meta_Data i_meta_data(GL_LINE_STRIP, index_count);
+         put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
 
@@ -226,11 +234,15 @@ namespace Shapes
             2, 3,
             3, 0
          };
+         uint num_indices = sizeof(local_indices) / sizeof(GLushort);
 
          // this is a rectangle, so go ahead and use magic numbers for the index count
-         put_data_here->m_num_indices = 8;
-         put_data_here->m_indices = new GLushort[8];
+         put_data_here->m_num_total_indices = num_indices;
+         put_data_here->m_indices = new GLushort[num_indices];
          memcpy(put_data_here->m_indices, local_indices, sizeof(local_indices));
+
+         Index_Meta_Data i_meta_data(GL_LINE_STRIP, num_indices);
+         put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
 
@@ -344,9 +356,12 @@ namespace Shapes
          // copy away!
          array_size_bytes = sizeof(local_indices);
          uint num_indices = array_size_bytes / sizeof(*local_indices);
-         put_data_here->m_num_indices = num_indices;
+         put_data_here->m_num_total_indices = num_indices;
          put_data_here->m_indices = new GLushort[num_indices];
          memcpy(put_data_here->m_indices, local_indices, array_size_bytes);
+
+         Index_Meta_Data i_meta_data(GL_TRIANGLES, num_indices);
+         put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
    }

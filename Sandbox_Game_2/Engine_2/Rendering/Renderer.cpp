@@ -167,19 +167,21 @@ namespace Rendering
 
          glUniformMatrix4fv(m_unif_loc_model_to_camera_matrix, 1, GL_FALSE, glm::value_ptr(model_to_camera));
          
-         uint first_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices / 2;
-         uint second_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices - first_half_indices;
-         uint total_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices;
+         //uint first_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices / 2;
+         //uint second_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices - first_half_indices;
+         //uint total_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices;
+
          //glDrawElements(
          //   (r.m_geometry_ptr)->m_render_mode, 
          //   (r.m_geometry_ptr)->m_shape_data.m_num_indices, 
          //   GL_UNSIGNED_SHORT, 0);
 
+         // draw the indices according to their draw command
          Shapes::Shape_Data &shape_data_ref = (r.m_geometry_ptr)->m_shape_data;
          uint indices_drawn_so_far = 0;
-         for (uint draw_command_index = 0; draw_command_index < shape_data_ref.m_num_indices; draw_command_index++)
+         for (uint render_mode_index = 0; render_mode_index < shape_data_ref.m_index_meta_data.size(); render_mode_index++)
          {
-            const Index_Meta_Data &index_meta_data_ref = shape_data_ref.m_index_meta_data[draw_command_index];
+            const Index_Meta_Data &index_meta_data_ref = shape_data_ref.m_index_meta_data[render_mode_index];
             glDrawElements(
                index_meta_data_ref.m_render_mode,
                index_meta_data_ref.m_num_indices_this_mode,

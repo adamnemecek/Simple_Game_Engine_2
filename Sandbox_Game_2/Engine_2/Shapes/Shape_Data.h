@@ -18,7 +18,7 @@ namespace Shapes
          : m_verts(0),
          m_num_verts(0),
          m_indices(0),
-         m_num_indices(0)
+         m_num_total_indices(0)
       {
       }
 
@@ -39,7 +39,7 @@ namespace Shapes
          // a pointer will be dereferenced here, so check that it isn't null first
          if (0 != m_indices)
          {
-            return (m_num_indices * sizeof(*m_indices));
+            return (m_num_total_indices * sizeof(*m_indices));
          }
 
          return 0;
@@ -56,7 +56,7 @@ namespace Shapes
       // in a single array, but I will also store additional information that says 
       // which indices use which draw command. 
       GLushort *m_indices;
-      uint m_num_indices;
+      uint m_num_total_indices;
 
       // stores the drawing command and the number of consecutive indices draw
       //std::vector<std::pair<GLenum, uint>> m_index_meta_data;
