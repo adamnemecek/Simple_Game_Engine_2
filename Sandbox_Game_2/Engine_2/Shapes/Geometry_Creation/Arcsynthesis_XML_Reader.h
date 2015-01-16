@@ -76,7 +76,7 @@ namespace Shapes
          // given a list of pointers to index nodes, parse them and fill out the 
          // Shape_Data structure's index data
          // Note: This function calls parse_index_node(...).
-         static void load_all_index_data(Shape_Data * put_shape_data_here, const std::vector<rapidxml::xml_node<> *> index_node_ptrs);
+         static void load_all_index_data(Shape_Data * put_shape_data_here, const std::vector<const rapidxml::xml_node<> *> index_node_ptrs);
 
          // given a single index (draw command, list of indices that should be drawn with
          // this rendering mode), collect the data into an index data helper structure

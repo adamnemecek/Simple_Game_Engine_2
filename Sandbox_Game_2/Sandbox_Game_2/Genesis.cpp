@@ -97,7 +97,7 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   Experiment::do_something();
+   //Experiment::do_something();
 
    glEnable(GL_CULL_FACE);
    glCullFace(GL_BACK);

@@ -22,44 +22,7 @@ namespace Shapes
          // open the file
          rapidxml::xml_document<> doc;
          std::vector<char> file_data;     // apparently this needs to be in the same scope as the xml_document<> object
-
-
-         //// this function is heavily influenced by the arcsynthesis framework's Mesh 
-         //// class constructor, and some lines are copied verbatim except for the 
-         //// camel-case-to-underscore notaion change
-         //std::ifstream file_stream(file_path);
-         //if (!file_stream.is_open())
-         //{
-         //   throw std::runtime_error("Could not find the mesh file: " + file_path);
-         //}
-
-         //std::vector<char> file_data;
-
-         //// reserve memory
-         //// Note: Reserving memory ensures contiguency of memory, which allows the 
-         //// rpaidxml parser to run through the data with just a pointer.
-         //file_data.reserve(2 * 1024 * 1024);
-         //file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
-         //   std::istreambuf_iterator<char>());
-         //file_data.push_back('\0');
-
-         //try
-         //{
-         //   doc.parse<0>(&(file_data[0]));
-         //}
-         //catch (rapidxml::parse_error &e)
-         //{
-         //   // this is a special rapidxml exception, so handle it here
-         //   std::cout << file_path << ": Parse error in the mesh file." << std::endl;
-         //   std::cout << e.what() << std::endl << e.where<char>() << std::endl;
-         //   throw;
-         //}
-
-
          open_xml_file(&doc, file_data, file_path);
-
-
-
 
          // make sure that there is a "mesh" root node
          rapidxml::xml_node<> *root_node_ptr = doc.first_node("mesh");
@@ -71,19 +34,26 @@ namespace Shapes
          // make sure that there is at least one "attribute" node
          // Note: There is at least two attribute nodes (attribute layout indices 0 and 2, 
          // which are used for vertex position and normal) in all the Arcsynthesis XML files.
-         const rapidxml::xml_node<> *node_ptr = root_node_ptr->first_node("attribute");
-         if (0 == node_ptr)
+         const rapidxml::xml_node<> *vertex_attrib_node_ptr = root_node_ptr->first_node("attribute");
+         if (0 == vertex_attrib_node_ptr)
          {
             throw std::runtime_error("'mesh' node must have at least one 'attribute' child.  File: " + file_path);
+         }
+
+         // make sure that there is at least one "indices" node
+         const rapidxml::xml_node<> *indices_node_ptr = root_node_ptr->first_node("indices");
+         if (0 == indices_node_ptr)
+         {
+            throw std::runtime_error("'mesh' node must have at least one 'indices' child.  File: " + file_path);
          }
 
          // collect the pointers that all point to vertex attribute data
          std::vector<const rapidxml::xml_node<> *> attribute_node_ptrs;
          for (;
-            node_ptr && ("attribute" == rapidxml::make_string_name(*node_ptr));
-            node_ptr = rapidxml::next_element(node_ptr))
+            vertex_attrib_node_ptr && ("attribute" == rapidxml::make_string_name(*vertex_attrib_node_ptr));
+            vertex_attrib_node_ptr = rapidxml::next_element(vertex_attrib_node_ptr))
          {
-            attribute_node_ptrs.push_back(node_ptr);
+            attribute_node_ptrs.push_back(vertex_attrib_node_ptr);
          }
 
          // load the data
@@ -92,14 +62,14 @@ namespace Shapes
          // collect the pointers that all point to index data
          std::vector<const rapidxml::xml_node<> *> index_node_ptrs;
          for (;
-            node_ptr && ("indices" == rapidxml::make_string_name(*node_ptr));
-            node_ptr = rapidxml::next_element(node_ptr))
+            indices_node_ptr && ("indices" == rapidxml::make_string_name(*indices_node_ptr));
+            indices_node_ptr = rapidxml::next_element(indices_node_ptr))
          {
-            index_node_ptrs.push_back(node_ptr);
+            index_node_ptrs.push_back(indices_node_ptr);
          }
 
-
-
+         // load the data
+         load_all_index_data(put_shape_data_here, index_node_ptrs);
       }
 
       void Arcsynthesis_XML_Reader::open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
@@ -313,7 +283,7 @@ namespace Shapes
          put_attrib_data_here->attribute_layout_index = atoi(type_str.c_str());
       }
 
-      void Arcsynthesis_XML_Reader::load_all_index_data(Shape_Data * put_shape_data_here, const std::vector<rapidxml::xml_node<> *> index_node_ptrs)
+      void Arcsynthesis_XML_Reader::load_all_index_data(Shape_Data * put_shape_data_here, const std::vector<const rapidxml::xml_node<> *> index_node_ptrs)
       {
          // parse each render mode command and the indices corresponding to that render mode, 
          // and store the raw data in a temporary structure
@@ -410,7 +380,6 @@ namespace Shapes
             throw std::exception("Arcsynthesis XML Reader, parse_index_node(...): two of the attributes have a different number of vectors");
          }
       }
-
 
       uint Arcsynthesis_XML_Reader::get_next_number_string(const char *start_ptr, std::string *put_number_string_here)
       {
