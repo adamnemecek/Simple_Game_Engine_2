@@ -77,7 +77,7 @@ namespace Shapes
             throw std::runtime_error("'mesh' node must have at least one 'attribute' child.  File: " + file_path);
          }
 
-         // collect the attribute pointers together
+         // collect the pointers that all point to vertex attribute data
          std::vector<const rapidxml::xml_node<> *> attribute_node_ptrs;
          for (;
             node_ptr && ("attribute" == rapidxml::make_string_name(*node_ptr));
@@ -86,12 +86,64 @@ namespace Shapes
             attribute_node_ptrs.push_back(node_ptr);
          }
 
-         // parse each attribute and store the raw float data
-         std::vector<attrib_data> all_attribute_data;
-         for (uint attrib_data_index = 0; attrib_data_index < attribute_node_ptrs.size(); attrib_data_index++)
+         // load the data
+         load_all_attributes(put_shape_data_here, attribute_node_ptrs);
+
+         // collect the pointers that all point to index data
+         std::vector<const rapidxml::xml_node<> *> index_node_ptrs;
+         for (;
+            node_ptr && ("indices" == rapidxml::make_string_name(*node_ptr));
+            node_ptr = rapidxml::next_element(node_ptr))
          {
-            attrib_data this_attribute_data;
-            parse_attribute_node(&this_attribute_data, attribute_node_ptrs[attrib_data_index]);
+            index_node_ptrs.push_back(node_ptr);
+         }
+
+
+
+      }
+
+      void Arcsynthesis_XML_Reader::open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
+      {
+         // this function is heavily influenced by the arcsynthesis framework's Mesh 
+         // class constructor, and some lines are copied verbatim except for the 
+         // camel-case-to-underscore notaion change
+         std::ifstream file_stream(file_path);
+         if (!file_stream.is_open())
+         {
+            throw std::runtime_error("Could not find the mesh file: " + file_path);
+         }
+
+         //std::vector<char> file_data;
+
+         // reserve memory
+         // Note: Reserving memory ensures contiguency of memory, which allows the 
+         // rpaidxml parser to run through the data with just a pointer.
+         file_data.reserve(2 * 1024 * 1024);
+         file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
+            std::istreambuf_iterator<char>());
+         file_data.push_back('\0');
+
+         try
+         {
+            (*put_parsed_xml_document_here).parse<0>(&(file_data[0]));
+         }
+         catch (rapidxml::parse_error &e)
+         {
+            // this is a special rapidxml exception, so handle it here
+            std::cout << file_path << ": Parse error in the mesh file." << std::endl;
+            std::cout << e.what() << std::endl << e.where<char>() << std::endl;
+            throw;
+         }
+      }
+
+      void Arcsynthesis_XML_Reader::load_all_attributes(Shape_Data *put_shape_data_here, const std::vector<const rapidxml::xml_node<> *> attrib_node_ptrs)
+      {
+         // parse each attribute and store the raw float data
+         std::vector<attrib_data_helper> all_attribute_data;
+         for (uint attrib_data_index = 0; attrib_data_index < attrib_node_ptrs.size(); attrib_data_index++)
+         {
+            attrib_data_helper this_attribute_data;
+            parse_attribute_node(&this_attribute_data, attrib_node_ptrs[attrib_data_index]);
             all_attribute_data.push_back(this_attribute_data);
          }
 
@@ -99,22 +151,29 @@ namespace Shapes
          // Note: If they are not (suppose there are 100 position vectors and 99 normals),
          // then somthing is wrong.  It is possible for there to be different numbers of
          // floats, such as if there are vec3 positions and normals but vec2 texture
-         // coordinates, but there should always be an equal number of vectors.
+         // coordinates, but there should always be an equal number of vectors (one 
+         // attribute vector for each vertex).
          uint first_attrib_vector_count = all_attribute_data[0].num_vectors;
          for (uint attrib_data_index = 1; attrib_data_index < all_attribute_data.size(); attrib_data_index++)
          {
             if (first_attrib_vector_count != all_attribute_data[attrib_data_index].num_vectors)
             {
                // bad
-               throw std::exception("Arcsynthesis XML Reader: two of the attributes have a different number of vectors");
+               throw std::exception("Arcsynthesis XML Reader, load_all_attributes(...): two of the attributes have a different number of vectors");
             }
          }
 
          // build a contiguous array of My_Vertex structures
+         // Note: I need a contiguous array because that is how I have defined the order 
+         // of positions, colors, and normals for my own geometry's vertices.  I have an 
+         // order that I like to use for all my vertex attributes, and I'd like to keep 
+         // it.
          // Note: The memory calculation is this:
          //  number of attributes * number of vectors per attribute * 3 floats per vector * number of bytes per float
+         // Note: I assume 3 floats per vector to keep things easy.  I can truncate this 
+         // down to 2 for texture coordinates, and I can chop a vec4 into a vec3.
          put_shape_data_here->m_verts = (My_Vertex *)malloc(all_attribute_data.size() * all_attribute_data[0].num_vectors * 3 * sizeof(float));
-         
+
          // fill out the contiguous array of My_Vertex structures
          // Note: Each My_Vertex structure stores a vec3 for position, normal, and color.
          // The Arcsynthesis XML files always seem to have a vec3 for position and normal, 
@@ -134,7 +193,7 @@ namespace Shapes
             // go through each attribute and add its vector to the appropriate My_Vertex member
             for (uint attrib_data_index = 0; attrib_data_index < all_attribute_data.size(); attrib_data_index++)
             {
-               attrib_data &this_attrib_ref = all_attribute_data[attrib_data_index];
+               attrib_data_helper &this_attrib_ref = all_attribute_data[attrib_data_index];
 
                // get a pointer to this vector's first float
                // Note: The attribute data has a pointer to float, and pointer arithmetic says
@@ -151,7 +210,7 @@ namespace Shapes
                   // Note: As far as I've seen, only texture coordinates (attribute layout index = 5) 
                   // have this.
                   glm::vec2 V(curr_vector_f_ptr[0], curr_vector_f_ptr[1]);
-                  
+
                   // ignore it for now because my My_Vertex structure can't handle texture coordinates yet
                }
                else if (3 == this_attrib_ref.floats_per_vector)
@@ -199,55 +258,23 @@ namespace Shapes
          // free the memory that was allocated for the attribute data by the parse_attribute_node(...) method
          for (uint attrib_data_index = 0; attrib_data_index < all_attribute_data.size(); attrib_data_index++)
          {
-            attrib_data &this_attrib_ref = all_attribute_data[attrib_data_index];
+            attrib_data_helper &this_attrib_ref = all_attribute_data[attrib_data_index];
             free(this_attrib_ref.float_data_ptr);
          }
 
-         cout << "hello" << endl;
+         cout << "end of load_all_attributes" << endl;
       }
 
-      void Arcsynthesis_XML_Reader::open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
-      {
-         // this function is heavily influenced by the arcsynthesis framework's Mesh 
-         // class constructor, and some lines are copied verbatim except for the 
-         // camel-case-to-underscore notaion change
-         std::ifstream file_stream(file_path);
-         if (!file_stream.is_open())
-         {
-            throw std::runtime_error("Could not find the mesh file: " + file_path);
-         }
-
-         //std::vector<char> file_data;
-
-         // reserve memory
-         // Note: Reserving memory ensures contiguency of memory, which allows the 
-         // rpaidxml parser to run through the data with just a pointer.
-         file_data.reserve(2 * 1024 * 1024);
-         file_data.insert(file_data.end(), std::istreambuf_iterator<char>(file_stream),
-            std::istreambuf_iterator<char>());
-         file_data.push_back('\0');
-
-         try
-         {
-            (*put_parsed_xml_document_here).parse<0>(&(file_data[0]));
-         }
-         catch (rapidxml::parse_error &e)
-         {
-            // this is a special rapidxml exception, so handle it here
-            std::cout << file_path << ": Parse error in the mesh file." << std::endl;
-            std::cout << e.what() << std::endl << e.where<char>() << std::endl;
-            throw;
-         }
-      }
-
-      void Arcsynthesis_XML_Reader::parse_attribute_node(attrib_data *put_attrib_data_here, const rapidxml::xml_node<> *node_ptr)
+      void Arcsynthesis_XML_Reader::parse_attribute_node(attrib_data_helper *put_attrib_data_here, const rapidxml::xml_node<> *node_ptr)
       {
          char *c_ptr = node_ptr->value();
          uint max_chars = node_ptr->value_size();
          std::string number_string = "";
          uint total_chars_scanned = 0;
 
-         // this memory does not need to be contiguous
+         // collect all the vertex attribute data together
+         // Note: This memory does not need to be contiguous.  The vector is very handy for building 
+         // a list of unknown size though, so I'll start with it.
          std::vector<float> local_float_storage;
 
          while (total_chars_scanned < max_chars)
@@ -269,16 +296,121 @@ namespace Shapes
          put_attrib_data_here->float_data_ptr = (float *)malloc(local_float_storage.size() * sizeof(float));
          put_attrib_data_here->num_floats = local_float_storage.size();
 
+         // copy the data into the allocated memory
+         for (uint float_counter = 0; float_counter < local_float_storage.size(); float_counter++)
+         {
+            put_attrib_data_here->float_data_ptr[float_counter] = local_float_storage[float_counter];
+         }
+
          // figure out how many floats exist per vector, and therefore how many vectors total
          std::string size_str = rapidxml::get_attrib_string(*node_ptr, "size");
          put_attrib_data_here->floats_per_vector = atoi(size_str.c_str());
          put_attrib_data_here->num_vectors = put_attrib_data_here->num_floats / put_attrib_data_here->floats_per_vector;
 
-         // figure out what this attribute is going to be used for
+         // figure out what this vertex attribute is going to be used for
+         // Note: 0 == position, 1 == color, 2 == normal (I think)
          std::string type_str = rapidxml::get_attrib_string(*node_ptr, "index");
          put_attrib_data_here->attribute_layout_index = atoi(type_str.c_str());
-
       }
+
+      void Arcsynthesis_XML_Reader::load_all_index_data(Shape_Data * put_shape_data_here, const std::vector<rapidxml::xml_node<> *> index_node_ptrs)
+      {
+         // parse each render mode command and the indices corresponding to that render mode, 
+         // and store the raw data in a temporary structure
+         std::vector<index_data_helper> all_index_data;
+         uint total_indices = 0;
+         for (uint index_data_set = 0; index_data_set < index_node_ptrs.size(); index_data_set++)
+         {
+            // make a tempoary local data structure, fill it out, copy it into the list, 
+            // then do it again until the loop finishes
+            index_data_helper this_render_mode_data;
+            parse_index_node(&this_render_mode_data, index_node_ptrs[index_data_set]);
+            all_index_data.push_back(this_render_mode_data);
+
+            total_indices += this_render_mode_data.num_indices;
+
+            Index_Meta_Data i_meta_data(this_render_mode_data.render_mode, this_render_mode_data.num_indices);
+            put_shape_data_here->m_index_meta_data.push_back(i_meta_data);
+         }
+
+         // build a contiguous array of GLushorts to store all the index data
+         put_shape_data_here->m_indices = (GLushort *)malloc(total_indices * sizeof(GLushort));
+         put_shape_data_here->m_num_total_indices = total_indices;
+
+         // go through all the lists of render modes and their index data and copy the indices into one giant array
+         GLushort *dest_ptr = put_shape_data_here->m_indices;
+         for (uint index_data_set = 0; index_data_set < all_index_data.size(); index_data_set++)
+         {
+            index_data_helper &this_data_set = all_index_data[index_data_set];
+
+            // the index data in each data structure is contiguous, so a memcpy will suffice
+            uint num_bytes_to_copy = this_data_set.num_indices * sizeof(GLushort);
+            memcpy(dest_ptr, this_data_set.index_data_ptr, num_bytes_to_copy);
+            dest_ptr += num_bytes_to_copy;
+
+            // done with this set of index data, so free the malloc'd memory
+            free(this_data_set.index_data_ptr);
+         }
+      }
+
+      void Arcsynthesis_XML_Reader::parse_index_node(index_data_helper *put_index_data_here, const rapidxml::xml_node<> *node_ptr)
+      {
+         char *c_ptr = node_ptr->value();
+         uint max_chars = node_ptr->value_size();
+         std::string number_string = "";
+         uint total_chars_scanned = 0;
+
+         // collect all the index data together
+         // Note: This memory does not need to be contiguous.  The vector is very handy for building 
+         // a list of unknown size though, so I'll start with it.
+         std::vector<GLushort> local_ushort_storage;
+
+         while (total_chars_scanned < max_chars)
+         {
+            uint chars_scanned_this_number = get_next_number_string(c_ptr, &number_string);
+
+            // the standard function atoi(...) returns an integer, but I am jamming it into an 
+            // unsigned short, which is fine because I don't expect index numbers to exceed 
+            // ~65000 (2^16)
+            GLushort i = atoi(number_string.c_str());
+
+            c_ptr += chars_scanned_this_number;
+            total_chars_scanned += chars_scanned_this_number;
+
+            local_ushort_storage.push_back(i);
+         }
+
+         // allocate some heap memory for this group of indices
+         put_index_data_here->index_data_ptr = (GLushort *)malloc(local_ushort_storage.size() * sizeof(GLushort));
+         put_index_data_here->num_indices = local_ushort_storage.size();
+
+         // load the index data into the allocated memory
+         for (uint ushort_counter = 0; ushort_counter < local_ushort_storage.size(); ushort_counter++)
+         {
+            put_index_data_here->index_data_ptr[ushort_counter] = local_ushort_storage[ushort_counter];
+         }
+
+         // figure out the type of rendering that is intended for this group of indices
+         std::string render_mode_str = rapidxml::get_attrib_string(*node_ptr, "cmd");
+         if ("tri-fan" == render_mode_str)
+         {
+            put_index_data_here->render_mode = GL_TRIANGLE_FAN;
+         }
+         else if ("tri-strip" == render_mode_str)
+         {
+            put_index_data_here->render_mode = GL_TRIANGLE_STRIP;
+         }
+         else if ("triangles" == render_mode_str)
+         {
+            put_index_data_here->render_mode = GL_TRIANGLES;
+         }
+         else
+         {
+            // bad
+            throw std::exception("Arcsynthesis XML Reader, parse_index_node(...): two of the attributes have a different number of vectors");
+         }
+      }
+
 
       uint Arcsynthesis_XML_Reader::get_next_number_string(const char *start_ptr, std::string *put_number_string_here)
       {
