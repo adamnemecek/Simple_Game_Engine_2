@@ -140,7 +140,8 @@ void init()
 
    try
    {
-      Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
+      //Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
+      Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitSphere.xml");
    }
    catch (std::exception &e)
    {

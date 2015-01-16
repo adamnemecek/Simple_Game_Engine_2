@@ -202,7 +202,11 @@ namespace Shapes
                   else if (2 == this_attrib_ref.attribute_layout_index)
                   {
                      // normal
-                     this_vert_ref.normal = V;
+                     // Note: Somehow the normals in the ArcSynthesis models (or at least the cube and 
+                     // tetrahedron) are such that, in my code, the side facing the light is in shadow 
+                     // and the side facing away from the light is lit.  Reversing the normal vectors 
+                     // seems to fix this.
+                     this_vert_ref.normal = -V;
                   }
                   else
                   {
