@@ -309,12 +309,14 @@ namespace Shapes
          }
 
          // build a contiguous array of GLushorts to store all the index data
+         int X = total_indices * sizeof(GLushort);
          put_shape_data_here->m_indices = (GLushort *)malloc(total_indices * sizeof(GLushort));
          put_shape_data_here->m_num_total_indices = total_indices;
 
          // go through all the lists of render modes and their index data and copy the indices into one giant array
          GLushort *dest_ptr = put_shape_data_here->m_indices;
-         for (uint index_data_set = 0; index_data_set < all_index_data.size(); index_data_set++)
+         //for (uint index_data_set = 0; index_data_set < all_index_data.size(); index_data_set++)
+         for (uint index_data_set = all_index_data.size() - 1; index_data_set != 0 ; index_data_set--)
          {
             index_data_helper &this_data_set = all_index_data[index_data_set];
 
@@ -356,6 +358,7 @@ namespace Shapes
          }
 
          // allocate some heap memory for this group of indices
+         int X = local_ushort_storage.size() * sizeof(GLushort);
          put_index_data_here->index_data_ptr = (GLushort *)malloc(local_ushort_storage.size() * sizeof(GLushort));
          put_index_data_here->num_indices = local_ushort_storage.size();
 
