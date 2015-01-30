@@ -315,15 +315,13 @@ namespace Shapes
 
          // go through all the lists of render modes and their index data and copy the indices into one giant array
          GLushort *dest_ptr = put_shape_data_here->m_indices;
-         //for (uint index_data_set = 0; index_data_set < all_index_data.size(); index_data_set++)
-         for (uint index_data_set = all_index_data.size() - 1; index_data_set != 0 ; index_data_set--)
+         for (uint index_data_set = 0; index_data_set < all_index_data.size(); index_data_set++)
          {
             index_data_helper &this_data_set = all_index_data[index_data_set];
 
             // the index data in each data structure is contiguous, so a memcpy will suffice
-            uint num_bytes_to_copy = this_data_set.num_indices * sizeof(GLushort);
-            memcpy(dest_ptr, this_data_set.index_data_ptr, num_bytes_to_copy);
-            dest_ptr += num_bytes_to_copy;
+            memcpy(dest_ptr, this_data_set.index_data_ptr, this_data_set.num_indices * sizeof(GLushort));
+            dest_ptr += this_data_set.num_indices;
 
             // done with this set of index data, so free the malloc'd memory
             free(this_data_set.index_data_ptr);
