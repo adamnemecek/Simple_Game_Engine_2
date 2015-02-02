@@ -43,6 +43,8 @@ namespace Shapes
          // Note: Algorithm courtesy of http://slabode.exofire.net/circle_draw.shtml .
          static void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
 
+         static void generate_arcysynthesis_cylinder(Shape_Data *put_data_here);
+
          // 3D shapes
          static void generate_cube(Shape_Data *put_data_here);
 

@@ -140,7 +140,7 @@ void init()
 
    try
    {
-      Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
+      //Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCube.xml");
       //Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitSphere.xml");
       //Geometry_Loader::load_arcsynthesis_xml_file(&g_arcsynthesis_cube_geometry, "../../middleware/arcsynthesis/Tut 12 Dynamic Range/data/UnitCylinder.xml");
    }
@@ -150,6 +150,7 @@ void init()
       throw;
    }
 
+   Geometry_Loader::load_cylinder(&g_arcsynthesis_cube_geometry);
 
 
 

@@ -12,7 +12,7 @@ namespace Rendering
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
-      m_position_relative_to_entity(0.0f, +3.0f, -15.0f)
+      m_position_relative_to_entity(0.0f, +1.0f, -10.0f)
    {
    }
 

@@ -158,6 +158,14 @@ namespace Shapes
          calculate_geometry_meta_data(put_geometry_here);
       }
 
+      void Geometry_Loader::load_cylinder(Geometry *put_geometry_here)
+      {
+         Shape_Generator::generate_arcysynthesis_cylinder(&put_geometry_here->m_shape_data);
+
+         initialize_attributes(put_geometry_here);
+         calculate_geometry_meta_data(put_geometry_here);
+      }
+
       void Geometry_Loader::load_arcsynthesis_xml_file(Geometry *put_geometry_here, const std::string &file_path)
       {
          Arcsynthesis_XML_Reader::load_from_xml_file(&(put_geometry_here->m_shape_data), file_path);
