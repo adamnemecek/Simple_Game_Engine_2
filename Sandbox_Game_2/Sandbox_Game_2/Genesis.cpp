@@ -202,7 +202,7 @@ void init()
    MY_ASSERT(g_cube_3_entity.initialize());
    //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
    Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +3.0f, +5.0f));
-   g_cube_3_entity.m_where_and_which_way = entity_3_offset;
+   g_cube_3_entity.m_where_and_which_way = entity_3_offset * (entity_3_offset * (-1.0f));
 
 
    // set up the camera entity
@@ -216,8 +216,8 @@ void init()
    g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
    g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
-
    MY_ASSERT(g_camera_entity.initialize());
+   //g_camera_entity
 
    // I got these numbers by having the camera print out its dual quat, and then I 
    // copied the numbers when the camera was at the desired starting point.
