@@ -139,6 +139,12 @@ namespace Math
       this->m_dual = new_dual;
    }
 
+   void F_Dual_Quat::operator*=(const float right)
+   {
+      this->m_real *= right;
+      this->m_dual *= right;
+   }
+
    glm::mat4 F_Dual_Quat::to_mat4() const
    {
       // get an identity matrix
@@ -311,6 +317,16 @@ namespace Math
    F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right)
    {
       return F_Dual_Quat(left.m_real * right.m_real, (left.m_real * right.m_dual) + (left.m_dual * right.m_real));
+   }
+
+   F_Dual_Quat operator*(const F_Dual_Quat &left, const float right)
+   {
+      return F_Dual_Quat(left.m_real * right, left.m_dual * right);
+   }
+
+   F_Dual_Quat operator*(const float left, const F_Dual_Quat &right)
+   {
+      return F_Dual_Quat(left * right.m_real, left * right.m_dual);
    }
 
    F_Dual_Quat operator-(const F_Dual_Quat &left, const F_Dual_Quat &right)

@@ -202,7 +202,7 @@ void init()
    MY_ASSERT(g_cube_3_entity.initialize());
    //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.5f, +0.0f, +5.5f));
    Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +3.0f, +5.0f));
-   g_cube_3_entity.m_where_and_which_way = entity_3_offset * (entity_3_offset * (-1.0f));
+   g_cube_3_entity.m_where_and_which_way = entity_3_offset;
 
 
    // set up the camera entity

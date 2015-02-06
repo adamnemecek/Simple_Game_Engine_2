@@ -61,6 +61,9 @@ namespace Math
       // Note: See description of operator* for details.
       void operator*=(const F_Dual_Quat &right);
 
+      // self-multiplication by scalar
+      void operator*=(const float right);
+
       // self-normalize
       void normalize();
 
@@ -87,6 +90,8 @@ namespace Math
    // dq1 * dq2 = AC + e(AD + BC).  There is no BD because e^2 is defined to
    // be 0.
    F_Dual_Quat operator*(const F_Dual_Quat &left, const F_Dual_Quat &right);
+   F_Dual_Quat operator*(const F_Dual_Quat &left, const float right);
+   F_Dual_Quat operator*(const float left, const F_Dual_Quat &right);
 
    // subtraction
    // Note: Given dual quats dq1 = (A + eB) and dq2 = (C + eD), then
