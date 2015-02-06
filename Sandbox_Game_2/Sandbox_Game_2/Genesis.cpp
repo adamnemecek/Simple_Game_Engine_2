@@ -217,7 +217,6 @@ void init()
    g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
    g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
    MY_ASSERT(g_camera_entity.initialize());
-   //g_camera_entity
 
    // I got these numbers by having the camera print out its dual quat, and then I 
    // copied the numbers when the camera was at the desired starting point.
