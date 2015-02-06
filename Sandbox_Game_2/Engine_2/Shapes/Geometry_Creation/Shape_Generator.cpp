@@ -188,6 +188,53 @@ namespace Shapes
          put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
+      void generate_cylinder(const uint num_arc_segments, const float radius, const float num_vertical_segments, const float height, Shape_Data *put_data_here)
+      {
+         // allocate space for the total number of vertices required
+         // Note: The top and bottom of the cylinder will use the same calculation.  
+         // The top and bottom vertices will be calculated as a Triangle Fan.
+         // The cylinder will be calculated as a Triangle Strip.
+         // The top and bottom will have 1 vertex for each arc segment + 1 to close the loop + 1 for the center.
+         uint num_verts = num_arc_segments + 2;
+         put_data_here->m_num_verts = num_verts;
+         put_data_here->m_verts = new My_Vertex[num_verts];
+
+
+         // pre-loop calculations
+         float theta = 2 * 3.1415926f / float(num_arc_segments);
+         float tangetial_factor = tanf(theta);
+         float radial_factor = cosf(theta);
+
+         float x = radius;//we start at angle = 0 
+         float z = 0;
+
+         for (int vertex_count = 0; vertex_count < num_arc_segments; vertex_count++)
+         {
+            My_Vertex& this_vert = put_data_here->m_verts[vertex_count];
+            this_vert.position.x = x;
+            this_vert.position.y = 0.0f;
+            this_vert.position.z = z;
+
+            this_vert.color = random_color();
+            this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
+
+            //calculate the tangential vector 
+            //remember, the radial vector is (x, y) 
+            //to get the tangential vector we flip those coordinates and negate one of them 
+
+            float tx = (-z) * tangetial_factor;
+            float tz = (x)* tangetial_factor;
+
+            //add the tangential vector 
+            x += tx;
+            z += tz;
+
+            //correct using the radial factor 
+            x *= radial_factor;
+            z *= radial_factor;
+         }
+      }
+
       void Shape_Generator::generate_arcysynthesis_cylinder(Shape_Data *put_data_here)
       {
          My_Vertex local_verts[] =
@@ -744,16 +791,16 @@ namespace Shapes
             GLushort local_indices[] =
             {
                62, 63, 64, 65, 66, 67,
-               68, 69, 70, 71, 72, 73,
-               74, 75, 76, 77, 78, 79,
-               80, 81, 82, 83, 84, 85,
-               86, 87, 88, 89, 90, 91,
-               92, 93, 94, 95, 96, 97,
-               98, 99, 100, 101, 102, 103,
-               104, 105, 106, 107, 108, 109,
-               110, 111, 112, 113, 114, 115,
-               116, 117, 118, 119, 120, 121,
-               62, 63,
+               //68, 69, 70, 71, 72, 73,
+               //74, 75, 76, 77, 78, 79,
+               //80, 81, 82, 83, 84, 85,
+               //86, 87, 88, 89, 90, 91,
+               //92, 93, 94, 95, 96, 97,
+               //98, 99, 100, 101, 102, 103,
+               //104, 105, 106, 107, 108, 109,
+               //110, 111, 112, 113, 114, 115,
+               //116, 117, 118, 119, 120, 121,
+               //62, 63,
             };
 
             // copy away!
