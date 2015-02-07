@@ -5,7 +5,7 @@
 #include <Shapes\Index_Meta_Data.h>
 
 #include <glm\vec3.hpp>
-using glm::vec3;
+#include <glm\detail\func_geometric.hpp>
 
 #include <stdlib.h>
 #include <Utilities\Include_Helpers\GL_Version.h>
@@ -13,41 +13,26 @@ using glm::vec3;
 #include <math.h>
 
 
-vec3 random_color()
-{
-   vec3 ret;
-   ret.x = rand() / (float)(RAND_MAX);
-   ret.y = rand() / (float)(RAND_MAX);
-   ret.z = rand() / (float)(RAND_MAX);
-   return ret;
-}
-
-// helper function for this file
+// helper functions for this file
 namespace
 {
-   // generate just the position vectors that make up a circle, allocate memory, and return a pointer
+   glm::vec3 random_color()
+   {
+      glm::vec3 ret;
+      ret.x = rand() / (float)(RAND_MAX);
+      ret.y = rand() / (float)(RAND_MAX);
+      ret.z = rand() / (float)(RAND_MAX);
+      return ret;
+   }
+
+   // generate vertices that make up a circle, allocate memory, and return a pointer
    // Note: It is the calling function's responsibility to free this memory.
-   glm::vec3* generate_circle_pos_vectors(const uint num_arc_segments, const float radius)
+   Shapes::My_Vertex* helper_generate_horizontal_circle(const uint num_arc_segments, const float radius, const float Y_height)
    {
       // there is one vertex for each line segment
       // Note: The calling function is responsible for assigning indices.
       uint num_verts = num_arc_segments;
-      glm::vec3 *ret_ptr = new glm::vec3[num_verts];
-
-
-
-      return ret_ptr;
-   }
-
-      void Shape_Generator::generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here)
-   {
-      // there is one vertex for each line segment
-      // Note: These vertices are calculated for a Line Strip, and the indices will
-      // handle the closing of the loop.
-      uint num_verts = num_arc_segments;
-      put_data_here->m_num_verts = num_verts;
-      put_data_here->m_verts = new My_Vertex[num_verts];
-
+      Shapes::My_Vertex *ret_ptr = new Shapes::My_Vertex[num_verts];
 
       // pre-loop calculations
       float theta = 2 * 3.1415926f / float(num_arc_segments);
@@ -57,22 +42,22 @@ namespace
       float x = radius;//we start at angle = 0 
       float z = 0;
 
-      for (int vertex_count = 0; vertex_count < num_arc_segments; vertex_count++)
+      for (uint segment_count = 0; segment_count < num_arc_segments; segment_count++)
       {
-         My_Vertex& this_vert = put_data_here->m_verts[vertex_count];
-         this_vert.position.x = x;
-         this_vert.position.y = 0.0f;
-         this_vert.position.z = z;
-
+         Shapes::My_Vertex& this_vert = ret_ptr[segment_count];
+         this_vert.position = glm::vec3(x, Y_height, z);
          this_vert.color = random_color();
-         this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
 
+         // the normals, by default, point outward radially like spikes on a wheel
+         this_vert.normal = glm::normalize(glm::vec3(x, 0.0f, z));
+
+         // calculate the next vertex
          //calculate the tangential vector 
          //remember, the radial vector is (x, y) 
          //to get the tangential vector we flip those coordinates and negate one of them 
 
          float tx = (-z) * tangetial_factor;
-         float tz = (x)* tangetial_factor;
+         float tz = (x) * tangetial_factor;
 
          //add the tangential vector 
          x += tx;
@@ -83,28 +68,8 @@ namespace
          z *= radial_factor;
       }
 
-      uint index_count = num_arc_segments * 2;
-      put_data_here->m_num_total_indices = index_count;
-      put_data_here->m_indices = new GLushort[index_count];
-      int index_counter = 0;
-      for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
-      {
-         if (segment_count == (num_arc_segments - 1))
-         {
-            // last vertex, then loop back to first one
-            put_data_here->m_indices[index_counter++] = segment_count;
-            put_data_here->m_indices[index_counter++] = 0;
-         }
-         else
-         {
-            // ex: segment 0 is vertices 0 and 1; segment 1 is vertices 1 and 2; segment 2 is vertices 2 and 3, etc.
-            put_data_here->m_indices[index_counter++] = segment_count;
-            put_data_here->m_indices[index_counter++] = segment_count + 1;
-         }
-      }
-
-      Index_Meta_Data i_meta_data(GL_LINE_STRIP, index_count);
-      put_data_here->m_index_meta_data.push_back(i_meta_data);
+      return ret_ptr;
+   }
 }
 
 namespace Shapes
@@ -117,17 +82,17 @@ namespace Shapes
       {
          My_Vertex local_verts[] = 
          {
-            vec3(-0.5f, -0.5f, -1.0f),          // left bottom corner
-            vec3(+0.0f, +0.0f, +1.0f),             // normal points out of screen
-            vec3(+1.0f, +0.0f, +0.0f),          // red
+            glm::vec3(-0.5f, -0.5f, -1.0f),          // left bottom corner
+            glm::vec3(+0.0f, +0.0f, +1.0f),             // normal points out of screen
+            glm::vec3(+1.0f, +0.0f, +0.0f),          // red
 
-            vec3(+0.5f, -0.5f, -1.0f),          // right bottom corner
-            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
-            vec3(+0.0f, +1.0f, +0.0f),          // green
+            glm::vec3(+0.5f, -0.5f, -1.0f),          // right bottom corner
+            glm::vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+            glm::vec3(+0.0f, +1.0f, +0.0f),          // green
 
-            vec3(+0.0f, +0.5f, -1.0f),          // center top
-            vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
-            vec3(+0.0f, +0.0f, +1.0f),          // blue
+            glm::vec3(+0.0f, +0.5f, -1.0f),          // center top
+            glm::vec3(+0.0f, +0.0f, +1.0f),          // normal points out of screen
+            glm::vec3(+0.0f, +0.0f, +1.0f),          // blue
          };
 
          // copy away!
@@ -176,7 +141,7 @@ namespace Shapes
                this_vert.position.y = 0.0f;
                this_vert.position.z = row_half_length - row_count;
                this_vert.color = random_color();
-               this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
+               this_vert.normal = glm::vec3(+0.0f, +1.0f, +0.0f);
             }
          }
 
@@ -214,40 +179,16 @@ namespace Shapes
          put_data_here->m_num_verts = num_verts;
          put_data_here->m_verts = new My_Vertex[num_verts];
 
-
-         // pre-loop calculations
-         float theta = 2 * 3.1415926f / float(num_arc_segments);
-         float tangetial_factor = tanf(theta);
-         float radial_factor = cosf(theta);
-
-         float x = radius;//we start at angle = 0 
-         float z = 0;
-
-         for (int vertex_count = 0; vertex_count < num_arc_segments; vertex_count++)
+         // remember that one vector is generated for each arc segment
+         My_Vertex *circle_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, 0.0f);
+         for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
          {
-            My_Vertex& this_vert = put_data_here->m_verts[vertex_count];
-            this_vert.position.x = x;
-            this_vert.position.y = 0.0f;
-            this_vert.position.z = z;
-
-            this_vert.color = random_color();
-            this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
-
-            //calculate the tangential vector 
-            //remember, the radial vector is (x, y) 
-            //to get the tangential vector we flip those coordinates and negate one of them 
-
-            float tx = (-z) * tangetial_factor;
-            float tz = (x)* tangetial_factor;
-
-            //add the tangential vector 
-            x += tx;
-            z += tz;
-
-            //correct using the radial factor 
-            x *= radial_factor;
-            z *= radial_factor;
+            // copy the data into the memory that's leaving this function
+            put_data_here->m_verts[arc_segment_count] = circle_verts_ptr[arc_segment_count];
          }
+
+         // free the temporary memory
+         free(circle_verts_ptr);
 
          uint index_count = num_arc_segments * 2;
          put_data_here->m_num_total_indices = index_count;
@@ -1069,7 +1010,7 @@ namespace Shapes
          float half_width = width / 2.0f;
          float half_length = length / 2.0f;
          
-         vec3 common_normal = vec3(0.0f, 1.0f, 0.0f);
+         glm::vec3 common_normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
          // generate vertices clockwise, starting with the upper right, when looking at an X-Z 
          // plane in which X is width and Z is length (or height depending on how you look at it)
@@ -1131,82 +1072,82 @@ namespace Shapes
 
          My_Vertex local_verts[] =
          {
-            vec3(-1.0f, +1.0f, +1.0f),  // 0
-            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, +1.0f, +1.0f),  // 0
+            glm::vec3(+0.0f, +1.0f, +0.0f),  // Normal
             random_color(),
-            vec3(+1.0f, +1.0f, +1.0f),  // 1
-            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            glm::vec3(+1.0f, +1.0f, +1.0f),  // 1
+            glm::vec3(+0.0f, +1.0f, +0.0f),  // Normal
             random_color(),
-            vec3(+1.0f, +1.0f, -1.0f),  // 2
-            vec3(+0.0f, +1.0f, +0.0f),  // Normal
+            glm::vec3(+1.0f, +1.0f, -1.0f),  // 2
+            glm::vec3(+0.0f, +1.0f, +0.0f),  // Normal
             random_color(),
-            vec3(-1.0f, +1.0f, -1.0f),  // 3
-            vec3(+0.0f, +1.0f, +0.0f),  // Normal
-            random_color(),
-
-            vec3(-1.0f, +1.0f, -1.0f),  // 4
-            vec3(+0.0f, +0.0f, -1.0f),  // Normal
-            random_color(),
-            vec3(+1.0f, +1.0f, -1.0f),  // 5
-            vec3(+0.0f, +0.0f, -1.0f),  // Normal
-            random_color(),
-            vec3(+1.0f, -1.0f, -1.0f),  // 6
-            vec3(+0.0f, +0.0f, -1.0f),  // Normal
-            random_color(),
-            vec3(-1.0f, -1.0f, -1.0f),  // 7
-            vec3(+0.0f, +0.0f, -1.0f),  // Normal
+            glm::vec3(-1.0f, +1.0f, -1.0f),  // 3
+            glm::vec3(+0.0f, +1.0f, +0.0f),  // Normal
             random_color(),
 
-            vec3(+1.0f, +1.0f, -1.0f),  // 8
-            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, +1.0f, -1.0f),  // 4
+            glm::vec3(+0.0f, +0.0f, -1.0f),  // Normal
             random_color(),
-            vec3(+1.0f, +1.0f, +1.0f),  // 9
-            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            glm::vec3(+1.0f, +1.0f, -1.0f),  // 5
+            glm::vec3(+0.0f, +0.0f, -1.0f),  // Normal
             random_color(),
-            vec3(+1.0f, -1.0f, +1.0f),  // 10
-            vec3(+1.0f, +0.0f, +0.0f),  // Normal
+            glm::vec3(+1.0f, -1.0f, -1.0f),  // 6
+            glm::vec3(+0.0f, +0.0f, -1.0f),  // Normal
             random_color(),
-            vec3(+1.0f, -1.0f, -1.0f),  // 11
-            vec3(+1.0f, +0.0f, +0.0f),  // Normal
-            random_color(),
-
-            vec3(-1.0f, +1.0f, +1.0f),  // 12
-            vec3(-1.0f, +0.0f, +0.0f),  // Normal
-            random_color(),
-            vec3(-1.0f, +1.0f, -1.0f),  // 13
-            vec3(-1.0f, +0.0f, +0.0f),  // Normal
-            random_color(),
-            vec3(-1.0f, -1.0f, -1.0f),  // 14
-            vec3(-1.0f, +0.0f, +0.0f),  // Normal
-            random_color(),
-            vec3(-1.0f, -1.0f, +1.0f),  // 15
-            vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, -1.0f, -1.0f),  // 7
+            glm::vec3(+0.0f, +0.0f, -1.0f),  // Normal
             random_color(),
 
-            vec3(+1.0f, +1.0f, +1.0f),  // 16
-            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            glm::vec3(+1.0f, +1.0f, -1.0f),  // 8
+            glm::vec3(+1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(-1.0f, +1.0f, +1.0f),  // 17
-            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            glm::vec3(+1.0f, +1.0f, +1.0f),  // 9
+            glm::vec3(+1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(-1.0f, -1.0f, +1.0f),  // 18
-            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            glm::vec3(+1.0f, -1.0f, +1.0f),  // 10
+            glm::vec3(+1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(+1.0f, -1.0f, +1.0f),  // 19
-            vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            glm::vec3(+1.0f, -1.0f, -1.0f),  // 11
+            glm::vec3(+1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
 
-            vec3(+1.0f, -1.0f, -1.0f),  // 20
-            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, +1.0f, +1.0f),  // 12
+            glm::vec3(-1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(-1.0f, -1.0f, -1.0f),  // 21
-            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, +1.0f, -1.0f),  // 13
+            glm::vec3(-1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(-1.0f, -1.0f, +1.0f),  // 22
-            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, -1.0f, -1.0f),  // 14
+            glm::vec3(-1.0f, +0.0f, +0.0f),  // Normal
             random_color(),
-            vec3(+1.0f, -1.0f, +1.0f),  // 23
-            vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            glm::vec3(-1.0f, -1.0f, +1.0f),  // 15
+            glm::vec3(-1.0f, +0.0f, +0.0f),  // Normal
+            random_color(),
+
+            glm::vec3(+1.0f, +1.0f, +1.0f),  // 16
+            glm::vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            glm::vec3(-1.0f, +1.0f, +1.0f),  // 17
+            glm::vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            glm::vec3(-1.0f, -1.0f, +1.0f),  // 18
+            glm::vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+            glm::vec3(+1.0f, -1.0f, +1.0f),  // 19
+            glm::vec3(+0.0f, +0.0f, +1.0f),  // Normal
+            random_color(),
+
+            glm::vec3(+1.0f, -1.0f, -1.0f),  // 20
+            glm::vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            glm::vec3(-1.0f, -1.0f, -1.0f),  // 21
+            glm::vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            glm::vec3(-1.0f, -1.0f, +1.0f),  // 22
+            glm::vec3(+0.0f, -1.0f, +0.0f),  // Normal
+            random_color(),
+            glm::vec3(+1.0f, -1.0f, +1.0f),  // 23
+            glm::vec3(+0.0f, -1.0f, +0.0f),  // Normal
             random_color(),
          };
 
