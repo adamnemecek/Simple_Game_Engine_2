@@ -182,7 +182,7 @@ namespace Rendering
          for (uint render_mode_index = 0; render_mode_index < shape_data_ref.m_index_meta_data.size(); render_mode_index++)
          {
             const Index_Meta_Data &index_meta_data_ref = shape_data_ref.m_index_meta_data[render_mode_index];
-            if (6 == index_meta_data_ref.m_num_indices_this_mode)
+            if (8 == index_meta_data_ref.m_num_indices_this_mode)
             {
                indices_drawn_so_far = indices_drawn_so_far;
             }
@@ -197,6 +197,8 @@ namespace Rendering
             {
                break;
             }
+
+            indices_drawn_so_far += index_meta_data_ref.m_num_indices_this_mode;
          }
 /*
          glDrawElements(
