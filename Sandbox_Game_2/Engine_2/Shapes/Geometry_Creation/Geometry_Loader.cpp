@@ -160,7 +160,8 @@ namespace Shapes
 
       void Geometry_Loader::load_cylinder(Geometry *put_geometry_here)
       {
-         Shape_Generator::generate_arcysynthesis_cylinder(&put_geometry_here->m_shape_data);
+         //Shape_Generator::generate_arcysynthesis_cylinder(&put_geometry_here->m_shape_data);
+         Shape_Generator::generate_cylinder(6, 1, 1, 1, &(put_geometry_here->m_shape_data));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);

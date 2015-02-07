@@ -150,7 +150,7 @@ void init()
       throw;
    }
 
-   Geometry_Loader::load_circle(&g_arcsynthesis_cube_geometry);
+   Geometry_Loader::load_cylinder(&g_arcsynthesis_cube_geometry);
 
 
 
@@ -246,7 +246,8 @@ void init()
    // and the box
    Geometry_Loader::load_box(&g_rectangle_box_geometry, 5.0f, 2.0f);
    g_rectangle_box_entity.add_component(&g_rectangle_box_physics);
-   g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
+   //g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
+   g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
    g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
    g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
    Math::F_Dual_Quat entity_rectangle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));

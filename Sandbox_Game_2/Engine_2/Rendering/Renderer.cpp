@@ -182,12 +182,21 @@ namespace Rendering
          for (uint render_mode_index = 0; render_mode_index < shape_data_ref.m_index_meta_data.size(); render_mode_index++)
          {
             const Index_Meta_Data &index_meta_data_ref = shape_data_ref.m_index_meta_data[render_mode_index];
+            if (6 == index_meta_data_ref.m_num_indices_this_mode)
+            {
+               indices_drawn_so_far = indices_drawn_so_far;
+            }
             glDrawElements(
                index_meta_data_ref.m_render_mode,
                index_meta_data_ref.m_num_indices_this_mode,
                GL_UNSIGNED_SHORT,
                (void *)(indices_drawn_so_far * sizeof(GLushort))
                );
+            GLenum err = glGetError();
+            if (GL_NO_ERROR != err)
+            {
+               break;
+            }
          }
 /*
          glDrawElements(
