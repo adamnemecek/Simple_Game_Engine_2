@@ -22,6 +22,90 @@ vec3 random_color()
    return ret;
 }
 
+// helper function for this file
+namespace
+{
+   // generate just the position vectors that make up a circle, allocate memory, and return a pointer
+   // Note: It is the calling function's responsibility to free this memory.
+   glm::vec3* generate_circle_pos_vectors(const uint num_arc_segments, const float radius)
+   {
+      // there is one vertex for each line segment
+      // Note: The calling function is responsible for assigning indices.
+      uint num_verts = num_arc_segments;
+      glm::vec3 *ret_ptr = new glm::vec3[num_verts];
+
+
+
+      return ret_ptr;
+   }
+
+      void Shape_Generator::generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here)
+   {
+      // there is one vertex for each line segment
+      // Note: These vertices are calculated for a Line Strip, and the indices will
+      // handle the closing of the loop.
+      uint num_verts = num_arc_segments;
+      put_data_here->m_num_verts = num_verts;
+      put_data_here->m_verts = new My_Vertex[num_verts];
+
+
+      // pre-loop calculations
+      float theta = 2 * 3.1415926f / float(num_arc_segments);
+      float tangetial_factor = tanf(theta);
+      float radial_factor = cosf(theta);
+
+      float x = radius;//we start at angle = 0 
+      float z = 0;
+
+      for (int vertex_count = 0; vertex_count < num_arc_segments; vertex_count++)
+      {
+         My_Vertex& this_vert = put_data_here->m_verts[vertex_count];
+         this_vert.position.x = x;
+         this_vert.position.y = 0.0f;
+         this_vert.position.z = z;
+
+         this_vert.color = random_color();
+         this_vert.normal = vec3(+0.0f, +1.0f, +0.0f);
+
+         //calculate the tangential vector 
+         //remember, the radial vector is (x, y) 
+         //to get the tangential vector we flip those coordinates and negate one of them 
+
+         float tx = (-z) * tangetial_factor;
+         float tz = (x)* tangetial_factor;
+
+         //add the tangential vector 
+         x += tx;
+         z += tz;
+
+         //correct using the radial factor 
+         x *= radial_factor;
+         z *= radial_factor;
+      }
+
+      uint index_count = num_arc_segments * 2;
+      put_data_here->m_num_total_indices = index_count;
+      put_data_here->m_indices = new GLushort[index_count];
+      int index_counter = 0;
+      for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
+      {
+         if (segment_count == (num_arc_segments - 1))
+         {
+            // last vertex, then loop back to first one
+            put_data_here->m_indices[index_counter++] = segment_count;
+            put_data_here->m_indices[index_counter++] = 0;
+         }
+         else
+         {
+            // ex: segment 0 is vertices 0 and 1; segment 1 is vertices 1 and 2; segment 2 is vertices 2 and 3, etc.
+            put_data_here->m_indices[index_counter++] = segment_count;
+            put_data_here->m_indices[index_counter++] = segment_count + 1;
+         }
+      }
+
+      Index_Meta_Data i_meta_data(GL_LINE_STRIP, index_count);
+      put_data_here->m_index_meta_data.push_back(i_meta_data);
+}
 
 namespace Shapes
 {
@@ -196,8 +280,10 @@ namespace Shapes
          // The top and bottom vertices will be calculated as a Triangle Fan.
          // The cylinder will be calculated as a Triangle Strip.
          // The top and bottom will have 1 vertex for each arc segment + 1 for the center.  The indices will close the loops.
+         // The body will be composed of a bunch of circles, so 1 vertex for each vertical segment.  The indices will close the loops.
          uint num_verts_on_one_cap = num_arc_segments + 1;
-         uint num_verts = num_verts_on_one_cap * 2;
+         uint num_verts_on_body = num_vertical_segments * num_arc_segments;
+         uint num_verts = (num_verts_on_one_cap * 2) + num_verts_on_body;
          put_data_here->m_num_verts = num_verts;
          put_data_here->m_verts = new My_Vertex[num_verts];
 
@@ -251,7 +337,7 @@ namespace Shapes
          float x = radius;//we start at angle = 0
          float z = 0;
 
-         // center of cylinder caps
+         // center of cylinder caps (pattern does not match the rest of the arc segments, so just hard code them)
          {
             // top
             My_Vertex& this_vert = put_data_here->m_verts[0];
@@ -271,27 +357,28 @@ namespace Shapes
             vert_arr[num_verts_on_one_cap] = this_vert;
          }
 
-         for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
+         // the rest of the cylinder caps
+         for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
          {
             // cylinder top
             {
                // add 1 because the center vertex was already added
-               My_Vertex& this_vert = put_data_here->m_verts[1 + segment_count];
+               My_Vertex& this_vert = put_data_here->m_verts[1 + arc_segment_count];
                this_vert.position = glm::vec3(x, z, half_height);
                this_vert.color = random_color();
                this_vert.normal = glm::vec3(0.0f, +1.0f, 0.0f);
 
-               vert_arr[1 + segment_count] = this_vert;
+               vert_arr[1 + arc_segment_count] = this_vert;
             }
 
             // cylinder bottom
             {
-               My_Vertex& this_vert = put_data_here->m_verts[1 + segment_count + num_verts_on_one_cap];
+               My_Vertex& this_vert = put_data_here->m_verts[1 + arc_segment_count + num_verts_on_one_cap];
                this_vert.position = glm::vec3(x, z, -half_height);
                this_vert.color = random_color();
                this_vert.normal = glm::vec3(0.0f, -1.0f, 0.0f);
 
-               vert_arr[1 + segment_count + num_verts_on_one_cap] = this_vert;
+               vert_arr[1 + arc_segment_count + num_verts_on_one_cap] = this_vert;
             }
 
             //calculate the tangential vector 
@@ -310,7 +397,16 @@ namespace Shapes
             z *= radial_factor;
          }
 
+         // the cylinder body
+         // Note: Start at the top cylinder cap and work towards the bottom.
+         uint starting_vert_index = num_verts_on_one_cap * 2;
+         for (uint vertical_segment_count = 0; vertical_segment_count < num_vertical_segments; vertical_segment_count++)
+         {
+            for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
+            {
 
+            }
+         }
 
 
          // each triangle fan will use one index for each vertex + 1 more to close it
@@ -352,14 +448,14 @@ namespace Shapes
          }
 
          
-         for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
+         for (int arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
          {
             // top
             {
                // add 1 because the index for the center vert was already specified
-               index_arr[index_counter_top] = 1 + segment_count;
-               indices_ptr[index_counter_top++] = 1 + segment_count;
-               if (segment_count == (num_arc_segments - 1))
+               index_arr[index_counter_top] = 1 + arc_segment_count;
+               indices_ptr[index_counter_top++] = 1 + arc_segment_count;
+               if (arc_segment_count == (num_arc_segments - 1))
                {
                   // last vertex, so loop back to first one AFTER the cap center
                   index_arr[index_counter_top] = 1;
@@ -370,9 +466,9 @@ namespace Shapes
             // bottom
             {
                // specify the next vertex in the bottom fan
-               index_arr[index_counter_bottom] = 1 + segment_count + num_verts_on_one_cap;
-               indices_ptr[index_counter_bottom++] = 1 + segment_count + num_verts_on_one_cap;
-               if (segment_count == (num_arc_segments - 1))
+               index_arr[index_counter_bottom] = 1 + arc_segment_count + num_verts_on_one_cap;
+               indices_ptr[index_counter_bottom++] = 1 + arc_segment_count + num_verts_on_one_cap;
+               if (arc_segment_count == (num_arc_segments - 1))
                {
                   // last vertex, so loop back to first one AFTER the cap center
                   index_arr[index_counter_bottom] = num_verts_on_one_cap + 1;
