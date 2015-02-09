@@ -196,7 +196,7 @@ namespace Shapes
          put_data_here->m_num_total_indices = index_count;
          put_data_here->m_indices = new GLushort[index_count];
          int index_counter = 0;
-         for (int segment_count = 0; segment_count < num_arc_segments; segment_count++)
+         for (uint segment_count = 0; segment_count < num_arc_segments; segment_count++)
          {
             if (segment_count == (num_arc_segments - 1))
             {
@@ -221,181 +221,181 @@ namespace Shapes
          // allocate space for the total number of vertices required
          // Note: The top and bottom of the cylinder will use the same calculation.  
          // The top and bottom vertices will be calculated as a Triangle Fan.
-         // The cylinder will be calculated as a Triangle Strip.
          // The top and bottom will have 1 vertex for each arc segment + 1 for the center.  The indices will close the loops.
-         // The body will be composed of a bunch of circles, so 1 vertex for each vertical segment.  The indices will close the loops.
+         // The cylinder body will be calculated as a Triangle Strip.
+         // The cylinder body will be composed of a bunch of circles, so 1 vertex for each circle segment.  The indices will close the loops.
+         // The cylinder body will have 1 circle for each vertical segment, then 1 more.  Two are needed for 1 vertical segment, 3 for 2, etc.
+         // Note: If 0 vertical arc segments or or 0 vertical segments are specified, then the cylinder will simply not generate any vertices.
          uint num_verts_on_one_cap = num_arc_segments + 1;
-         uint num_verts_on_body = num_vertical_segments * num_arc_segments;
+         uint num_verts_on_body = (num_vertical_segments + 1) * num_arc_segments;
          uint num_verts = (num_verts_on_one_cap * 2) + num_verts_on_body;
          put_data_here->m_num_verts = num_verts;
          put_data_here->m_verts = new My_Vertex[num_verts];
 
-         My_Vertex vert_arr[14];
-         memset(vert_arr, 0, 14 * sizeof(My_Vertex));
+         My_Vertex vert_arr[64];
+         memset(vert_arr, 0, 64 * sizeof(My_Vertex));
 
+         //// top row
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[0];
-         //   this_vert.position = glm::vec3(0.0f, 0.0f, 0.0f);
+         //   this_vert.position = glm::vec3(-2.0f, +1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[1];
-         //   this_vert.position = glm::vec3(1.0f, 0.0f, 0.0f);
+         //   this_vert.position = glm::vec3(-1.0f, +1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[2];
-         //   this_vert.position = glm::vec3(0.5f, 0.0f, 0.866f);
+         //   this_vert.position = glm::vec3(0.0f, +1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[3];
-         //   this_vert.position = glm::vec3(-0.5f, 0.0f, 0.866f);
+         //   this_vert.position = glm::vec3(+1.0f, +1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[4];
-         //   this_vert.position = glm::vec3(-1.0f, 0.0f, 0.0f);
+         //   this_vert.position = glm::vec3(+2.0f, +1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
+
+         //// bottom row
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[5];
-         //   this_vert.position = glm::vec3(-0.5f, 0.0f, -0.866f);
+         //   this_vert.position = glm::vec3(-2.0f, -1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
          //{
          //   My_Vertex& this_vert = put_data_here->m_verts[6];
-         //   this_vert.position = glm::vec3(0.5f, 0.0f, -0.866f);
+         //   this_vert.position = glm::vec3(-1.0f, -1.0f, 0.0f);
+         //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+         //}
+         //{
+         //   My_Vertex& this_vert = put_data_here->m_verts[7];
+         //   this_vert.position = glm::vec3(0.0f, -1.0f, 0.0f);
+         //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+         //}
+         //{
+         //   My_Vertex& this_vert = put_data_here->m_verts[8];
+         //   this_vert.position = glm::vec3(+1.0f, -1.0f, 0.0f);
+         //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
+         //}
+         //{
+         //   My_Vertex& this_vert = put_data_here->m_verts[9];
+         //   this_vert.position = glm::vec3(+2.0f, -1.0f, 0.0f);
          //   this_vert.normal = glm::vec3(0.0f, 1.0f, 0.0f);
          //}
 
 
-         // cylinder caps
-         float half_height = height * 0.5f;
-         {
-            // top
-            My_Vertex& this_vert = put_data_here->m_verts[0];
-            this_vert.position = glm::vec3(0.0f, half_height, 0.0f);
-            //this_vert.position = glm::vec3(0.0f, -half_height, 0.0f);
-            this_vert.color = random_color();
-            this_vert.normal = glm::vec3(0.0f, +1.0f, 0.0f);
-
-            vert_arr[0] = this_vert;
-
-            // remember that one vector is generated for each arc segment
-            My_Vertex *circle_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, half_height);
-            for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
-            {
-               // the normals on the top point up, so override the default normal
-               circle_verts_ptr[arc_segment_count].normal = glm::vec3(0.0f, 1.0f, 0.0f);
-
-               // copy the data into the memory that's leaving this function
-               // Note: Add 1 because the center vertex has already been added
-               put_data_here->m_verts[1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
-
-               vert_arr[1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
-            }
-
-            // free the temporary memory
-            free(circle_verts_ptr);
-         }
-         {
-            // bottom
-            My_Vertex& this_vert = put_data_here->m_verts[num_verts_on_one_cap];
-            this_vert.position = glm::vec3(0.0f, -half_height, 0.0f);
-            //this_vert.position = glm::vec3(0.0f, half_height, 0.0f);
-            this_vert.color = random_color();
-            this_vert.normal = glm::vec3(0.0f, -1.0f, 0.0f);
-
-            vert_arr[num_verts_on_one_cap] = this_vert;
-
-            // remember that one vector is generated for each arc segment
-            My_Vertex *circle_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, -half_height);
-            for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
-            {
-               // the normals on the bottom point down, so override the default normal
-               circle_verts_ptr[arc_segment_count].normal = glm::vec3(0.0f, -1.0f, 0.0f);
-
-               // copy the data into the memory that's leaving this function
-               // Note: Add 1 because the center vertex has already been added
-               put_data_here->m_verts[num_verts_on_one_cap + 1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
-
-               vert_arr[num_verts_on_one_cap + 1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
-            }
-
-            // free the temporary memory
-            free(circle_verts_ptr);
-         }
-
-
-
-
-         //// pre-calculations
-         //// Note: I don't fully understand how this algorithm works, but I'll accept
-         //// that it does.
-         //float theta = 2 * 3.1415926f / float(num_arc_segments);
-         //float tangetial_factor = tanf(theta);
-         //float radial_factor = cosf(theta);
-         //float x = radius;//we start at angle = 0
-         //float z = 0;
-
-
-
-         //// the rest of the cylinder caps
-         //for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
+         //// cylinder caps
+         //float half_height = height * 0.5f;
          //{
-         //   // cylinder top
-         //   {
-         //      // add 1 because the center vertex was already added
-         //      My_Vertex& this_vert = put_data_here->m_verts[1 + arc_segment_count];
-         //      this_vert.position = glm::vec3(x, z, half_height);
-         //      this_vert.color = random_color();
-         //      this_vert.normal = glm::vec3(0.0f, +1.0f, 0.0f);
+         //   // top
+         //   My_Vertex& this_vert = put_data_here->m_verts[0];
+         //   this_vert.position = glm::vec3(0.0f, half_height, 0.0f);
+         //   //this_vert.position = glm::vec3(0.0f, -half_height, 0.0f);
+         //   this_vert.color = random_color();
+         //   this_vert.normal = glm::vec3(0.0f, +1.0f, 0.0f);
 
-         //      vert_arr[1 + arc_segment_count] = this_vert;
-         //   }
+         //   vert_arr[0] = this_vert;
 
-         //   // cylinder bottom
-         //   {
-         //      My_Vertex& this_vert = put_data_here->m_verts[1 + arc_segment_count + num_verts_on_one_cap];
-         //      this_vert.position = glm::vec3(x, z, -half_height);
-         //      this_vert.color = random_color();
-         //      this_vert.normal = glm::vec3(0.0f, -1.0f, 0.0f);
-
-         //      vert_arr[1 + arc_segment_count + num_verts_on_one_cap] = this_vert;
-         //   }
-
-         //   //calculate the tangential vector 
-         //   //remember, the radial vector is (x, y) 
-         //   //to get the tangential vector we flip those coordinates and negate one of them 
-
-         //   float tx = (-z) * tangetial_factor;
-         //   float tz = (x)* tangetial_factor;
-
-         //   //add the tangential vector 
-         //   x += tx;
-         //   z += tz;
-
-         //   //correct using the radial factor 
-         //   x *= radial_factor;
-         //   z *= radial_factor;
-         //}
-
-         //// the cylinder body
-         //// Note: Start at the top cylinder cap and work towards the bottom.
-         //uint starting_vert_index = num_verts_on_one_cap * 2;
-         //for (uint vertical_segment_count = 0; vertical_segment_count < num_vertical_segments; vertical_segment_count++)
-         //{
+         //   // remember that one vector is generated for each arc segment
+         //   My_Vertex *circle_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, half_height);
          //   for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
          //   {
+         //      // the normals on the top point up, so override the default normal
+         //      circle_verts_ptr[arc_segment_count].normal = glm::vec3(0.0f, 1.0f, 0.0f);
 
+         //      // copy the modified vertex into the memory that's leaving this function
+         //      // Note: Add 1 because the center vertex has already been added
+         //      put_data_here->m_verts[1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
+
+         //      vert_arr[1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
          //   }
+
+         //   // free the temporary memory
+         //   free(circle_verts_ptr);
+         //}
+         //{
+         //   // bottom
+         //   My_Vertex& this_vert = put_data_here->m_verts[num_verts_on_one_cap];
+         //   this_vert.position = glm::vec3(0.0f, -half_height, 0.0f);
+         //   this_vert.color = random_color();
+         //   this_vert.normal = glm::vec3(0.0f, -1.0f, 0.0f);
+
+         //   vert_arr[num_verts_on_one_cap] = this_vert;
+
+         //   // remember that one vector is generated for each arc segment
+         //   My_Vertex *circle_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, -half_height);
+         //   for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
+         //   {
+         //      // the normals on the bottom point down, so override the default normal
+         //      circle_verts_ptr[arc_segment_count].normal = glm::vec3(0.0f, -1.0f, 0.0f);
+
+         //      // copy the modified vertex into the memory that's leaving this function
+         //      // Note: Add 1 because the center vertex has already been added
+         //      put_data_here->m_verts[num_verts_on_one_cap + 1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
+
+         //      vert_arr[num_verts_on_one_cap + 1 + arc_segment_count] = circle_verts_ptr[arc_segment_count];
+         //   }
+
+         //   // free the temporary memory
+         //   free(circle_verts_ptr);
          //}
 
+         // for convenience so that the multiplication is not repeated
+         // Note: This variable is used as an offset in the creation of both the body's 
+         // vertices and the indices.
+         uint num_vertices_on_both_caps = (num_verts_on_one_cap * 2);
+
+         // cylinder body
+         // Note: If there is 1 vertical segment, then two circles will be created.
+         // If there are 2 vertical segments, then three circles will be created.
+         // If someone tries to be funny and specifies 0 vertical segments, then 
+         // 0 circles will be created and there will be no cylinder body.
+         float vertical_segment_height = height / num_vertical_segments;
+         for (uint vertical_segment_counter = 0; vertical_segment_counter < (num_vertical_segments + 1); vertical_segment_counter++)
+         {
+            if (0 == num_vertical_segments)
+            {
+               // someone is being silly
+               break;
+            }
+
+            // construct it from the ground (height = 0) up
+            //My_Vertex *vertical_segment_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, height - (vertical_segment_height * vertical_segment_counter));
+            My_Vertex *vertical_segment_verts_ptr = helper_generate_horizontal_circle(num_arc_segments, radius, (vertical_segment_height * vertical_segment_counter));
+
+            // copy the data into memory
+            // Note: Remember that there is one vertex for each arc segment in a circle.
+            // Note: Remember that both the top and bottom caps already copied their vertices.
+            // Note: Remember your pointer arithmetic!
+            // char *c_ptr vs uint32 *x_ptr
+            // - c_ptr + 2 will add 2 bytes
+            // - x_ptr + 2 will add 8 bytes (4 bytes per uint32)
+            uint bytes_to_copy = num_arc_segments * sizeof(My_Vertex);
+
+            My_Vertex *dest_ptr = put_data_here->m_verts + num_vertices_on_both_caps + (num_arc_segments * vertical_segment_counter);
+            memcpy(dest_ptr, vertical_segment_verts_ptr, bytes_to_copy);
+
+            // free the memory created by the helper function
+            free(vertical_segment_verts_ptr);
+         }
 
          // each triangle fan will use one index for each vertex + 1 more to close it
          uint indices_on_one_cap = num_verts_on_one_cap + 1;
-         uint index_count = indices_on_one_cap * 2;
+
+         // the body will be composed of a triangle strips
+         // Note: Every vertical segemnt is composed of two connected circles (requires one index
+         // per segment, similar to a triangle fan or a line strip), plus two triangles to close 
+         // the loop (read, "plus 2 more indices between the upp and lower circles").
+         uint indices_on_body = (num_vertical_segments * num_arc_segments + num_vertical_segments) * 2;
+
+         // calculate the total resources required for all indices
+         uint index_count = (indices_on_one_cap * 2) + indices_on_body;
          put_data_here->m_num_total_indices = index_count;
          put_data_here->m_indices = new GLushort[index_count];
          GLushort index_arr[32];
@@ -404,90 +404,114 @@ namespace Shapes
          // for convenience
          GLushort *indices_ptr = put_data_here->m_indices;
 
-         ////indices_ptr[0] = 0;
-         //////indices_ptr[1] = 1;
-         ////indices_ptr[1] = 5;
-         ////indices_ptr[2] = 4;
-         ////indices_ptr[3] = 3;
-         ////indices_ptr[4] = 2;
-         ////indices_ptr[5] = 1;
-         ////indices_ptr[6] = 6;
+         uint body_index_counter = 0;
+
+         // this loop is also immune to the "0 vertical segments" attempt
+         // Note: Each vertical segment is built by connecting the vertices on one circle 
+         // to the circle below it.  I can therefore have a loop condition that is dependent
+         // upon the number of vertical segments only (unlike the circle creation loop).
+         for (uint body_circle_counter = 0; body_circle_counter < num_vertical_segments; body_circle_counter++)
+         {
+            // in pairs of top circle followed by bottom circle
+            for (uint arc_segment_counter = 0; arc_segment_counter < num_arc_segments; arc_segment_counter++)
+            {
+               // connect the upper circle to the lower one
+               // Note: Remember to keep in mind culling because these circles are created in the X-Z plane.
+               // Construction is from the ground up, so the first circle will be at height = 0, and the next
+               // circle will be above it.
+               index_arr[body_index_counter + 0] = num_vertices_on_both_caps + (body_circle_counter * num_arc_segments) + arc_segment_counter;
+               index_arr[body_index_counter + 1] = num_vertices_on_both_caps + ((body_circle_counter + 1) * num_arc_segments) + arc_segment_counter;
+
+               indices_ptr[body_index_counter++] = num_vertices_on_both_caps + (body_circle_counter * num_arc_segments) + arc_segment_counter;
+               indices_ptr[body_index_counter++] = num_vertices_on_both_caps + ((body_circle_counter + 1) * num_arc_segments) + arc_segment_counter;
+
+               // at the last arc segment, reconnect it to the first segment 
+               // through the first vertex in the upper circle
+               if (arc_segment_counter == num_arc_segments - 1)
+               {
+                  index_arr[body_index_counter + 0] = num_vertices_on_both_caps + (body_circle_counter * num_arc_segments);
+                  index_arr[body_index_counter + 1] = num_vertices_on_both_caps + ((body_circle_counter + 1) * num_arc_segments);
+
+                  indices_ptr[body_index_counter++] = num_vertices_on_both_caps + (body_circle_counter * num_arc_segments);
+                  indices_ptr[body_index_counter++] = num_vertices_on_both_caps + ((body_circle_counter + 1) * num_arc_segments);
+               }
+            }
+         }
+
          //indices_ptr[0] = 0;
-         //indices_ptr[1] = 1;
-         //indices_ptr[2] = 2;
-         //indices_ptr[3] = 3;
-         //indices_ptr[4] = 4;
-         //indices_ptr[5] = 5;
-         //indices_ptr[6] = 6;
-         //indices_ptr[7] = 1;
-         //Index_Meta_Data top_i_meta_data(GL_TRIANGLE_FAN, 8);
-         //put_data_here->m_index_meta_data.push_back(top_i_meta_data);
-
-
-         int index_counter_top = 0;
-         int index_counter_bottom = indices_on_one_cap;
-
-         // cap centers
-         {
-            // top
-            index_arr[index_counter_top] = 0;
-            indices_ptr[index_counter_top++] = 0;
-         }
-         {
-            // bottom
-            index_arr[index_counter_bottom] = num_verts_on_one_cap;
-            indices_ptr[index_counter_bottom++] = num_verts_on_one_cap;
-         }
-
-         // Note: Remember that the circle is created CCW on a plane in which one positive axis 
-         // is to the right and the other is upwards.  Lay this plane down on whatever 
-         // horizontal plane that you need to and then figure out your index ordering from there.
-         for (int arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
-         {
-            // top vertices need to be ordered CCW when seen from positive Y to avoid culling
-            // Note: The circle is created in the X-Z plane, so when viewed from above, vertex
-            // creation order would naturally be CW.  I therefore need to reverse the vertex 
-            // creation order for the top cap.
-            {
-               // add 1 because the index for the center vert was already specified
-               //index_arr[index_counter_top] = 1 + arc_segment_count;
-               index_arr[index_counter_top] = num_verts_on_one_cap - 1 - arc_segment_count;
-               //indices_ptr[index_counter_top++] = 1 + arc_segment_count;
-               indices_ptr[index_counter_top++] = num_verts_on_one_cap - 1 - arc_segment_count;
-               if (arc_segment_count == (num_arc_segments - 1))
-               {
-                  // last vertex, so loop back to first one AFTER the cap center
-                  //index_arr[index_counter_top] = 1;
-                  index_arr[index_counter_top] = num_verts_on_one_cap - 1;
-                  //indices_ptr[index_counter_top++] = 1;
-                  indices_ptr[index_counter_top++] = num_verts_on_one_cap - 1;
-               }
-            }
-
-            // bottom vertices need to be ordered CCW when seen from negative Y 
-            // (alternatively, CW from positive Y) to avoid culling
-            {
-               // specify the next vertex in the bottom fan
-               index_arr[index_counter_bottom] = 1 + arc_segment_count + num_verts_on_one_cap;
-               indices_ptr[index_counter_bottom++] = 1 + arc_segment_count + num_verts_on_one_cap;
-               if (arc_segment_count == (num_arc_segments - 1))
-               {
-                  // last vertex, so loop back to first one AFTER the cap center
-                  index_arr[index_counter_bottom] = num_verts_on_one_cap + 1;
-                  indices_ptr[index_counter_bottom++] = num_verts_on_one_cap + 1;
-               }
-            }
-         }
-
-         // create the index meta data and add it to the shape data
-         
-         // top
-         Index_Meta_Data top_i_meta_data(GL_TRIANGLE_FAN, indices_on_one_cap);
+         //indices_ptr[1] = num_arc_segments;
+         //indices_ptr[2] = 1;
+         //indices_ptr[3] = num_arc_segments + 1;
+         //indices_ptr[4] = 2;
+         //indices_ptr[5] = num_arc_segments + 2;
+         //indices_ptr[6] = 3;
+         //indices_ptr[7] = num_arc_segments + 3;
+         //indices_ptr[8] = 4;
+         //indices_ptr[9] = num_arc_segments + 4;
+         Index_Meta_Data top_i_meta_data(GL_TRIANGLE_STRIP, body_index_counter);
          put_data_here->m_index_meta_data.push_back(top_i_meta_data);
+
+
+         //int index_counter_top = 0;
+         //int index_counter_bottom = indices_on_one_cap;
+
+         //// cap centers
+         //{
+         //   // top
+         //   index_arr[index_counter_top] = 0;
+         //   indices_ptr[index_counter_top++] = 0;
+         //}
+         //{
+         //   // bottom
+         //   index_arr[index_counter_bottom] = num_verts_on_one_cap;
+         //   indices_ptr[index_counter_bottom++] = num_verts_on_one_cap;
+         //}
+
+         //// Note: Remember that the circle is created CCW on a plane in which one positive axis 
+         //// is to the right and the other is upwards.  Lay this plane down on whatever 
+         //// horizontal plane that you need to and then figure out your index ordering from there.
+         //for (uint arc_segment_count = 0; arc_segment_count < num_arc_segments; arc_segment_count++)
+         //{
+         //   // top vertices need to be ordered CCW when seen from positive Y to avoid culling
+         //   // Note: The circle is created in the X-Z plane, so when viewed from above, vertex
+         //   // creation order would naturally be CW.  I therefore need to reverse the vertex 
+         //   // creation order for the top cap.
+         //   {
+         //      // add 1 because the index for the center vert was already specified
+         //      index_arr[index_counter_top] = num_verts_on_one_cap - 1 - arc_segment_count;
+         //      indices_ptr[index_counter_top++] = num_verts_on_one_cap - 1 - arc_segment_count;
+         //      if (arc_segment_count == (num_arc_segments - 1))
+         //      {
+         //         // last vertex, so loop back to first one AFTER the cap center
+         //         index_arr[index_counter_top] = num_verts_on_one_cap - 1;
+         //         indices_ptr[index_counter_top++] = num_verts_on_one_cap - 1;
+         //      }
+         //   }
+
+         //   // bottom vertices need to be ordered CCW when seen from negative Y 
+         //   // (alternatively, CW from positive Y) to avoid culling
+         //   {
+         //      // specify the next vertex in the bottom fan
+         //      index_arr[index_counter_bottom] = 1 + arc_segment_count + num_verts_on_one_cap;
+         //      indices_ptr[index_counter_bottom++] = 1 + arc_segment_count + num_verts_on_one_cap;
+         //      if (arc_segment_count == (num_arc_segments - 1))
+         //      {
+         //         // last vertex, so loop back to first one AFTER the cap center
+         //         index_arr[index_counter_bottom] = num_verts_on_one_cap + 1;
+         //         indices_ptr[index_counter_bottom++] = num_verts_on_one_cap + 1;
+         //      }
+         //   }
+         //}
+
+         //// create the index meta data and add it to the shape data
          
-         // bottom
-         Index_Meta_Data bottom_i_meta_data(GL_TRIANGLE_FAN, indices_on_one_cap);
-         put_data_here->m_index_meta_data.push_back(bottom_i_meta_data);
+         //// top
+         //Index_Meta_Data top_i_meta_data(GL_TRIANGLE_FAN, indices_on_one_cap);
+         //put_data_here->m_index_meta_data.push_back(top_i_meta_data);
+         //
+         //// bottom
+         //Index_Meta_Data bottom_i_meta_data(GL_TRIANGLE_FAN, indices_on_one_cap);
+         //put_data_here->m_index_meta_data.push_back(bottom_i_meta_data);
       }
 
       void Shape_Generator::generate_arcysynthesis_cylinder(Shape_Data *put_data_here)
