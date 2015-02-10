@@ -35,6 +35,7 @@ namespace Shapes
          static void load_box(Geometry *put_geometry_here, const float width = 1.0f, const float length = 1.0f);
 
          static void load_cylinder(Geometry *put_geometry_here);
+         static void load_sphere(Geometry *put_geometry_here);
          static void load_arcsynthesis_xml_file(Geometry *put_geometry_here, const std::string &file_path);
 
 

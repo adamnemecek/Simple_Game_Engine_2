@@ -212,6 +212,9 @@
     <ClInclude Include="Shapes\Index_Meta_Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\My_Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Entities\overview_of_entity_use.txt" />

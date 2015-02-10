@@ -150,7 +150,7 @@ void init()
       throw;
    }
 
-   Geometry_Loader::load_cylinder(&g_arcsynthesis_cube_geometry);
+   Geometry_Loader::load_sphere(&g_arcsynthesis_cube_geometry);
 
 
 

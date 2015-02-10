@@ -43,6 +43,7 @@ namespace Shapes
          static void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
 
          static void generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Shape_Data *put_data_here);
+         static void generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Shape_Data *put_data_here);
 
          static void generate_arcysynthesis_cylinder(Shape_Data *put_data_here);
 
