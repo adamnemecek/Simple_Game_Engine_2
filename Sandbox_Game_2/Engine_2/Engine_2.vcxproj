@@ -132,7 +132,7 @@
     <ClInclude Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />
-    <ClInclude Include="Shapes\Geometry_Meta_Data.h" />
+    <ClInclude Include="Shapes\Shape_Meta_Data.h" />
     <ClInclude Include="Shapes\Index_Meta_Data.h" />
     <ClInclude Include="Shapes\My_Vertex.h" />
     <ClInclude Include="Shapes\Shape_Data.h" />

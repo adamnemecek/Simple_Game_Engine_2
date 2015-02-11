@@ -4,7 +4,7 @@
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
 #include <Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h>
 #include <Shapes\Shape_Data.h>
-#include <Shapes\Geometry_Meta_Data.h>
+#include <Shapes\Shape_Meta_Data.h>
 
 #include <glm\vec3.hpp>
 #include <glm\gtc\type_ptr.hpp> // to make buffer data passing easier
@@ -79,7 +79,7 @@ namespace Shapes
             double sum_z = 0.0;
 
             // declarations to make dereferencing easier
-            Geometry_Meta_Data &meta_data_ref = geo->m_meta_data;
+            Shape_Meta_Data &meta_data_ref = geo->m_meta_data;
             Shape_Data &shape_data_ref = geo->m_shape_data;
 
             // go through the geometry data and analyze it
@@ -108,15 +108,17 @@ namespace Shapes
             // of the double, THEN jam the result into the vec3's float
             // Note: This approach should result in minimal precision loss because the float 
             // cast happens after the high-precision sum and division operations.
-            meta_data_ref.m_center_of_geometry.x = sum_x * inverse_num_verts;
-            meta_data_ref.m_center_of_geometry.y = sum_y * inverse_num_verts;
-            meta_data_ref.m_center_of_geometry.z = sum_z * inverse_num_verts;
+            meta_data_ref.m_center_of_vertices.x = sum_x * inverse_num_verts;
+            meta_data_ref.m_center_of_vertices.y = sum_y * inverse_num_verts;
+            meta_data_ref.m_center_of_vertices.z = sum_z * inverse_num_verts;
       }
 
       void Geometry_Loader::load_cube(Geometry *put_geometry_here)
       {
-         Shape_Generator::generate_cube(&(put_geometry_here->m_shape_data));
-         //put_geometry_here->m_render_mode = GL_TRIANGLES;
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+         Shape_Generator::generate_cube(shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("cube");
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -124,8 +126,11 @@ namespace Shapes
 
       void Geometry_Loader::load_plane(Geometry *put_geometry_here, const uint num_unit_segments_on_a_side)
       {
-         Shape_Generator::generate_plane(num_unit_segments_on_a_side, &(put_geometry_here->m_shape_data));
-         //put_geometry_here->m_render_mode = GL_TRIANGLES;
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+         Shape_Generator::generate_plane(num_unit_segments_on_a_side, shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("plane");
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_unit_segments_on_a_side));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -133,8 +138,10 @@ namespace Shapes
 
       void Geometry_Loader::load_triangle(Geometry *put_geometry_here)
       {
-         Shape_Generator::generate_triangle(&(put_geometry_here->m_shape_data));
-         //put_geometry_here->m_render_mode = GL_TRIANGLES;
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+         Shape_Generator::generate_triangle(shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("triangle");
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -142,8 +149,12 @@ namespace Shapes
 
       void Geometry_Loader::load_circle(Geometry *put_geometry_here, const uint num_arc_segments, const float radius)
       {
-         Shape_Generator::generate_circle(num_arc_segments, radius, &(put_geometry_here->m_shape_data));
-         //put_geometry_here->m_render_mode = GL_LINE_STRIP;
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+         Shape_Generator::generate_circle(num_arc_segments, radius, shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("circle");
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_arc_segments));
+         shape_data_ptr->m_parameters.push_back(std::to_string(radius));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -151,26 +162,45 @@ namespace Shapes
 
       void Geometry_Loader::load_box(Geometry *put_geometry_here, const float width, const float length)
       {
-         Shape_Generator::generate_box(width, length, &(put_geometry_here->m_shape_data));
-         //put_geometry_here->m_render_mode = GL_LINE_STRIP;
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+         Shape_Generator::generate_box(width, length, shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("box");
+         shape_data_ptr->m_parameters.push_back(std::to_string(width));
+         shape_data_ptr->m_parameters.push_back(std::to_string(length));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
       }
 
-      void Geometry_Loader::load_cylinder(Geometry *put_geometry_here)
+      void Geometry_Loader::load_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Geometry *put_geometry_here)
       {
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+
          // be nice to it and don't specify 0 anywhere
-         Shape_Generator::generate_cylinder(12, 1.5f, 3, 3, &(put_geometry_here->m_shape_data));
+         Shape_Generator::generate_cylinder(num_arc_segments, radius, num_vertical_segments, height, shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("cylinder");
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_arc_segments));
+         shape_data_ptr->m_parameters.push_back(std::to_string(radius));
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_vertical_segments));
+         shape_data_ptr->m_parameters.push_back(std::to_string(height));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
       }
 
-      void Geometry_Loader::load_sphere(Geometry *put_geometry_here)
+      void Geometry_Loader::load_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Geometry *put_geometry_here)
       {
+         Shape_Data *shape_data_ptr = &(put_geometry_here->m_shape_data);
+
          // be nice to it and don't specify 0 anywhere
-         Shape_Generator::generate_sphere(12, 1.5f, 12, &(put_geometry_here->m_shape_data));
+         Shape_Generator::generate_sphere(num_arc_segments, radius, num_vertical_segments, shape_data_ptr);
+
+         shape_data_ptr->m_parameters.push_back("sphere");
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_arc_segments));
+         shape_data_ptr->m_parameters.push_back(std::to_string(radius));
+         shape_data_ptr->m_parameters.push_back(std::to_string(num_vertical_segments));
 
          initialize_attributes(put_geometry_here);
          calculate_geometry_meta_data(put_geometry_here);
@@ -178,9 +208,11 @@ namespace Shapes
 
       void Geometry_Loader::load_arcsynthesis_xml_file(Geometry *put_geometry_here, const std::string &file_path)
       {
-         Arcsynthesis_XML_Reader::load_from_xml_file(&(put_geometry_here->m_shape_data), file_path);
-         initialize_attributes(put_geometry_here);
-         calculate_geometry_meta_data(put_geometry_here);
+         // I don't want to bother with this file for now
+
+         //Arcsynthesis_XML_Reader::load_from_xml_file(&(put_geometry_here->m_shape_data), file_path);
+         //initialize_attributes(put_geometry_here);
+         //calculate_geometry_meta_data(put_geometry_here);
       }
    }
 }

@@ -41,10 +41,17 @@ namespace Shapes
          {
             return (m_num_total_indices * sizeof(*m_indices));
          }
-
+         
          return 0;
       }
       
+      // this is a collection of strings that will store the parameters that were 
+      // used to construct this shape
+      // Note: This is very useful during scene loading and saving so that two 
+      // shapes that use the same generator but different parameters (ex: spheres
+      // with different radii) can be saved and reconstructed later.
+      std::vector<std::string> m_parameters;
+
       // store a pointer to the vertex data 
       My_Vertex *m_verts;
       uint m_num_verts;

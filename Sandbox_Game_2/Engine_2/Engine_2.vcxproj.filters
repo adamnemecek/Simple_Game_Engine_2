@@ -203,9 +203,6 @@
     <ClInclude Include="Utilities\Quaternion_Helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shapes\Geometry_Meta_Data.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Collision_Detection\Collision_Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -222,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Scene_Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Shape_Meta_Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
