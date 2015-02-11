@@ -9,7 +9,7 @@
 namespace Shapes
 {
    class Geometry;
-   class Shape_Data;
+   struct Shape_Data;
 }
 
 namespace Shapes

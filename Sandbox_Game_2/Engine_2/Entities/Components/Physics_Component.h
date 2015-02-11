@@ -28,7 +28,7 @@ namespace Entities
       void add_mass(const float additional_mass);
 
       // removes mass from the entity
-      // Note: Will not allow the mass to drop below.
+      // Note: Will not allow the mass to drop below 0.
       void remove_mass(const float mass_to_go_bye_bye);
       
       // an immediate force vector will likely induce both linear and angular acceleration, so we need 

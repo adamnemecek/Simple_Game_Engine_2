@@ -14,7 +14,7 @@
 // forward declarations
 namespace Rendering
 {
-   class Renderer;
+   class Renderable;
 }
 
 namespace Entities
@@ -47,14 +47,19 @@ namespace Shapes
 
    private:
       // let everything else be private, but let a select few classes access the private data 
-      // Ex: Geometry_Loader needs to set the vertices, the bounding box needs to read the 
-      // meta data, and the Renderer needs to get at VAO and buffer IDs.
       // Note: In this design, these classes could set things, but be nice to the program 
       // and don't exploit this permission loophole.
+
+      // The AABB needs access to the geometry's meta data, which includes min/max values 
+      // on all axes
       friend class Entities::AABB_Component;
-      friend class Entities::Physics_Component;
+
+      // The geometry loader needs access to fill out these private fields
       friend class Geometry_Creation::Geometry_Loader;
-      friend class Rendering::Renderer;
+
+      // the Renderable needs access to these to selectively hand them off to the Renderer 
+      // for VAO binding and index collections and draw commands
+      friend class Rendering::Renderable;
 
       // these will be cleaned up by the destructor
       GLuint m_VAO_ID;

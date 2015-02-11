@@ -1,5 +1,5 @@
-#ifndef ENGINE_RENDERABLE_H
-#define ENGINE_RENDERABLE_H
+#ifndef ENGINE_RENDERER_H
+#define ENGINE_RENDERER_H
 
 #include <glm\mat4x4.hpp>
 #include <glm\vec3.hpp>
@@ -11,9 +11,14 @@
 // the renderer stores arrays of both of these, so we can't forward declare them
 #include <Rendering\Renderable.h>
 
+// forward declarations
 namespace Shapes
 {
    class Geometry;
+}
+namespace Entities
+{
+   class Entity;
 }
 
 namespace Rendering
@@ -30,8 +35,12 @@ namespace Rendering
       bool bind_shader_program(GLuint program_ID);
       bool unbind_current_shader_program();
 
-      // returns a pointer to a renderable (??why??)
-      Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
+      // fill out an unassigned renderable in the Renderer's collection of renderables
+      // with the geometry that it is referencing, which includes information on the 
+      // vertex array object binding, and the entity that it is for, which is how the
+      // renderable gets the entity-specific model-to-world matrix
+      //Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
+      void configure_new_renderable(const Shapes::Geometry *g_ptr, const Entities::Entity *e_ptr);
 
       void set_viewport(GLsizei width, GLsizei height);
       void set_camera_to_render(Camera *camera_ptr);

@@ -97,14 +97,13 @@ namespace Rendering
       return false;
    }
 
-   Renderable *Renderer::add_renderable(Shapes::Geometry *geometry_ptr)
+   void Renderer::configure_new_renderable(const Shapes::Geometry *g_ptr, const Entities::Entity *e_ptr)
    {
       MY_ASSERT(m_num_current_renderables != m_MAX_RENDERABLES);
+      MY_ASSERT(0 != g_ptr && 0 != e_ptr);
       Renderable &r = m_renderables[m_num_current_renderables++];
-      r.m_geometry_ptr = geometry_ptr;
-      r.m_model_to_world_mat = glm::mat4(1.0f);
-
-      return &r;
+      r.set_geometry(g_ptr);
+      r.set_entity(e_ptr);
    }
 
    void Renderer::set_viewport(GLsizei width, GLsizei height)
@@ -161,9 +160,9 @@ namespace Rendering
       for (uint renderable_count = 0; renderable_count < m_num_current_renderables; renderable_count++)
       {
          Renderable &r = m_renderables[renderable_count];
-         glBindVertexArray((r.m_geometry_ptr)->m_VAO_ID);
+         glBindVertexArray(r.get_VAO_ID());
 
-         glm::mat4 model_to_camera = camera_mat * r.m_model_to_world_mat;
+         glm::mat4 model_to_camera = camera_mat * r.get_model_to_world_matrix();
 
          glUniformMatrix4fv(m_unif_loc_model_to_camera_matrix, 1, GL_FALSE, glm::value_ptr(model_to_camera));
          
@@ -177,11 +176,11 @@ namespace Rendering
          //   GL_UNSIGNED_SHORT, 0);
 
          // draw the indices according to their draw command
-         Shapes::Shape_Data &shape_data_ref = (r.m_geometry_ptr)->m_shape_data;
+         std::vector<Shapes::Index_Meta_Data> index_meta_data_collection_ref = r.get_geometry_index_meta_data_collection();
          uint indices_drawn_so_far = 0;
-         for (uint render_mode_index = 0; render_mode_index < shape_data_ref.m_index_meta_data.size(); render_mode_index++)
+         for (uint render_mode_index = 0; render_mode_index < index_meta_data_collection_ref.size(); render_mode_index++)
          {
-            const Index_Meta_Data &index_meta_data_ref = shape_data_ref.m_index_meta_data[render_mode_index];
+            const Shapes::Index_Meta_Data &index_meta_data_ref = index_meta_data_collection_ref[render_mode_index];
             if (8 == index_meta_data_ref.m_num_indices_this_mode)
             {
                indices_drawn_so_far = indices_drawn_so_far;

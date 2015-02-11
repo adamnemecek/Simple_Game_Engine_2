@@ -19,7 +19,6 @@ these function.
 
 #include <Engine_2\Entities\Entity.h>
 #include <Engine_2\Entities\Components\Controller_Component.h>
-#include <Engine_2\Entities\Components\Renderable_Updater_Component.h>
 #include <Engine_2\Entities\Components\Physics_Component.h>
 #include <Engine_2\Entities\Components\AABB_Component.h>
 #include <Engine_2\Collision_Detection\Collision_Handler.h>
@@ -55,38 +54,31 @@ Shapes::Geometry g_arcsynthesis_cube_geometry;
 
 Entities::Entity g_cube_1_entity;
 Rendering::Renderable *g_cube_1_renderable_ptr;
-Entities::Renderable_Updater_Component g_cube_1_renderable_updater_component;
 Entities::Physics_Component g_cube_1_physics;
 Entities::AABB_Component g_cube_1_bounding_box;
 
 Entities::Entity g_cube_2_entity;
 Rendering::Renderable *g_cube_2_renderable_ptr;
-Entities::Renderable_Updater_Component g_cube_2_renderable_updater_component;
 Entities::Physics_Component g_cube_2_physics;
 Entities::AABB_Component g_cube_2_bounding_box;
 
 Entities::Entity g_cube_3_entity;
-Entities::Renderable_Updater_Component g_cube_3_renderable_updater_component;
 Rendering::Renderable *g_cube_3_renderable_ptr;
 
 Entities::Entity g_cube_4_entity;
 Rendering::Renderable *g_cube_4_renderable_ptr;
-Entities::Renderable_Updater_Component g_cube_4_renderable_updater_component;
 
 Entities::Entity g_plane_entity;
 Shapes::Geometry g_plane_geometry;
 Rendering::Renderable *g_plane_renderable_ptr;
-Entities::Renderable_Updater_Component g_plane_renderable_updater_component;
 
 Entities::Entity g_circle_entity;
 Shapes::Geometry g_circle_geometry;
 Rendering::Renderable * g_circle_renderable_ptr;
-Entities::Renderable_Updater_Component g_circle_renderable_updater_component;
 
 Entities::Entity g_rectangle_box_entity;
 Shapes::Geometry g_rectangle_box_geometry;
 Rendering::Renderable * g_rectangle_box_renderable_ptr;
-Entities::Renderable_Updater_Component g_rectangle_box_renderable_updater_component;
 Entities::Physics_Component g_rectangle_box_physics;
 
 Entities::Entity g_camera_entity;
@@ -170,11 +162,9 @@ void init()
    // initialization initializes the components and does not set the dual quat values
 
    // add physics first so that the entity's transform is updated for the frame
-   g_cube_1_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_1_renderable_updater_component.set_renderable(g_cube_1_renderable_ptr);
+   g_renderer.configure_new_renderable(&g_cube_geometry, &g_cube_1_entity);
    g_cube_1_bounding_box.set_geometry(&g_cube_geometry);
    g_cube_1_entity.add_component(&g_cube_1_physics);
-   g_cube_1_entity.add_component(&g_cube_1_renderable_updater_component);
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_1_bounding_box, &g_cube_1_physics);
    MY_ASSERT(g_cube_1_entity.initialize());
@@ -183,11 +173,9 @@ void init()
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -0.0f));
    g_cube_1_physics.add_mass(5.0f);
 
-   g_cube_2_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_2_renderable_updater_component.set_renderable(g_cube_2_renderable_ptr);
+   g_renderer.configure_new_renderable(&g_cube_geometry, &g_cube_2_entity);
    g_cube_2_bounding_box.set_geometry(&g_cube_geometry);
    g_cube_2_entity.add_component(&g_cube_2_physics);
-   g_cube_2_entity.add_component(&g_cube_2_renderable_updater_component);
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_2_bounding_box, &g_cube_2_physics);
    MY_ASSERT(g_cube_2_entity.initialize());
@@ -197,9 +185,7 @@ void init()
    g_cube_2_physics.add_mass(10.0f);
 
    //g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_3_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
-   g_cube_3_renderable_updater_component.set_renderable(g_cube_3_renderable_ptr);
-   g_cube_3_entity.add_component(&g_cube_3_renderable_updater_component);
+   g_renderer.configure_new_renderable(&g_arcsynthesis_cube_geometry, &g_cube_3_entity);
    MY_ASSERT(g_cube_3_entity.initialize());
    Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +4.0f, +3.0f));
    //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.0f, +3.0f, +0.0f));
@@ -214,9 +200,7 @@ void init()
    g_camera_entity.add_component(&g_controller_component);
 
    //g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_cube_geometry);
-   g_cube_4_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
-   g_cube_4_renderable_updater_component.set_renderable(g_cube_4_renderable_ptr);
-   g_camera_entity.add_component(&g_cube_4_renderable_updater_component);
+   g_renderer.configure_new_renderable(&g_arcsynthesis_cube_geometry, &g_camera_entity);
    MY_ASSERT(g_camera_entity.initialize());
 
    // I got these numbers by having the camera print out its dual quat, and then I 
@@ -230,16 +214,12 @@ void init()
    // and the plane
    // Note: Let the plane be it's default size and remain at the origin.
    Geometry_Loader::load_plane(&g_plane_geometry, 40);
-   g_plane_renderable_ptr = g_renderer.add_renderable(&g_plane_geometry);
-   g_plane_renderable_updater_component.set_renderable(g_plane_renderable_ptr);
-   g_plane_entity.add_component(&g_plane_renderable_updater_component);
+   g_renderer.configure_new_renderable(&g_plane_geometry, &g_plane_entity);
    MY_ASSERT(g_plane_entity.initialize());
 
    // and the circle
    Geometry_Loader::load_circle(&g_circle_geometry);
-   g_circle_renderable_ptr = g_renderer.add_renderable(&g_circle_geometry);
-   g_circle_renderable_updater_component.set_renderable(g_circle_renderable_ptr);
-   g_circle_entity.add_component(&g_circle_renderable_updater_component);
+   g_renderer.configure_new_renderable(&g_circle_geometry, &g_circle_entity);
    Math::F_Dual_Quat entity_circle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
    g_circle_entity.m_where_and_which_way = entity_circle_offset;
    MY_ASSERT(g_circle_entity.initialize());
@@ -247,10 +227,7 @@ void init()
    // and the box
    Geometry_Loader::load_box(&g_rectangle_box_geometry, 5.0f, 2.0f);
    g_rectangle_box_entity.add_component(&g_rectangle_box_physics);
-   //g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_rectangle_box_geometry);
-   g_rectangle_box_renderable_ptr = g_renderer.add_renderable(&g_arcsynthesis_cube_geometry);
-   g_rectangle_box_renderable_updater_component.set_renderable(g_rectangle_box_renderable_ptr);
-   g_rectangle_box_entity.add_component(&g_rectangle_box_renderable_updater_component);
+   g_renderer.configure_new_renderable(&g_arcsynthesis_cube_geometry, &g_rectangle_box_entity);
    Math::F_Dual_Quat entity_rectangle_offset = Math::F_Dual_Quat::generate_translate_only(glm::vec3(0.0f, +3.0f, 0.0f));
    g_rectangle_box_entity.m_where_and_which_way = entity_rectangle_offset;
    MY_ASSERT(g_rectangle_box_entity.initialize());
