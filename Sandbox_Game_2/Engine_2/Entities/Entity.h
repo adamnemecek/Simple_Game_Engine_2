@@ -6,6 +6,13 @@
 
 #include <Math\F_Dual_Quat.h>
 
+// an empty namespace for local-only static ID counter
+namespace
+{
+   // I can't initiate a non-const static class member with a value, but I CAN initiate a global this way
+   static uint g_id_counter = 0;
+}
+
 namespace Entities
 {
    class Game_Component;
@@ -36,10 +43,12 @@ namespace Entities
       // single item when transforming child entities
       Math::F_Dual_Quat m_where_and_which_way;
 
-   protected:
-      glm::vec3 m_original_location;
+      // this is const and will need to be accessed during scene loading and saving, so
+      // go ahead and make this public instead of bothering with friend classes or 
+      // getters/setters
+      const uint m_id;
 
-      // these are protected instead of private so that the Controllable_Entity can also access them
+   public:
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;
       Game_Component *m_components[m_MAX_COMPONENTS];

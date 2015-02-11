@@ -11,6 +11,13 @@
 #include <Utilities\Include_Helpers\GL_Version.h>
 
 
+// an empty namespace for helper stuff
+namespace
+{
+   uint g_geometry_id_counter;
+}
+
+
 // forward declarations
 namespace Rendering
 {
@@ -46,6 +53,8 @@ namespace Shapes
       }
 
    private:
+      const uint m_ID;
+
       // let everything else be private, but let a select few classes access the private data 
       // Note: In this design, these classes could set things, but be nice to the program 
       // and don't exploit this permission loophole.

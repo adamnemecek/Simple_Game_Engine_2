@@ -17,7 +17,9 @@ using std::memset;
 namespace Entities
 {
    Entity::Entity()
-      : m_num_current_components(0),
+      : 
+      m_id(g_id_counter++),
+      m_num_current_components(0),
       m_where_and_which_way(Math::F_Quat::generate_real_quat(1.0f), Math::F_Quat())
    {
       memset(m_components, 0, sizeof(Game_Component *) * m_MAX_COMPONENTS);

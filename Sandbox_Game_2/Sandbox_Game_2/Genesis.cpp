@@ -25,6 +25,8 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
+#include <Engine_2\Scene\Scene_Loader.h>
+
 //#include <Engine_2\Utilities\Printer_Helper.h>
 #include <Engine_2\Utilities\My_Assert.h>
 
@@ -91,6 +93,9 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
+   Scene::Scene_Loader SL;
+   SL.load_scene();
+
    //Experiment::do_something();
 
    glEnable(GL_CULL_FACE);
