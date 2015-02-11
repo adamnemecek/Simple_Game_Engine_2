@@ -1,5 +1,5 @@
-#ifndef MY_CONSTANTS_H
-#define MY_CONSTANTS_H
+#ifndef ENGINE_MY_CONSTANTS_H
+#define ENGINE_MY_CONSTANTS_H
 
 namespace Utilities
 {

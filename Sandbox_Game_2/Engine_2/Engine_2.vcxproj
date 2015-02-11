@@ -125,6 +125,7 @@
     <ClInclude Include="Math\F_Quat.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Shapes\Geometry.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h" />
