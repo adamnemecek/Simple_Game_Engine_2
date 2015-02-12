@@ -54,36 +54,36 @@ Rendering::Camera g_camera;
 Shapes::Geometry g_cube_geometry;
 Shapes::Geometry g_arcsynthesis_cube_geometry;
 
-Entities::Entity g_cube_1_entity;
+Entities::Entity g_cube_1_entity("cube_1");
 Rendering::Renderable *g_cube_1_renderable_ptr;
 Entities::Physics_Component g_cube_1_physics;
 Entities::AABB_Component g_cube_1_bounding_box;
 
-Entities::Entity g_cube_2_entity;
+Entities::Entity g_cube_2_entity("cube_2");
 Rendering::Renderable *g_cube_2_renderable_ptr;
 Entities::Physics_Component g_cube_2_physics;
 Entities::AABB_Component g_cube_2_bounding_box;
 
-Entities::Entity g_cube_3_entity;
+Entities::Entity g_cube_3_entity("cube_3");
 Rendering::Renderable *g_cube_3_renderable_ptr;
 
-Entities::Entity g_cube_4_entity;
+Entities::Entity g_cube_4_entity("cube_4");
 Rendering::Renderable *g_cube_4_renderable_ptr;
 
-Entities::Entity g_plane_entity;
+Entities::Entity g_plane_entity("plane");
 Shapes::Geometry g_plane_geometry;
 Rendering::Renderable *g_plane_renderable_ptr;
 
-Entities::Entity g_circle_entity;
+Entities::Entity g_circle_entity("circle");
 Shapes::Geometry g_circle_geometry;
 Rendering::Renderable * g_circle_renderable_ptr;
 
-Entities::Entity g_rectangle_box_entity;
+Entities::Entity g_rectangle_box_entity("rectangle");
 Shapes::Geometry g_rectangle_box_geometry;
 Rendering::Renderable * g_rectangle_box_renderable_ptr;
 Entities::Physics_Component g_rectangle_box_physics;
 
-Entities::Entity g_camera_entity;
+Entities::Entity g_camera_entity("camera");
 Entities::Controller_Component g_controller_component;
 
 
@@ -93,8 +93,8 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   Scene::Scene_Loader SL;
-   SL.load_scene();
+   Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
+   //SL.load_scene();
 
    //Experiment::do_something();
 
@@ -147,7 +147,7 @@ void init()
       throw;
    }
 
-   Geometry_Loader::load_sphere(&g_arcsynthesis_cube_geometry);
+   Geometry_Loader::load_sphere(12, 1.7f, 11, &g_arcsynthesis_cube_geometry);
 
 
 

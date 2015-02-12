@@ -3,15 +3,9 @@
 
 #include <glm\vec3.hpp>
 #include <Utilities\Typedefs.h>
-
 #include <Math\F_Dual_Quat.h>
+#include <string>
 
-// an empty namespace for local-only static ID counter
-namespace
-{
-   // I can't initiate a non-const static class member with a value, but I CAN initiate a global this way
-   static uint g_id_counter = 0;
-}
 
 namespace Entities
 {
@@ -20,9 +14,8 @@ namespace Entities
    class __declspec(dllexport) Entity
    {
    public:
-      // for initializing non-static-const members
-      Entity();
-
+      Entity(const std::string& new_ID);
+      
       bool initialize();
       bool shutdown();
 
@@ -43,12 +36,26 @@ namespace Entities
       // single item when transforming child entities
       Math::F_Dual_Quat m_where_and_which_way;
 
-      // this is const and will need to be accessed during scene loading and saving, so
+      // this setter is not an unecessary exposure of a private member because I only want to
+      // expose the assignment operation
+      void set_id(const std::string& new_id);
+      const std::string& get_id();
+
+
+   private:
+      // hide the default constructor so that the user is forced to use the one with an ID 
+      // specifier
+      Entity() {}
+
+      // this will need to be accessed during scene loading and saving, so
       // go ahead and make this public instead of bothering with friend classes or 
       // getters/setters
-      const uint m_id;
+      // Note: This is not const because I want the user to be able to change the entity name.
+      // Also, const-ness created disabled the creation of a default assignment operator and 
+      // made writing my own impossible.
+      // TODO: provide an interface for changing the name
+      std::string m_id;
 
-   public:
       static const uint m_MAX_COMPONENTS = 10;
       uint m_num_current_components;
       Game_Component *m_components[m_MAX_COMPONENTS];

@@ -16,6 +16,7 @@ namespace Shapes
 {
    namespace Geometry_Creation
    {
+      // TODO: make a singleton instead of static
       class __declspec(dllexport) Geometry_Loader
       {
       public:

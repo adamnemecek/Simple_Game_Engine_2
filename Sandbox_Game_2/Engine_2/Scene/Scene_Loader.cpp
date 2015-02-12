@@ -8,7 +8,8 @@
 #include <fstream>
 #include <vector>
 
-// for generating the transform from the file data
+// for generating things from the file data
+#include <Entities\Entity.h>
 #include <Math\F_Quat.h>
 #include <Math\F_Dual_Quat.h>
 
@@ -95,10 +96,20 @@ namespace
 
 namespace Scene
 {
+   Scene_Loader& Scene_Loader::get_instance()
+   {
+      static Scene_Loader instance;
+
+      return instance;
+   }
+
    bool Scene_Loader::load_scene()
    {
       Scene::Scene_Data local_scene;
-
+      if (!local_scene.initialize())
+      {
+         return false;
+      }
 
       std::string file_path = "C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml";
 
@@ -120,6 +131,9 @@ namespace Scene
       const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
       if (0 != entity_node_ptr)
       {
+         std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
+         Entities::Entity *new_entity_ptr = local_scene.new_entity(new_entity_id_str);
+
          const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
          if (0 != shape_node_ptr)
          {
@@ -129,39 +143,45 @@ namespace Scene
          const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
          if (0 != transform_node_ptr)
          {
-            std::string transform_str = rapidxml::get_attrib_string(*transform_node_ptr, "value");
-            std::string num_string = "";
-            uint chars_scanned = 0;
+            if ("dual_quaternion" == rapidxml::get_attrib_string(*transform_node_ptr, "type"))
+            {
+               // "r" == "real", "d" == "dual"
+               float f = 0.0f;
+               float rw = rapidxml::get_attrib_float(*transform_node_ptr, "rw", f);
+            }
+            //std::string transform_str = rapidxml::get_attrib_string(*transform_node_ptr, "value");
+            //std::string num_string = "";
+            //uint chars_scanned = 0;
 
-            // there should be 8 characters in the dual quat transform
+            //// there should be 8 characters in the dual quat transform
 
-            chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
-            float real_w = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float real_x = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float real_y = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float real_z = atof(num_string.c_str());
+            //chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
+            //float real_w = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float real_x = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float real_y = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float real_z = atof(num_string.c_str());
 
-            chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
-            float dual_w = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float dual_x = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float dual_y = atof(num_string.c_str());
-            num_string.clear();
-            chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            float dual_z = atof(num_string.c_str());
+            //chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
+            //float dual_w = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float dual_x = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float dual_y = atof(num_string.c_str());
+            //num_string.clear();
+            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
+            //float dual_z = atof(num_string.c_str());
 
-            Math::F_Dual_Quat dq(
-               Math::F_Quat(real_w, glm::vec3(real_x, real_y, real_z)),
-               Math::F_Quat(dual_w, glm::vec3(dual_x, dual_y, dual_z)));
+            //Math::F_Dual_Quat dq(
+            //   Math::F_Quat(real_w, glm::vec3(real_x, real_y, real_z)),
+            //   Math::F_Quat(dual_w, glm::vec3(dual_x, dual_y, dual_z)));
 
 
          }

@@ -3,7 +3,7 @@
 #include <Entities\Entity.h>
 #include <Entities\Components\Physics_Component.h>
 #include <Shapes\Geometry.h>
-#include <Shapes\Geometry_Meta_Data.h>
+#include <Shapes\Shape_Meta_Data.h>
 #include <Shapes\My_Vertex.h>
 #include <memory.h>
 #include <Utilities\My_Assert.h>
@@ -34,7 +34,7 @@ namespace Entities
       // can't initialize without any geometry
       MY_ASSERT(m_geometry_data_ptr != 0);
 
-      const Shapes::Geometry_Meta_Data &meta_data_ref = m_geometry_data_ptr->m_meta_data;
+      const Shapes::Shape_Meta_Data &meta_data_ref = m_geometry_data_ptr->m_meta_data;
 
       // set the default vectors so that they can be transformed on the next update
       m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);

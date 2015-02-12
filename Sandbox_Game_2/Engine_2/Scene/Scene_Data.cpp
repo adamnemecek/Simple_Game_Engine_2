@@ -3,16 +3,22 @@
 
 namespace Scene
 {
-   void Scene_Data::initialize()
+   bool Scene_Data::initialize()
    {
       m_entities.clear();
-      m_geometries.clear();
+      //m_geometries.clear();
+
+      return true;
    }
 
-   Entities::Entity* Scene_Data::new_entity()
+   Entities::Entity* Scene_Data::new_entity(const std::string& new_entity_id)
    {
-      m_entities.push_back(Entities::Entity());
+      //m_entities.push_back(Entities::Entity(new_entity_id));
+      //m_entities.push_back(Entities::Entity());
 
-      return &(m_entities[m_entities.size() - 1]);
+      // return a pointer to the newly created entity
+      //return &(m_entities[m_entities.size() - 1]);
+
+      return 0;
    }
 }

@@ -8,11 +8,14 @@ namespace Scene
    class __declspec(dllexport) Scene_Loader
    {
    public:
+      static Scene_Loader& get_instance();
+
       bool load_scene();
 
    private:
       Scene_Loader() {}
-
+      Scene_Loader(const Scene_Loader&);
+      Scene_Loader& operator=(const Scene_Loader&);
    };
 }
 

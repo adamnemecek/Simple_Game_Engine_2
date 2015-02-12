@@ -6,19 +6,16 @@
 // so we can assign each component's "containing entity" pointer and reject the controller component
 #include <Entities\Game_Component.h>
 #include <Entities\Components\Controller_Component.h>
-
 #include <memory>
-using std::memset;
-
+#include <string>
 #include <Utilities\Typedefs.h>
-
 #include <Utilities\Printer_Helper.h>
 
 namespace Entities
 {
-   Entity::Entity()
+   Entity::Entity(const std::string& new_ID)
       : 
-      m_id(g_id_counter++),
+      m_id(new_ID),
       m_num_current_components(0),
       m_where_and_which_way(Math::F_Quat::generate_real_quat(1.0f), Math::F_Quat())
    {
@@ -68,5 +65,18 @@ namespace Entities
       }
 
       //glm::vec3 curr_location = Math::F_Dual_Quat::transform(m_where_and_which_way, m_original_location);
+   }
+
+   void Entity::set_id(const std::string& new_id)
+   {
+      if ("" != new_id)
+      {
+         m_id = new_id;
+      }
+   }
+
+   const std::string& Entity::get_id()
+   {
+      return m_id;
    }
 }

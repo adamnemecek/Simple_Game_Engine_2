@@ -10,6 +10,7 @@
 
 namespace Utilities
 {
+   // TODO: make singleton instead of static
    class Printer_Helper
    {
    public:
