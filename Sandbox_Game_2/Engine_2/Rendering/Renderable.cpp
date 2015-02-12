@@ -8,7 +8,9 @@ namespace Rendering
 {
    GLuint Renderable::get_VAO_ID()
    {
-      return m_geometry_ptr->m_VAO_ID;
+      m_geometry_ptr->get_VAO_ID();
+
+      return m_geometry_ptr->get_VAO_ID();
    }
 
    glm::mat4 Renderable::get_model_to_world_matrix()
@@ -18,7 +20,7 @@ namespace Rendering
 
    const std::vector<Shapes::Index_Meta_Data>& Renderable::get_geometry_index_meta_data_collection()
    {
-      return m_geometry_ptr->m_shape_data.m_index_meta_data;
+      return m_geometry_ptr->get_index_meta_data_collection();
    }
 
    void Renderable::set_geometry(const Shapes::Geometry *geometry_ptr)
