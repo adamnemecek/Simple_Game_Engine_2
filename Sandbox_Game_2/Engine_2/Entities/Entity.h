@@ -53,7 +53,6 @@ namespace Entities
       // Note: This is not const because I want the user to be able to change the entity name.
       // Also, const-ness created disabled the creation of a default assignment operator and 
       // made writing my own impossible.
-      // TODO: provide an interface for changing the name
       std::string m_id;
 
       static const uint m_MAX_COMPONENTS = 10;

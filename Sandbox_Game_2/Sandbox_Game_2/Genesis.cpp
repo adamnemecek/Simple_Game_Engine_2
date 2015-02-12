@@ -94,7 +94,7 @@ Entities::Controller_Component g_controller_component;
 void init()
 {
    Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
-   //SL.load_scene();
+   SL.load_scene();
 
    //Experiment::do_something();
 

@@ -17,7 +17,7 @@ namespace Scene
 
    private:
       std::vector<Entities::Entity> m_entities;
-      //std::vector<Shapes::Geometry> m_geometries;
+      std::vector<Shapes::Geometry> m_geometries;
    };
 }
 

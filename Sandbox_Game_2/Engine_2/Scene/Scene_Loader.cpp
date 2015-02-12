@@ -14,6 +14,8 @@
 #include <Math\F_Dual_Quat.h>
 
 #include <iostream>
+using std::cout;
+using std::endl;
 
 
 // empty namespace for helper functions
@@ -146,42 +148,22 @@ namespace Scene
             if ("dual_quaternion" == rapidxml::get_attrib_string(*transform_node_ptr, "type"))
             {
                // "r" == "real", "d" == "dual"
-               float f = 0.0f;
-               float rw = rapidxml::get_attrib_float(*transform_node_ptr, "rw", f);
+               float ret_val_in_case_of_failure = 0.0f;
+               float rw = rapidxml::get_attrib_float(*transform_node_ptr, "rw", ret_val_in_case_of_failure);
+               float rx = rapidxml::get_attrib_float(*transform_node_ptr, "rx", ret_val_in_case_of_failure);
+               float ry = rapidxml::get_attrib_float(*transform_node_ptr, "ry", ret_val_in_case_of_failure);
+               float rz = rapidxml::get_attrib_float(*transform_node_ptr, "rz", ret_val_in_case_of_failure);
+               float dw = rapidxml::get_attrib_float(*transform_node_ptr, "dw", ret_val_in_case_of_failure);
+               float dx = rapidxml::get_attrib_float(*transform_node_ptr, "dx", ret_val_in_case_of_failure);
+               float dy = rapidxml::get_attrib_float(*transform_node_ptr, "dy", ret_val_in_case_of_failure);
+               float dz = rapidxml::get_attrib_float(*transform_node_ptr, "dz", ret_val_in_case_of_failure);
+
+               Math::F_Dual_Quat dq(
+                  Math::F_Quat(rw, glm::vec3(rx, ry, rz)),
+                  Math::F_Quat(dw, glm::vec3(dx, dy, dz)));
+
+               new_entity_ptr->m_where_and_which_way = dq;
             }
-            //std::string transform_str = rapidxml::get_attrib_string(*transform_node_ptr, "value");
-            //std::string num_string = "";
-            //uint chars_scanned = 0;
-
-            //// there should be 8 characters in the dual quat transform
-
-            //chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
-            //float real_w = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float real_x = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float real_y = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float real_z = atof(num_string.c_str());
-
-            //chars_scanned += get_next_number_string(transform_str.c_str(), &num_string);
-            //float dual_w = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float dual_x = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float dual_y = atof(num_string.c_str());
-            //num_string.clear();
-            //chars_scanned += get_next_number_string(transform_str.c_str() + chars_scanned, &num_string);
-            //float dual_z = atof(num_string.c_str());
-
-            //Math::F_Dual_Quat dq(
-            //   Math::F_Quat(real_w, glm::vec3(real_x, real_y, real_z)),
-            //   Math::F_Quat(dual_w, glm::vec3(dual_x, dual_y, dual_z)));
 
 
          }

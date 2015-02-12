@@ -11,13 +11,6 @@
 #include <Utilities\Include_Helpers\GL_Version.h>
 
 
-// an empty namespace for helper stuff
-namespace
-{
-   uint g_geometry_id_counter;
-}
-
-
 // forward declarations
 namespace Rendering
 {
