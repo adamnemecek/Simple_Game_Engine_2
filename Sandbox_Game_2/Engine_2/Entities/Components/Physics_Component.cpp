@@ -35,7 +35,7 @@ namespace Entities
    void Physics_Component::update()
    {
       // get delta time for the last frame
-      float delta_time = Timing::Game_Clock::get_instance().get_delta_time_last_frame();
+      float delta_time = (float)Timing::Game_Clock::get_instance().get_delta_time_last_frame();
 
       // add up the immediate and sustained force vectors
       glm::vec3 net_force_vector;

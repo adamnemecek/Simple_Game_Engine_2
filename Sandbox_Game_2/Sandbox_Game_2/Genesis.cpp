@@ -11,6 +11,7 @@ these function.
 
 #include <Engine_2\Shapes\Geometry.h>
 #include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
+#include <Engine_2\Shapes\Geometry_Creation\Shape_Generator.h>
 #include <Engine_2\Utilities\Shader_Maker.h>
 #include <Engine_2\Rendering\Renderer.h>
 #include <Engine_2\Rendering\Renderable.h>
@@ -51,8 +52,11 @@ GLuint g_program_ID;
 Rendering::Renderer g_renderer;
 Rendering::Camera g_camera;
 
-Shapes::Geometry g_cube_geometry;
-Shapes::Geometry g_arcsynthesis_cube_geometry;
+Shapes::Geometry *g_plane_geometry_ptr;
+Shapes::Geometry *g_cube_geometry_ptr;
+Shapes::Geometry *g_circle_geometry_ptr;
+Shapes::Geometry *g_rectangle_box_geometry_ptr;
+Shapes::Geometry *g_experimental_geometry_ptr;
 
 Entities::Entity g_cube_1_entity("cube_1");
 Rendering::Renderable *g_cube_1_renderable_ptr;
@@ -71,15 +75,12 @@ Entities::Entity g_cube_4_entity("cube_4");
 Rendering::Renderable *g_cube_4_renderable_ptr;
 
 Entities::Entity g_plane_entity("plane");
-Shapes::Geometry g_plane_geometry;
 Rendering::Renderable *g_plane_renderable_ptr;
 
 Entities::Entity g_circle_entity("circle");
-Shapes::Geometry g_circle_geometry;
 Rendering::Renderable * g_circle_renderable_ptr;
 
 Entities::Entity g_rectangle_box_entity("rectangle");
-Shapes::Geometry g_rectangle_box_geometry;
 Rendering::Renderable * g_rectangle_box_renderable_ptr;
 Entities::Physics_Component g_rectangle_box_physics;
 
@@ -132,8 +133,19 @@ void init()
    // initialize the collision detector, which causes it to forget any bounding boxes that had been added
    Collision_Detection::Collision_Handler::get_instance().initialize();
    
-   using Shapes::Geometry_Creation::Geometry_Loader;
-   Geometry_Loader::load_cube(&g_cube_geometry);
+   using Shapes::Geometry_Creation::Shape_Generator;
+   Shape_Generator& shape_generator_ref = Shape_Generator::get_instance();
+
+   Shapes::Shape_Data cube_shape;
+   shape_generator_ref.generate_cube(&cube_shape);
+   g_cube_geometry_ptr = new Shapes::Geometry(cube_shape);
+
+   Shapes::Shape_Data plane_shape;
+   shape_generator_ref.generate_plane(10, )
+
+   Shapes::Shape_Data circle_shape;
+   Shapes::Shape_Data rectangle_shape;
+   Shapes::Shape_Data experiment_shape;
 
    try
    {
