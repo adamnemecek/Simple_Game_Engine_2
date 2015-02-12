@@ -100,9 +100,9 @@ namespace Shapes
       // of the double, THEN jam the result into the vec3's float
       // Note: This approach should result in minimal precision loss because the float 
       // cast happens after the high-precision sum and division operations.
-      m_shape_meta_data.m_center_of_vertices.x = sum_x * inverse_num_verts;
-      m_shape_meta_data.m_center_of_vertices.y = sum_y * inverse_num_verts;
-      m_shape_meta_data.m_center_of_vertices.z = sum_z * inverse_num_verts;
+      m_shape_meta_data.m_center_of_vertices.x = (float)(sum_x * inverse_num_verts);
+      m_shape_meta_data.m_center_of_vertices.y = (float)(sum_y * inverse_num_verts);
+      m_shape_meta_data.m_center_of_vertices.z = (float)(sum_z * inverse_num_verts);
    }
 
    const GLuint Geometry::get_VAO_ID() const

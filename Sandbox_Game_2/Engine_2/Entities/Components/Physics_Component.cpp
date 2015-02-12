@@ -59,12 +59,12 @@ namespace Entities
 
       // make crude physics code just to start things moving and testing your collision boxes, and then do t with fancy calculations later
 
-      static const uint ENTITY_MASS = 5.0f;  // TODO: make this an adjustable property of the entity, perhaps with a 'material' component or property
+      static const float ENTITY_MASS = 5.0f;  // TODO: make this an adjustable property of the entity, perhaps with a 'material' component or property
 
       // calculate torque and rotate the entity
       float angular_accel = 0.0f; //glm::length(net_force_vector) / 2.0f;
       m_angular_velocity += angular_accel * delta_time;
-      double rotation_angle = m_angular_velocity * delta_time;
+      float rotation_angle = m_angular_velocity * delta_time;
 
       // calculate the linear acceleration and move it in the new direction
       glm::vec3 linear_accel = net_force_vector;

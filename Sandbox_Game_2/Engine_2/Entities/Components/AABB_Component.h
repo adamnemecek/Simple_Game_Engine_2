@@ -76,7 +76,7 @@ namespace Entities
       float m_curr_max_Z;
 
       // helper functions are private
-      void recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const int max_vectors);
+      void recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const uint max_vectors);
       bool calculate_overlap_on_axis(const float other_max_to_this_min, const float this_max_to_other_min, float *put_overlap_here) const;
    };
 }

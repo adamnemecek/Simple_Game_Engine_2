@@ -34,7 +34,7 @@ namespace Entities
       // can't initialize without any geometry
       MY_ASSERT(m_geometry_data_ptr != 0);
 
-      const Shapes::Shape_Meta_Data &meta_data_ref = m_geometry_data_ptr->m_meta_data;
+      const Shapes::Shape_Meta_Data &meta_data_ref = m_geometry_data_ptr->get_shape_meta_data();
 
       // set the default vectors so that they can be transformed on the next update
       m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);
@@ -120,7 +120,7 @@ namespace Entities
       }
    }
 
-   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const int max_vectors)
+   void AABB_Component::recalculate_all_min_max_values(const glm::vec3 *curr_box_corners_arr, const uint max_vectors)
    {
       // start the min/max values with an initial data point that is within the boundaries 
       // of the data
