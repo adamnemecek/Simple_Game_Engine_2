@@ -14,6 +14,8 @@ namespace Shapes
       class __declspec(dllexport) Shape_Generator
       {
       public:
+         static Shape_Generator& get_instance();
+
          // the order of the returned vertices is as follows:
          // - position (3 floats)
          // - normal (3 floats)
@@ -31,27 +33,31 @@ namespace Shapes
          // create a triangle in the X-Y plane (vertical)
          // Note: It is vertical because this was the original shape that I drew to make sure that 
          // my code could draw something to the screen.
-         static void generate_triangle(Shape_Data *put_data_here);
+         void generate_triangle(Shape_Data *put_data_here);
 
          // create a plane in the X-Z plane (horizontal) at Y = 0
-         static void generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here);
+         void generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here);
 
          // create a rectangle wire-frame in the X-Z plane (horizontal) at Y = 0
-         static void generate_box(const float width, const float length, Shape_Data *put_data_here);
+         void generate_box(const float width, const float length, Shape_Data *put_data_here);
 
          // create a circle in the X-Z plane (horizontal) at Y = 0
-         static void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
-
-         static void generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Shape_Data *put_data_here);
-         static void generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Shape_Data *put_data_here);
-
-         static void generate_arcysynthesis_cylinder(Shape_Data *put_data_here);
+         void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
 
          // 3D shapes
-         static void generate_cube(Shape_Data *put_data_here);
+
+         // create a cube centered on the origin
+         void generate_cube(Shape_Data *put_data_here);
+
+         // create a cylinder with top facing +Y, bottom facing -Y, and the bottom on Y = 0
+         void generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Shape_Data *put_data_here);
+
+         // create a sphere with the bottom on Y = 0
+         void generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Shape_Data *put_data_here);
+
 
       private:
-         // enforce staticness
+         // enforce singlton-ness
          Shape_Generator();
          Shape_Generator(const Shape_Generator&);
          Shape_Generator &operator=(const Shape_Generator&);

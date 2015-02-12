@@ -94,6 +94,7 @@
     <ClCompile Include="Rendering\Renderable.cpp" />
     <ClCompile Include="Scene\Scene_Data.cpp" />
     <ClCompile Include="Scene\Scene_Loader.cpp" />
+    <ClCompile Include="Shapes\Geometry.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.cpp" />
     <ClCompile Include="Start_Engine.cpp" />
     <ClCompile Include="Math\F_Dual_Quat.cpp" />

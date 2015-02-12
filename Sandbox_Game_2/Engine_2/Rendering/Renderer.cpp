@@ -166,25 +166,12 @@ namespace Rendering
 
          glUniformMatrix4fv(m_unif_loc_model_to_camera_matrix, 1, GL_FALSE, glm::value_ptr(model_to_camera));
          
-         //uint first_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices / 2;
-         //uint second_half_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices - first_half_indices;
-         //uint total_indices = (r.m_geometry_ptr)->m_shape_data.m_num_indices;
-
-         //glDrawElements(
-         //   (r.m_geometry_ptr)->m_render_mode, 
-         //   (r.m_geometry_ptr)->m_shape_data.m_num_indices, 
-         //   GL_UNSIGNED_SHORT, 0);
-
          // draw the indices according to their draw command
          std::vector<Shapes::Index_Meta_Data> index_meta_data_collection_ref = r.get_geometry_index_meta_data_collection();
          uint indices_drawn_so_far = 0;
          for (uint render_mode_index = 0; render_mode_index < index_meta_data_collection_ref.size(); render_mode_index++)
          {
             const Shapes::Index_Meta_Data &index_meta_data_ref = index_meta_data_collection_ref[render_mode_index];
-            if (8 == index_meta_data_ref.m_num_indices_this_mode)
-            {
-               indices_drawn_so_far = indices_drawn_so_far;
-            }
             glDrawElements(
                index_meta_data_ref.m_render_mode,
                index_meta_data_ref.m_num_indices_this_mode,
@@ -199,15 +186,6 @@ namespace Rendering
 
             indices_drawn_so_far += index_meta_data_ref.m_num_indices_this_mode;
          }
-/*
-         glDrawElements(
-            (r.m_geometry_ptr)->m_render_mode,
-            first_half_indices,
-            GL_UNSIGNED_SHORT, 0);
-         glDrawElements(
-            (r.m_geometry_ptr)->m_render_mode,
-            second_half_indices,
-            GL_UNSIGNED_SHORT, (void *)(first_half_indices * sizeof(GLushort)));*/
       }
    }
 
