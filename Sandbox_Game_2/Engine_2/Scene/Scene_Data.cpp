@@ -27,17 +27,18 @@ namespace Scene
       return &(m_geometries[m_geometries.size() - 1]);
    }
 
-   bool Scene_Data::geometry_already_loaded(const std::vector<std::string>& parameter_list)
+   Shapes::Geometry *Scene_Data::geometry_already_loaded(const std::string& shape_id_str)
    {
       for (uint geometry_index_counter = 0; geometry_index_counter < m_geometries.size(); geometry_index_counter++)
       {
-         if (parameter_list == m_geometries[geometry_index_counter].get_shape_parameter_list())
+         //if (parameter_list == m_geometries[geometry_index_counter].get_shape_parameter_list())
+         if (shape_id_str == m_geometries[geometry_index_counter].get_shape_id_string())
          {
-            return true;
+            return &m_geometries[geometry_index_counter];
          }
       }
 
-      return false;
+      return 0;
    }
 
 }

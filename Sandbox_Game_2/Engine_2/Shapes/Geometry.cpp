@@ -120,8 +120,22 @@ namespace Shapes
       return m_shape_data.m_index_meta_data;
    }
 
-   const std::vector<std::string>& Geometry::get_shape_parameter_list() const
+   //const std::vector<std::string>& Geometry::get_shape_parameter_list() const
+   //{
+   //   return Geometry::m_shape_data.m_parameters;
+   //}
+
+   const std::string Geometry::get_shape_id_string() const
    {
-      return m_shape_data.m_parameters;
+      const std::vector<std::string>& parameter_list = m_shape_data.m_parameters;
+
+      std::string S = "";
+
+      for (uint index_counter = 0; index_counter < parameter_list.size(); index_counter++)
+      {
+         S += parameter_list[index_counter];
+      }
+
+      return S;
    }
 }

@@ -25,6 +25,7 @@ these function.
 #include <Engine_2\Input\Supported_Bindings.h>
 #include <Engine_2\Timing\Game_Clock.h>
 
+#include <Engine_2\Scene\Scene_Data.h>
 #include <Engine_2\Scene\Scene_Loader.h>
 
 //#include <Engine_2\Utilities\Printer_Helper.h>
@@ -89,12 +90,12 @@ Entities::Controller_Component g_controller_component;
 
 #include "experiment.h"
 
-
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
+   Scene::Scene_Data local_scene;
    Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
-   SL.load_scene();
+   //SL.load_scene(&g_renderer, &local_scene);
 
    //Experiment::do_something();
 

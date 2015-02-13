@@ -16,7 +16,12 @@ namespace Scene
       Entities::Entity *new_entity(const std::string& new_entity_id);
       Shapes::Geometry *new_geometry(const Shapes::Shape_Data& new_shape_data);
 
-      bool geometry_already_loaded(const std::vector<std::string>& parameter_list);
+      // checks if any of the already-loaded geometries have a shape that matches
+      // the argument id string, which is simply a mashing of all the parameters
+      // into a unique string
+      // Note: This method cannot be const because it is returning a non-const value,
+      // and apparently that makes it ineligible for const-ness.
+      Shapes::Geometry *geometry_already_loaded(const std::string& shape_id_str);
 
    private:
       // these are vectors of classes instead of pointers because I want the

@@ -43,7 +43,10 @@ namespace Shapes
       // ??is there a way to provide access to this collection without requiring this header to include <vector>??
       const std::vector<Index_Meta_Data>& get_index_meta_data_list() const;
 
-      const std::vector<std::string>& get_shape_parameter_list() const;
+      //const std::vector<std::string>& get_shape_parameter_list() const;
+      
+      // jams the parameter list into a single unique string
+      const std::string get_shape_id_string() const;
 
    private:
       // hide the default constructor so that the user has to supply shape data

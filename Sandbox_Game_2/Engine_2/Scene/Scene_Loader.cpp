@@ -9,6 +9,7 @@
 #include <vector>
 
 // for generating things from the file data
+#include <Rendering\Renderer.h>
 #include <Entities\Entity.h>
 #include <Shapes\Shape_Data.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
@@ -24,7 +25,7 @@ using std::endl;
 // empty namespace for helper functions
 namespace
 {
-   void open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
+   void helper_open_xml_file(rapidxml::xml_document<> *put_parsed_xml_document_here, std::vector<char> &file_data, const std::string &file_path)
    {
       // this function is heavily influenced by the arcsynthesis framework's Mesh 
       // class constructor, and some lines are copied verbatim except for the 
@@ -58,76 +59,127 @@ namespace
       }
    }
 
-   uint get_next_number_string(const char *start_ptr, std::string *put_number_string_here)
-   {
-      uint characters_scanned = 0;
+   //uint helper_get_next_number_string(const char *start_ptr, std::string *put_number_string_here)
+   //{
+   //   uint characters_scanned = 0;
 
-      put_number_string_here->clear();
-      if (0 == *start_ptr)
+   //   put_number_string_here->clear();
+   //   if (0 == *start_ptr)
+   //   {
+   //      // already at end of data set; don't read anything
+   //      return 0;
+   //   }
+
+   //   // scan through white space 
+   //   const char *c_ptr = start_ptr;
+   //   char c = *c_ptr;
+   //   while ('\n' == c || '\r' == c || '\t' == c || ' ' == c)
+   //   {
+   //      c_ptr += 1;
+   //      c = *c_ptr;
+   //      characters_scanned++;
+   //   }
+
+   //   // scan through non-white space characters and put them into the number string
+   //   while (1)
+   //   {
+   //      if (0 == c || '\n' == c || '\r' == c || '\t' == c || ' ' == c)
+   //      {
+   //         // 0 means end of data set, and white space means end of number but the data set still
+   //         // has values in it, but both cases indicate the end of this number
+   //         return characters_scanned;
+   //      }
+
+   //      // not a white-space character, so record it
+   //      (*put_number_string_here) += c;
+
+   //      c_ptr += 1;
+   //      c = *c_ptr;
+   //      characters_scanned++;
+   //   }
+   //}
+
+   Shapes::Geometry *helper_load_geometry(const rapidxml::xml_node<> *shape_node_ptr, Scene::Scene_Data *load_into_this_scene)
+   {
+      if (0 != shape_node_ptr)
       {
-         // already at end of data set; don't read anything
+         // no shape, so return a null pointer
          return 0;
       }
 
-      // scan through white space 
-      const char *c_ptr = start_ptr;
-      char c = *c_ptr;
-      while ('\n' == c || '\r' == c || '\t' == c || ' ' == c)
+      // check if the geometry has already been loaded
+      std::string shape_id_str = rapidxml::get_attrib_string(*shape_node_ptr, "id");
+      Shapes::Geometry *geometry_ptr = load_into_this_scene->geometry_already_loaded(shape_id_str);
+
+      if (0 != geometry_ptr)
       {
-         c_ptr += 1;
-         c = *c_ptr;
-         characters_scanned++;
+         // geometry has already been loaded, so return a pointer to it
+         return geometry_ptr;
       }
 
-      // scan through non-white space characters and put them into the number string
-      while (1)
-      {
-         if (0 == c || '\n' == c || '\r' == c || '\t' == c || ' ' == c)
-         {
-            // 0 means end of data set, and white space means end of number but the data set still
-            // has values in it, but both cases indicate the end of this number
-            return characters_scanned;
-         }
-
-         // not a white-space character, so record it
-         (*put_number_string_here) += c;
-
-         c_ptr += 1;
-         c = *c_ptr;
-         characters_scanned++;
-      }
-   }
-
-   Shapes::Geometry *load_geometry(const rapidxml::xml_node<> *shape_node_ptr)
-   {
+      // geometry has not been loaded, so pick apart the node to figure out 
+      // what shape to make, and then make it
       std::string shape_type_str = rapidxml::get_attrib_string(*shape_node_ptr, "value");
+      Shapes::Shape_Data new_shape;
+      Shapes::Geometry_Creation::Shape_Generator& shape_generator_ref = Shapes::Geometry_Creation::Shape_Generator::get_instance();
+      float f_return_value_if_parameter_not_found = 0.0f;
+      int i_return_value_if_parameter_not_found = 0;
 
       if ("triangle" == shape_type_str)
       {
+         shape_generator_ref.generate_triangle(&new_shape);
          cout << "loading triangle" << endl;
       }
       else if ("plane" == shape_type_str)
       {
+         shape_generator_ref.generate_plane(
+            rapidxml::get_attrib_float(*shape_node_ptr, "width", f_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_int(*shape_node_ptr, "width_segments", i_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_int(*shape_node_ptr, "length_segments", i_return_value_if_parameter_not_found),
+            &new_shape);
          cout << "loading plane" << endl;
       }
       else if ("box" == shape_type_str)
       {
+         shape_generator_ref.generate_box(
+            rapidxml::get_attrib_float(*shape_node_ptr, "width", f_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
+            &new_shape);
          cout << "loading box" << endl;
       }
       else if ("circle" == shape_type_str)
       {
+         shape_generator_ref.generate_circle(
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
+            &new_shape);
          cout << "loading circle" << endl;
       }
       else if ("cube" == shape_type_str)
       {
+         shape_generator_ref.generate_cube(&new_shape);
          cout << "loading cube" << endl;
       }
       else if ("cylinder" == shape_type_str)
       {
+         shape_generator_ref.generate_cylinder(
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "height", f_return_value_if_parameter_not_found),
+            &new_shape);
+
          cout << "loading cylinder" << endl;
       }
       else if ("sphere" == shape_type_str)
       {
+         shape_generator_ref.generate_sphere(
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
+            &new_shape);
+
          cout << "loading sphere" << endl;
       }
       else
@@ -137,7 +189,44 @@ namespace
          return 0;
       }
 
-      return 0;
+      geometry_ptr = load_into_this_scene->new_geometry(new_shape);
+
+      return geometry_ptr;
+   }
+
+   Math::F_Dual_Quat helper_get_transform(const rapidxml::xml_node<> *transform_node_ptr)
+   {
+      if (0 == transform_node_ptr)
+      {
+         // bad!
+         // TODO: do something about the bad
+         cout << "no transform node" << endl;
+      }
+
+      if ("dual_quaternion" == rapidxml::get_attrib_string(*transform_node_ptr, "type"))
+      {
+         // "r" == "real", "d" == "dual"
+         float ret_val_in_case_of_failure = 0.0f;
+         float rw = rapidxml::get_attrib_float(*transform_node_ptr, "rw", ret_val_in_case_of_failure);
+         float rx = rapidxml::get_attrib_float(*transform_node_ptr, "rx", ret_val_in_case_of_failure);
+         float ry = rapidxml::get_attrib_float(*transform_node_ptr, "ry", ret_val_in_case_of_failure);
+         float rz = rapidxml::get_attrib_float(*transform_node_ptr, "rz", ret_val_in_case_of_failure);
+         float dw = rapidxml::get_attrib_float(*transform_node_ptr, "dw", ret_val_in_case_of_failure);
+         float dx = rapidxml::get_attrib_float(*transform_node_ptr, "dx", ret_val_in_case_of_failure);
+         float dy = rapidxml::get_attrib_float(*transform_node_ptr, "dy", ret_val_in_case_of_failure);
+         float dz = rapidxml::get_attrib_float(*transform_node_ptr, "dz", ret_val_in_case_of_failure);
+
+         return Math::F_Dual_Quat(
+            Math::F_Quat(rw, glm::vec3(rx, ry, rz)),
+            Math::F_Quat(dw, glm::vec3(dx, dy, dz)));
+      }
+      else
+      {
+         // ??support another type??
+      }
+
+      // return a null transform
+      return Math::F_Dual_Quat();
    }
 }
 
@@ -150,10 +239,9 @@ namespace Scene
       return instance;
    }
 
-   bool Scene_Loader::load_scene()
+   bool Scene_Loader::load_scene(Rendering::Renderer *renderer_ptr, Scene::Scene_Data *load_scene_data_here)
    {
-      Scene::Scene_Data local_scene;
-      if (!local_scene.initialize())
+      if (!load_scene_data_here->initialize())
       {
          return false;
       }
@@ -163,7 +251,7 @@ namespace Scene
       // open the file
       rapidxml::xml_document<> doc;
       std::vector<char> file_data;
-      open_xml_file(&doc, file_data, file_path);
+      helper_open_xml_file(&doc, file_data, file_path);
 
       // make sure that there is a "scene" root node
       rapidxml::xml_node<> *root_node_ptr = doc.first_node("scene");
@@ -181,55 +269,28 @@ namespace Scene
          cout << new_entity_id_str << endl;
 
          // create the entity
-         Entities::Entity *new_entity_ptr = local_scene.new_entity(new_entity_id_str);
+         Entities::Entity *new_entity_ptr = load_scene_data_here->new_entity(new_entity_id_str);
+
+         // load the transform
+         const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
+         new_entity_ptr->m_where_and_which_way = helper_get_transform(transform_node_ptr);
+
+         
+         entity_node_ptr = entity_node_ptr->next_sibling("entity");
+
 
          // check for geometry
          const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
-         if (0 != shape_node_ptr)
+         Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, load_scene_data_here);
+         if (0 == new_geometry_ptr)
          {
-            Shapes::Geometry *new_geometry_ptr = load_geometry(shape_node_ptr);
-               
-            // make a renderable for this geometry
-
-         }
-
-         const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
-         if (0 == transform_node_ptr)
-         {
-            // bad!
-            // TODO: do something about the bad
-            cout << "no transform node" << endl;
+            // no shape data available, so don't make a renderable
          }
          else
          {
-            if ("dual_quaternion" == rapidxml::get_attrib_string(*transform_node_ptr, "type"))
-            {
-               // "r" == "real", "d" == "dual"
-               float ret_val_in_case_of_failure = 0.0f;
-               float rw = rapidxml::get_attrib_float(*transform_node_ptr, "rw", ret_val_in_case_of_failure);
-               float rx = rapidxml::get_attrib_float(*transform_node_ptr, "rx", ret_val_in_case_of_failure);
-               float ry = rapidxml::get_attrib_float(*transform_node_ptr, "ry", ret_val_in_case_of_failure);
-               float rz = rapidxml::get_attrib_float(*transform_node_ptr, "rz", ret_val_in_case_of_failure);
-               float dw = rapidxml::get_attrib_float(*transform_node_ptr, "dw", ret_val_in_case_of_failure);
-               float dx = rapidxml::get_attrib_float(*transform_node_ptr, "dx", ret_val_in_case_of_failure);
-               float dy = rapidxml::get_attrib_float(*transform_node_ptr, "dy", ret_val_in_case_of_failure);
-               float dz = rapidxml::get_attrib_float(*transform_node_ptr, "dz", ret_val_in_case_of_failure);
-
-               Math::F_Dual_Quat dq(
-                  Math::F_Quat(rw, glm::vec3(rx, ry, rz)),
-                  Math::F_Quat(dw, glm::vec3(dx, dy, dz)));
-
-               new_entity_ptr->m_where_and_which_way = dq;
-            }
-
-
+            // make a renderable
+            renderer_ptr->configure_new_renderable(new_geometry_ptr, new_entity_ptr);
          }
-
-         entity_node_ptr = entity_node_ptr->next_sibling("entity");
-      }
-      if (0 != entity_node_ptr)
-      {
-
       }
 
       return true;
