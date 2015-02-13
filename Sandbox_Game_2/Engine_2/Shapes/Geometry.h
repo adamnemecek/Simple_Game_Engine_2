@@ -41,8 +41,9 @@ namespace Shapes
       // get a constant reference to the collection of index meta data contained 
       // within the shape data (draw mode, number of indices to draw with this mode)
       // ??is there a way to provide access to this collection without requiring this header to include <vector>??
-      const std::vector<Index_Meta_Data>& get_index_meta_data_collection() const;
+      const std::vector<Index_Meta_Data>& get_index_meta_data_list() const;
 
+      const std::vector<std::string>& get_shape_parameter_list() const;
 
    private:
       // hide the default constructor so that the user has to supply shape data

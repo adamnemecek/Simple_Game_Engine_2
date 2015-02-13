@@ -5,7 +5,7 @@ namespace Shapes
 {
    Geometry::Geometry(const Shape_Data& new_shape_data)
       : 
-      m_shape_data(new_shape_data)
+      m_shape_data(new_shape_data)  // copy constructor copies pointers and other data
    {
       initialize_attributes();
       calculate_shape_meta_data();
@@ -115,9 +115,13 @@ namespace Shapes
       return m_shape_meta_data;
    }
 
-   const std::vector<Index_Meta_Data>& Geometry::get_index_meta_data_collection() const
+   const std::vector<Index_Meta_Data>& Geometry::get_index_meta_data_list() const
    {
       return m_shape_data.m_index_meta_data;
    }
 
+   const std::vector<std::string>& Geometry::get_shape_parameter_list() const
+   {
+      return m_shape_data.m_parameters;
+   }
 }

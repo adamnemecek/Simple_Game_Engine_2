@@ -11,11 +11,33 @@ namespace Scene
       return true;
    }
 
-   Entities::Entity* Scene_Data::new_entity(const std::string& new_entity_id)
+   Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id)
    {
       m_entities.push_back(Entities::Entity(new_entity_id));
 
       // return a pointer to the newly created entity
       return &(m_entities[m_entities.size() - 1]);
    }
+
+   Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data& new_shape_data)
+   {
+      m_geometries.push_back(Shapes::Geometry(new_shape_data));
+
+      // return a pointer to the newly created geometry
+      return &(m_geometries[m_geometries.size() - 1]);
+   }
+
+   bool Scene_Data::geometry_already_loaded(const std::vector<std::string>& parameter_list)
+   {
+      for (uint geometry_index_counter = 0; geometry_index_counter < m_geometries.size(); geometry_index_counter++)
+      {
+         if (parameter_list == m_geometries[geometry_index_counter].get_shape_parameter_list())
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
 }

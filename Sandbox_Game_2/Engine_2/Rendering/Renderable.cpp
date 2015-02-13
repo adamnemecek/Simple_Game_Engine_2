@@ -20,7 +20,7 @@ namespace Rendering
 
    const std::vector<Shapes::Index_Meta_Data>& Renderable::get_geometry_index_meta_data_collection()
    {
-      return m_geometry_ptr->get_index_meta_data_collection();
+      return m_geometry_ptr->get_index_meta_data_list();
    }
 
    void Renderable::set_geometry(const Shapes::Geometry *geometry_ptr)

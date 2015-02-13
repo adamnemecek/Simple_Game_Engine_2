@@ -10,6 +10,9 @@
 
 // for generating things from the file data
 #include <Entities\Entity.h>
+#include <Shapes\Shape_Data.h>
+#include <Shapes\Geometry_Creation\Shape_Generator.h>
+#include <Shapes\Geometry.h>
 #include <Math\F_Quat.h>
 #include <Math\F_Dual_Quat.h>
 
@@ -94,6 +97,48 @@ namespace
          characters_scanned++;
       }
    }
+
+   Shapes::Geometry *load_geometry(const rapidxml::xml_node<> *shape_node_ptr)
+   {
+      std::string shape_type_str = rapidxml::get_attrib_string(*shape_node_ptr, "value");
+
+      if ("triangle" == shape_type_str)
+      {
+         cout << "loading triangle" << endl;
+      }
+      else if ("plane" == shape_type_str)
+      {
+         cout << "loading plane" << endl;
+      }
+      else if ("box" == shape_type_str)
+      {
+         cout << "loading box" << endl;
+      }
+      else if ("circle" == shape_type_str)
+      {
+         cout << "loading circle" << endl;
+      }
+      else if ("cube" == shape_type_str)
+      {
+         cout << "loading cube" << endl;
+      }
+      else if ("cylinder" == shape_type_str)
+      {
+         cout << "loading cylinder" << endl;
+      }
+      else if ("sphere" == shape_type_str)
+      {
+         cout << "loading sphere" << endl;
+      }
+      else
+      {
+         // not a valid shape
+         cout << "'" << shape_type_str << "' is not recognized and cannot be generated" << endl;
+         return 0;
+      }
+
+      return 0;
+   }
 }
 
 namespace Scene
@@ -127,23 +172,35 @@ namespace Scene
          throw std::runtime_error("'scene' node not found in mesh file: " + file_path);
       }
 
-      uint num_entities = 0;
-      uint num_lights = 0;
-
+      // cycle through the list of entities and generate them one by one
       const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
-      if (0 != entity_node_ptr)
+      while (0 != entity_node_ptr)
       {
+         // get the ID of the entity
          std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
+         cout << new_entity_id_str << endl;
+
+         // create the entity
          Entities::Entity *new_entity_ptr = local_scene.new_entity(new_entity_id_str);
 
+         // check for geometry
          const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
          if (0 != shape_node_ptr)
          {
-            std::string shape_type = rapidxml::get_attrib_string(*shape_node_ptr, "value");
+            Shapes::Geometry *new_geometry_ptr = load_geometry(shape_node_ptr);
+               
+            // make a renderable for this geometry
+
          }
 
          const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
-         if (0 != transform_node_ptr)
+         if (0 == transform_node_ptr)
+         {
+            // bad!
+            // TODO: do something about the bad
+            cout << "no transform node" << endl;
+         }
+         else
          {
             if ("dual_quaternion" == rapidxml::get_attrib_string(*transform_node_ptr, "type"))
             {
@@ -167,6 +224,12 @@ namespace Scene
 
 
          }
+
+         entity_node_ptr = entity_node_ptr->next_sibling("entity");
+      }
+      if (0 != entity_node_ptr)
+      {
+
       }
 
       return true;
