@@ -60,7 +60,7 @@ namespace Shapes
 
       private:
          // enforce singlton-ness
-         Shape_Generator();
+         Shape_Generator() {}
          Shape_Generator(const Shape_Generator&);
          Shape_Generator &operator=(const Shape_Generator&);
       };
