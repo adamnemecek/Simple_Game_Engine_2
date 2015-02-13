@@ -36,7 +36,8 @@ namespace Shapes
          void generate_triangle(Shape_Data *put_data_here);
 
          // create a plane in the X-Z plane (horizontal) at Y = 0
-         void generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here);
+         // Note: X = width, Z = length
+         void generate_plane(const float width, const float length, const uint width_segments, const uint length_segments, Shape_Data *put_data_here);
 
          // create a rectangle wire-frame in the X-Z plane (horizontal) at Y = 0
          void generate_box(const float width, const float length, Shape_Data *put_data_here);

@@ -126,16 +126,18 @@ namespace Shapes
          put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
-      void Shape_Generator::generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here)
+      void Shape_Generator::generate_plane(const float width, const float length, const uint width_segments, const uint length_segments, Shape_Data *put_data_here)
       {
-         uint vert_count = number_segments_on_side * number_segments_on_side;
+         uint vert_count = width_segments * length_segments;
          put_data_here->m_num_verts = vert_count;
          put_data_here->m_verts = new My_Vertex[vert_count];
 
-         int row_max_count = number_segments_on_side;
-         float row_half_length = (float)number_segments_on_side / 2;
-         int col_max_count = number_segments_on_side;
-         float col_half_length = (float)number_segments_on_side / 2;
+         int row_max_count = width_segments;
+         float row_half_count = width / 2;
+         float row_length = width / width_segments;
+         int col_max_count = length_segments;
+         float col_half_count = length / 2;
+         float col_wi
 
          for (int row_count = 0; row_count < row_max_count; row_count++)
          {
