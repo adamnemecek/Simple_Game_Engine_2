@@ -10,7 +10,6 @@ these function.
 
 
 #include <Engine_2\Shapes\Geometry.h>
-#include <Engine_2\Shapes\Geometry_Creation\Geometry_Loader.h>
 #include <Engine_2\Shapes\Geometry_Creation\Shape_Generator.h>
 #include <Engine_2\Utilities\Shader_Maker.h>
 #include <Engine_2\Rendering\Renderer.h>

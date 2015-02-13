@@ -36,9 +36,6 @@
     <ClCompile Include="Shapes\Geometry_Creation\Shape_Generator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shapes\Geometry_Creation\Geometry_Loader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utilities\Printer_Helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -132,9 +129,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shapes\Geometry_Creation\Geometry_Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shapes\My_Vertex.h">
