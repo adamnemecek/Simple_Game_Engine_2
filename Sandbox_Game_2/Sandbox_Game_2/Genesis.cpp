@@ -141,7 +141,7 @@ void init()
    g_cube_geometry_ptr = new Shapes::Geometry(cube_shape);
 
    Shapes::Shape_Data plane_shape;
-   shape_generator_ref.generate_plane(100, &plane_shape);
+   shape_generator_ref.generate_plane(20, 50, 11, 12, &plane_shape);
    g_plane_geometry_ptr = new Shapes::Geometry(plane_shape);
 
    Shapes::Shape_Data circle_shape;

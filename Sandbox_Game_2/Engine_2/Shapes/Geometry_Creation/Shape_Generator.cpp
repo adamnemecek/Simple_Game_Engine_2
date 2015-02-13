@@ -126,50 +126,70 @@ namespace Shapes
          put_data_here->m_index_meta_data.push_back(i_meta_data);
       }
 
-      void Shape_Generator::generate_plane(const uint number_segments_on_side, Shape_Data *put_data_here)
+      void Shape_Generator::generate_plane(const float width, const float length, const uint width_segments, const uint length_segments, Shape_Data *put_data_here)
       {
-         uint vert_count = number_segments_on_side * number_segments_on_side;
+         // remember tat a single row or column is bordered by two vertices, 
+         // 2 rows or columns are bordered by 3, 3 by 4, etc.
+         uint vert_count = (width_segments + 1) * (length_segments + 1);
          put_data_here->m_num_verts = vert_count;
          put_data_here->m_verts = new My_Vertex[vert_count];
 
-         int row_max_count = number_segments_on_side;
-         float row_half_length = (float)number_segments_on_side / 2;
-         int col_max_count = number_segments_on_side;
-         float col_half_length = (float)number_segments_on_side / 2;
+         // remember:
+         // - Rows traverse the X axis, but they are stacked on the X axis.
+         // - Columns traverse the Z axis, but they are stacked on the Y axis
+         // Draw it out.  It only really made sense to me when I drew it on paper.
+         // Row 0, col 0 is at -X, -Z; row n, col m is at +X, +Z.
+         uint num_vertex_rows = length_segments + 1;
+         uint vertices_per_vertex_row = width_segments + 1;
+         uint num_vertex_cols = width_segments + 1;
 
-         for (int row_count = 0; row_count < row_max_count; row_count++)
+         float row_thickness = length / length_segments;
+         float col_thickness = width / width_segments;
+         float half_length = length * 0.5f;
+         float half_width = width * 0.5f;
+
+         for (uint vertex_row_counter = 0; vertex_row_counter < num_vertex_rows; vertex_row_counter++)
          {
-            for (int col_count = 0; col_count < col_max_count; col_count++)
+            for (uint vertex_col_counter = 0; vertex_col_counter < num_vertex_cols; vertex_col_counter++)
             {
-               // start at upper left (-X, +Y) and work to lower right (+X, -Y)
-               My_Vertex& this_vert = put_data_here->m_verts[row_count * row_max_count + col_count];
-               this_vert.position.x = col_count - col_half_length;
-               this_vert.position.y = 0.0f;
-               this_vert.position.z = row_half_length - row_count;
+               My_Vertex& this_vert = put_data_here->m_verts[vertex_row_counter * vertices_per_vertex_row + vertex_col_counter];
+               this_vert.position = glm::vec3(
+                  vertex_col_counter * col_thickness - half_width,
+                  0.0f,
+                  vertex_row_counter * row_thickness - half_length);
                this_vert.color = random_color();
-               this_vert.normal = glm::vec3(+0.0f, +1.0f, +0.0f);
+               this_vert.normal = glm::vec3(0.0f, +1.0f, 0.0f);
             }
          }
 
          // 6 indices to draw a square (every adjacent set of 4 vertices (including overlap))
          // Note: 3x3 is a 2x2 set of 4 vertices, 4x4 is a 3x3 set of 4, etc.
-         uint index_count = (row_max_count - 1) * (col_max_count - 1) * 6;
+         uint index_count = width_segments * length_segments * 6;
          put_data_here->m_num_total_indices = index_count;
          put_data_here->m_indices = new GLushort[index_count];
          int index_counter = 0;
-         for (int row_count = 0; row_count < (row_max_count - 1); row_count++)
-         {
-            for (int col_count = 0; col_count < (col_max_count - 1); col_count++)
-            {
-               put_data_here->m_indices[index_counter++] = row_count * row_max_count + col_count;
-               put_data_here->m_indices[index_counter++] = row_count * row_max_count + (col_count + 1);
-               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + (col_count + 1);
 
-               put_data_here->m_indices[index_counter++] = row_count * row_max_count + col_count;
-               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + (col_count + 1);
-               put_data_here->m_indices[index_counter++] = (row_count + 1) * row_max_count + col_count;
+         uint num_rows = length_segments;
+         uint num_cols = width_segments;
+         for (uint row_counter = 0; row_counter < num_rows; row_counter++)
+         {
+            for (uint col_counter = 0; col_counter < num_cols; col_counter++)
+            {
+               // This plane is constructed in the X-Z plane with the following layout:
+               // - -X is left, +X is right
+               // - -Z is "up", +Z is "down"
+               // I have explicitly defined the front face to be CCW, so construct accordingly.
+
+               put_data_here->m_indices[index_counter++] = row_counter * vertices_per_vertex_row + col_counter;
+               put_data_here->m_indices[index_counter++] = (row_counter + 1) * vertices_per_vertex_row + col_counter;
+               put_data_here->m_indices[index_counter++] = (row_counter + 1) * vertices_per_vertex_row + (col_counter + 1);
+
+               put_data_here->m_indices[index_counter++] = row_counter * vertices_per_vertex_row + col_counter;
+               put_data_here->m_indices[index_counter++] = (row_counter + 1) * vertices_per_vertex_row + (col_counter + 1);
+               put_data_here->m_indices[index_counter++] = row_counter * vertices_per_vertex_row + (col_counter + 1);
             }
          }
+
 
          Index_Meta_Data i_meta_data(GL_TRIANGLES, index_count);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
