@@ -1,10 +1,12 @@
 #ifndef ENGINE_SCENE_DATA_H
 #define ENGINE_SCENE_DATA_H
 
+#include <memory>
 #include <vector>
 #include <string>
-#include <Entities\Entity.h>
-#include <Shapes\Geometry.h>
+//#include <Entities\Entity.h>
+//#include <Shapes\Geometry.h>
+#include <Shapes\Shape_Data.h>
 #include <Rendering\Renderer.h>
 #include <Rendering\Camera.h>
 
@@ -13,6 +15,16 @@ namespace rapidxml
 {
    template<class Ch = char>
    class xml_document;
+}
+
+namespace Entities
+{
+   class Entity;
+}
+
+namespace Shapes
+{
+   class Geometry;
 }
 
 namespace Scene
@@ -67,8 +79,9 @@ namespace Scene
 
       // these are vectors of classes instead of pointers because I want the
       // class' destructors to be called when the scene instance dies
-      std::vector<Entities::Entity> m_entities;
-      std::vector<Shapes::Geometry> m_geometries;
+      std::vector<std::shared_ptr<Entities::Entity>> V;
+      std::vector<Entities::Entity *> m_entities;
+      std::vector<Shapes::Geometry *> m_geometries;
       std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry *>> m_entity_geometry_pairings;
    };
 }

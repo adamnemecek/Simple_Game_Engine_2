@@ -59,30 +59,32 @@ Shapes::Geometry *g_rectangle_box_geometry_ptr;
 Shapes::Geometry *g_experimental_geometry_ptr;
 
 Entities::Entity g_cube_1_entity("cube_1");
-Rendering::Renderable *g_cube_1_renderable_ptr;
+//Rendering::Renderable *g_cube_1_renderable_ptr;
 Entities::Physics_Component g_cube_1_physics;
 Entities::AABB_Component g_cube_1_bounding_box;
 
 Entities::Entity g_cube_2_entity("cube_2");
-Rendering::Renderable *g_cube_2_renderable_ptr;
+//Rendering::Renderable *g_cube_2_renderable_ptr;
 Entities::Physics_Component g_cube_2_physics;
 Entities::AABB_Component g_cube_2_bounding_box;
 
 Entities::Entity g_cube_3_entity("cube_3");
-Rendering::Renderable *g_cube_3_renderable_ptr;
+//Rendering::Renderable *g_cube_3_renderable_ptr;
 
 Entities::Entity g_cube_4_entity("cube_4");
-Rendering::Renderable *g_cube_4_renderable_ptr;
+//Rendering::Renderable *g_cube_4_renderable_ptr;
 
 Entities::Entity g_plane_entity("plane");
-Rendering::Renderable *g_plane_renderable_ptr;
+//Rendering::Renderable *g_plane_renderable_ptr;
 
 Entities::Entity g_circle_entity("circle");
-Rendering::Renderable * g_circle_renderable_ptr;
+//Rendering::Renderable * g_circle_renderable_ptr;
 
 Entities::Entity g_rectangle_box_entity("rectangle");
-Rendering::Renderable * g_rectangle_box_renderable_ptr;
+//Rendering::Renderable * g_rectangle_box_renderable_ptr;
 Entities::Physics_Component g_rectangle_box_physics;
+
+Entities::Entity g_experimental_entity("experiment");
 
 Entities::Entity g_camera_entity("camera");
 Entities::Controller_Component g_controller_component;
@@ -93,7 +95,9 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   //Scene::Scene_Data local_scene;
+   Scene::Scene_Data local_scene;
+   local_scene.load("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
+
    //Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
    //SL.load_scene(&g_renderer, &local_scene);
 
@@ -180,8 +184,7 @@ void init()
    g_cube_1_entity.add_component(&g_cube_1_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_1_bounding_box, &g_cube_1_physics);
    MY_ASSERT(g_cube_1_entity.initialize());
-   Math::F_Dual_Quat entity_1_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.5f, glm::vec3(0.0f, +3.0f, +4.0f));
-   g_cube_1_entity.m_where_and_which_way = entity_1_offset;
+   g_cube_1_entity.m_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, +1.0f), 0.3f, glm::vec3(0.0f, +2.0f, +4.0f));
    g_cube_1_physics.add_sustained_force_vector(glm::vec3(+0.0f, 0.0f, -0.0f));
    g_cube_1_physics.add_mass(5.0f);
 
@@ -191,17 +194,22 @@ void init()
    g_cube_2_entity.add_component(&g_cube_2_bounding_box);
    Collision_Detection::Collision_Handler::get_instance().add_collision_data(&g_cube_2_bounding_box, &g_cube_2_physics);
    MY_ASSERT(g_cube_2_entity.initialize());
-   Math::F_Dual_Quat entity_2_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.5f, glm::vec3(0.0f, +3.0f, -4.0f));
-   g_cube_2_entity.m_where_and_which_way = entity_2_offset;
+   g_cube_2_entity.m_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(+1.0f, 0.0f, -1.0f), 0.6f, glm::vec3(+4.0f, +3.0f, 0.0f));
    g_cube_2_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, +0.0f));
    g_cube_2_physics.add_mass(10.0f);
 
-   g_renderer.configure_new_renderable(g_experimental_geometry_ptr, &g_cube_3_entity);
+   g_renderer.configure_new_renderable(g_cube_geometry_ptr, &g_cube_3_entity);
    MY_ASSERT(g_cube_3_entity.initialize());
-   Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(-5.0f, +4.0f, +3.0f));
-   //Math::F_Dual_Quat entity_3_offset = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.0f, +3.0f, +0.0f));
-   g_cube_3_entity.m_where_and_which_way = entity_3_offset;
+   g_cube_3_entity.m_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, -1.0f), 0.9f, glm::vec3(0.0f, +4.0f, -4.0f));
 
+   g_renderer.configure_new_renderable(g_cube_geometry_ptr, &g_cube_4_entity);
+   MY_ASSERT(g_cube_4_entity.initialize());
+   g_cube_4_entity.m_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(-1.0f, 0.0f, +1.0f), 1.2f, glm::vec3(-4.0f, +5.0f, 0.0f));
+
+
+   g_renderer.configure_new_renderable(g_experimental_geometry_ptr, &g_experimental_entity);
+   MY_ASSERT(g_experimental_entity.initialize());
+   g_experimental_entity.m_where_and_which_way = Math::F_Dual_Quat::generate_rotate_then_translate(glm::vec3(1.0f, 0.0f, 0.0f), 0.0f, glm::vec3(0.0f, +4.0f, 0.0f));
 
    // set up the camera entity
    // Note: Set it to be off to the side of and above the scene and looking into it.
@@ -241,13 +249,15 @@ void init()
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
 
    Utilities::Printer_Helper &printer_helper_ref = Utilities::Printer_Helper::get_instance();
-   printer_helper_ref.print_my_dual_quat("cube 1", g_cube_3_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("cube 1", g_cube_1_entity.m_where_and_which_way);
    printer_helper_ref.print_my_dual_quat("cube 2", g_cube_2_entity.m_where_and_which_way);
-   printer_helper_ref.print_my_dual_quat("cube 3", g_cube_1_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("cube 3", g_cube_3_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("cube 4", g_cube_4_entity.m_where_and_which_way);
    printer_helper_ref.print_my_dual_quat("camera", g_camera_entity.m_where_and_which_way);
    printer_helper_ref.print_my_dual_quat("circle", g_circle_entity.m_where_and_which_way);
    printer_helper_ref.print_my_dual_quat("rectangle", g_rectangle_box_entity.m_where_and_which_way);
    printer_helper_ref.print_my_dual_quat("plane", g_plane_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("experiment", g_experimental_entity.m_where_and_which_way);
 
 
    // start the game clock
