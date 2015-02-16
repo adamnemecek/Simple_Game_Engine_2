@@ -10,19 +10,26 @@
 
 namespace Utilities
 {
-   // TODO: make singleton instead of static
    class Printer_Helper
    {
    public:
-      static void print_vec(const char *foreword, const glm::vec3 &vec);
-      static void print_dual_vec(
+      static Printer_Helper& get_instance();
+
+      void print_vec(const char *foreword, const glm::vec3 &vec);
+      void print_dual_vec(
          const char *foreword_v1, const glm::vec3 &v1,
          const char *foreword_v2, const glm::vec3 &v2);
-      static void print_mat(const char *foreword, const glm::mat4 &mat);
-      static void print_glm_quat(const char *foreword, const glm::fquat &quat);
-      static void print_glm_dual_quat(const char *foreword, const glm::fdualquat &dq);
-      static void print_my_quat(const char *foreword, const Math::F_Quat &quat);
-      static void print_my_dual_quat(const char *foreword, const Math::F_Dual_Quat &dq);
+      void print_mat(const char *foreword, const glm::mat4 &mat);
+      void print_glm_quat(const char *foreword, const glm::fquat &quat);
+      void print_glm_dual_quat(const char *foreword, const glm::fdualquat &dq);
+      void print_my_quat(const char *foreword, const Math::F_Quat &quat);
+      void print_my_dual_quat(const char *foreword, const Math::F_Dual_Quat &dq);
+
+   private:
+      // enforce singletonness
+      Printer_Helper() {}
+      Printer_Helper(const Printer_Helper&);
+      Printer_Helper &operator=(const Printer_Helper&);
    };
 }
 

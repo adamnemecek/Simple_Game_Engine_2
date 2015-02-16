@@ -4,6 +4,13 @@
 
 namespace Utilities
 {
+   Printer_Helper& Printer_Helper::get_instance()
+   {
+      static Printer_Helper instance;
+
+      return instance;
+   }
+
    void Printer_Helper::print_vec(const char *foreword, const glm::vec3 &vec)
    {
       printf("%s <%.2f, %.2f, %.2f>\n", foreword, vec.x, vec.y, vec.z);

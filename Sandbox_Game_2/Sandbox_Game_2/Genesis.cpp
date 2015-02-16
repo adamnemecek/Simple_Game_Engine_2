@@ -240,7 +240,14 @@ void init()
    MY_ASSERT(g_rectangle_box_entity.initialize());
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
 
-   Utilities::Printer_Helper::
+   Utilities::Printer_Helper &printer_helper_ref = Utilities::Printer_Helper::get_instance();
+   printer_helper_ref.print_my_dual_quat("cube 1", g_cube_3_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("cube 2", g_cube_2_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("cube 3", g_cube_1_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("camera", g_camera_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("circle", g_circle_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("rectangle", g_rectangle_box_entity.m_where_and_which_way);
+   printer_helper_ref.print_my_dual_quat("plane", g_plane_entity.m_where_and_which_way);
 
 
    // start the game clock
