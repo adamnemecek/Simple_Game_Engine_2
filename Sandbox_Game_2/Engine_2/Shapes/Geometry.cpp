@@ -3,9 +3,10 @@
 
 namespace Shapes
 {
-   Geometry::Geometry(const Shape_Data& new_shape_data)
+   Geometry::Geometry(const Shape_Data& new_shape_data, const std::string& new_geometry_id_str)
       : 
-      m_shape_data(new_shape_data)  // copy constructor copies pointers and other data
+      m_shape_data(new_shape_data),  // copy constructor copies pointers and other data
+      m_id(new_geometry_id_str)
    {
       initialize_attributes();
       calculate_shape_meta_data();
@@ -119,23 +120,24 @@ namespace Shapes
    {
       return m_shape_data.m_index_meta_data;
    }
-
+   
+   //TODO: ??delete these??
    //const std::vector<std::string>& Geometry::get_shape_parameter_list() const
    //{
    //   return Geometry::m_shape_data.m_parameters;
    //}
 
-   const std::string Geometry::get_shape_id_string() const
-   {
-      const std::vector<std::string>& parameter_list = m_shape_data.m_parameters;
+   //const std::string Geometry::get_shape_id_string() const
+   //{
+   //   const std::vector<std::string>& parameter_list = m_shape_data.m_parameters;
 
-      std::string S = "";
+   //   std::string S = "";
 
-      for (uint index_counter = 0; index_counter < parameter_list.size(); index_counter++)
-      {
-         S += parameter_list[index_counter];
-      }
+   //   for (uint index_counter = 0; index_counter < parameter_list.size(); index_counter++)
+   //   {
+   //      S += parameter_list[index_counter];
+   //   }
 
-      return S;
-   }
+   //   return S;
+   //}
 }

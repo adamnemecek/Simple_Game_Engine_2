@@ -28,7 +28,7 @@ these function.
 #include <Engine_2\Scene\Scene_Data.h>
 #include <Engine_2\Scene\Scene_Loader.h>
 
-//#include <Engine_2\Utilities\Printer_Helper.h>
+#include <Engine_2\Utilities\Printer_Helper.h>
 #include <Engine_2\Utilities\My_Assert.h>
 
 #include <Engine_2\Math\F_Dual_Quat.h>
@@ -93,8 +93,8 @@ Entities::Controller_Component g_controller_component;
 //Called after the window and OpenGL are initialized. Called exactly once, before the main loop.
 void init()
 {
-   Scene::Scene_Data local_scene;
-   Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
+   //Scene::Scene_Data local_scene;
+   //Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
    //SL.load_scene(&g_renderer, &local_scene);
 
    //Experiment::do_something();
@@ -138,23 +138,23 @@ void init()
 
    Shapes::Shape_Data cube_shape;
    shape_generator_ref.generate_cube(&cube_shape);
-   g_cube_geometry_ptr = new Shapes::Geometry(cube_shape);
+   g_cube_geometry_ptr = new Shapes::Geometry(cube_shape, "my_cube");
 
    Shapes::Shape_Data plane_shape;
    shape_generator_ref.generate_plane(20, 50, 11, 12, &plane_shape);
-   g_plane_geometry_ptr = new Shapes::Geometry(plane_shape);
+   g_plane_geometry_ptr = new Shapes::Geometry(plane_shape, "my_plane");
 
    Shapes::Shape_Data circle_shape;
    shape_generator_ref.generate_circle(15, 1.4, &circle_shape);
-   g_circle_geometry_ptr = new Shapes::Geometry(circle_shape);
+   g_circle_geometry_ptr = new Shapes::Geometry(circle_shape, "my_circle");
 
    Shapes::Shape_Data rectangle_shape;
    shape_generator_ref.generate_box(3, 2, &rectangle_shape);
-   g_rectangle_box_geometry_ptr = new Shapes::Geometry(rectangle_shape);
+   g_rectangle_box_geometry_ptr = new Shapes::Geometry(rectangle_shape, "my_rectangle");
 
    Shapes::Shape_Data experiment_shape;
    shape_generator_ref.generate_sphere(12, 1.7f, 11, &experiment_shape);
-   g_experimental_geometry_ptr = new Shapes::Geometry(experiment_shape);
+   g_experimental_geometry_ptr = new Shapes::Geometry(experiment_shape, "my_experiment");
 
 
 
@@ -239,6 +239,8 @@ void init()
    g_rectangle_box_entity.m_where_and_which_way = entity_rectangle_offset;
    MY_ASSERT(g_rectangle_box_entity.initialize());
    g_rectangle_box_physics.add_sustained_force_vector(glm::vec3(0.0f, 0.0f, 1.0f));
+
+   Utilities::Printer_Helper::
 
 
    // start the game clock

@@ -20,7 +20,7 @@ namespace Shapes
    public:
       // makes a local copy of the shape data (it's a lightweight structure),
       // set up the openGL binding data, and analyze it to create meta data
-      Geometry(const Shape_Data& new_shape_data);
+      Geometry(const Shape_Data& new_shape_data, const std::string& new_geometry_id_str);
 
       // public destructor for cleaning up when this object is destroyed
       ~Geometry()
@@ -43,10 +43,9 @@ namespace Shapes
       // ??is there a way to provide access to this collection without requiring this header to include <vector>??
       const std::vector<Index_Meta_Data>& get_index_meta_data_list() const;
 
-      //const std::vector<std::string>& get_shape_parameter_list() const;
-      
-      // jams the parameter list into a single unique string
-      const std::string get_shape_id_string() const;
+      // just make it public for now
+      // TODO: ??make it private with getter and setter gates??
+      std::string m_id;
 
    private:
       // hide the default constructor so that the user has to supply shape data
@@ -60,7 +59,6 @@ namespace Shapes
       // also not take a Geometry argument pointer for the same reason.
       void initialize_attributes();
       void calculate_shape_meta_data();
-
 
       // these will be cleaned up by the destructor
       GLuint m_VAO_ID;

@@ -147,7 +147,8 @@ namespace
          return 0;
       }
 
-      geometry_ptr = load_into_this_scene->new_geometry(new_shape);
+      // TODO: !!change this!!
+      geometry_ptr = load_into_this_scene->new_geometry(new_shape, "yegads");
 
       return geometry_ptr;
    }
@@ -202,6 +203,19 @@ namespace Scene
 
    bool Scene_Data::load(const std::string& file_path)
    {
+      // start up the renderer
+      //    load shaders
+      //    initialize and set the camera
+      // load geometries (geometries should have unique names, like "cube_1", "sphere_2", "plane_3", etc.)
+      //    geometries need to have names with get/set functions
+      //    need to be able to retrieve a pointer to a geometry from the Scene's geometry collection
+      // load entities 
+      //    generate renderables with entity-geometry combinations
+      //    need to be able to retrieve a pointer to an entity from the Scene's entity collection
+      // the world outside the scene needs to be able to generate new geometry and add 
+
+
+
       //std::string file_path = "C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml";
 
       // open the file
@@ -209,7 +223,7 @@ namespace Scene
       std::vector<char> file_data;
       helper_open_xml_file(&doc, file_data, file_path);
 
-      // make sure that there is a "scene" root node
+      // make sure that there is a "scene" root node (if not, let rapidxml blow up)
       rapidxml::xml_node<> *root_node_ptr = doc.first_node("scene");
       if (0 == root_node_ptr)
       {
@@ -227,7 +241,7 @@ namespace Scene
          // create the entity
          Entities::Entity *new_entity_ptr = this->new_entity(new_entity_id_str);
 
-         // load the transform (it should have this, so let it blow up if it doesn't)
+         // load the transform (it should have this, so let rapidxml blow up if it doesn't)
          const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
          new_entity_ptr->m_where_and_which_way = helper_get_transform(transform_node_ptr);
 
@@ -238,8 +252,6 @@ namespace Scene
             // shape data available, so load it and make a renderable out of it
             Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, this);
             m_renderer.configure_new_renderable(new_geometry_ptr, new_entity_ptr);
-
-
          }
 
          // get the next entity in the node hierarchy
@@ -260,17 +272,17 @@ namespace Scene
    }
 
 
-   Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id)
+   Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id_str)
    {
-      m_entities.push_back(Entities::Entity(new_entity_id));
+      m_entities.push_back(Entities::Entity(new_entity_id_str));
 
       // return a pointer to the newly created entity
       return &(m_entities[m_entities.size() - 1]);
    }
 
-   Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data& new_shape_data)
+   Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data& new_shape_data, const std::string& new_geometry_id_str)
    {
-      m_geometries.push_back(Shapes::Geometry(new_shape_data));
+      m_geometries.push_back(Shapes::Geometry(new_shape_data, new_geometry_id_str));
 
       // return a pointer to the newly created geometry
       return &(m_geometries[m_geometries.size() - 1]);
@@ -281,12 +293,13 @@ namespace Scene
       m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry *>(entity_ptr, geo_ptr));
    }
 
-   Shapes::Geometry *Scene_Data::geometry_already_loaded(const std::string& shape_id_str)
+   Shapes::Geometry *Scene_Data::geometry_already_loaded(const std::string& geometry_id_str)
    {
       for (uint geometry_index_counter = 0; geometry_index_counter < m_geometries.size(); geometry_index_counter++)
       {
          //if (parameter_list == m_geometries[geometry_index_counter].get_shape_parameter_list())
-         if (shape_id_str == m_geometries[geometry_index_counter].get_shape_id_string())
+         //if (geometry_id_str == m_geometries[geometry_index_counter].get_shape_id_string())
+         if (geometry_id_str == m_geometries[geometry_index_counter].m_id)
          {
             return &m_geometries[geometry_index_counter];
          }
@@ -294,5 +307,23 @@ namespace Scene
 
       return 0;
    }
+
+
+   // PRIVATE
+   bool load_renderer(const rapidxml::xml_document<> *parsed_scene_doc)
+   {
+      return true;
+   }
+
+   bool load_geometries(const rapidxml::xml_document<> *parsed_scene_doc)
+   {
+      return true;
+   }
+
+   bool load_entities(const rapidxml::xml_document<> *parsed_scene_doc)
+   {
+      return true;
+   }
+
 
 }
