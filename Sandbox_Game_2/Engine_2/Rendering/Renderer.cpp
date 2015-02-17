@@ -97,7 +97,7 @@ namespace Rendering
       return false;
    }
 
-   void Renderer::configure_new_renderable(const Shapes::Geometry *g_ptr, const Entities::Entity *e_ptr)
+   void Renderer::configure_new_renderable(const Entities::Entity *e_ptr, const Shapes::Geometry *g_ptr)
    {
       MY_ASSERT(m_num_current_renderables != m_MAX_RENDERABLES);
       MY_ASSERT(0 != g_ptr && 0 != e_ptr);

@@ -295,6 +295,7 @@ namespace Scene
 
    Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id_str)
    {
+      //TODO: check if the entity already exists, and if it does, ??do something??
       m_entity_ptrs.push_back(std::unique_ptr<Entities::Entity>(new Entities::Entity(new_entity_id_str)));
 
       // return a pointer to the newly created entity
@@ -324,6 +325,34 @@ namespace Scene
    void Scene_Data::new_entity_geometry_pairing(const Entities::Entity *entity_ptr, const Shapes::Geometry *geo_ptr)
    {
       m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry *>(entity_ptr, geo_ptr));
+   }
+
+   Entities::Entity *Scene_Data::find_entity(const std::string& entity_id_str)
+   {
+      for (uint index_counter = 0; index_counter < m_entity_ptrs.size(); index_counter++)
+      {
+         Entities::Entity *entity_ptr = m_entity_ptrs[index_counter].get();
+         if (entity_id_str == entity_ptr->get_id())
+         {
+            return entity_ptr;
+         }
+      }
+
+      return 0;
+   }
+
+   Shapes::Geometry *Scene_Data::find_geometry(const std::string& geometry_id_str)
+   {
+      for (uint index_counter = 0; index_counter < m_geometry_ptrs.size(); index_counter++)
+      {
+         Shapes::Geometry *geo_ptr = m_geometry_ptrs[index_counter].get();
+         if (geometry_id_str == geo_ptr->m_id)
+         {
+            return geo_ptr;
+         }
+      }
+
+      return 0;
    }
 
    Shapes::Geometry *Scene_Data::geometry_already_loaded(const std::string& geometry_id_str)
@@ -400,7 +429,45 @@ namespace Scene
       const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
       while (0 != entity_node_ptr)
       {
-         const rapidxml::xml_node<> *geometry = root_node_ptr->first_node("bilbags");
+         // before creating anything, check that there is a transform and that the 
+         // entity has an id
+         const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
+         std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
+         if (0 == transform_node_ptr || "" == new_entity_id_str)
+         {
+            // bad
+            // TODO: ??be more elegant than this??
+            cout << "load_entities(...): transform node doesn't exist or entity id is a blank string" << endl;
+            return false;
+         }
+
+         // make a new entity
+         Entities::Entity *new_entity_ptr = this->new_entity(new_entity_id_str);
+         Math::F_Dual_Quat new_transform = helper_get_transform(transform_node_ptr);
+         new_entity_ptr->m_where_and_which_way = new_transform;
+
+         // check if it has a geometry, and if it does, make a renderable
+         const rapidxml::xml_node<> *geo_node_ptr = root_node_ptr->first_node("geometry");
+         if (0 != geo_node_ptr)
+         {
+            std::string geo_id_str = rapidxml::get_attrib_string(*geo_node_ptr, "id");
+            Shapes::Geometry *geo_ptr = this->find_geometry(geo_id_str);
+            if (0 == geo_ptr)
+            {
+               // bad; needs a geometry that doesn't exist
+               // TODO: ??delete the entity??
+               cout << "load_entities(...): geometry with id '" << geo_id_str << "' doesn't exist" << endl;
+               return 0;
+            }
+
+            // add a new pairing to the scene so that it can be saved later
+            this->m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry*>(new_entity_ptr, geo_ptr));
+
+            // add a renderable for this entity-geometry pairing
+            m_renderer.configure_new_renderable(new_entity_ptr, geo_ptr);
+         }
+
+
 
          // get the next entity in the node hierarchy
          entity_node_ptr = entity_node_ptr->next_sibling("entity");
@@ -408,6 +475,4 @@ namespace Scene
 
       return true;
    }
-
-
 }

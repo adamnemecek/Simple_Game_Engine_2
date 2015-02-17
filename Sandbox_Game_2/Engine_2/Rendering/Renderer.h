@@ -40,7 +40,7 @@ namespace Rendering
       // vertex array object binding, and the entity that it is for, which is how the
       // renderable gets the entity-specific model-to-world matrix
       //Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
-      void configure_new_renderable(const Shapes::Geometry *g_ptr, const Entities::Entity *e_ptr);
+      void configure_new_renderable(const Entities::Entity *e_ptr, const Shapes::Geometry *g_ptr);
 
       void set_viewport(GLsizei width, GLsizei height);
       void set_camera_to_render(Camera *camera_ptr);
