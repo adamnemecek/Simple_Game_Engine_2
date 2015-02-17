@@ -229,15 +229,13 @@ namespace Scene
       {
          return false;
       }
-      else
-      {
-         for (uint index = 0; index < m_geometry_ptrs.size(); index++)
-         {
-            cout << m_geometry_ptrs[index]->m_id << endl;
-         }
-      }
 
       if (!load_entities(&doc))
+      {
+         return false;
+      }
+
+      if (!load_camera(&doc))
       {
          return false;
       }
@@ -287,7 +285,7 @@ namespace Scene
       return true;
    }
 
-   void Scene_Data::draw_scene()
+   void Scene_Data::render()
    {
       m_renderer.render_scene();
    }
@@ -447,7 +445,7 @@ namespace Scene
          new_entity_ptr->m_where_and_which_way = new_transform;
 
          // check if it has a geometry, and if it does, make a renderable
-         const rapidxml::xml_node<> *geo_node_ptr = root_node_ptr->first_node("geometry");
+         const rapidxml::xml_node<> *geo_node_ptr = entity_node_ptr->first_node("geometry");
          if (0 != geo_node_ptr)
          {
             std::string geo_id_str = rapidxml::get_attrib_string(*geo_node_ptr, "id");
@@ -465,6 +463,12 @@ namespace Scene
 
             // add a renderable for this entity-geometry pairing
             m_renderer.configure_new_renderable(new_entity_ptr, geo_ptr);
+         }
+
+         if (!new_entity_ptr->initialize())
+         {
+            // bad (??do something else??)
+            return false;
          }
 
          // get the next entity in the node hierarchy

@@ -50,7 +50,7 @@ namespace Scene
       bool load(const std::string& file_path);
       bool save(const std::string& file_path);
 
-      void draw_scene();
+      void render();
 
       Entities::Entity *new_entity(const std::string& new_entity_id_str);
       Shapes::Geometry *new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
