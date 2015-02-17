@@ -20,11 +20,13 @@ namespace Entities
 {
    class Entity;
 }
-
 namespace Rendering
 {
    class Camera;
+}
 
+namespace Rendering
+{
    class __declspec(dllexport) Renderer
    {
    public:
@@ -39,7 +41,6 @@ namespace Rendering
       // with the geometry that it is referencing, which includes information on the 
       // vertex array object binding, and the entity that it is for, which is how the
       // renderable gets the entity-specific model-to-world matrix
-      //Renderable *add_renderable(Shapes::Geometry *geometry_ptr);
       void configure_new_renderable(const Entities::Entity *e_ptr, const Shapes::Geometry *g_ptr);
 
       void set_viewport(GLsizei width, GLsizei height);
@@ -56,7 +57,6 @@ namespace Rendering
       std::vector<GLuint> m_shader_programs;
       GLint m_unif_loc_model_to_camera_matrix;
       GLint m_unif_loc_camera_to_clip_matrix;
-      GLint m_unif_loc_cam_pos_cs;
       GLint m_unif_loc_light_1_pos_cs;
       GLint m_unif_loc_light_1_intensity;
       GLint m_unif_loc_light_2_pos_cs;

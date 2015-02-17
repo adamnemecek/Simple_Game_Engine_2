@@ -1,13 +1,20 @@
 #ifndef ENGINE_SCENE_DATA_H
 #define ENGINE_SCENE_DATA_H
 
+// for storing std:unique_ptr
 #include <memory>
 #include <vector>
+
+// I can't forward declare these things for the std::unique_ptr, so I 
+// have to include the whole definition
+#include <Entities\Entity.h>
+#include <Entities\Components\Physics_Component.h>
+#include <Entities\Components\AABB_Component.h>
+#include <Entities\Components\Controller_Component.h>
+#include <Shapes\Geometry.h>
+
+// misc
 #include <string>
-//#include <Entities\Entity.h>
-//#include <Shapes\Geometry.h>
-//#include <Shapes\Shape_Data.h>
-//#include <Rendering\Renderer.h>
 #include <Rendering\Camera.h>
 
 // forward declarations
@@ -17,32 +24,15 @@ namespace rapidxml
    class xml_document;
 }
 
-namespace Entities
-{
-   class Entity;
-   class Physics_Component;
-   class AABB_Component;
-   class Controller_Component;
-}
-
 namespace Shapes
 {
    class Geometry;
-   struct Shape_Data;
-   struct My_Vertex;
 }
 
 namespace Rendering
 {
    class Renderer;
 }
-
-class my_class
-{
-public:
-
-private:
-};
 
 namespace Scene
 {

@@ -94,7 +94,6 @@
     <ClCompile Include="Math\F_Dual_Number.cpp" />
     <ClCompile Include="Rendering\Renderable.cpp" />
     <ClCompile Include="Scene\Scene_Data.cpp" />
-    <ClCompile Include="Scene\Scene_Loader.cpp" />
     <ClCompile Include="Shapes\Geometry.cpp" />
     <ClCompile Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.cpp" />
     <ClCompile Include="Start_Engine.cpp" />
@@ -128,7 +127,6 @@
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\Renderer.h" />
     <ClInclude Include="Scene\Scene_Data.h" />
-    <ClInclude Include="Scene\Scene_Loader.h" />
     <ClInclude Include="Shapes\Geometry.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Arcsynthesis_XML_Reader.h" />
     <ClInclude Include="Shapes\Geometry_Creation\Shape_Generator.h" />

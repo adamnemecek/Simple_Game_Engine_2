@@ -27,7 +27,6 @@ namespace Rendering
       // do NOT let the uniform locations be initialized to 0, which is the first valid uniform location!
       m_unif_loc_model_to_camera_matrix = -1;
       m_unif_loc_camera_to_clip_matrix = -1;
-      m_unif_loc_cam_pos_cs = -1;
       m_unif_loc_light_1_pos_cs = -1;
       m_unif_loc_light_1_intensity = -1;
       m_unif_loc_light_2_pos_cs = -1;
@@ -71,9 +70,6 @@ namespace Rendering
 
       uniform_name_str = "unif_camera_to_clip_matrix";
       if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_camera_to_clip_matrix)) { glUseProgram(0); return false; }
-
-      uniform_name_str = "unif_cam_pos_cs";
-      //if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_cam_pos_cs)) { glUseProgram(0); return false; }
 
       uniform_name_str = "unif_light_1_pos_cs";
       if (!find_uniform(program_ID, uniform_name_str, &m_unif_loc_light_1_pos_cs)) { glUseProgram(0); return false; }
