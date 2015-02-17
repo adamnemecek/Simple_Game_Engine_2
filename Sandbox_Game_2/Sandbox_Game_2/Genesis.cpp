@@ -140,25 +140,25 @@ void init()
    using Shapes::Geometry_Creation::Shape_Generator;
    Shape_Generator& shape_generator_ref = Shape_Generator::get_instance();
 
-   Shapes::Shape_Data cube_shape;
-   shape_generator_ref.generate_cube(&cube_shape);
-   g_cube_geometry_ptr = new Shapes::Geometry(cube_shape, "my_cube");
+   Shapes::Shape_Data *cube_shape_ptr;
+   cube_shape_ptr = shape_generator_ref.generate_cube();
+   g_cube_geometry_ptr = new Shapes::Geometry(cube_shape_ptr, "my_cube");
 
-   Shapes::Shape_Data plane_shape;
-   shape_generator_ref.generate_plane(20, 50, 11, 12, &plane_shape);
-   g_plane_geometry_ptr = new Shapes::Geometry(plane_shape, "my_plane");
+   Shapes::Shape_Data *plane_shape_ptr;
+   plane_shape_ptr = shape_generator_ref.generate_plane(20, 50, 11, 12);
+   g_plane_geometry_ptr = new Shapes::Geometry(plane_shape_ptr, "my_plane");
 
-   Shapes::Shape_Data circle_shape;
-   shape_generator_ref.generate_circle(15, 1.4, &circle_shape);
-   g_circle_geometry_ptr = new Shapes::Geometry(circle_shape, "my_circle");
+   Shapes::Shape_Data *circle_shape_ptr;
+   circle_shape_ptr = shape_generator_ref.generate_circle(15, 1.4);
+   g_circle_geometry_ptr = new Shapes::Geometry(circle_shape_ptr, "my_circle");
 
-   Shapes::Shape_Data rectangle_shape;
-   shape_generator_ref.generate_box(3, 2, &rectangle_shape);
-   g_rectangle_box_geometry_ptr = new Shapes::Geometry(rectangle_shape, "my_rectangle");
+   Shapes::Shape_Data *rectangle_shape_ptr;
+   rectangle_shape_ptr = shape_generator_ref.generate_box(3, 2);
+   g_rectangle_box_geometry_ptr = new Shapes::Geometry(rectangle_shape_ptr, "my_rectangle");
 
-   Shapes::Shape_Data experiment_shape;
-   shape_generator_ref.generate_sphere(12, 1.7f, 11, &experiment_shape);
-   g_experimental_geometry_ptr = new Shapes::Geometry(experiment_shape, "my_experiment");
+   Shapes::Shape_Data *experiment_shape_ptr;
+   experiment_shape_ptr = shape_generator_ref.generate_sphere(12, 1.7f, 11);
+   g_experimental_geometry_ptr = new Shapes::Geometry(experiment_shape_ptr, "my_experiment");
 
 
 

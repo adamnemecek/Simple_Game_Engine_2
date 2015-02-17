@@ -72,66 +72,60 @@ namespace
 
       // pick apart the node to figure out what shape to make, and then make it
       std::string shape_type_str = rapidxml::get_attrib_string(*shape_node_ptr, "id");
-      Shapes::Shape_Data *new_shape_ptr = new Shapes::Shape_Data;
-
+      Shapes::Shape_Data *new_shape_ptr = 0;
       Shapes::Geometry_Creation::Shape_Generator& shape_generator_ref = Shapes::Geometry_Creation::Shape_Generator::get_instance();
       float f_return_value_if_parameter_not_found = 0.0f;
       int i_return_value_if_parameter_not_found = 0;
 
       if ("triangle" == shape_type_str)
       {
-         shape_generator_ref.generate_triangle(new_shape_ptr);
+         new_shape_ptr = shape_generator_ref.generate_triangle();
          cout << "loading triangle" << endl;
       }
       else if ("plane" == shape_type_str)
       {
-         shape_generator_ref.generate_plane(
+         new_shape_ptr = shape_generator_ref.generate_plane(
             rapidxml::get_attrib_float(*shape_node_ptr, "width", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "width_segments", i_return_value_if_parameter_not_found),
-            rapidxml::get_attrib_int(*shape_node_ptr, "length_segments", i_return_value_if_parameter_not_found),
-            new_shape_ptr);
+            rapidxml::get_attrib_int(*shape_node_ptr, "length_segments", i_return_value_if_parameter_not_found));
          cout << "loading plane" << endl;
       }
       else if ("box" == shape_type_str)
       {
-         shape_generator_ref.generate_box(
+         new_shape_ptr =shape_generator_ref.generate_box(
             rapidxml::get_attrib_float(*shape_node_ptr, "width", f_return_value_if_parameter_not_found),
-            rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
-            new_shape_ptr);
+            rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found));
          cout << "loading box" << endl;
       }
       else if ("circle" == shape_type_str)
       {
-         shape_generator_ref.generate_circle(
+         new_shape_ptr = shape_generator_ref.generate_circle(
             rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
-            rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
-            new_shape_ptr);
+            rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found));
          cout << "loading circle" << endl;
       }
       else if ("cube" == shape_type_str)
       {
-         shape_generator_ref.generate_cube(new_shape_ptr);
+         new_shape_ptr = shape_generator_ref.generate_cube();
          cout << "loading cube" << endl;
       }
       else if ("cylinder" == shape_type_str)
       {
-         shape_generator_ref.generate_cylinder(
+         new_shape_ptr = shape_generator_ref.generate_cylinder(
             rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
-            rapidxml::get_attrib_float(*shape_node_ptr, "height", f_return_value_if_parameter_not_found),
-            new_shape_ptr);
+            rapidxml::get_attrib_float(*shape_node_ptr, "height", f_return_value_if_parameter_not_found));
 
          cout << "loading cylinder" << endl;
       }
       else if ("sphere" == shape_type_str)
       {
-         shape_generator_ref.generate_sphere(
+         new_shape_ptr = shape_generator_ref.generate_sphere(
             rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
-            rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
-            new_shape_ptr);
+            rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found));
 
          cout << "loading sphere" << endl;
       }

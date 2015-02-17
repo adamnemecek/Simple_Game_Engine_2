@@ -33,28 +33,28 @@ namespace Shapes
          // create a triangle in the X-Y plane (vertical)
          // Note: It is vertical because this was the original shape that I drew to make sure that 
          // my code could draw something to the screen.
-         void generate_triangle(Shape_Data *put_data_here);
+         Shape_Data *generate_triangle();
 
          // create a plane in the X-Z plane (horizontal) at Y = 0
          // Note: X = width, Z = length
-         void generate_plane(const float width, const float length, const uint width_segments, const uint length_segments, Shape_Data *put_data_here);
+         Shape_Data *generate_plane(const float width, const float length, const uint width_segments, const uint length_segments);
 
          // create a rectangle wire-frame in the X-Z plane (horizontal) at Y = 0
-         void generate_box(const float width, const float length, Shape_Data *put_data_here);
+         Shape_Data *generate_box(const float width, const float length);
 
          // create a circle in the X-Z plane (horizontal) at Y = 0
-         void generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here);
+         Shape_Data *generate_circle(const uint num_arc_segments, const float radius);
 
          // 3D shapes
 
          // create a cube centered on the origin
-         void generate_cube(Shape_Data *put_data_here);
+         Shape_Data *generate_cube();
 
          // create a cylinder with top facing +Y, bottom facing -Y, and the bottom on Y = 0
-         void generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Shape_Data *put_data_here);
+         Shape_Data *generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height);
 
          // create a sphere with the bottom on Y = 0
-         void generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Shape_Data *put_data_here);
+         Shape_Data *generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments);
 
 
       private:

@@ -85,8 +85,11 @@ namespace Shapes
          return instance;
       }
 
-      void Shape_Generator::generate_triangle(Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_triangle()
       {
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
          My_Vertex local_verts[] =
          {
             glm::vec3(-0.5f, -0.5f, -1.0f),          // left bottom corner
@@ -124,11 +127,16 @@ namespace Shapes
 
          Index_Meta_Data i_meta_data(GL_TRIANGLES, num_indices);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
+
+         return put_data_here;
       }
 
-      void Shape_Generator::generate_plane(const float width, const float length, const uint width_segments, const uint length_segments, Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_plane(const float width, const float length, const uint width_segments, const uint length_segments)
       {
-         // remember tat a single row or column is bordered by two vertices, 
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
+         // remember that a single row or column is bordered by two vertices, 
          // 2 rows or columns are bordered by 3, 3 by 4, etc.
          uint vert_count = (width_segments + 1) * (length_segments + 1);
          put_data_here->m_num_verts = vert_count;
@@ -193,10 +201,16 @@ namespace Shapes
 
          Index_Meta_Data i_meta_data(GL_TRIANGLES, index_count);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
+
+
+         return put_data_here;
       }
 
-      void Shape_Generator::generate_circle(const uint num_arc_segments, const float radius, Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_circle(const uint num_arc_segments, const float radius)
       {
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
          // there is one vertex for each line segment
          // Note: These vertices are calculated for a Line Strip, and the indices will
          // handle the closing of the loop.
@@ -237,10 +251,16 @@ namespace Shapes
 
          Index_Meta_Data i_meta_data(GL_LINE_STRIP, index_count);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
+
+
+         return put_data_here;
       }
 
-      void Shape_Generator::generate_box(const float width, const float length, Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_box(const float width, const float length)
       {
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
          float half_width = width / 2.0f;
          float half_length = length / 2.0f;
 
@@ -293,14 +313,15 @@ namespace Shapes
 
          Index_Meta_Data i_meta_data(GL_LINE_STRIP, num_indices);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
+
+         
+         return put_data_here;
       }
 
-      void Shape_Generator::generate_cube(Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_cube()
       {
-         if (0 == put_data_here)
-         {
-            return;
-         }
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
 
          My_Vertex local_verts[] =
          {
@@ -410,10 +431,15 @@ namespace Shapes
 
          Index_Meta_Data i_meta_data(GL_TRIANGLES, num_indices);
          put_data_here->m_index_meta_data.push_back(i_meta_data);
+
+         return put_data_here;
       }
       
-      void Shape_Generator::generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height, Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_cylinder(const uint num_arc_segments, const float radius, const uint num_vertical_segments, const float height)
       {
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
          // allocate space for the total number of vertices required
          // Note: The top and bottom of the cylinder will use the same calculation.  
          // The top and bottom vertices will be calculated as a Triangle Fan.
@@ -618,10 +644,16 @@ namespace Shapes
          // body
          Index_Meta_Data body_i_meta_data(GL_TRIANGLE_STRIP, indices_on_body);
          put_data_here->m_index_meta_data.push_back(body_i_meta_data);
+
+
+         return put_data_here;
       }
 
-      void Shape_Generator::generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments, Shape_Data *put_data_here)
+      Shape_Data *Shape_Generator::generate_sphere(const uint num_arc_segments, const float radius, const uint num_vertical_segments)
       {
+         // create a new storage structure that will persist beyond the function
+         Shape_Data *put_data_here = new Shape_Data;
+
          // The following calculations are nearly identical to those of the cylinder.  
          // There is still a triangle fan at the top and another at the bottom, and the
          // body is still composed of triangle strips.  The differences are in the height 
@@ -857,6 +889,9 @@ namespace Shapes
             // body
             Index_Meta_Data body_i_meta_data(GL_TRIANGLE_STRIP, indices_on_body);
             put_data_here->m_index_meta_data.push_back(body_i_meta_data);
+
+
+            return put_data_here;
          }
       }
    }

@@ -26,13 +26,25 @@ namespace Shapes
 {
    class Geometry;
    struct Shape_Data;
+   struct My_Vertex;
 }
+
+class my_class
+{
+public:
+
+private:
+};
 
 namespace Scene
 {
    class __declspec(dllexport) Scene_Data
    {
    public:
+      // I explicitly hide the copy constructor and assignment operator,
+      // so I also have to explicitly declare a public constructor 
+      Scene_Data() {}
+
       bool initialize();
 
       bool load(const std::string& file_path);
@@ -56,6 +68,14 @@ namespace Scene
       Shapes::Geometry *geometry_already_loaded(const std::string& geometry_id_str);
 
    private:
+      // hide the copy and assignment constructors 
+      // Note: If I don't, then default ones will be created, and they will attempt to
+      // to use the copy and assignment constructors of all class members, but the 
+      // unique_ptr doesn't have these, so an error will be thrown.
+      Scene_Data(const Scene_Data&);
+      Scene_Data& operator=(const Scene_Data&);
+
+
       // private initialization helper functions
 
       bool load_renderer(const rapidxml::xml_document<> *parsed_scene_doc);
