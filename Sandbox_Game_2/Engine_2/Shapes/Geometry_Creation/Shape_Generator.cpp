@@ -3,15 +3,14 @@
 #include <Shapes\Shape_Data.h>
 #include <Shapes\My_Vertex.h>
 #include <Shapes\Index_Meta_Data.h>
-
 #include <glm\vec3.hpp>
-#include <glm\detail\func_geometric.hpp>
-
+#include <glm\detail\func_geometric.hpp> // for normalizing certain normal vector calculations
 #include <stdlib.h>
 #include <Utilities\Include_Helpers\GL_Version.h>
 #include <Utilities\Typedefs.h>
 #include <math.h>
 #include <Utilities\My_Constants.h>
+#include <string>
 
 
 // helper functions for this file
@@ -90,6 +89,9 @@ namespace Shapes
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
 
+         // create the parameter list
+         put_data_here->m_parameters.push_back("triangle");
+
          My_Vertex local_verts[] =
          {
             glm::vec3(-0.5f, -0.5f, -1.0f),          // left bottom corner
@@ -135,6 +137,13 @@ namespace Shapes
       {
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
+
+         // create the parameter list
+         put_data_here->m_parameters.push_back("plane");
+         put_data_here->m_parameters.push_back(std::to_string(width));
+         put_data_here->m_parameters.push_back(std::to_string(length));
+         put_data_here->m_parameters.push_back(std::to_string(width_segments));
+         put_data_here->m_parameters.push_back(std::to_string(length_segments));
 
          // remember that a single row or column is bordered by two vertices, 
          // 2 rows or columns are bordered by 3, 3 by 4, etc.
@@ -211,6 +220,11 @@ namespace Shapes
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
 
+         // create the parameter list
+         put_data_here->m_parameters.push_back("circle");
+         put_data_here->m_parameters.push_back(std::to_string(num_arc_segments));
+         put_data_here->m_parameters.push_back(std::to_string(radius));
+
          // there is one vertex for each line segment
          // Note: These vertices are calculated for a Line Strip, and the indices will
          // handle the closing of the loop.
@@ -260,6 +274,11 @@ namespace Shapes
       {
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
+
+         // create the parameter list
+         put_data_here->m_parameters.push_back("box");
+         put_data_here->m_parameters.push_back(std::to_string(width));
+         put_data_here->m_parameters.push_back(std::to_string(length));
 
          float half_width = width / 2.0f;
          float half_length = length / 2.0f;
@@ -322,6 +341,9 @@ namespace Shapes
       {
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
+
+         // create the parameter list
+         put_data_here->m_parameters.push_back("cube");
 
          My_Vertex local_verts[] =
          {
@@ -439,6 +461,13 @@ namespace Shapes
       {
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
+
+         // create the parameter list
+         put_data_here->m_parameters.push_back("cylinder");
+         put_data_here->m_parameters.push_back(std::to_string(num_arc_segments));
+         put_data_here->m_parameters.push_back(std::to_string(radius));
+         put_data_here->m_parameters.push_back(std::to_string(num_vertical_segments));
+         put_data_here->m_parameters.push_back(std::to_string(height));
 
          // allocate space for the total number of vertices required
          // Note: The top and bottom of the cylinder will use the same calculation.  
@@ -653,6 +682,12 @@ namespace Shapes
       {
          // create a new storage structure that will persist beyond the function
          Shape_Data *put_data_here = new Shape_Data;
+
+         // create the parameter list
+         put_data_here->m_parameters.push_back("sphere");
+         put_data_here->m_parameters.push_back(std::to_string(num_arc_segments));
+         put_data_here->m_parameters.push_back(std::to_string(radius));
+         put_data_here->m_parameters.push_back(std::to_string(num_vertical_segments));
 
          // The following calculations are nearly identical to those of the cylinder.  
          // There is still a triangle fan at the top and another at the bottom, and the

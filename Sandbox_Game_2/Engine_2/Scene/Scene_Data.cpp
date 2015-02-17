@@ -227,12 +227,14 @@ namespace Scene
 
       if (!load_geometries(&doc))
       {
+         return false;
+      }
+      else
+      {
          for (uint index = 0; index < m_geometry_ptrs.size(); index++)
          {
             cout << m_geometry_ptrs[index]->m_id << endl;
          }
-
-         return false;
       }
 
       if (!load_entities(&doc))
