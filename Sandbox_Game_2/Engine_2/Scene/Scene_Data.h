@@ -7,7 +7,7 @@
 //#include <Entities\Entity.h>
 //#include <Shapes\Geometry.h>
 //#include <Shapes\Shape_Data.h>
-#include <Rendering\Renderer.h>
+//#include <Rendering\Renderer.h>
 #include <Rendering\Camera.h>
 
 // forward declarations
@@ -29,6 +29,11 @@ namespace Shapes
    struct My_Vertex;
 }
 
+namespace Rendering
+{
+   class Renderer;
+}
+
 class my_class
 {
 public:
@@ -46,11 +51,12 @@ namespace Scene
       Scene_Data() {}
 
       bool initialize();
+      void set_render(Rendering::Renderer *renderer_ptr);
+
+      void update();
 
       bool load(const std::string& file_path);
       bool save(const std::string& file_path);
-
-      void render();
 
       Entities::Entity *new_entity(const std::string& new_entity_id_str);
       Shapes::Geometry *new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
@@ -86,14 +92,11 @@ namespace Scene
 
       // keep this around so that new renderables can be added as new entities and
       // geometries are introduced
-      // Note: I am keeping this as a class member instead of a pointer because it
-      // only needs to live as long as the scene.  If there is no scene, then there
-      // is no need of a renderer.  If there is a scene, then there only needs to be 
-      // a single renderer with its collection of renderables.  When the scene object
-      // dies, then all renderables should also die.
-      // 
-      // Making the renderer a class member accomplishes this goal.
-      Rendering::Renderer m_renderer;
+      // Note: Wherever the renderer is kept it should be in the same scope as the
+      // scene so that they both die at the same time.  The renderer makes use of
+      // entity transforms, and if those entities die and the renderer doesn't, then
+      // there will be trouble.
+      Rendering::Renderer *m_renderer_ptr;
 
       // a single camera
       // TODO: ??make this a collection of cameras??

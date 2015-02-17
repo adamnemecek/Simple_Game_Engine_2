@@ -154,6 +154,7 @@ namespace Rendering
       glUniform3fv(m_unif_loc_light_2_pos_cs, 1, glm::value_ptr(light_2_location));
       glUniform1f(m_unif_loc_light_2_intensity, light_2_intensity);
 
+      glm::mat4 m = m_perspective_mat;
       // the camera-to-clip matrix is independent of each renderable
       glUniformMatrix4fv(m_unif_loc_camera_to_clip_matrix, 1, GL_FALSE, glm::value_ptr(m_perspective_mat));
 

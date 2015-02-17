@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <memory> // for std::shared_ptr
+#include <Rendering\Renderer.h>
 
 // for generating things from the file data
 #include <Entities\Entity.h>
@@ -191,12 +192,27 @@ namespace Scene
 {
    bool Scene_Data::initialize()
    {
-      MY_ASSERT(m_renderer.initialize());
+      MY_ASSERT(m_renderer_ptr->initialize());
 
       m_entity_ptrs.clear();
       m_geometry_ptrs.clear();
 
       return true;
+   }
+
+   void Scene_Data::set_render(Rendering::Renderer *renderer_ptr)
+   {
+      m_renderer_ptr = renderer_ptr;
+   }
+
+   void Scene_Data::update()
+   {
+      for (uint index_counter = 0; index_counter < m_entity_ptrs.size(); index_counter++)
+      {
+         m_entity_ptrs[index_counter]->update();
+      }
+
+      m_camera.update();
    }
 
    bool Scene_Data::load(const std::string& file_path)
@@ -270,7 +286,7 @@ namespace Scene
       //   {
       //      // shape data available, so load it and make a renderable out of it
       //      Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, this);
-      //      m_renderer.configure_new_renderable(new_geometry_ptr, new_entity_ptr);
+      //      m_renderer_ptr->configure_new_renderable(new_geometry_ptr, new_entity_ptr);
       //   }
 
       //   // get the next entity in the node hierarchy
@@ -284,12 +300,6 @@ namespace Scene
    {
       return true;
    }
-
-   void Scene_Data::render()
-   {
-      m_renderer.render_scene();
-   }
-
 
    Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id_str)
    {
@@ -370,7 +380,7 @@ namespace Scene
    // PRIVATE
    bool Scene_Data::load_renderer(const rapidxml::xml_document<> *parsed_scene_doc)
    {
-      if (!m_renderer.initialize()) { return false; }
+      if (!m_renderer_ptr->initialize()) { return false; }
 
       // TODO: put these into the scene file under something other than "scene"
       std::string file_paths[] =
@@ -385,15 +395,15 @@ namespace Scene
       };
 
       GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
-      if (!m_renderer.add_shader_program(program_ID)) { return false; }
-      if (!m_renderer.bind_shader_program(program_ID)) { return false; }
+      if (!m_renderer_ptr->add_shader_program(program_ID)) { return false; }
+      if (!m_renderer_ptr->bind_shader_program(program_ID)) { return false; }
 
       cout << "Program ID: " << program_ID << endl;
 
       // set the camera instance that will be used in rendering, but don't specify an
       // entity for the camera to follow because that should take place in the 
       // load_entities(...) function
-      m_renderer.set_camera_to_render(&m_camera);
+      m_renderer_ptr->set_camera_to_render(&m_camera);
 
       return true;
    }
@@ -462,7 +472,7 @@ namespace Scene
             this->m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry*>(new_entity_ptr, geo_ptr));
 
             // add a renderable for this entity-geometry pairing
-            m_renderer.configure_new_renderable(new_entity_ptr, geo_ptr);
+            m_renderer_ptr->configure_new_renderable(new_entity_ptr, geo_ptr);
          }
 
          if (!new_entity_ptr->initialize())

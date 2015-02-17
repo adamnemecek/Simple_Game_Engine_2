@@ -97,6 +97,9 @@ Scene::Scene_Data g_scene;
 void init()
 {
    //Scene::Scene_Data local_scene;
+   g_renderer.initialize();
+   g_scene.set_render(&g_renderer);
+   g_scene.initialize();
    g_scene.load("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
 
    //Scene::Scene_Loader& SL = Scene::Scene_Loader::get_instance();
@@ -287,11 +290,11 @@ void display()
 
    //Collision_Detection::Collision_Handler::get_instance().update();
 
-   g_camera_entity.update();
-   g_camera.update();
+   //g_camera_entity.update();
+   //g_camera.update();
    
-   g_scene.render();
-   //g_renderer.render_scene();
+   g_scene.update();
+   g_renderer.render_scene();
 
    glutSwapBuffers();
    glutPostRedisplay();
