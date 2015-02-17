@@ -20,7 +20,19 @@ namespace Entities
    class __declspec(dllexport) Physics_Component : public Game_Component
    {
    public:
-      bool initialize();
+      // for setting starting values to 0
+      // Note: The initialize() method formerly held this responsibility, but I ran into
+      // trouble when I was implementing the scene loading.  Basically, I didn't have the 
+      // luxury (without breaking cohesion) of making the physics component, adding it to
+      // the entity, initializing it, and THEN adding a sustained force vector.  The 
+      // initialize() method was originally designed as a way to start up a Game_Component
+      // object AFTER it had been added to an entity, plus it could do double duty in 
+      // resetting the component (I don't know when I would use this, but Jamie King said
+      // that it might be useful).  I will now reject that last design idea and only use 
+      // initialize() for things that happen AFTER the object is added to its entity.
+      Physics_Component();
+
+      // default initialize();
       // default shutdown()
       void update();
 

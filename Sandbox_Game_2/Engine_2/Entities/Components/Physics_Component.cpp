@@ -20,16 +20,14 @@
 
 namespace Entities
 {
-   bool Physics_Component::initialize()
+   Physics_Component::Physics_Component()
+      :
+      m_current_immediate_force_vector_index(0),
+      m_current_sustained_force_vector_index(0),
+      m_linear_velocity(glm::vec3()),
+      m_angular_velocity(0)
    {
-      m_current_immediate_force_vector_index = 0;
-      m_current_sustained_force_vector_index = 0;
-      m_linear_velocity = glm::vec3();
-      m_angular_velocity = 0.0f;
-
       // don't bother clearing the force vectors array because it will be overwritten on every frame
-
-      return true;
    }
 
    void Physics_Component::update()

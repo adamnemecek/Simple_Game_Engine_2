@@ -222,6 +222,9 @@ namespace
 
             // do NOT look for immediate force vectors because those are resolved 
             // frame by frame and therefore should not be in the file
+
+            // add the component
+            load_into_this_entity_ptr->add_component(physics_ptr);
          }
          else if ("AABB" == component_type_str)
          {
@@ -231,20 +234,34 @@ namespace
             Shapes::Geometry *geo_ptr = store_components_here_ptr->find_geometry(geo_id_str);
             if (0 == geo_ptr)
             {
-               // bad; bounding box wants geometry that doesn't exist
+               // bad; bounding box wants geometry that doesn't exist (or that doesn't exist yet, which shouldn't happen because the geometry is supposed to load before the components)
                return false;
             }
 
             Entities::AABB_Component *aabb_ptr = store_components_here_ptr->new_AABB_component();
             aabb_ptr->calculate_default_boundaries(geo_ptr->get_shape_meta_data());
+
+            // add the component
+            load_into_this_entity_ptr->add_component(aabb_ptr);
          }
          else if ("controller" == component_type_str)
          {
-            
+            Entities::Controller_Component *controller_ptr = store_components_here_ptr->new_controller_component();
+            controller_ptr->set_key_binding(Input::SUPPORTED_BINDINGS::KEYBOARD);
+
+            load_into_this_entity_ptr->add_component(controller_ptr);
          }
+         else
+         {
+            //TODO: ??be more harsh with bad component construction
+            cout << "component type '" << component_type_str << "' unknown" << endl;
+         }
+
+         // get the next component
+         component_node_ptr = component_node_ptr->next_sibling("component");
       }
 
-      return false;
+      return true;
    }
 }
 
@@ -557,7 +574,12 @@ return true;
             m_renderer_ptr->configure_new_renderable(new_entity_ptr, geo_ptr);
          }
 
-         // ch
+         // check for components
+         if (!helper_load_components(entity_node_ptr, new_entity_ptr, this))
+         {
+            // bad; something went wrong with component loading (TODO:??be more specific??)
+            return false;
+         }
 
          if (!new_entity_ptr->initialize())
          {
