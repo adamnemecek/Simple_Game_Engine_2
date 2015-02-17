@@ -467,11 +467,42 @@ namespace Scene
             m_renderer.configure_new_renderable(new_entity_ptr, geo_ptr);
          }
 
-
-
          // get the next entity in the node hierarchy
          entity_node_ptr = entity_node_ptr->next_sibling("entity");
       }
+
+      return true;
+   }
+
+   bool Scene_Data::load_camera(const rapidxml::xml_document<> *parsed_scene_doc)
+   {
+      // make sure that there is a "scene" root node (if not, let rapidxml blow up)
+      rapidxml::xml_node<> *root_node_ptr = parsed_scene_doc->first_node("scene");
+
+      // look for the cameras and link them up with their corresponding entities
+      // Note: For the foreseeable future, I'll only have one camera.
+      const rapidxml::xml_node<> *camera_node_ptr = root_node_ptr->first_node("camera");
+      while (0 != camera_node_ptr)
+      {
+         // ??does the camera really need a unique ID??
+         std::string camera_id_str = rapidxml::get_attrib_string(*camera_node_ptr, "id");
+         m_camera.set_id(camera_id_str);
+
+         std::string followed_entitiy_id = rapidxml::get_attrib_string(*camera_node_ptr, "followed_entity_id");
+         Entities::Entity *followed_entity_ptr = this->find_entity(followed_entitiy_id);
+
+         if (0 == followed_entity_ptr)
+         {
+            // bad
+            // ??kill anything? set camera id to blank again??
+            return false;
+         }
+
+         m_camera.set_entity_to_follow(followed_entity_ptr);
+
+         camera_node_ptr = camera_node_ptr->next_sibling("camera");
+      }
+
 
       return true;
    }

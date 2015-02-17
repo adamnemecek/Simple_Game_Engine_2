@@ -9,6 +9,7 @@ namespace Rendering
 {
    Camera::Camera()
       :
+      m_id(""),   // TODO: ??use another default like "camera_x" where "x" is an integer counter??
       m_prev_mouse_position(0.0f),
       m_camera_move_speed(0.3f),
       m_follow_this_entity_ptr(0),
@@ -68,10 +69,24 @@ namespace Rendering
       }
    }
 
-   void Camera::set_entity_to_follow(Entities::Entity *entity_ptr)
+   void Camera::set_entity_to_follow(const Entities::Entity *entity_ptr)
    {
       MY_ASSERT(entity_ptr != 0);
       m_follow_this_entity_ptr = entity_ptr;
    }
 
+   bool Camera::set_id(const std::string& new_id)
+   {
+      if ("" == new_id)
+      {
+         return false;
+      }
+
+      m_id = new_id;
+   }
+
+   std::string Camera::get_id()
+   {
+      return m_id;
+   }
 }

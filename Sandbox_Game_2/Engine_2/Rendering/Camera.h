@@ -5,6 +5,7 @@
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
 #include <Math\F_Dual_Quat.h>
+#include <string>
 
 namespace Entities
 {
@@ -25,15 +26,19 @@ namespace Rendering
 
       // use this to assign an entity to follow
       // Note: If no entity is assigned, then the camera will remain at the origin and not move.
-      void set_entity_to_follow(Entities::Entity *entity_ptr);
+      void set_entity_to_follow(const Entities::Entity *entity_ptr);
 
+      bool set_id(const std::string& new_id);
+      std::string get_id();
 
    private:
+      std::string m_id;
+
       Math::F_Dual_Quat m_where_and_which_way;
 
       glm::vec2 m_prev_mouse_position;
 
-      Entities::Entity *m_follow_this_entity_ptr;
+      const Entities::Entity *m_follow_this_entity_ptr;
 
       // this vector is used to reposition the camera relative to the entity being followed
       // TODO: ??make this a dual quaternion as well??

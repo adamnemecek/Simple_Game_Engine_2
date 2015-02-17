@@ -81,6 +81,7 @@ namespace Scene
       bool load_renderer(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_geometries(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_entities(const rapidxml::xml_document<> *parsed_scene_doc);
+      bool load_camera(const rapidxml::xml_document<> *parsed_scene_doc);
 
 
       // keep this around so that new renderables can be added as new entities and
