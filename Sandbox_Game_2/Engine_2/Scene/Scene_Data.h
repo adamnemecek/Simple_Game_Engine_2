@@ -6,7 +6,7 @@
 #include <string>
 //#include <Entities\Entity.h>
 //#include <Shapes\Geometry.h>
-#include <Shapes\Shape_Data.h>
+//#include <Shapes\Shape_Data.h>
 #include <Rendering\Renderer.h>
 #include <Rendering\Camera.h>
 
@@ -25,6 +25,7 @@ namespace Entities
 namespace Shapes
 {
    class Geometry;
+   struct Shape_Data;
 }
 
 namespace Scene
@@ -40,7 +41,7 @@ namespace Scene
       void draw_scene();
 
       Entities::Entity *new_entity(const std::string& new_entity_id_str);
-      Shapes::Geometry *new_geometry(const Shapes::Shape_Data& new_shape_data, const std::string& new_geometry_id_str);
+      Shapes::Geometry *new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
       void new_entity_geometry_pairing(const Entities::Entity *entity_ptr, const Shapes::Geometry *geo_ptr);
 
       Entities::Entity *find_entity(const std::string& entity_id_str);
@@ -77,12 +78,22 @@ namespace Scene
       // TODO: ??make this a collection of cameras??
       Rendering::Camera m_camera;
 
-      // these are vectors of classes instead of pointers because I want the
-      // class' destructors to be called when the scene instance dies
-      std::vector<std::shared_ptr<Entities::Entity>> V;
-      std::vector<Entities::Entity *> m_entities;
-      std::vector<Shapes::Geometry *> m_geometries;
-      std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry *>> m_entity_geometry_pairings;
+      // storage of things
+      // Note: I am using shared pointers to manage the storage of objects because of
+      // the way that vectors push things into their collection: via copy constructor.
+      // Then if the local copy of the object goes out of scope, it's descructor is called,
+      // killing any data that it may have pointed to.  I thought about pointers, but
+      // a vector won't delete pointers.  Enter the unique pointer (I could use a shared
+      // pointer, but a unique one communicates sole ownership), which is a class that 
+      // manages a pointer.  When this class' destructor is called, the object dies,
+      // just as I need it to.  Additionally, no copy constructor is called when I 
+      // push it into a vector, and no destructor is called either.  Sweet!
+      //
+      // Also, I can still get at the "dumb" pointer so that I can pass it around
+      // and not have to rewrite a bunch of my program.
+      std::vector<std::unique_ptr<Entities::Entity>> m_entity_ptrs;
+      std::vector<std::unique_ptr<Shapes::Geometry>> m_geometry_ptrs;
+      std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry*>> m_entity_geometry_pairings;
    };
 }
 

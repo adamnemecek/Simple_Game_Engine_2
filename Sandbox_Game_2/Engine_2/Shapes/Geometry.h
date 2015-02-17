@@ -18,13 +18,15 @@ namespace Shapes
    class __declspec(dllexport) Geometry
    {
    public:
-      // makes a local copy of the shape data (it's a lightweight structure),
-      // set up the openGL binding data, and analyze it to create meta data
-      Geometry(const Shape_Data& new_shape_data, const std::string& new_geometry_id_str);
+      // makes a local copy of the shape data pointer, set up the 
+      // openGL binding data, and analyze it to create meta data
+      Geometry(const Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
 
       // public destructor for cleaning up when this object is destroyed
       ~Geometry()
       {
+         delete m_shape_data_ptr;
+
          glDeleteVertexArrays(1, &m_VAO_ID);
          glDeleteBuffers(1, &m_vertex_buffer_ID);
          glDeleteBuffers(1, &m_element_buffer_ID);
@@ -66,7 +68,7 @@ namespace Shapes
       GLuint m_element_buffer_ID;
 
       // the vertex and index data of the shape
-      Shape_Data m_shape_data;
+      const Shape_Data *m_shape_data_ptr;
 
       // shape-specific meta data, like min/max on X, Y, and Z
       Shape_Meta_Data m_shape_meta_data;

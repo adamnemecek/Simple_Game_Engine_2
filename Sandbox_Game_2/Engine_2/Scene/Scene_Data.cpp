@@ -6,6 +6,7 @@
 #include <middleware\arcsynthesis\framework\rapidxml_helpers.h>
 #include <fstream>
 #include <vector>
+#include <memory> // for std::shared_ptr
 
 // for generating things from the file data
 #include <Entities\Entity.h>
@@ -71,14 +72,15 @@ namespace
 
       // pick apart the node to figure out what shape to make, and then make it
       std::string shape_type_str = rapidxml::get_attrib_string(*shape_node_ptr, "id");
-      Shapes::Shape_Data new_shape;
+      Shapes::Shape_Data *new_shape_ptr = new Shapes::Shape_Data;
+
       Shapes::Geometry_Creation::Shape_Generator& shape_generator_ref = Shapes::Geometry_Creation::Shape_Generator::get_instance();
       float f_return_value_if_parameter_not_found = 0.0f;
       int i_return_value_if_parameter_not_found = 0;
 
       if ("triangle" == shape_type_str)
       {
-         shape_generator_ref.generate_triangle(&new_shape);
+         shape_generator_ref.generate_triangle(new_shape_ptr);
          cout << "loading triangle" << endl;
       }
       else if ("plane" == shape_type_str)
@@ -88,7 +90,7 @@ namespace
             rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "width_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "length_segments", i_return_value_if_parameter_not_found),
-            &new_shape);
+            new_shape_ptr);
          cout << "loading plane" << endl;
       }
       else if ("box" == shape_type_str)
@@ -96,7 +98,7 @@ namespace
          shape_generator_ref.generate_box(
             rapidxml::get_attrib_float(*shape_node_ptr, "width", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "length", f_return_value_if_parameter_not_found),
-            &new_shape);
+            new_shape_ptr);
          cout << "loading box" << endl;
       }
       else if ("circle" == shape_type_str)
@@ -104,12 +106,12 @@ namespace
          shape_generator_ref.generate_circle(
             rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
-            &new_shape);
+            new_shape_ptr);
          cout << "loading circle" << endl;
       }
       else if ("cube" == shape_type_str)
       {
-         shape_generator_ref.generate_cube(&new_shape);
+         shape_generator_ref.generate_cube(new_shape_ptr);
          cout << "loading cube" << endl;
       }
       else if ("cylinder" == shape_type_str)
@@ -119,7 +121,7 @@ namespace
             rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "height", f_return_value_if_parameter_not_found),
-            &new_shape);
+            new_shape_ptr);
 
          cout << "loading cylinder" << endl;
       }
@@ -129,7 +131,7 @@ namespace
             rapidxml::get_attrib_int(*shape_node_ptr, "num_arc_segments", i_return_value_if_parameter_not_found),
             rapidxml::get_attrib_float(*shape_node_ptr, "radius", f_return_value_if_parameter_not_found),
             rapidxml::get_attrib_int(*shape_node_ptr, "num_vertical_segments", i_return_value_if_parameter_not_found),
-            &new_shape);
+            new_shape_ptr);
 
          cout << "loading sphere" << endl;
       }
@@ -146,7 +148,7 @@ namespace
       // make a new geometry
       // Note: If the geometry name already exists, then a 0 (null pointer) will be returned.
       // In this event, let the shape object die and return a 0 to the calling function.
-      Shapes::Geometry *geometry_ptr = load_into_this_scene->new_geometry(new_shape, geometry_id_str);
+      Shapes::Geometry *geometry_ptr = load_into_this_scene->new_geometry(new_shape_ptr, geometry_id_str);
       if (0 == geometry_ptr)
       {
          cout << "Geometry loading: geometry id '" << geometry_id_str << "' already exists." << endl;
@@ -197,8 +199,8 @@ namespace Scene
    {
       MY_ASSERT(m_renderer.initialize());
 
-      m_entities.clear();
-      m_geometries.clear();
+      m_entity_ptrs.clear();
+      m_geometry_ptrs.clear();
 
       return true;
    }
@@ -231,9 +233,9 @@ namespace Scene
 
       if (!load_geometries(&doc))
       {
-         for (uint index = 0; index < m_geometries.size(); index++)
+         for (uint index = 0; index < m_geometry_ptrs.size(); index++)
          {
-            //cout << m_geometries[index].m_id << endl;
+            cout << m_geometry_ptrs[index]->m_id << endl;
          }
 
          return false;
@@ -297,16 +299,13 @@ namespace Scene
 
    Entities::Entity *Scene_Data::new_entity(const std::string& new_entity_id_str)
    {
-      V.push_back(std::shared_ptr<Entities::Entity>(new Entities::Entity(new_entity_id_str)));
-      //m_entities.push_back(Entities::Entity(new_entity_id_str));
+      m_entity_ptrs.push_back(std::unique_ptr<Entities::Entity>(new Entities::Entity(new_entity_id_str)));
 
-      //// return a pointer to the newly created entity
-      //return &(m_entities[m_entities.size() - 1]);
-
-      return 0;
+      // return a pointer to the newly created entity
+      return m_entity_ptrs[m_entity_ptrs.size() - 1].get();
    }
 
-   Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data& new_shape_data, const std::string& new_geometry_id_str)
+   Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str)
    {
       // check if the name is already taken
       if (0 != geometry_already_loaded(new_geometry_id_str))
@@ -316,12 +315,14 @@ namespace Scene
       }
 
       // geometry doesn't exist, so create it
-      //m_geometries.push_back(Shapes::Geometry(new_shape_data, new_geometry_id_str));
+      // Note: I understand that this push_back(...) back call is long, but it is 
+      // necessary in order to create a unique pointer to it.  The unique pointer
+      // has no copy constructor, but unlike other objects, no destructor is called
+      // if I pass in the constructor.  ??why? I won't argue??
+      m_geometry_ptrs.push_back(std::unique_ptr<Shapes::Geometry>(new Shapes::Geometry(new_shape_data_ptr, new_geometry_id_str)));
 
       // return a pointer to the newly created geometry
-      //return &(m_geometries[m_geometries.size() - 1]);
-
-      return 0;
+      return m_geometry_ptrs[m_geometry_ptrs.size() - 1].get();
    }
 
    void Scene_Data::new_entity_geometry_pairing(const Entities::Entity *entity_ptr, const Shapes::Geometry *geo_ptr)
@@ -331,14 +332,12 @@ namespace Scene
 
    Shapes::Geometry *Scene_Data::geometry_already_loaded(const std::string& geometry_id_str)
    {
-      for (uint geometry_index_counter = 0; geometry_index_counter < m_geometries.size(); geometry_index_counter++)
+      for (uint geometry_index_counter = 0; geometry_index_counter < m_geometry_ptrs.size(); geometry_index_counter++)
       {
-         //if (parameter_list == m_geometries[geometry_index_counter].get_shape_parameter_list())
-         //if (geometry_id_str == m_geometries[geometry_index_counter].get_shape_id_string())
-         //if (geometry_id_str == m_geometries[geometry_index_counter].m_id)
-         //{
-         //   return &m_geometries[geometry_index_counter];
-         //}
+         if (geometry_id_str == m_geometry_ptrs[geometry_index_counter]->m_id)
+         {
+            return m_geometry_ptrs[geometry_index_counter].get();
+         }
       }
 
       return 0;

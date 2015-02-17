@@ -3,9 +3,9 @@
 
 namespace Shapes
 {
-   Geometry::Geometry(const Shape_Data& new_shape_data, const std::string& new_geometry_id_str)
+   Geometry::Geometry(const Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str)
       : 
-      m_shape_data(new_shape_data),  // copy constructor copies pointers and other data
+      m_shape_data_ptr(new_shape_data_ptr),  // copy constructor copies pointers and other data
       m_id(new_geometry_id_str)
    {
       initialize_attributes();
@@ -25,7 +25,7 @@ namespace Shapes
       // - send data with glBufferSubData(...)
       glGenBuffers(1, &m_vertex_buffer_ID);
       glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_ID);
-      glBufferData(GL_ARRAY_BUFFER, m_shape_data.vertex_buffer_size(), m_shape_data.m_verts, GL_STATIC_DRAW);
+      glBufferData(GL_ARRAY_BUFFER, m_shape_data_ptr->vertex_buffer_size(), m_shape_data_ptr->m_verts, GL_STATIC_DRAW);
 
 
       // position = 0
@@ -60,7 +60,7 @@ namespace Shapes
       // - allocate space for the indices and send the data
       glGenBuffers(1, &m_element_buffer_ID);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_element_buffer_ID);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_shape_data.index_buffer_size(), m_shape_data.m_indices, GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_shape_data_ptr->index_buffer_size(), m_shape_data_ptr->m_indices, GL_STATIC_DRAW);
 
 
       // clean up bindings 
@@ -76,9 +76,9 @@ namespace Shapes
       double sum_z = 0.0;
 
       // go through the geometry data and analyze it
-      for (size_t vertex_counter = 0; vertex_counter < m_shape_data.m_num_verts; vertex_counter++)
+      for (size_t vertex_counter = 0; vertex_counter < m_shape_data_ptr->m_num_verts; vertex_counter++)
       {
-         glm::vec3 &this_pos = m_shape_data.m_verts[vertex_counter].position;
+         glm::vec3 &this_pos = m_shape_data_ptr->m_verts[vertex_counter].position;
 
          sum_x += this_pos.x;
          sum_y += this_pos.y;
@@ -95,7 +95,7 @@ namespace Shapes
       }
 
       // do this division so that you keep the precision of the double
-      double inverse_num_verts = 1.0 / m_shape_data.m_num_verts;
+      double inverse_num_verts = 1.0 / m_shape_data_ptr->m_num_verts;
 
       // perform the double multiplication version of division in order to keep precision
       // of the double, THEN jam the result into the vec3's float
@@ -118,7 +118,7 @@ namespace Shapes
 
    const std::vector<Index_Meta_Data>& Geometry::get_index_meta_data_list() const
    {
-      return m_shape_data.m_index_meta_data;
+      return m_shape_data_ptr->m_index_meta_data;
    }
    
    //TODO: ??delete these??
