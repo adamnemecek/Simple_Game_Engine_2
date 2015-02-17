@@ -59,6 +59,9 @@ namespace Scene
       bool save(const std::string& file_path);
 
       Entities::Entity *new_entity(const std::string& new_entity_id_str);
+      Entities::Physics_Component *new_physics_component();
+      Entities::AABB_Component *new_AABB_component();
+      Entities::Controller_Component *new_controller_component();
       Shapes::Geometry *new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
       void new_entity_geometry_pairing(const Entities::Entity *entity_ptr, const Shapes::Geometry *geo_ptr);
 
@@ -116,6 +119,10 @@ namespace Scene
       // Also, I can still get at the "dumb" pointer so that I can pass it around
       // and not have to rewrite a bunch of my program.
       std::vector<std::unique_ptr<Entities::Entity>> m_entity_ptrs;
+      std::vector<std::unique_ptr<Entities::Physics_Component>> m_physics_components;
+      std::vector<std::unique_ptr<Entities::Controllable_Entity>> m_controllable_components;
+      std::vector<std::unique_ptr<Entities::AABB_Component>> m_AABB_components;
+      std::vector<std::unique_ptr<Entities::Controller_Component>> m_controller_components;
       std::vector<std::unique_ptr<Shapes::Geometry>> m_geometry_ptrs;
       std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry*>> m_entity_geometry_pairings;
    };

@@ -11,6 +11,9 @@
 
 // for generating things from the file data
 #include <Entities\Entity.h>
+#include <Entities\Components\AABB_Component.h>
+#include <Entities\Components\Physics_Component.h>
+#include <Entities\Components\Controller_Component.h>
 #include <Shapes\Shape_Data.h>
 #include <Shapes\Geometry_Creation\Shape_Generator.h>
 #include <Shapes\Geometry.h>
@@ -186,6 +189,52 @@ namespace
       // return a null transform
       return Math::F_Dual_Quat();
    }
+
+   void helper_load_components(const rapidxml::xml_node<> *entity_node_ptr, Entities::Entity *load_into_this_entity_ptr, Scene::Scene_Data *store_components_here_ptr)
+   {
+      const rapidxml::xml_node<> *component_node_ptr = entity_node_ptr->first_node("component");
+      while (0 != component_node_ptr)
+      {
+         std::string component_type_str = rapidxml::get_attrib_string(*component_node_ptr, "type");
+         if ("physics" == component_type_str)
+         {
+            Entities::Physics_Component *physics_ptr = store_components_here_ptr->new_physics_component();
+            float f_return_value_in_case_of_failure = 0.0;
+
+            const rapidxml::xml_node<> *sustained_force_vector_node_ptr = component_node_ptr->first_node("sustained_force_vector");
+            if (0 != sustained_force_vector_node_ptr)
+            {
+               glm::vec3 force_vector(
+                  rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "x", f_return_value_in_case_of_failure),
+                  rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "y", f_return_value_in_case_of_failure),
+                  rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "z", f_return_value_in_case_of_failure);
+               
+               physics_ptr->add_sustained_force_vector(force_vector);
+            }
+
+            const rapidxml::xml_node<> *mass_node_ptr = component_node_ptr->first_node("mass");
+            if (0 != mass_node_ptr)
+            {
+               float mass = rapidxml::get_attrib_float(*mass_node_ptr, "value", f_return_value_in_case_of_failure);
+
+               physics_ptr->add_mass(mass);
+            }
+
+            // do NOT look for immediate force vectors because those are resolved 
+            // frame by frame and therefore should not be in the file
+         }
+         else if ("AABB" == component_type_str)
+         {
+            // the AABB relies on the meta data for the geometry
+            Entities::AABB_Component *aabb_ptr = store_components_here_ptr->new_AABB_component();
+
+         }
+         else if ("controller" == component_type_str)
+         {
+
+         }
+      }
+   }
 }
 
 namespace Scene
@@ -221,79 +270,79 @@ namespace Scene
       //    load shaders
       //    initialize and set the camera
       // load geometries (geometries should have unique names, like "cube_1", "sphere_2", "plane_3", etc.)
-      //    geometries need to have names with get/set functions
-      //    need to be able to retrieve a pointer to a geometry from the Scene's geometry collection
-      // load entities 
-      //    generate renderables with entity-geometry combinations
-      //    need to be able to retrieve a pointer to an entity from the Scene's entity collection
-      // the world outside the scene needs to be able to generate new geometry and add 
+//    geometries need to have names with get/set functions
+//    need to be able to retrieve a pointer to a geometry from the Scene's geometry collection
+// load entities 
+//    generate renderables with entity-geometry combinations
+//    need to be able to retrieve a pointer to an entity from the Scene's entity collection
+// the world outside the scene needs to be able to generate new geometry and add 
 
 
-      //std::string file_path = "C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml";
+//std::string file_path = "C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml";
 
-      // open the file
-      rapidxml::xml_document<> doc;
-      std::vector<char> file_data;
-      helper_open_xml_file(&doc, file_data, file_path);
+// open the file
+rapidxml::xml_document<> doc;
+std::vector<char> file_data;
+helper_open_xml_file(&doc, file_data, file_path);
 
-      if (!load_renderer(&doc))
-      {
-         return false;
-      }
+if (!load_renderer(&doc))
+{
+   return false;
+}
 
-      if (!load_geometries(&doc))
-      {
-         return false;
-      }
+if (!load_geometries(&doc))
+{
+   return false;
+}
 
-      if (!load_entities(&doc))
-      {
-         return false;
-      }
+if (!load_entities(&doc))
+{
+   return false;
+}
 
-      if (!load_camera(&doc))
-      {
-         return false;
-      }
+if (!load_camera(&doc))
+{
+   return false;
+}
 
 
 
-      //// make sure that there is a "scene" root node (if not, let rapidxml blow up)
-      //rapidxml::xml_node<> *root_node_ptr = doc.first_node("scene");
-      //if (0 == root_node_ptr)
-      //{
-      //   throw std::runtime_error("'scene' node not found in mesh file: " + file_path);
-      //}
+//// make sure that there is a "scene" root node (if not, let rapidxml blow up)
+//rapidxml::xml_node<> *root_node_ptr = doc.first_node("scene");
+//if (0 == root_node_ptr)
+//{
+//   throw std::runtime_error("'scene' node not found in mesh file: " + file_path);
+//}
 
-      //// cycle through the list of entities and generate them one by one
-      //const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
-      //while (0 != entity_node_ptr)
-      //{
-      //   // get the entity's ID string (it should have this, so let it blow up if it doesn't)
-      //   std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
-      //   cout << new_entity_id_str << endl;
+//// cycle through the list of entities and generate them one by one
+//const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
+//while (0 != entity_node_ptr)
+//{
+//   // get the entity's ID string (it should have this, so let it blow up if it doesn't)
+//   std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
+//   cout << new_entity_id_str << endl;
 
-      //   // create the entity
-      //   Entities::Entity *new_entity_ptr = this->new_entity(new_entity_id_str);
+//   // create the entity
+//   Entities::Entity *new_entity_ptr = this->new_entity(new_entity_id_str);
 
-      //   // load the transform (it should have this, so let rapidxml blow up if it doesn't)
-      //   const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
-      //   new_entity_ptr->m_where_and_which_way = helper_get_transform(transform_node_ptr);
+//   // load the transform (it should have this, so let rapidxml blow up if it doesn't)
+//   const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
+//   new_entity_ptr->m_where_and_which_way = helper_get_transform(transform_node_ptr);
 
-      //   // check for geometry
-      //   const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
-      //   if (0 != shape_node_ptr)
-      //   {
-      //      // shape data available, so load it and make a renderable out of it
-      //      Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, this);
-      //      m_renderer_ptr->configure_new_renderable(new_geometry_ptr, new_entity_ptr);
-      //   }
+//   // check for geometry
+//   const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
+//   if (0 != shape_node_ptr)
+//   {
+//      // shape data available, so load it and make a renderable out of it
+//      Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, this);
+//      m_renderer_ptr->configure_new_renderable(new_geometry_ptr, new_entity_ptr);
+//   }
 
-      //   // get the next entity in the node hierarchy
-      //   entity_node_ptr = entity_node_ptr->next_sibling("entity");
-      //}
+//   // get the next entity in the node hierarchy
+//   entity_node_ptr = entity_node_ptr->next_sibling("entity");
+//}
 
-      return true;
+return true;
    }
 
    bool Scene_Data::save(const std::string& file_path)
@@ -309,6 +358,28 @@ namespace Scene
       // return a pointer to the newly created entity
       return m_entity_ptrs[m_entity_ptrs.size() - 1].get();
    }
+
+   Entities::Physics_Component *Scene_Data::new_physics_component()
+   {
+      m_physics_components.push_back(std::unique_ptr<Entities::Physics_Component>(new Entities::Physics_Component));
+
+      return m_physics_components[m_physics_components.size() - 1].get();
+   }
+
+   Entities::AABB_Component *Scene_Data::new_AABB_component()
+   {
+      m_AABB_components.push_back(std::unique_ptr<Entities::AABB_Component>(new Entities::AABB_Component));
+
+      return m_AABB_components[m_AABB_components.size() - 1].get();
+   }
+
+   Entities::Controller_Component *Scene_Data::new_controller_component()
+   {
+      m_controller_components.push_back(std::unique_ptr<Entities::Controller_Component>(new Entities::Controller_Component));
+
+      return m_controller_components[m_controllable_components.size() - 1].get();
+   }
+
 
    Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str)
    {
@@ -475,6 +546,8 @@ namespace Scene
             m_renderer_ptr->configure_new_renderable(new_entity_ptr, geo_ptr);
          }
 
+         // ch
+
          if (!new_entity_ptr->initialize())
          {
             // bad (??do something else??)
@@ -516,7 +589,6 @@ namespace Scene
 
          camera_node_ptr = camera_node_ptr->next_sibling("camera");
       }
-
 
       return true;
    }
