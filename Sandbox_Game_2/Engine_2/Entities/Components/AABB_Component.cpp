@@ -19,34 +19,17 @@ using std::endl;
 
 namespace Entities
 {
-   AABB_Component::AABB_Component()
-      : m_geometry_data_ptr(0)
+   void AABB_Component::calculate_default_boundaries(const Shapes::Shape_Meta_Data &box_this)
    {
-   }
-
-   void AABB_Component::set_geometry(const Shapes::Geometry *box_this)
-   {
-      m_geometry_data_ptr = box_this;
-   }
-
-   bool AABB_Component::initialize()
-   {
-      // can't initialize without any geometry
-      MY_ASSERT(m_geometry_data_ptr != 0);
-
-      const Shapes::Shape_Meta_Data &meta_data_ref = m_geometry_data_ptr->get_shape_meta_data();
-
       // set the default vectors so that they can be transformed on the next update
-      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_max_Y, meta_data_ref.m_max_Z);
-      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_FRONT] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_max_Y, meta_data_ref.m_min_Z);
-      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_BACK] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_max_Y, meta_data_ref.m_max_Z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_min_Y, meta_data_ref.m_min_Z);
-      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(meta_data_ref.m_max_X, meta_data_ref.m_min_Y, meta_data_ref.m_max_Z);
-      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_FRONT] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_min_Y, meta_data_ref.m_min_Z);
-      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_BACK] = glm::vec3(meta_data_ref.m_min_X, meta_data_ref.m_min_Y, meta_data_ref.m_max_Z);
-
-      return true;
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_FRONT] = glm::vec3(box_this.m_max_X, box_this.m_max_Y, box_this.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_UPPER_BACK] = glm::vec3(box_this.m_max_X, box_this.m_max_Y, box_this.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_FRONT] = glm::vec3(box_this.m_min_X, box_this.m_max_Y, box_this.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_UPPER_BACK] = glm::vec3(box_this.m_min_X, box_this.m_max_Y, box_this.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(box_this.m_max_X, box_this.m_min_Y, box_this.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::RIGHT_LOWER_BACK] = glm::vec3(box_this.m_max_X, box_this.m_min_Y, box_this.m_max_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_FRONT] = glm::vec3(box_this.m_min_X, box_this.m_min_Y, box_this.m_min_Z);
+      m_default_box_corners[BOX_CORNERS::LEFT_LOWER_BACK] = glm::vec3(box_this.m_min_X, box_this.m_min_Y, box_this.m_max_Z);
    }
 
    void AABB_Component::update()

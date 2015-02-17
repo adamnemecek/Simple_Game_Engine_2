@@ -6,15 +6,15 @@
 #include <Entities\Game_Component.h>
 #include <Utilities\Typedefs.h>
 
-// forward declaration of friend classes
-namespace Shapes
-{
-   class Geometry;
-}
-
+// forward declarations
 namespace Collision_Detection
 {
    class Collision_Handler;
+}
+
+namespace Shapes
+{
+   struct Shape_Meta_Data;
 }
 
 
@@ -24,12 +24,9 @@ namespace Entities
    class __declspec(dllexport) AABB_Component : public Game_Component
    {
    public:
-      // for ensuring that pointers and array data get set to 0
-      AABB_Component();
+      void calculate_default_boundaries(const Shapes::Shape_Meta_Data &box_this);
 
-      void set_geometry(const Shapes::Geometry *box_this);
-
-      bool initialize();
+      // defualt initialize
       // default shutdown
       void update();
 
@@ -40,15 +37,12 @@ namespace Entities
       bool is_colliding_with_AABB(const AABB_Component &other_box, glm::vec3 *put_overlap_here) const;
 
    private:
-      // the collision handler class will need access to the entity's mass and velocity to calculate
-      // the point of impact and the force exerted at that point, and then this physics class will 
-      // react to the applied force
+      // the collision handler will need to access information on the boundaries of the bounding 
+      // box, and there are enough of these members that I feel that it is worth it to just
+      // let the collision handler have full access
       friend class Collision_Detection::Collision_Handler;
-      
-      // keep this pointer around in case you need to re-calculate something from the geometry
-      const Shapes::Geometry *m_geometry_data_ptr;
 
-      // a box has six faces, so just magically declare them
+      // a box has eight corners, so just magically declare them
       enum BOX_CORNERS
       {
          RIGHT_UPPER_FRONT,

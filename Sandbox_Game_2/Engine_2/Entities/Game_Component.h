@@ -25,7 +25,10 @@ namespace Entities
       virtual void update() = 0;
 
    protected:
-      // the Game Component might need to access it's sibling components, and this is done by going through it's parent entity
+      // the Game Component might need to access it's sibling components, and this is 
+      // done by going through it's parent entity
+      // Note: The Entity class itself will set this value when a Game_Component 
+      // derivative is added to it.
       Entity *m_parent_entity_ptr;
 
    private:

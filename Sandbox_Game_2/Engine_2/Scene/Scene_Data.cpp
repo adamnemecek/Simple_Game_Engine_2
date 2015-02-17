@@ -190,7 +190,7 @@ namespace
       return Math::F_Dual_Quat();
    }
 
-   void helper_load_components(const rapidxml::xml_node<> *entity_node_ptr, Entities::Entity *load_into_this_entity_ptr, Scene::Scene_Data *store_components_here_ptr)
+   bool helper_load_components(const rapidxml::xml_node<> *entity_node_ptr, Entities::Entity *load_into_this_entity_ptr, Scene::Scene_Data *store_components_here_ptr)
    {
       const rapidxml::xml_node<> *component_node_ptr = entity_node_ptr->first_node("component");
       while (0 != component_node_ptr)
@@ -207,7 +207,7 @@ namespace
                glm::vec3 force_vector(
                   rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "x", f_return_value_in_case_of_failure),
                   rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "y", f_return_value_in_case_of_failure),
-                  rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "z", f_return_value_in_case_of_failure);
+                  rapidxml::get_attrib_float(*sustained_force_vector_node_ptr, "z", f_return_value_in_case_of_failure));
                
                physics_ptr->add_sustained_force_vector(force_vector);
             }
@@ -225,8 +225,18 @@ namespace
          }
          else if ("AABB" == component_type_str)
          {
-            // the AABB relies on the meta data for the geometry
+            // the AABB relies on the meta data for a shape, so start by looking 
+            // for the geometry that this bounding box will cover
+            std::string geo_id_str = rapidxml::get_attrib_string(*component_node_ptr, "geometry_id");
+            Shapes::Geometry *geo_ptr = store_components_here_ptr->find_geometry(geo_id_str);
+            if (0 == geo_ptr)
+            {
+               // bad; bounding box wants geometry that doesn't exist
+               return false;
+            }
+
             Entities::AABB_Component *aabb_ptr = store_components_here_ptr->new_AABB_component();
+            aabb_ptr->calculate_default_boundaries(geo_ptr->get_shape_meta_data());
 
          }
          else if ("controller" == component_type_str)
@@ -234,6 +244,8 @@ namespace
 
          }
       }
+
+      return false;
    }
 }
 
@@ -377,7 +389,7 @@ return true;
    {
       m_controller_components.push_back(std::unique_ptr<Entities::Controller_Component>(new Entities::Controller_Component));
 
-      return m_controller_components[m_controllable_components.size() - 1].get();
+      return m_controller_components[m_controller_components.size() - 1].get();
    }
 
 

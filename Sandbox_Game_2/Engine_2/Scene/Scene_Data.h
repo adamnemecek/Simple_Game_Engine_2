@@ -20,6 +20,9 @@ namespace rapidxml
 namespace Entities
 {
    class Entity;
+   class Physics_Component;
+   class AABB_Component;
+   class Controller_Component;
 }
 
 namespace Shapes
@@ -120,7 +123,6 @@ namespace Scene
       // and not have to rewrite a bunch of my program.
       std::vector<std::unique_ptr<Entities::Entity>> m_entity_ptrs;
       std::vector<std::unique_ptr<Entities::Physics_Component>> m_physics_components;
-      std::vector<std::unique_ptr<Entities::Controllable_Entity>> m_controllable_components;
       std::vector<std::unique_ptr<Entities::AABB_Component>> m_AABB_components;
       std::vector<std::unique_ptr<Entities::Controller_Component>> m_controller_components;
       std::vector<std::unique_ptr<Shapes::Geometry>> m_geometry_ptrs;
