@@ -5,7 +5,6 @@
 namespace Entities
 {
    class Entity;
-   class Controllable_Entity;
 }
 
 namespace Entities
@@ -36,7 +35,6 @@ namespace Entities
       // nothing else should be able to access this pointer, so specify a friend class and
       // do not make a public setter
       friend class Entity;
-      friend class Controllable_Entity;
    };
 }
 

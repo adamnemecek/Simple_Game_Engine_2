@@ -237,11 +237,10 @@ namespace
 
             Entities::AABB_Component *aabb_ptr = store_components_here_ptr->new_AABB_component();
             aabb_ptr->calculate_default_boundaries(geo_ptr->get_shape_meta_data());
-
          }
          else if ("controller" == component_type_str)
          {
-
+            
          }
       }
 
