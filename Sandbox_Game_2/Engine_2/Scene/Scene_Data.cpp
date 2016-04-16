@@ -269,8 +269,6 @@ namespace Scene
 {
    bool Scene_Data::initialize()
    {
-      MY_ASSERT(m_renderer_ptr->initialize());
-
       m_entity_ptrs.clear();
       m_geometry_ptrs.clear();
 
@@ -332,43 +330,6 @@ namespace Scene
       {
          return false;
       }
-
-
-
-      //// make sure that there is a "scene" root node (if not, let rapidxml blow up)
-      //rapidxml::xml_node<> *root_node_ptr = doc.first_node("scene");
-      //if (0 == root_node_ptr)
-      //{
-      //   throw std::runtime_error("'scene' node not found in mesh file: " + file_path);
-      //}
-
-      //// cycle through the list of entities and generate them one by one
-      //const rapidxml::xml_node<> *entity_node_ptr = root_node_ptr->first_node("entity");
-      //while (0 != entity_node_ptr)
-      //{
-      //   // get the entity's ID string (it should have this, so let it blow up if it doesn't)
-      //   std::string new_entity_id_str = rapidxml::get_attrib_string(*entity_node_ptr, "id");
-      //   cout << new_entity_id_str << endl;
-
-      //   // create the entity
-      //   Entities::Entity *new_entity_ptr = this->new_entity(new_entity_id_str);
-
-      //   // load the transform (it should have this, so let rapidxml blow up if it doesn't)
-      //   const rapidxml::xml_node<> *transform_node_ptr = entity_node_ptr->first_node("transform");
-      //   new_entity_ptr->m_where_and_which_way = helper_get_transform(transform_node_ptr);
-
-      //   // check for geometry
-      //   const rapidxml::xml_node<> *shape_node_ptr = entity_node_ptr->first_node("shape");
-      //   if (0 != shape_node_ptr)
-      //   {
-      //      // shape data available, so load it and make a renderable out of it
-      //      Shapes::Geometry *new_geometry_ptr = helper_load_geometry(shape_node_ptr, this);
-      //      m_renderer_ptr->configure_new_renderable(new_geometry_ptr, new_entity_ptr);
-      //   }
-
-      //   // get the next entity in the node hierarchy
-      //   entity_node_ptr = entity_node_ptr->next_sibling("entity");
-      //}
 
       return true;
    }
@@ -479,26 +440,6 @@ namespace Scene
    // PRIVATE
    bool Scene_Data::load_renderer(const rapidxml::xml_document<> *parsed_scene_doc)
    {
-      if (!m_renderer_ptr->initialize()) { return false; }
-
-      // TODO: put these into the scene file under something other than "scene"
-      std::string file_paths[] =
-      {
-         "data/experimental_shader.vert",
-         "data/experimental_shader.frag",
-      };
-      GLenum shader_types[] =
-      {
-         GL_VERTEX_SHADER,
-         GL_FRAGMENT_SHADER,
-      };
-
-      GLuint program_ID = Utilities::Shader_Maker::create_shader_program(file_paths, shader_types, 2);
-      if (!m_renderer_ptr->add_shader_program(program_ID)) { return false; }
-      if (!m_renderer_ptr->bind_shader_program(program_ID)) { return false; }
-
-      cout << "Program ID: " << program_ID << endl;
-
       // set the camera instance that will be used in rendering, but don't specify an
       // entity for the camera to follow because that should take place in the 
       // load_entities(...) function

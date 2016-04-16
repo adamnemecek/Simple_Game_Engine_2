@@ -1,21 +1,25 @@
-#include <Engine_2\Rendering\Renderer.h>
-#include <Engine_2\Timing\Game_Clock.h>
-#include <Engine_2\Utilities\My_Assert.h>
-#include <Engine_2\Scene\Scene_Data.h>
+#include <Engine_2/Rendering/Renderer.h>
+#include <Engine_2/Rendering/FrameRateCounter.h>
+#include <Engine_2/Timing/Game_Clock.h>
+#include <Engine_2/Scene/Scene_Data.h>
+#include <Engine_2/Utilities/My_Assert.h>
+#include <Engine_2/Utilities/ShaderManager.h>
+#include <Engine_2/Utilities/FreeTypeEncapsulate.h>
 
 #include <string>
 #include <iostream>
 using std::cout;
 using std::endl;
 
-#include <glm\vec3.hpp>
-#include <glm\mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 // include this last to avoid errors when this includes gl.h 
 // (apparently this needs to be included after the glm and glload and other libraries)
 #include <GL/freeglut.h>
 
 Rendering::Renderer g_renderer;
+Rendering::FrameRateRenderer g_frame_rate_renderer;
 Scene::Scene_Data g_scene;
 
 #include "experiment.h"
@@ -32,13 +36,34 @@ void init()
    glDepthFunc(GL_LEQUAL);
    glDepthRange(0.0f, 1.0f);
 
-   //Scene::Scene_Data local_scene;
-   g_renderer.initialize();
+   Utilities::ShaderManager &shaderManagerRef = Utilities::ShaderManager::GetInstance();
+
+   // load the main rendering program
+   std::string filePaths[] =
+   {
+       "data/experimental_shader.vert",
+       "data/experimental_shader.frag",
+   };
+   GLenum shaderTypes[] =
+   {
+       GL_VERTEX_SHADER,
+       GL_FRAGMENT_SHADER,
+   };
+   int mainRendererProgram = shaderManagerRef.LoadProgram("main", filePaths, shaderTypes, 2);
+   MY_ASSERT(g_renderer.initialize(mainRendererProgram));
+
+   // now load the program for FreeType
+   filePaths[0] = "data/freeTypeText.vert";
+   filePaths[1] = "data/freeTypeText.frag";
+   // the shader type array is still ok
+   int freeTypeProgram = shaderManagerRef.LoadProgram("freetype", filePaths, shaderTypes, 2);
+   MY_ASSERT(Utilities::FreeTypeEncapsulate::GetInstance().
+       Init("data/FreeSans.ttf", freeTypeProgram));
+   MY_ASSERT(g_frame_rate_renderer.Init(freeTypeProgram));
+
    g_scene.set_render(&g_renderer);
    g_scene.initialize();
    g_scene.load("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
-
-   //Experiment::do_something();
 
    // start the game clock
    MY_ASSERT(Timing::Game_Clock::get_instance().initialize());
@@ -60,6 +85,8 @@ void display()
 
    g_scene.update();
    g_renderer.render_scene();
+   g_frame_rate_renderer.NewFrame();
+   g_frame_rate_renderer.Render();
 
    glutSwapBuffers();
    glutPostRedisplay();

@@ -66,7 +66,7 @@ int start_engine_loop(int argc, char** argv)
    displayMode = defaults(displayMode, width, height);
 
    glutInitDisplayMode(displayMode);
-   glutInitContextVersion(3, 3);
+   glutInitContextVersion(4, 4);
    glutInitContextProfile(GLUT_CORE_PROFILE);
 #ifdef DEBUG
    glutInitContextFlags(GLUT_DEBUG);
@@ -79,6 +79,7 @@ int start_engine_loop(int argc, char** argv)
 
    glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 
+   // actually checks if version is at least this
    if (!glload::IsVersionGEQ(3, 3))
    {
       printf("Your OpenGL version is %i, %i. You must have at least OpenGL 3.3 to run this tutorial.\n",

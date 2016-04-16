@@ -45,7 +45,7 @@ namespace Utilities
       printf("%s real: <%.2f, %.2f, %.2f, %.2f>, dual: <%.2f, %.2f, %.2f, %.2f>\n",
          foreword,
          dq.real.w, dq.real.x, dq.real.y, dq.real.z,
-         dq.dual.w, dq.dual.x, dq.dual.y, dq.dual.z, 5);
+         dq.dual.w, dq.dual.x, dq.dual.y, dq.dual.z);
    }
 
    void Printer_Helper::print_my_quat(const char *foreword, const Math::F_Quat &quat)
@@ -58,7 +58,7 @@ namespace Utilities
       printf("%s real: <%.2f, %.2f, %.2f, %.2f>, dual: <%.2f, %.2f, %.2f, %.2f>\n",
          foreword,
          dq.m_real.m_scalar, dq.m_real.m_vector.x, dq.m_real.m_vector.y, dq.m_real.m_vector.z,
-         dq.m_dual.m_scalar, dq.m_dual.m_vector.x, dq.m_dual.m_vector.y, dq.m_dual.m_vector.z, 5);
+         dq.m_dual.m_scalar, dq.m_dual.m_vector.x, dq.m_dual.m_vector.y, dq.m_dual.m_vector.z);
    }
 
 }

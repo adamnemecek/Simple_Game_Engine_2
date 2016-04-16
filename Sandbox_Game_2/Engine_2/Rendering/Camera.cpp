@@ -83,6 +83,7 @@ namespace Rendering
       }
 
       m_id = new_id;
+	  return true;
    }
 
    std::string Camera::get_id()

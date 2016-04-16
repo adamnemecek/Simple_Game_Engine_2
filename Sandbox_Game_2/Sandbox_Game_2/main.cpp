@@ -48,12 +48,15 @@
 // true meaning of the term "dll hell".  So I just went with the Engine as a static library.
 #include <Engine_2\Start_Engine.h>
 
+#include <Engine_2\EngineExperiments.h>
+
 int main(int argc, char **argv)
 {
-   // if the program gets here, then the program has obviously finished compiling and linking
-   // and my start_engine_loop(...) function can tell freeglut to register certain 
-   // forward-declared functions that are linked to their definitions in the Sandbox_Game_2
-   int ret_val = start_engine_loop(argc, argv);
+	// if the program gets here, then the program has obviously finished compiling and linking
+	// and my start_engine_loop(...) function can tell freeglut to register certain 
+	// forward-declared functions that are linked to their definitions in the Sandbox_Game_2
+	int retVal = start_engine_loop(argc, argv);
+	//int retVal = ExperimentStart(argc, argv);
 
-   return ret_val;
+	return retVal;
 }

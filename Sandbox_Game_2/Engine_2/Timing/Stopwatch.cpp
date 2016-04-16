@@ -7,20 +7,13 @@
 // with it.
 #include <Utilities\Include_Helpers\Windows_Lite.h>
 
-// make an empty namespace to keep these values in this file only
-// Note: I do this instead of making them class members because their declaration
-// requires including Windows.h, which is a large header file and I want to avoid
-// bloat if I can, and this is an easy way to avoid it.
-namespace
-{
-   LARGE_INTEGER g_cpu_timer_frequency;
-   LARGE_INTEGER g_start_counter;
-   LARGE_INTEGER g_last_lap_counter;
+static double g_inverse_cpu_timer_frequency;
+static LARGE_INTEGER g_start_counter;
+static LARGE_INTEGER g_last_lap_counter;
 
-   inline double counter_to_seconds(LARGE_INTEGER counter)
-   {
-      return ((double)counter.QuadPart / g_cpu_timer_frequency.QuadPart);
-   }
+inline double counter_to_seconds(LARGE_INTEGER counter)
+{
+    return ((double)counter.QuadPart * g_inverse_cpu_timer_frequency);
 }
 
 namespace Timing
@@ -33,8 +26,9 @@ namespace Timing
       // Note: If it succeeds, it returns non-zero, not a bool as C++ knows it.
       // Rather, it returns a BOOL a typedef of an int.
       // http://msdn.microsoft.com/en-us/library/windows/desktop/ms644905(v=vs.85).aspx
-      bool success = true;
-      success = (0 != QueryPerformanceFrequency(&g_cpu_timer_frequency));
+      LARGE_INTEGER cpuFreq;
+      bool success = (0 != QueryPerformanceFrequency(&cpuFreq));
+      g_inverse_cpu_timer_frequency = 1.0 / cpuFreq.QuadPart;
 
       return true;
    }
