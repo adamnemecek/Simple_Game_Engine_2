@@ -18,9 +18,32 @@
     - (for eventual more fancy stuff) particle type (O2, CO2, etc.)
     - value of repulsive force that is linear regressed from 0 at the edge of the collision sphere to full value at the center
 - create a particle manager
+    - requires:
+        - max number of particles to handle
+        - a region inside of which they exist and outside of which they are reclaimed
+        - a region in which they are generated
+        - a direction in which the particles are spewed
+        - Ex: (Wind tunnel box) particles are emitted from a plane at one end of a box and travel towards the other end of the box 
+        - Ex: (Wind tunnel cylinder) same as the box, but particles are emitted from a circular plane and travel down a cylinder
+        - Ex: particles are emitted from a point in all directions
+        - Ex: particles are emitted from the surface of a sphere
+    - "update" method
+        - ??take a "wind" vector argument that will influence the forces on the air particles??
     - stage 1: particle spawning and particle reclamation when it goes out of range
-    - stage 2: evenly spaced particle spawning from a "source" plane to replicate a wind tunnel
-    - stage 3: collision detection between particles from one frame to the next
+        - (1a) spawning from 
+            - a point in all directions
+            - a surface of a plane in a single direction
+        - (1b) reclaimed after exiting
+            - a sphere
+            - a box
+            - a cylinder
+    - stage 2: collision detection between particles from one frame to the next
+        - detect 
+            - octal region splitting for efficiency
+            - stepping (10 steps? 20?) along the position vectors of two particles from previous frame to current frame and seeing if they overlap at all
+        - add up repulsive forces on a single particle when it runs into the collision region of any number of nearby particles
+        - resolve forces acting on particle to alter existing velocity vector
+    - stage 3: collision with geometry
 - GPU development: 
     - stage 1: handle particle position updates without collisions
     - stage 2: stage 1 + collisions, and change particle color to reflect the magnitude of the forces on that particle
@@ -33,4 +56,8 @@
 - calculate a way to dump all vertices into a single, giant vertex array, and then control rendering just with indices and render types
 - (done) FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
 - FreeTypeAtlas: Use texture sampler binding.  Right now, the texture parameters are set once for texture 0, but if there is ever a second texture, these will need to be set again at every draw call.  
-
+- change all #includes to use 
+    - / instead of \ (painstaking, but should do for the sake of future cross-platform-ness)
+    - <> for std includes and for 3rd party includes like middleware and FreeType stuff
+    - "" for my headers
+- 
