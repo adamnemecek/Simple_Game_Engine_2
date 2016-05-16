@@ -64,7 +64,7 @@ void init()
    g_scene.set_render(&g_renderer);
    g_scene.initialize();
    g_scene.load("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
-   //g_scene.load_from_blender_obj("C:/Users/John/Documents/untitled.obj");
+   g_scene.load_from_blender_obj("C:/Users/John/Documents/untitled.obj");
 
    // start the game clock
    MY_ASSERT(Timing::Game_Clock::get_instance().initialize());

@@ -31,5 +31,6 @@
     - hand off particle manger updating to the GPU
     - hand off collision calculations to the GPU
 - calculate a way to dump all vertices into a single, giant vertex array, and then control rendering just with indices and render types
-- FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
+- (done) FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
+- FreeTypeAtlas: Use texture sampler binding.  Right now, the texture parameters are set once for texture 0, but if there is ever a second texture, these will need to be set again at every draw call.  
 

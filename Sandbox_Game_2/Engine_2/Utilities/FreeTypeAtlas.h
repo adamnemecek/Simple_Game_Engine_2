@@ -54,6 +54,13 @@ namespace Utilities
         // "texture ID" is an unsigned int instead of GLuint.
         int _textureSamplerId;
 
+        // this is directly related to how much GPU memory is allocated for the quads' vertices
+        // Note: Alternatively, I could have made the RenderChar(...) and RenderText(...) 
+        // methods non-const and then resized this value as necessary to accomodate possibly 
+        // larger strings, but I didn't want to make them non-const, so this value will be the 
+        // end of discussion about how big the string can be.  ??bad idea??)
+        const int _MAX_STR_LENGTH = 32;
+
         // the FreeType glyph set provides the basic printable ASCII character set, and even though 
         // the first 31 are not visible and will therefore not be loaded, the useless bytes are an 
         // acceptable tradeoff for rapid ASCII character lookup

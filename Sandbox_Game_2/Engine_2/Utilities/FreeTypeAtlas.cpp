@@ -326,15 +326,12 @@ namespace Utilities
         // another in a moment anyway?), and in doing so this error might be swallowed.  
         glBindBuffer(GL_ARRAY_BUFFER, _vboId);
 
-        define a starting max string size, and if that size is exceeded, then resize the buffer, otherwise use glbuffersubdata
-        //// the vertex buffer's size is dependent upon string length, and in this demo that value is 
-        //// not constant, so the vertex data needs to be completely refreshed every draw call, and 
-        //// therefore glBufferData(...) is used instead of glBufferSubData(...) 
-        glBufferData(GL_ARRAY_BUFFER, 32 * 4 * sizeof(point), 0, GL_DYNAMIC_DRAW);
-
+        // Note: Remember that each character is drawn with a texture box (quad), so the 
+        // required number of vertices is 4x the number of characters.
+        glBufferData(GL_ARRAY_BUFFER, _MAX_STR_LENGTH * 4 * sizeof(point), 0, GL_DYNAMIC_DRAW);
 
         // now set up the vertex attributes, which are a property of the data organization and 
-        // not the size or contents
+        // not the size or contents and can therefore be set after the buffer size
 
         // 2 floats per screen coord, 2 floats per texture coord, so 1 variable will do
         GLint itemsPerVertexAttrib = 2;
@@ -365,16 +362,9 @@ namespace Utilities
         glVertexAttribPointer(vai, itemsPerVertexAttrib, GL_FLOAT, GL_FALSE, bytesPerVertex,
             (void *)bufferStartByteOffset);
 
-        //GLint boundBuffer = 0;
-        //glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &boundBuffer);
-
         //cleanup
         glBindTexture(GL_TEXTURE_2D, 0);
         glBindVertexArray(0);
-
-        //glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &boundBuffer);
-
-
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         // no problems initializing atlas (I hope)
@@ -391,93 +381,95 @@ namespace Utilities
     void FreeTypeAtlas::RenderChar(const char c, const float posScreenCoord[2],
         const float userScale[2], const float color[4]) const
     {
-        //// the text will be drawn, in part, via a manipulation of pixel alpha values, and apparently
-        //// OpenGL's blending does this
-        //glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // the text will be drawn, in part, via a manipulation of pixel alpha values, and apparently
+        // OpenGL's blending does this
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        //// bind the texture that contains the atlas and tell OpenGL 
-        //glBindTexture(GL_TEXTURE_2D, _textureId);
-        //glUniform1i(_uniformTextSamplerLoc, _textureSamplerId);
+        // bind the texture that contains the atlas and tell OpenGL 
+        glBindTexture(GL_TEXTURE_2D, _textureId);
+        glUniform1i(_uniformTextSamplerLoc, _textureSamplerId);
 
-        //// use the user-provided color
-        //glUniform4fv(_uniformTextColorLoc, 1, color);
+        // use the user-provided color
+        glUniform4fv(_uniformTextColorLoc, 1, color);
 
-        //// X and Y screen coordinates are on the range [-1,+1]
-        //float oneOverScreenPixelWidth = 2.0f / glutGet(GLUT_WINDOW_WIDTH);
-        //float oneOverScreenPixelHeight = 2.0f / glutGet(GLUT_WINDOW_HEIGHT);
+        // X and Y screen coordinates are on the range [-1,+1]
+        float oneOverScreenPixelWidth = 2.0f / glutGet(GLUT_WINDOW_WIDTH);
+        float oneOverScreenPixelHeight = 2.0f / glutGet(GLUT_WINDOW_HEIGHT);
 
-        //// figure out where the texture needs to start drawing in screen coordinates
-        //// Note: A glyph has a formal origin point that we (humans) usually think of as being where
-        //// the character "starts".  But as far as OpenGL is concerned, I have a 2D rectangle of 
-        //// pixel data, and that's it.  If I drew that texture at the user-provided x and y, then 
-        //// the character would likely look like it isn't centered.  The TrueType format provides 
-        //// info that FreeType extracts so that I can figure out where to draw the texture so that 
-        //// it LOOKS like the glyph ('g', c, ';', etc.) "starts" at the user-provided x and y.
-        //float scaledGlyphLeft = _glyphCharInfo[c].bl * oneOverScreenPixelWidth * userScale[0];
-        //float scaledGlyphWidth = _glyphCharInfo[c].bw * oneOverScreenPixelWidth * userScale[0];
-        //float scaledGlyphTop = _glyphCharInfo[c].bt * oneOverScreenPixelHeight * userScale[1];
-        //float scaledGlyphHeight = _glyphCharInfo[c].bh * oneOverScreenPixelHeight * userScale[1];
+        // figure out where the texture needs to start drawing in screen coordinates
+        // Note: A glyph has a formal origin point that we (humans) usually think of as being where
+        // the character "starts".  But as far as OpenGL is concerned, I have a 2D rectangle of 
+        // pixel data, and that's it.  If I drew that texture at the user-provided x and y, then 
+        // the character would likely look like it isn't centered.  The TrueType format provides 
+        // info that FreeType extracts so that I can figure out where to draw the texture so that 
+        // it LOOKS like the glyph ('g', c, ';', etc.) "starts" at the user-provided x and y.
+        float scaledGlyphLeft = _glyphCharInfo[c].bl * oneOverScreenPixelWidth * userScale[0];
+        float scaledGlyphWidth = _glyphCharInfo[c].bw * oneOverScreenPixelWidth * userScale[0];
+        float scaledGlyphTop = _glyphCharInfo[c].bt * oneOverScreenPixelHeight * userScale[1];
+        float scaledGlyphHeight = _glyphCharInfo[c].bh * oneOverScreenPixelHeight * userScale[1];
 
-        //// could these be condensed into the "scaled glyph" calulations? yes, but this is clearer 
-        //// to me
-        //float screenCoordLeft = posScreenCoord[0] - scaledGlyphLeft;
-        //float screenCoordRight = screenCoordLeft + scaledGlyphWidth;
-        //float screenCoordTop = posScreenCoord[1] + scaledGlyphTop;
-        //float screenCoordBottom = screenCoordTop - scaledGlyphHeight;
+        // could these be condensed into the "scaled glyph" calulations? yes, but this is clearer 
+        // to me
+        float screenCoordLeft = posScreenCoord[0] - scaledGlyphLeft;
+        float screenCoordRight = screenCoordLeft + scaledGlyphWidth;
+        float screenCoordTop = posScreenCoord[1] + scaledGlyphTop;
+        float screenCoordBottom = screenCoordTop - scaledGlyphHeight;
 
-        //// unlike my project "freeglut_glload_render_freetype", which loads glyphs into their own 
-        //// textures one at a time (crude, but conveys basics), I can no longer use the whole 
-        //// texture and must use the offset info that was stored when the atlas was created
-        //// Note: Remember that textures use their own 2D coordinate system (S,T) to avoid confusion 
-        //// with screen coordinates (X,Y).
-        //float sLeft = _glyphCharInfo[c].tx;//0.0f;
-        //float sRight = _glyphCharInfo[c].tx + _glyphCharInfo[c].nbw;//1.0f;
-        //float tBottom = _glyphCharInfo[c].ty;
-        //float tTop = _glyphCharInfo[c].ty + _glyphCharInfo[c].nbh;
+        // unlike my project "freeglut_glload_render_freetype", which loads glyphs into their own 
+        // textures one at a time (crude, but conveys basics), I can no longer use the whole 
+        // texture and must use the offset info that was stored when the atlas was created
+        // Note: Remember that textures use their own 2D coordinate system (S,T) to avoid confusion 
+        // with screen coordinates (X,Y).
+        float sLeft = _glyphCharInfo[c].tx;//0.0f;
+        float sRight = _glyphCharInfo[c].tx + _glyphCharInfo[c].nbw;//1.0f;
+        float tBottom = _glyphCharInfo[c].ty;
+        float tTop = _glyphCharInfo[c].ty + _glyphCharInfo[c].nbh;
 
-        //// OpenGL draws triangles, but a rectangle needs to be drawn, so specify the four corners
-        //// of the box in such a way that GL_LINE_STRIP will draw the two triangle halves of the 
-        //// box
-        //// Note: As long as the lines from point A to B to C to D don't cross each other (draw 
-        //// it on paper), this is fine.  I am going with the pattern 
-        //// bottom left -> bottom right -> top left -> top right.
-        //// Also Note: Bitmap standards (and most other rectangle standards in programming, such 
-        //// as for GUIs) understand the top left as the origin, and therefore the texture's pixels 
-        //// are provided in a rectangle that goes from top left to bottom right.  OpenGL is the 
-        //// odd one out in the world of rectangles, and it draws textures from lower left 
-        //// ([S=0,T=0]) to upper right ([S=1,T=1]).  This means that the texture, from OpenGL's 
-        //// perspective, is "upside down".  Yay for different standards.
-        //// Also Also Note: IF THIS BOX SIZE EVER CHANGES, CHANGE THE SIZE OF THE VBO THAT THESE 
-        //// ARE LOADED INTO.
-        //point box[4] = {
-        //    { screenCoordLeft, screenCoordBottom, sLeft, tTop },
-        //    { screenCoordRight, screenCoordBottom, sRight, tTop },
-        //    { screenCoordLeft, screenCoordTop, sLeft, tBottom },
-        //    { screenCoordRight, screenCoordTop, sRight, tBottom }
-        //};
+        // OpenGL draws triangles, but a rectangle needs to be drawn, so specify the four corners
+        // of the box in such a way that GL_LINE_STRIP will draw the two triangle halves of the 
+        // box
+        // Note: As long as the lines from point A to B to C to D don't cross each other (draw 
+        // it on paper), this is fine.  I am going with the pattern 
+        // bottom left -> bottom right -> top left -> top right.
+        // Also Note: Bitmap standards (and most other rectangle standards in programming, such 
+        // as for GUIs) understand the top left as the origin, and therefore the texture's pixels 
+        // are provided in a rectangle that goes from top left to bottom right.  OpenGL is the 
+        // odd one out in the world of rectangles, and it draws textures from lower left 
+        // ([S=0,T=0]) to upper right ([S=1,T=1]).  This means that the texture, from OpenGL's 
+        // perspective, is "upside down".  Yay for different standards.
+        // Also Also Note: IF THIS BOX SIZE EVER CHANGES, CHANGE THE SIZE OF THE VBO THAT THESE 
+        // ARE LOADED INTO.
+        point box[4] = {
+            { screenCoordLeft, screenCoordBottom, sLeft, tTop },
+            { screenCoordRight, screenCoordBottom, sRight, tTop },
+            { screenCoordLeft, screenCoordTop, sLeft, tBottom },
+            { screenCoordRight, screenCoordTop, sRight, tBottom }
+        };
 
-        //// the vertex buffer's size is dependent upon string length, and in this demo that value is 
-        //// not constant, so the vertex data needs to be completely refreshed every draw call, and 
-        //// therefore glBufferData(...) is used instead of glBufferSubData(...) 
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(box), box, GL_DYNAMIC_DRAW);
+        // summon the VBO and the vertex attributes
+        glBindVertexArray(_vaoId);
 
-        //// all that so that this one function call will work
-        //// Note: Start at vertex 0 (that is, start at element 0 in the GL_ARRAY_BUFFER) and draw 
-        //// 4 of them.
-        //// Also Note: Due to the way that fonts work in texture atlases, only one character is 
-        //// drawn at a time, which means that only 1 quad is drawn at a time.  Rather than set up 
-        //// indexes and perform an element draw, just use a GL_TRIANGLE_STRIP.  That works great 
-        //// for a single (and only a single) quad, hence the hard-coded vertex count (4) in the 
-        //// draw call.  If it were not a quad, instancing and glDrawElements(...) should be used
-        //// instead.
-        //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        // MUST bind a buffer before sending the vertex info
+        glBindBuffer(GL_ARRAY_BUFFER, _vboId);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(box), box);
 
-        //// cleanup
-        //glBindTexture(GL_TEXTURE_2D, 0);
-        //glBindBuffer(GL_ARRAY_BUFFER, 0);
-        //glDisable(GL_BLEND);
-        //glBlendFunc(0, 0);
+        // all that so that this one function call will work
+        // Note: Start at vertex 0 (that is, start at element 0 in the GL_ARRAY_BUFFER) and draw 
+        // 4 of them.
+        // Also Note: Due to the way that fonts work in texture atlases, only one character is 
+        // drawn at a time, which means that only 1 quad is drawn at a time.  Rather than set up 
+        // indexes and perform an element draw, just use a GL_TRIANGLE_STRIP.  That works great 
+        // for a single (and only a single) quad, hence the hard-coded vertex count (4) in the 
+        // draw call.  If it were not a quad, instancing and glDrawElements(...) should be used
+        // instead.
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        // cleanup
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glDisable(GL_BLEND);
+        glBlendFunc(0, 0);
     }
 
     // see RenderChar(...) for more detail
@@ -509,32 +501,6 @@ namespace Utilities
         // shorthand for "vertex attribute index"
         GLint vai = 0;
 
-        // summon the VBO and the vertex attributes
-        glBindVertexArray(_vaoId);
-
-        //// need to create 1 quad (2 triangles) for each character, each of which occupies a 
-        //// rectangle in the atlas texture
-        //// Note: MUST bind BEFORE setting vertex attribute array pointers or it WILL crash.  
-        //glBindBuffer(GL_ARRAY_BUFFER, _vboId);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(point) * 4, 0, GL_DYNAMIC_DRAW);
-
-        //// screen coordinates first
-        //// Note: 2 floats starting 0 bytes from set start.
-        //glEnableVertexAttribArray(vai);
-        //glVertexAttribPointer(vai, itemsPerVertexAttrib, GL_FLOAT, GL_FALSE, bytesPerVertex,
-        //    (void *)bufferStartByteOffset);
-
-        //// texture coordinates second
-        //// Note: My approach (a common one) is to use the same kind and number of items for each
-        //// vertex attribute, so this array's settings are nearly identical to the screen 
-        //// coordinate's, the only difference being an offset (screen coordinate bytes first, then
-        //// texture coordinate byte; see the box).
-        //vai++;
-        //bufferStartByteOffset += itemsPerVertexAttrib * sizeof(float);
-        //glEnableVertexAttribArray(vai);
-        //glVertexAttribPointer(vai, itemsPerVertexAttrib, GL_FLOAT, GL_FALSE, bytesPerVertex,
-        //    (void *)bufferStartByteOffset);
-
         // X and Y screen coordinates are on the range [-1,+1]
         float oneOverScreenPixelWidth = 2.0f / glutGet(GLUT_WINDOW_WIDTH);
         float oneOverScreenPixelHeight = 2.0f / glutGet(GLUT_WINDOW_HEIGHT);
@@ -551,9 +517,17 @@ namespace Utilities
         // detailed comments.
         std::vector<point> glyphBoxes(4 * str.length());
 
+        // I don't want to make this whole function non-const just to resize max string length, 
+        // so instead force compliance to this max value
+        int maxIndex = str.length();
+        if (maxIndex > _MAX_STR_LENGTH)
+        {
+            maxIndex = _MAX_STR_LENGTH;
+        }
+
         // run through each character, gather all the vertex and other info together, and draw it 
         // all in one go
-        for (size_t charIndex = 0; charIndex < str.length(); charIndex++)
+        for (int charIndex = 0; charIndex < maxIndex; charIndex++)
         {
             char c = str[charIndex];
 
@@ -603,15 +577,11 @@ namespace Utilities
             glyphOriginY += _glyphCharInfo[c].ay * oneOverScreenPixelHeight;
         }
 
-        //// the vertex buffer's size is dependent upon string length, and in this demo that value is 
-        //// not constant, so the vertex data needs to be completely refreshed every draw call, and 
-        //// therefore glBufferData(...) is used instead of glBufferSubData(...) 
-        //glBufferData(GL_ARRAY_BUFFER, glyphBoxes.size() * sizeof(point), glyphBoxes.data(),
-        //    GL_DYNAMIC_DRAW);
+        // summon the VBO and the vertex attributes
+        glBindVertexArray(_vaoId);
 
-        // MUSt
+        // MUST bind a buffer before sending the vertex info
         glBindBuffer(GL_ARRAY_BUFFER, _vboId);
-        if ()
         glBufferSubData(GL_ARRAY_BUFFER, 0, glyphBoxes.size() * sizeof(point), glyphBoxes.data());
 
         // all that so that this one function call will work
