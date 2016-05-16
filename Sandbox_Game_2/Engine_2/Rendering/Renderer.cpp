@@ -169,6 +169,9 @@ namespace Rendering
                 indices_drawn_so_far += index_meta_data_ref.m_num_indices_this_mode;
             }
         }
+        
+        //??could this really be the problem??
+        glBindVertexArray(0);
 
         // courteous cleanup
         glUseProgram(0);

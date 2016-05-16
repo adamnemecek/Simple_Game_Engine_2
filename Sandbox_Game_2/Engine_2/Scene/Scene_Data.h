@@ -49,6 +49,7 @@ namespace Scene
       void update();
 
       bool load(const std::string& file_path);
+      bool load_from_blender_obj(const std::string& file_path);
       bool save(const std::string& file_path);
 
       Entities::Entity *new_entity(const std::string& new_entity_id_str);

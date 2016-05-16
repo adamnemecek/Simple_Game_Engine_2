@@ -18,6 +18,11 @@ namespace Rendering
     // Note: The FreeType encapsulation class MUST be initialized first.
     bool FrameRateRenderer::Init(const GLuint programId)
     {
+        _programId = programId;
+
+        // MUST bind the program beforehand or else the VAO generation and binding will blow up
+        glUseProgram(_programId);
+
         // ??is this going to be a problem with smart pointers if Init(...) is called multiple times??
         _pAtlas = Utilities::FreeTypeEncapsulate::GetInstance().GenerateAtlas(48);
         if (0 == _pAtlas)
@@ -25,7 +30,7 @@ namespace Rendering
             fprintf(stderr, "FreeType atlas could not be initialized\n");
             return false;
         }
-        _programId = programId;
+        glUseProgram(0);
 
         // all went well
         return true;

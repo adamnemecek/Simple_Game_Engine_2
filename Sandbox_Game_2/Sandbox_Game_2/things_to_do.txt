@@ -1,7 +1,35 @@
-- add a "scene" class that stores as orders entities
-- add support for scene loading from a file
-- add support for multiple simultaneous shader programs
-- add support for geometry loading from Maya
-- change entities to use dual-quaternions for position and orientation instead of the current mix of vec3 (position) and fquat (orientation)
-- an AABB class tht stores vertex locations
+- (done) add a "scene" class that stores as orders entities
+- (done) add support for scene loading from a file
+- (done) add support for multiple simultaneous shader programs
+- (in progress) add support for geometry loading from Blender3D
+- (done) change entities to use dual-quaternions for position and orientation instead of the current mix of vec3 (position) and fquat (orientation)
+- (?) an AABB class tht stores vertex locations
+- Entity constructor should NOT use a memset(...) to clear out the data
+- re-design primitive shape loading so that it can handle a failure
+- relegate shape loading from a Blender3D OBJ file to its own class like ShapeGenerator
+- re-name ShapeGenerator to PrimitiveGenerator
+- create an "air particle" structure
+    - position
+    - position on previous frame
+    - radius of collision
+    - sum of total forces acting upon the particle on this frame
+    - current velocity vector
+    - mass
+    - (for eventual more fancy stuff) particle type (O2, CO2, etc.)
+    - value of repulsive force that is linear regressed from 0 at the edge of the collision sphere to full value at the center
+- create a particle manager
+    - stage 1: particle spawning and particle reclamation when it goes out of range
+    - stage 2: evenly spaced particle spawning from a "source" plane to replicate a wind tunnel
+    - stage 3: collision detection between particles from one frame to the next
+- GPU development: 
+    - stage 1: handle particle position updates without collisions
+    - stage 2: stage 1 + collisions, and change particle color to reflect the magnitude of the forces on that particle
+    - stage 3: stage 2 + collisions with geometry
+        handle particle updates 
+- re-design the "scene" class so that it can:
+    - take more of a managerial role in loading
+    - hand off particle manger updating to the GPU
+    - hand off collision calculations to the GPU
+- calculate a way to dump all vertices into a single, giant vertex array, and then control rendering just with indices and render types
+- FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
 

@@ -33,6 +33,9 @@ namespace Utilities
         void RenderText(const std::string &str, const float posScreenCoord[2],
             const float userScale[2], const float color[4]) const;
     private:
+        // stores all the vertex buffer and attribute points for easy use after initialization
+        unsigned int _vaoId;
+
         // have to reference it on every draw call, so keep it around
         // Note: It is actually a GLuint, which is a typedef of "unsigned int", but I don't want to 
         // include all of the OpenGL declarations in a header file, so just use the original type.
