@@ -94,6 +94,7 @@
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="Input\Key_Bindings\Keyboard_Bindings.cpp" />
     <ClCompile Include="Math\F_Dual_Number.cpp" />
+    <ClCompile Include="Particles\ParticleManager.cpp" />
     <ClCompile Include="Rendering\FrameRateCounter.cpp" />
     <ClCompile Include="Rendering\Renderable.cpp" />
     <ClCompile Include="Utilities\ShaderManager.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="Math\F_Quat.h" />
     <ClInclude Include="Particles\AirParticle.h" />
     <ClInclude Include="Particles\ParticleManager.h" />
+    <ClInclude Include="Particles\ParticleRenderer.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\FrameRateCounter.h" />
     <ClInclude Include="Rendering\Renderer.h" />

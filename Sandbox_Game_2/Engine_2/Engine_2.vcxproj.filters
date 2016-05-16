@@ -102,6 +102,9 @@
     <ClCompile Include="Rendering\FrameRateCounter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Particles\ParticleManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugTools\Profiling\Profiler.h">
@@ -249,6 +252,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Particles\ParticleManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Particles\ParticleRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

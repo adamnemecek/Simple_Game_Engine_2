@@ -23,7 +23,11 @@
     - mass
     - (for eventual more fancy stuff) particle type (O2, CO2, etc.)
     - value of repulsive force that is linear regressed from 0 at the edge of the collision sphere to full value at the center
-- create a particle manager
+- Particles
+    - create a particle manager base class that does particle initialization
+    - create a particle manager for circles
+    - create another for emission on a plane
+- create a particle manager 
     - requires:
         - max number of particles to handle
         - a region inside of which they exist and outside of which they are reclaimed
@@ -50,6 +54,7 @@
         - add up repulsive forces on a single particle when it runs into the collision region of any number of nearby particles
         - resolve forces acting on particle to alter existing velocity vector
     - stage 3: collision with geometry
+- create a particle renderer
 - GPU development: 
     - stage 1: handle particle position updates without collisions
     - stage 2: stage 1 + collisions, and change particle color to reflect the magnitude of the forces on that particle
@@ -62,5 +67,5 @@
 - calculate a way to dump all vertices into a single, giant vertex array, and then control rendering just with indices and render types
 - (done) FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
 - FreeTypeAtlas: Use texture sampler binding.  Right now, the texture parameters are set once for texture 0, but if there is ever a second texture, these will need to be set again at every draw call.  
-- Encapsulate the "sahpe data" pointers coming out of the "shape generator" in a smart pointer.  Right now there is nothing deleting it.
+- (done) Encapsulate the "shape data" pointers coming out of the "shape generator" in a smart pointer.
 - 
