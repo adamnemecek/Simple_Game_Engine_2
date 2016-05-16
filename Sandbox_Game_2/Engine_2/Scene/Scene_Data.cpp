@@ -82,7 +82,7 @@ namespace
 
         // pick apart the node to figure out what shape to make, and then make it
         std::string shape_type_str = rapidxml::get_attrib_string(*shape_node_ptr, "id");
-        Shapes::Shape_Data *new_shape_ptr = 0;
+        std::shared_ptr<Shapes::Shape_Data> new_shape_ptr(nullptr);
         Shapes::Geometry_Creation::Shape_Generator& shape_generator_ref = Shapes::Geometry_Creation::Shape_Generator::get_instance();
         float f_return_value_if_parameter_not_found = 0.0f;
         int i_return_value_if_parameter_not_found = 0;
@@ -472,7 +472,7 @@ namespace Scene
         // Note: the std::vector<...> class is great for creating the vertices when it is not 
         // known ahead of time how many vertices will be needed.  But OpenGL uses arrays, so 
         // once all the vertices and indices are created, stuff them into arrays.
-        Shape_Data *pShape = new Shape_Data;
+        std::shared_ptr<Shape_Data> pShape = std::make_shared<Shape_Data>();
         pShape->m_verts = new My_Vertex[verts.size()];
         pShape->m_indices = new unsigned short[indices.size()];
 
@@ -551,7 +551,7 @@ namespace Scene
     }
 
 
-    Shapes::Geometry *Scene_Data::new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str)
+    Shapes::Geometry *Scene_Data::new_geometry(const std::shared_ptr<Shapes::Shape_Data> new_shape_data_ptr, const std::string& new_geometry_id_str)
     {
         // check if the name is already taken
         if (0 != geometry_already_loaded(new_geometry_id_str))

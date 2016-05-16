@@ -1,8 +1,7 @@
 #ifndef ENGINE_SCENE_DATA_H
 #define ENGINE_SCENE_DATA_H
 
-// for storing std:unique_ptr
-#include <memory>
+#include <memory>   // for smart pointers
 #include <vector>
 
 // I can't forward declare these things for the std::unique_ptr, so I 
@@ -56,7 +55,7 @@ namespace Scene
       Entities::Physics_Component *new_physics_component();
       Entities::AABB_Component *new_AABB_component();
       Entities::Controller_Component *new_controller_component();
-      Shapes::Geometry *new_geometry(const Shapes::Shape_Data *new_shape_data_ptr, const std::string& new_geometry_id_str);
+      Shapes::Geometry *new_geometry(const std::shared_ptr<Shapes::Shape_Data> new_shape_data_ptr, const std::string& new_geometry_id_str);
       void new_entity_geometry_pairing(const Entities::Entity *entity_ptr, const Shapes::Geometry *geo_ptr);
 
       Entities::Entity *find_entity(const std::string& entity_id_str);

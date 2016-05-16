@@ -131,6 +131,8 @@
     <ClInclude Include="Math\F_Dual_Number.h" />
     <ClInclude Include="Math\F_Dual_Quat.h" />
     <ClInclude Include="Math\F_Quat.h" />
+    <ClInclude Include="Particles\AirParticle.h" />
+    <ClInclude Include="Particles\ParticleManager.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\FrameRateCounter.h" />
     <ClInclude Include="Rendering\Renderer.h" />

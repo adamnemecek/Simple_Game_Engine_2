@@ -1,3 +1,9 @@
+- general cleanup
+    - change all #includes to use 
+        - / instead of \ (painstaking, but should do for the sake of future cross-platform-ness)
+        - <> for std includes and for 3rd party includes like middleware and FreeType stuff
+        - "" for my headers
+    - CTRL-KF for proper spacing
 - (done) add a "scene" class that stores as orders entities
 - (done) add support for scene loading from a file
 - (done) add support for multiple simultaneous shader programs
@@ -56,8 +62,5 @@
 - calculate a way to dump all vertices into a single, giant vertex array, and then control rendering just with indices and render types
 - (done) FreeTypeAtlas: use a VAO to encapsulate the glVertexAttribPointer and buffer binding
 - FreeTypeAtlas: Use texture sampler binding.  Right now, the texture parameters are set once for texture 0, but if there is ever a second texture, these will need to be set again at every draw call.  
-- change all #includes to use 
-    - / instead of \ (painstaking, but should do for the sake of future cross-platform-ness)
-    - <> for std includes and for 3rd party includes like middleware and FreeType stuff
-    - "" for my headers
+- Encapsulate the "sahpe data" pointers coming out of the "shape generator" in a smart pointer.  Right now there is nothing deleting it.
 - 
