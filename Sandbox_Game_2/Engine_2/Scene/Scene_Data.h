@@ -6,26 +6,22 @@
 
 // I can't forward declare these things for the std::unique_ptr, so I 
 // have to include the whole definition
-#include <Entities\Entity.h>
-#include <Entities\Components\Physics_Component.h>
-#include <Entities\Components\AABB_Component.h>
-#include <Entities\Components\Controller_Component.h>
-#include <Shapes\Geometry.h>
+#include "Entities/Entity.h"
+#include "Entities/Components/Physics_Component.h"
+#include "Entities/Components/AABB_Component.h"
+#include "Entities/Components/Controller_Component.h"
+#include "Shapes/Geometry.h"
+#include "Particles/ParticleManager.h"
 
 // misc
 #include <string>
-#include <Rendering\Camera.h>
+#include <Rendering/Camera.h>
 
 // forward declarations
 namespace rapidxml
 {
    template<class Ch = char>
    class xml_document;
-}
-
-namespace Shapes
-{
-   class Geometry;
 }
 
 namespace Rendering
@@ -82,6 +78,7 @@ namespace Scene
 
       bool load_renderer(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_geometries(const rapidxml::xml_document<> *parsed_scene_doc);
+      bool load_particle_management();
       bool load_entities(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_camera(const rapidxml::xml_document<> *parsed_scene_doc);
 
@@ -117,6 +114,7 @@ namespace Scene
       std::vector<std::unique_ptr<Entities::Controller_Component>> m_controller_components;
       std::vector<std::unique_ptr<Shapes::Geometry>> m_geometry_ptrs;
       std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry*>> m_entity_geometry_pairings;
+      std::vector<std::unique_ptr<Particles::ParticleManager>> m_particle_managers;
    };
 }
 

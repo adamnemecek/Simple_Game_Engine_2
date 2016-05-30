@@ -11,6 +11,14 @@
 - (done) change entities to use dual-quaternions for position and orientation instead of the current mix of vec3 (position) and fquat (orientation)
 - (?) an AABB class tht stores vertex locations
 - Entity constructor should NOT use a memset(...) to clear out the data
+- red-design texture loading to use samplers (already doing that in shader (I think), but not in C++ code)
+    - https://www.opengl.org/wiki/Sampler_Object
+    - https://www.reddit.com/r/opengl/comments/4j82g9/is_there_a_vaolike_thing_for_textures_that_stores/713
+- re-design scene class and consider what it actually needs to hold
+    - do I really need a vector of unique pointers for the particle manager?
+    - load from JSON file instead of XML
+- re-design entity-component system to be more pure (alternately, adopt EntityX)
+    - https://www.reddit.com/r/gamedev/comments/4l2qck/entitycomponent_by_encapsulated_class_or_by_dumb/
 - re-design primitive shape loading so that it can handle a failure
 - relegate shape loading from a Blender3D OBJ file to its own class like ShapeGenerator
 - re-name ShapeGenerator to PrimitiveGenerator
@@ -28,6 +36,7 @@
     - create a particle manager for circles
     - create another for emission on a plane
 - create a particle manager 
+    - TODO: store IDs instead of pointers in the "active particles" and "relaunch these" collections.  On a 64bit system, a pointer is 8 bytes, while a 16bit integer (unsigned is good for up to ~65,000) is just 2 bytes.  If you go beyond this, then a 32bit unsigned integer is still only 4 bytes.  More compact memory => better cache locality => better performance.
     - requires:
         - max number of particles to handle
         - a region inside of which they exist and outside of which they are reclaimed

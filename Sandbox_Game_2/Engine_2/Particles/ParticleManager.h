@@ -3,7 +3,6 @@
 #include "Particles/AirParticle.h"
 //#include "Shapes/Shape_Data.h"
 #include <vector>
-#include <deque>
 
 #include <glm/vec3.hpp>
 
@@ -26,6 +25,14 @@ namespace Particles
         void Update(const float deltaTimeSec);
 
     private:
+        // Note: I will be using std::remove_if(...) over the container of active particles, but 
+        // since the predicate argument can only take a reference to an item in that container 
+        // and updating and determining if a particle is out of bounds requires delta time and 
+        // a distance from the emitter position, use a method for the predicate so that members
+        // can be tapped into.
+        bool UpdateParticleRemoveIfTrue(AirParticle *p);
+        float _deltaTimeSec;
+
         // can be used to allow particles to release over time instead 
         int _numToLaunchPerFrame;
 
@@ -37,8 +44,12 @@ namespace Particles
         float _radius;
         glm::vec3 _emitterPosition;
 
+        // make these all vectors to guarantee contiguous memory, which keeps cache misses (the 
+        // biggest villain when dealing with many many items) down
         std::vector<AirParticle> _allParticles;
-        std::deque<AirParticle *> _activeParticles;
-        std::deque<AirParticle *> _relaunchThese;
+        typedef std::vector<AirParticle *> PARTICLE_CONTAINER;
+        PARTICLE_CONTAINER _activeParticles;
+        PARTICLE_CONTAINER _inactiveParticles;
+
     };
 }

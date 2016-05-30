@@ -1,31 +1,34 @@
 #include "Scene_Data.h"
 
-#include <Utilities\My_Assert.h>
-#include <Utilities\Typedefs.h>
-#include <middleware\arcsynthesis\framework\rapidxml.hpp>
-#include <middleware\arcsynthesis\framework\rapidxml_helpers.h>
+#include "Utilities/My_Assert.h"
+#include "Utilities/Typedefs.h"
+#include "middleware/arcsynthesis/framework/rapidxml.hpp"
+#include "middleware/arcsynthesis/framework/rapidxml_helpers.h"
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <memory> // for std::shared_ptr
-#include <Rendering\Renderer.h>
+#include "Rendering/Renderer.h"
 
 // for generating things from the file data
-#include <Entities\Entity.h>
-#include <Entities\Components\AABB_Component.h>
-#include <Entities\Components\Physics_Component.h>
-#include <Entities\Components\Controller_Component.h>
-#include <Shapes\Shape_Data.h>
-#include <Shapes\Geometry_Creation\Shape_Generator.h>
-#include <Shapes\Geometry.h>
-#include <Math\F_Quat.h>
-#include <Math\F_Dual_Quat.h>
-#include <Utilities\Shader_Maker.h>
+#include "Entities/Entity.h"
+#include "Entities/Components/AABB_Component.h"
+#include "Entities/Components/Physics_Component.h"
+#include "Entities/Components/Controller_Component.h"
+#include "Shapes/Shape_Data.h"
+#include "Shapes/Geometry_Creation/Shape_Generator.h"
+#include "Shapes/Geometry.h"
+#include "Math/F_Quat.h"
+#include "Math/F_Dual_Quat.h"
+#include "Utilities/Shader_Maker.h"
+
+// for updating particle managers (they need delta time)
+#include "Timing/Game_Clock.h"
 
 // for loading an object from Blender3d
-#include <Shapes\Shape_Data.h>
-#include <Shapes\My_Vertex.h>
-#include <Shapes\Index_Meta_Data.h>
+#include "Shapes/Shape_Data.h"
+#include "Shapes/My_Vertex.h"
+#include "Shapes/Index_Meta_Data.h"
 
 #include <iostream>
 using std::cout;
@@ -293,6 +296,12 @@ namespace Scene
             m_entity_ptrs[index_counter]->update();
         }
 
+        for (size_t i = 0; i < m_particle_managers.size(); i++)
+        {
+            float deltaT = (float)Timing::Game_Clock::get_instance().get_delta_time_last_frame();
+            m_particle_managers[i]->Update(deltaT);
+        }
+
         m_camera.update();
     }
 
@@ -323,6 +332,11 @@ namespace Scene
         }
 
         if (!load_geometries(&doc))
+        {
+            return false;
+        }
+
+        if (!load_particle_management())
         {
             return false;
         }
@@ -644,6 +658,14 @@ namespace Scene
             // get the next geometry in the node hierarchy
             geo_node_ptr = geo_node_ptr->next_sibling("geometry");
         }
+
+        return true;
+    }
+
+    bool Scene_Data::load_particle_management()
+    {
+        m_particle_managers.push_back(std::unique_ptr<Particles::ParticleManager>(new Particles::ParticleManager()));
+        m_particle_managers.back()->Init(10, 2, 2, 5, 10, glm::vec3(0.0f, 1.0f, 0.0f));
 
         return true;
     }

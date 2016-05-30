@@ -22,21 +22,22 @@ namespace Particles
         AirParticle(const PARTICLE_TYPE type = AIR) 
             : _type(type)   // once this particle type, always this particle type
         {
-            this->Reset(NULL_VEC, NULL_VEC, 0.0f);
+            this->Reset(NULL_VEC, NULL_VEC);
         }
 
         // make inline because, when handling many many particles, I'll take whatever speed advantage I can get
-        inline void Reset(const glm::vec3 emitterPosition, const glm::vec3 velocity, const float radius)
+        inline void Reset(const glm::vec3 emitterPosition, const glm::vec3 velocity)
         {
             switch (_type)
             {
             case AIR:
                 _mass = 0.001f;
-                //_radius;    // TODO: make this a function of particle type
+                _collisionRadius = 0.02f;
                 _repulsiveForce = 1.0f;
                 break;
             default:
                 _mass = 0.0f;
+                _collisionRadius = 0.0f;
                 _repulsiveForce = 0.0f;
                 break;
             }
@@ -47,8 +48,6 @@ namespace Particles
 
             // upon creation there is no "net force" acting upon this particle
             _netForceActingOnMe = NULL_VEC;  
-
-            _collisionRadius = radius;
         }
 
 

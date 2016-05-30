@@ -137,7 +137,9 @@
     <ClInclude Include="Particles\ParticleRenderer.h" />
     <ClInclude Include="Rendering\Camera.h" />
     <ClInclude Include="Rendering\FrameRateCounter.h" />
+    <ClInclude Include="Rendering\ParticleRenderer.h" />
     <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Utilities\FastRandom.h" />
     <ClInclude Include="Utilities\ShaderManager.h" />
     <ClInclude Include="Scene\Scene_Data.h" />
     <ClInclude Include="Shapes\Geometry.h" />
