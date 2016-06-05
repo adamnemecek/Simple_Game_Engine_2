@@ -4,7 +4,7 @@
 #include "glm/mat4x4.hpp"
 #include "glm/vec3.hpp"
 #include "Utilities/Include_Helpers/GL_Version.h"
-#include "Utilities/Typedefs.h""
+#include "Utilities/Typedefs.h"
 #include <string>
 
 // the renderer stores arrays of both of these, so we can't forward declare them

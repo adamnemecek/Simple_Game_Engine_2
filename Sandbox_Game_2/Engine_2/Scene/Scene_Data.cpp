@@ -21,7 +21,6 @@
 #include "Shapes/Geometry.h"
 #include "Math/F_Quat.h"
 #include "Math/F_Dual_Quat.h"
-#include "Utilities/Shader_Maker.h"
 
 // for updating particle managers (they need delta time)
 #include "Timing/Game_Clock.h"

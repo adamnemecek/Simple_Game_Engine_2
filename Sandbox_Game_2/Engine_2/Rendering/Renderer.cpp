@@ -1,7 +1,6 @@
 #include "Renderer.h"
 
 #include "Utilities/My_Assert.h"
-#include "Utilities/Shader_Maker.h"
 #include "Utilities/ShaderManager.h"
 
 #include <glm/vec3.hpp>
