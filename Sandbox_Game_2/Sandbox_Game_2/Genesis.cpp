@@ -1,4 +1,5 @@
 #include <Engine_2/Rendering/Renderer.h>
+#include <Engine_2/Rendering/ParticleRenderer.h>
 #include <Engine_2/Rendering/FrameRateCounter.h>
 #include <Engine_2/Timing/Game_Clock.h>
 #include <Engine_2/Scene/Scene_Data.h>
@@ -18,9 +19,10 @@ using std::endl;
 // (apparently this needs to be included after the glm and glload and other libraries)
 #include <GL/freeglut.h>
 
-Rendering::Renderer g_renderer;
-Rendering::FrameRateRenderer g_frame_rate_renderer;
-Scene::Scene_Data g_scene;
+Rendering::Renderer gGeometryRenderer;
+Rendering::ParticleRenderer gParticleRenderer;
+Rendering::FrameRateRenderer gFrameRateRenderer;
+Scene::Scene_Data gScene;
 
 #include "experiment.h"
 
@@ -38,7 +40,7 @@ void init()
 
    Utilities::ShaderManager &shaderManagerRef = Utilities::ShaderManager::GetInstance();
 
-   // load the main rendering program
+   // load the geometry rendering program
    std::string filePaths[] =
    {
        "data/experimental_shader.vert",
@@ -50,7 +52,13 @@ void init()
        GL_FRAGMENT_SHADER,
    };
    int mainRendererProgram = shaderManagerRef.LoadProgram("main", filePaths, shaderTypes, 2);
-   MY_ASSERT(g_renderer.initialize(mainRendererProgram));
+   MY_ASSERT(gGeometryRenderer.Init(mainRendererProgram));
+
+   // load the particle rendering program
+   filePaths[0] = "data/particles.vert";
+   filePaths[1] = "data/particles.frag";
+   int particleProgram = shaderManagerRef.LoadProgram("particle", filePaths, shaderTypes, 2);
+   MY_ASSERT(gParticleRenderer.Init(particleProgram));
 
    // now load the program for FreeType
    filePaths[0] = "data/freeTypeText.vert";
@@ -59,12 +67,13 @@ void init()
    int freeTypeProgram = shaderManagerRef.LoadProgram("freetype", filePaths, shaderTypes, 2);
    MY_ASSERT(Utilities::FreeTypeEncapsulate::GetInstance().
        Init("data/FreeSans.ttf", freeTypeProgram));
-   MY_ASSERT(g_frame_rate_renderer.Init(freeTypeProgram));
+   MY_ASSERT(gFrameRateRenderer.Init(freeTypeProgram));
 
-   g_scene.set_render(&g_renderer);
-   g_scene.initialize();
-   g_scene.load("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
-   g_scene.load_from_blender_obj("C:/Users/John/Documents/untitled.obj");
+   // now the scene itself
+   gScene.Init("C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml");
+   gScene.load_from_blender_obj("C:/Users/John/Documents/untitled.obj");
+   gScene.ConfigureGeometryRenderer(&gGeometryRenderer);
+   gScene.ConfigureParticleRenderer(&gParticleRenderer);
 
    // start the game clock
    MY_ASSERT(Timing::Game_Clock::get_instance().initialize());
@@ -84,10 +93,11 @@ void display()
 
    //Collision_Detection::Collision_Handler::get_instance().update();
 
-   g_scene.update();
-   g_renderer.render_scene();
-   g_frame_rate_renderer.NewFrame();
-   g_frame_rate_renderer.Render();
+   gScene.update();
+   gGeometryRenderer.Render();
+   gParticleRenderer.Render();
+   gFrameRateRenderer.NewFrame();
+   gFrameRateRenderer.Render();
 
    glutSwapBuffers();
    glutPostRedisplay();
@@ -97,7 +107,8 @@ void display()
 //This is an opportunity to call glViewport or glScissor to keep up with the change in size.
 void reshape (int w, int h)
 {
-   g_renderer.set_viewport(w, h);
+   gGeometryRenderer.SetViewport(w, h);
+   gParticleRenderer.SetViewport(w, h);
 }
 
 //Called whenever a key on the keyboard was pressed.

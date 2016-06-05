@@ -8,6 +8,8 @@
 
 namespace Particles
 {
+    typedef std::vector<AirParticle *> PARTICLE_CONTAINER;
+
     class ParticleManager
     {
     public:
@@ -23,6 +25,9 @@ namespace Particles
             const float radius, const glm::vec3 emitterPosition);
 
         void Update(const float deltaTimeSec);
+
+        const PARTICLE_CONTAINER &GetActiveParticles() const;
+        const unsigned int GetNumParticles() const;
 
     private:
         // Note: I will be using std::remove_if(...) over the container of active particles, but 
@@ -47,7 +52,6 @@ namespace Particles
         // make these all vectors to guarantee contiguous memory, which keeps cache misses (the 
         // biggest villain when dealing with many many items) down
         std::vector<AirParticle> _allParticles;
-        typedef std::vector<AirParticle *> PARTICLE_CONTAINER;
         PARTICLE_CONTAINER _activeParticles;
         PARTICLE_CONTAINER _inactiveParticles;
 

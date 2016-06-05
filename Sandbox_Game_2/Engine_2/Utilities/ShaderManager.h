@@ -20,6 +20,8 @@ namespace Utilities
         int LoadProgram(const std::string &theKey, const std::string *shaderFilePaths,
             const GLenum *shaderTypes, const uint numShaders);
         int GetProgramId(const std::string &theKey);
+        int FindUniform(const int programId, const std::string &findThis);
+        int FindAttribute(const int programId, const std::string &findThis);
     private:
         // hide these to enforce singleton-ness
         ShaderManager() {}

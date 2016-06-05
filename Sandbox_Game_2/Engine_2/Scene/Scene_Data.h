@@ -27,6 +27,7 @@ namespace rapidxml
 namespace Rendering
 {
    class Renderer;
+   class ParticleRenderer;
 }
 
 namespace Scene
@@ -38,12 +39,12 @@ namespace Scene
       // so I also have to explicitly declare a public constructor 
       Scene_Data() {}
 
-      bool initialize();
-      void set_render(Rendering::Renderer *renderer_ptr);
+      bool Init(const std::string& file_path);
+      void ConfigureGeometryRenderer(Rendering::Renderer *pRenderer);
+      void ConfigureParticleRenderer(Rendering::ParticleRenderer *pRenderer);
 
       void update();
 
-      bool load(const std::string& file_path);
       bool load_from_blender_obj(const std::string& file_path);
       bool save(const std::string& file_path);
 
@@ -73,23 +74,10 @@ namespace Scene
       Scene_Data(const Scene_Data&);
       Scene_Data& operator=(const Scene_Data&);
 
-
-      // private initialization helper functions
-
-      bool load_renderer(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_geometries(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_particle_management();
       bool load_entities(const rapidxml::xml_document<> *parsed_scene_doc);
       bool load_camera(const rapidxml::xml_document<> *parsed_scene_doc);
-
-
-      // keep this around so that new renderables can be added as new entities and
-      // geometries are introduced
-      // Note: Wherever the renderer is kept it should be in the same scope as the
-      // scene so that they both die at the same time.  The renderer makes use of
-      // entity transforms, and if those entities die and the renderer doesn't, then
-      // there will be trouble.
-      Rendering::Renderer *m_renderer_ptr;
 
       // a single camera
       // TODO: ??make this a collection of cameras??
@@ -98,7 +86,7 @@ namespace Scene
       // storage of things
       // Note: I am using shared pointers to manage the storage of objects because of
       // the way that vectors push things into their collection: via copy constructor.
-      // Then if the local copy of the object goes out of scope, it's descructor is called,
+      // Then if the local copy of the object goes out of scope, it's destructor is called,
       // killing any data that it may have pointed to.  I thought about pointers, but
       // a vector won't delete pointers.  Enter the unique pointer (I could use a shared
       // pointer, but a unique one communicates sole ownership), which is a class that 
@@ -113,7 +101,8 @@ namespace Scene
       std::vector<std::unique_ptr<Entities::AABB_Component>> m_AABB_components;
       std::vector<std::unique_ptr<Entities::Controller_Component>> m_controller_components;
       std::vector<std::unique_ptr<Shapes::Geometry>> m_geometry_ptrs;
-      std::vector<std::pair<const Entities::Entity *, const Shapes::Geometry*>> m_entity_geometry_pairings;
+      typedef std::pair<const Entities::Entity *, const Shapes::Geometry*> ENTITY_GEOMETRY_PAIRS;
+      std::vector<ENTITY_GEOMETRY_PAIRS> m_entity_geometry_pairings;
       std::vector<std::unique_ptr<Particles::ParticleManager>> m_particle_managers;
    };
 }

@@ -96,6 +96,8 @@
   <ItemGroup>
     <None Include="data\freeTypeText.frag" />
     <None Include="data\freeTypeText.vert" />
+    <None Include="data\particles.frag" />
+    <None Include="data\particles.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

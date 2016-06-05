@@ -49,6 +49,35 @@ namespace Utilities
         return itr->second;
     }
 
+    // returns -1 if not found
+    int ShaderManager::FindUniform(const int programId, const std::string &findThis)
+    {
+        // do not need to bind the program for this to work
+        GLint location = glGetUniformLocation(programId, findThis.c_str());
+#ifdef DEBUG
+        if (location < 0)
+        {
+            printf("ShaderManager::FindUniform(...): could not find uniform '%s' in program '%u'; the requested uniform is either mispelled or unused in the program", findThis.c_str(), programId);
+        }
+#endif
+        return location;
+    }
+
+    // returns -1 if not found
+    int ShaderManager::FindAttribute(const int programId, const std::string &findThis)
+    {
+        // do not need to bind the program for this to work
+        GLint location = glGetAttribLocation(programId, findThis.c_str());
+#ifdef DEBUG
+        if (location < 0)
+        {
+            printf("ShaderManager::FindAttribute(...): could not find attribute '%s' in program '%u'; the requested attribute is either mispelled or unused in the program", findThis.c_str(), programId);
+        }
+#endif
+        return location;
+    }
+
+
     // PRIVATE
     GLuint ShaderManager::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
     {

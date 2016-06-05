@@ -96,6 +96,7 @@
     <ClCompile Include="Math\F_Dual_Number.cpp" />
     <ClCompile Include="Particles\ParticleManager.cpp" />
     <ClCompile Include="Rendering\FrameRateCounter.cpp" />
+    <ClCompile Include="Rendering\ParticleRenderer.cpp" />
     <ClCompile Include="Rendering\Renderable.cpp" />
     <ClCompile Include="Utilities\ShaderManager.cpp" />
     <ClCompile Include="Scene\Scene_Data.cpp" />

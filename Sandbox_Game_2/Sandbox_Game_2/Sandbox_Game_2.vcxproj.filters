@@ -36,5 +36,7 @@
   <ItemGroup>
     <None Include="data\freeTypeText.frag" />
     <None Include="data\freeTypeText.vert" />
+    <None Include="data\particles.vert" />
+    <None Include="data\particles.frag" />
   </ItemGroup>
 </Project>

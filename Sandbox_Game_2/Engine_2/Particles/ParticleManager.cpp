@@ -135,4 +135,14 @@ namespace Particles
             _inactiveParticles.pop_back();
         }
     }
+
+    const PARTICLE_CONTAINER &ParticleManager::GetActiveParticles() const
+    {
+        return _activeParticles;
+    }
+
+    const unsigned int ParticleManager::GetNumParticles() const
+    {
+        return _allParticles.size();
+    }
 }

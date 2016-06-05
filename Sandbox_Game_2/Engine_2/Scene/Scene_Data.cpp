@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory> // for std::shared_ptr
 #include "Rendering/Renderer.h"
+#include "Rendering/ParticleRenderer.h"
 
 // for generating things from the file data
 #include "Entities/Entity.h"
@@ -276,48 +277,10 @@ namespace
 
 namespace Scene
 {
-    bool Scene_Data::initialize()
+    bool Scene_Data::Init(const std::string& file_path)
     {
         m_entity_ptrs.clear();
         m_geometry_ptrs.clear();
-
-        return true;
-    }
-
-    void Scene_Data::set_render(Rendering::Renderer *renderer_ptr)
-    {
-        m_renderer_ptr = renderer_ptr;
-    }
-
-    void Scene_Data::update()
-    {
-        for (uint index_counter = 0; index_counter < m_entity_ptrs.size(); index_counter++)
-        {
-            m_entity_ptrs[index_counter]->update();
-        }
-
-        for (size_t i = 0; i < m_particle_managers.size(); i++)
-        {
-            float deltaT = (float)Timing::Game_Clock::get_instance().get_delta_time_last_frame();
-            m_particle_managers[i]->Update(deltaT);
-        }
-
-        m_camera.update();
-    }
-
-    bool Scene_Data::load(const std::string& file_path)
-    {
-        // start up the renderer
-        //    load shaders
-        //    initialize and set the camera
-        // load geometries (geometries should have unique names, like "cube_1", "sphere_2", "plane_3", etc.)
-        //    geometries need to have names with get/set functions
-        //    need to be able to retrieve a pointer to a geometry from the Scene's geometry collection
-        // load entities 
-        //    generate renderables with entity-geometry combinations
-        //    need to be able to retrieve a pointer to an entity from the Scene's entity collection
-        // the world outside the scene needs to be able to generate new geometry and add 
-
 
         //std::string file_path = "C:/Users/John/Documents/GitHub/Simple_Game_Engine_2/scene_save_exp.xml";
 
@@ -325,11 +288,6 @@ namespace Scene
         rapidxml::xml_document<> doc;
         std::vector<char> file_data;
         helper_open_xml_file(&doc, file_data, file_path);
-
-        if (!load_renderer(&doc))
-        {
-            return false;
-        }
 
         if (!load_geometries(&doc))
         {
@@ -352,6 +310,50 @@ namespace Scene
         }
 
         return true;
+    }
+
+    // call AFTER init or you'll have nothing
+    void Scene_Data::ConfigureGeometryRenderer(Rendering::Renderer *pRenderer)
+    {
+        pRenderer->SetCameraToRender(&m_camera);
+        for (size_t i = 0; i < m_entity_geometry_pairings.size(); i++)
+        {
+            const ENTITY_GEOMETRY_PAIRS &pairRef = m_entity_geometry_pairings[i];
+            pRenderer->ConfigureNewRenderable(pairRef.first, pairRef.second);
+        }
+    }
+
+    // call AGTER init or you'll have nothing
+    void Scene_Data::ConfigureParticleRenderer(Rendering::ParticleRenderer *pRenderer)
+    {
+        // TODO: one of the following:
+        // (1) make the particle renderer keep a collection of pointers to particle managers, 
+        //  not unlike the geometry renderer keeping a collection of renderables
+        // (2) Give the particle managers or renderers (or both) some kind of ID that describes 
+        //  what kind of particles they render, thus allowing different kinds of particle 
+        //  rendering while still letting the scene keep the particle emitters nicely contained 
+        //  and updateable
+        // Note: For now, just hard code this single particle manager.
+        // Also Note: The get() function returns the raw pointer to the particle manager, which
+        // is what the particle renderer expects.
+        pRenderer->SetCameraToRender(&m_camera);
+        pRenderer->SetParticleManager(m_particle_managers[0].get());
+    }
+
+    void Scene_Data::update()
+    {
+        for (uint index_counter = 0; index_counter < m_entity_ptrs.size(); index_counter++)
+        {
+            m_entity_ptrs[index_counter]->update();
+        }
+
+        for (size_t i = 0; i < m_particle_managers.size(); i++)
+        {
+            float deltaT = (float)Timing::Game_Clock::get_instance().get_delta_time_last_frame();
+            m_particle_managers[i]->Update(deltaT);
+        }
+
+        m_camera.update();
     }
 
     bool Scene_Data::load_from_blender_obj(const std::string& file_path)
@@ -524,7 +526,7 @@ namespace Scene
 
         this->m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry*>(pNewEntity, pGeometry));
 
-        m_renderer_ptr->configure_new_renderable(pNewEntity, pGeometry);
+        //m_renderer_ptr->configure_new_renderable(pNewEntity, pGeometry);
 
         return true;
     }
@@ -633,16 +635,6 @@ namespace Scene
 
 
     // PRIVATE
-    bool Scene_Data::load_renderer(const rapidxml::xml_document<> *parsed_scene_doc)
-    {
-        // set the camera instance that will be used in rendering, but don't specify an
-        // entity for the camera to follow because that should take place in the 
-        // load_entities(...) function
-        m_renderer_ptr->set_camera_to_render(&m_camera);
-
-        return true;
-    }
-
     bool Scene_Data::load_geometries(const rapidxml::xml_document<> *parsed_scene_doc)
     {
         // make sure that there is a "scene" root node (if not, let rapidxml blow up)
@@ -665,7 +657,7 @@ namespace Scene
     bool Scene_Data::load_particle_management()
     {
         m_particle_managers.push_back(std::unique_ptr<Particles::ParticleManager>(new Particles::ParticleManager()));
-        m_particle_managers.back()->Init(10, 2, 2, 5, 10, glm::vec3(0.0f, 1.0f, 0.0f));
+        m_particle_managers.back()->Init(50, 2, 2, 1, 2, glm::vec3(0.0f, 1.0f, 0.0f));
 
         return true;
     }
@@ -715,7 +707,7 @@ namespace Scene
                 this->m_entity_geometry_pairings.push_back(std::pair<const Entities::Entity *, const Shapes::Geometry*>(new_entity_ptr, geo_ptr));
 
                 // add a renderable for this entity-geometry pairing
-                m_renderer_ptr->configure_new_renderable(new_entity_ptr, geo_ptr);
+                //m_renderer_ptr->configure_new_renderable(new_entity_ptr, geo_ptr);
             }
 
             // check for components and load any that are found
